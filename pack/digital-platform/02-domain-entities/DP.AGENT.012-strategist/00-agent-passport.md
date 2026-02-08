@@ -10,7 +10,7 @@ trust:
 epistemic_stage: emerging
 ---
 
-# StrategicPlanner
+# Strategist (Стратег)
 
 ## 1. Роль
 
@@ -57,11 +57,27 @@ epistemic_stage: emerging
 
 | Источник | Данные |
 |----------|--------|
-| `current/weekly-plan.md` | Текущий план недели |
-| `current/monthly-priorities.md` | Месячные приоритеты |
-| `current/daily/*.md` | Планы дней |
-| `reviews/` | История ревью |
-| Git log | Коммиты за период |
+| `~/Github/my-strategy/current/` | Агрегированные планы (HUB) |
+| `~/Github/*/WORKPLAN.md` | Планы каждого репо (SPOKE) |
+| `~/Github/my-strategy/dissatisfactions/` | Неудовлетворённости |
+| `~/Github/my-strategy/reviews/` | История ревью |
+| Git log (все репо) | Коммиты за период |
+
+### 3.1.1. Hub-and-Spoke архитектура
+
+```
+    my-strategy (HUB)          ← агрегированные личные планы
+         │
+    Стратег обходит WORKPLAN.md
+         │
+    ┌────┼────┬────┬────┐
+    ↓    ↓    ↓    ↓    ↓
+  repo1 repo2 repo3 ... repoN   ← WORKPLAN.md в корне каждого репо
+```
+
+**Агрегация:** Стратег обходит все `~/Github/*/WORKPLAN.md`, собирает РП, формирует агрегированный план в `my-strategy/current/`.
+
+**Обратная синхронизация:** При обновлении приоритетов Стратег обновляет соответствующие `WORKPLAN.md` в целевых репо.
 
 ### 3.2. Триггеры
 
@@ -154,17 +170,21 @@ context:
 
 ### 8.1. Текущие
 
-- **ecosystem-development** — хранилище планов
-- **GitHub** — источник коммитов
+- **my-strategy** — личный стратегический хаб (HUB, private)
+- **WORKPLAN.md** — операционные планы в каждом репо (SPOKE)
+- **GitHub** — источник коммитов из всех репо
+- **ecosystem-development** — командные планы
 
 ### 8.2. Будущие
 
+- **Aist Bot (Telegram)** — отчёты и стратегирование через бот
 - **digital-twin-mcp** — данные о пользователе
 - **Toggl** — фактическое время
-- **Telegram** — напоминания и публикация
+- **spf-personal-pack** — знания ПРС для стратегирования
 
 ## 9. Связанные документы
 
 - [Индекс сценариев](scenarios/00-scenarios-index.md)
 - [Шаблоны](templates/)
 - [DP.AGENT.001 Реестр агентов](../DP.AGENT.001-ai-agents.md)
+- [my-strategy (HUB)](https://github.com/TserenTserenov/my-strategy) — личный стратегический репозиторий

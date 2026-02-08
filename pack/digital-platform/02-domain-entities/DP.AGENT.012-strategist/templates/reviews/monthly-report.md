@@ -2,7 +2,7 @@
 type: monthly-report
 month: YYYY-MM
 status: published
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # Итоги месяца: [Месяц YYYY]

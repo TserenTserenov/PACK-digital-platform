@@ -130,7 +130,7 @@ created: 2026-02-07
 ### Пример 3: Изменить месячный приоритет
 
 ```
-/update-priorities месяц поднять "StrategicPlanner" на P1
+/update-priorities месяц поднять "Strategist" на P1
 ```
 
 ### Пример 4: Перенести на следующую неделю

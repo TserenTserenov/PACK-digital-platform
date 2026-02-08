@@ -2,7 +2,7 @@
 type: monthly-priorities
 period: YYYY-MM
 status: active
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # Приоритеты: [Месяц YYYY]

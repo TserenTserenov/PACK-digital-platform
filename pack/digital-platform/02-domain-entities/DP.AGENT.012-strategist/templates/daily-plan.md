@@ -2,7 +2,7 @@
 type: daily-plan
 date: YYYY-MM-DD
 status: active
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # [Дата] — План дня

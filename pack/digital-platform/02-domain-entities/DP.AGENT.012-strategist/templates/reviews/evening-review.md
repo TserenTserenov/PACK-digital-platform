@@ -2,7 +2,7 @@
 type: evening-review
 date: YYYY-MM-DD
 status: done
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # Итоги дня: [дата]

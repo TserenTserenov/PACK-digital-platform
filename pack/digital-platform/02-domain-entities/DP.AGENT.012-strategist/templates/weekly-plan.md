@@ -3,7 +3,7 @@ type: weekly-plan
 period: YYYY-MM-DD / YYYY-MM-DD
 week: YYYY-WXX
 status: active
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # План недели: [даты]

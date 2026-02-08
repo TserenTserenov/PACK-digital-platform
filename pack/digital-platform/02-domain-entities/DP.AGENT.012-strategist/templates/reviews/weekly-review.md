@@ -3,7 +3,7 @@ type: weekly-review
 week: YYYY-WXX
 period: YYYY-MM-DD / YYYY-MM-DD
 status: published
-agent: StrategicPlanner
+agent: Strategist
 ---
 
 # Итоги недели [номер]: [даты]
