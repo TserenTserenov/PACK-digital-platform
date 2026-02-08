@@ -24,7 +24,7 @@ created: 2026-02-07
 | Источник | Данные | Обязательность |
 |----------|--------|----------------|
 | `current/monthly-priorities.md` | Приоритеты на месяц | Обязательно |
-| `current/weekly-plan.md` | План прошлой недели | Обязательно |
+| `current/weeks/YYYY-MM-DD--DD.md` | План прошлой недели | Обязательно |
 | `reviews/weekly/YYYY-WXX.md` | Ревью прошлой недели | Если есть |
 | Git log | Коммиты за прошлую неделю | Обязательно |
 
@@ -79,7 +79,7 @@ completion_rate = done_wp / planned_wp * 100%
 
 ### Шаг 5: После подтверждения
 
-1. Сохранить `current/weekly-plan.md`
+1. Сохранить `current/weeks/YYYY-MM-DD--DD.md`
 2. Обновить `current/monthly-priorities.md`
 3. **ОБЯЗАТЕЛЬНО:** Обновить `MEMORY.md` → секция «РП текущей недели» (полная перезапись списка РП с актуальными статусами)
 4. Закоммитить изменения
@@ -89,7 +89,7 @@ completion_rate = done_wp / planned_wp * 100%
 
 | Артефакт | Путь | Описание |
 |----------|------|----------|
-| План недели | `current/weekly-plan.md` | Обновлённый план |
+| План недели | `current/weeks/YYYY-MM-DD--DD.md` | Обновлённый план |
 | Месячные приоритеты | `current/monthly-priorities.md` | Сдвинутое окно |
 | MEMORY.md | `~/.claude/.../memory/MEMORY.md` | Актуальный список РП недели |
 | Коммит | — | Фиксация изменений |
