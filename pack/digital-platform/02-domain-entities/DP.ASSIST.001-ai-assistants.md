@@ -1,8 +1,10 @@
 ---
 id: DP.ASSIST.001
 type: domain-entity
-status: active
+status: superseded
+superseded_by: DP.AGENT.001
 created: 2026-02-07
+updated: 2026-02-10
 migrated_from: ecosystem-development/B2.2.Architecture/3.2.4
 trust:
   F: 4
@@ -11,7 +13,17 @@ trust:
 epistemic_stage: formed
 ---
 
-# ИИ-ассистенты платформы
+# ИИ-ассистенты платформы (superseded)
+
+> **Этот файл заменён.** ИИ-ассистенты теперь классифицируются как вид ИИ-системы с признаком `orientation: human`. См. [DP.AGENT.001 ИИ-системы платформы](DP.AGENT.001-ai-agents.md).
+>
+> Различение: ИИ-агент ≠ ИИ-ассистент (D.DTP.009) — это виды ИИ-систем, а не разные архитектурные слои.
+
+*Ниже — историческое содержимое.*
+
+---
+
+## ИИ-ассистенты платформы (historical)
 
 ## 1. Определение
 
