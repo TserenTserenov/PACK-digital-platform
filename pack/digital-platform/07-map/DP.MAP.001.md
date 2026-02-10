@@ -14,13 +14,13 @@ created: 2026-02-10
 
 | Категория | Количество |
 |-----------|-----------|
-| Доменный контракт | 2 файла (bounded context + distinctions) |
+| Доменный контракт | 3 файла (bounded context + distinctions + ontology) |
 | Доменные сущности | 8 сущностей + 1 superseded |
 | Методы | 1 |
 | Рабочие продукты | 1 |
 | Failure modes | 2 |
 | SoTA | 0 |
-| **Итого** | **15 файлов** |
+| **Итого** | **16 файлов** |
 
 ## 2. Доменный контракт (01-domain-contract)
 
@@ -28,6 +28,7 @@ created: 2026-02-10
 |------|------------|
 | [01A-bounded-context.md](../01-domain-contract/01A-bounded-context.md) | Определение области, ключевые понятия, scope, связи |
 | [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (DP.D.001–DP.D.015) |
+| [01C-ontology.md](../01-domain-contract/01C-ontology.md) | Онтология домена: виды сущностей, глоссарий, связи (SPF.SPEC.002) |
 
 ### Реестр различений
 
