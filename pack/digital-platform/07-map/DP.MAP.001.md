@@ -28,7 +28,7 @@ created: 2026-02-10
 |------|------------|
 | [01A-bounded-context.md](../01-domain-contract/01A-bounded-context.md) | Определение области, ключевые понятия, scope, связи |
 | [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (DP.D.001–DP.D.015) |
-| [01C-ontology.md](../01-domain-contract/01C-ontology.md) | Онтология домена: виды сущностей, глоссарий, связи (SPF.SPEC.002) |
+| [ontology.md](../../../ontology.md) | Онтология домена: виды сущностей, глоссарий, связи (SPF.SPEC.002) |
 
 ### Реестр различений
 
