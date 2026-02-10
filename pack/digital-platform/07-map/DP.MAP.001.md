@@ -27,7 +27,7 @@ created: 2026-02-10
 | Файл | Содержание |
 |------|------------|
 | [01A-bounded-context.md](../01-domain-contract/01A-bounded-context.md) | Определение области, ключевые понятия, scope, связи |
-| [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 14 различений (D.DTP.001–D.DTP.014) |
+| [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (D.DTP.001–D.DTP.015) |
 
 ### Реестр различений
 
@@ -47,6 +47,7 @@ created: 2026-02-10
 | D.DTP.012 | Знание ≠ Информация | active |
 | D.DTP.013 | Навигация ≠ Поиск | active |
 | D.DTP.014 | Оперативная память ≠ Справочник | active |
+| D.DTP.015 | ИИ-система ≠ ИТ-система | active |
 
 ## 3. Доменные сущности (02-domain-entities)
 
