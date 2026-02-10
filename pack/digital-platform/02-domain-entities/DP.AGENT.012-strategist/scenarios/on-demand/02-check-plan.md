@@ -1,5 +1,5 @@
 ---
-id: AGT.012.SC.06
+id: DP.AGENT.012.SC.06
 type: scenario
 trigger: on-demand
 status: draft

@@ -1,5 +1,5 @@
 ---
-id: AGT.012.SCENARIOS
+id: DP.AGENT.012.SCENARIOS
 type: scenarios-index
 status: draft
 created: 2026-02-07

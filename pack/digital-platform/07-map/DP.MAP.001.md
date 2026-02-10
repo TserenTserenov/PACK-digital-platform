@@ -27,27 +27,27 @@ created: 2026-02-10
 | Файл | Содержание |
 |------|------------|
 | [01A-bounded-context.md](../01-domain-contract/01A-bounded-context.md) | Определение области, ключевые понятия, scope, связи |
-| [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (D.DTP.001–D.DTP.015) |
+| [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (DP.D.001–DP.D.015) |
 
 ### Реестр различений
 
 | ID | Различение | Статус |
 |----|-----------|--------|
-| D.DTP.001 | Объект ≠ Модель | active |
-| D.DTP.002 | Модель ≠ Данные | active |
-| D.DTP.003 | Данные ≠ Представление | active |
-| D.DTP.004 | Индикатор ≠ Факт | active |
-| D.DTP.005 | Входной индикатор ≠ Производный индикатор | active |
-| D.DTP.006 | Генеративный текст ≠ Source-of-truth | active |
-| D.DTP.007 | Качество модели ≠ Качество данных | active |
-| D.DTP.008 | Синхронизация ≠ Копирование | active |
-| D.DTP.009 | ИИ-агент ≠ ИИ-ассистент | active |
-| D.DTP.010 | Архитектурная характеристика ≠ Архитектурный принцип | active |
-| D.DTP.011 | Platform-space ≠ User-space | active |
-| D.DTP.012 | Знание ≠ Информация | active |
-| D.DTP.013 | Навигация ≠ Поиск | active |
-| D.DTP.014 | Оперативная память ≠ Справочник | active |
-| D.DTP.015 | ИИ-система ≠ ИТ-система | active |
+| DP.D.001 | Объект ≠ Модель | active |
+| DP.D.002 | Модель ≠ Данные | active |
+| DP.D.003 | Данные ≠ Представление | active |
+| DP.D.004 | Индикатор ≠ Факт | active |
+| DP.D.005 | Входной индикатор ≠ Производный индикатор | active |
+| DP.D.006 | Генеративный текст ≠ Source-of-truth | active |
+| DP.D.007 | Качество модели ≠ Качество данных | active |
+| DP.D.008 | Синхронизация ≠ Копирование | active |
+| DP.D.009 | ИИ-агент ≠ ИИ-ассистент | active |
+| DP.D.010 | Архитектурная характеристика ≠ Архитектурный принцип | active |
+| DP.D.011 | Platform-space ≠ User-space | active |
+| DP.D.012 | Знание ≠ Информация | active |
+| DP.D.013 | Навигация ≠ Поиск | active |
+| DP.D.014 | Оперативная память ≠ Справочник | active |
+| DP.D.015 | ИИ-система ≠ ИТ-система | active |
 
 ## 3. Доменные сущности (02-domain-entities)
 
@@ -65,7 +65,7 @@ created: 2026-02-10
 |----|----------|--------|----------|
 | [DP.AGENT.001](../02-domain-entities/DP.AGENT.001-ai-agents.md) | ИИ-системы платформы | draft | Унифицированный реестр (16 систем), классификация, паспорт |
 | [DP.ASSIST.001](../02-domain-entities/DP.ASSIST.001-ai-assistants.md) | ИИ-ассистенты | **superseded** | → DP.AGENT.001 (ассистенты = ИИ-системы с orientation: human) |
-| [AGT.012](../02-domain-entities/DP.AGENT.012-strategist/00-agent-passport.md) | Стратег | draft | Паспорт агента, сценарии, шаблоны, Hub-and-Spoke, WP Gate |
+| [DP.AGENT.012](../02-domain-entities/DP.AGENT.012-strategist/00-agent-passport.md) | Стратег | draft | Паспорт агента, сценарии, шаблоны, Hub-and-Spoke, WP Gate |
 | [DP.AISYS.013](../02-domain-entities/DP.AISYS.013-knowledge-extractor.md) | Знание-Экстрактор | draft | ИИ-система экстракции знаний, 4 сценария |
 
 ### 3.3. Навигация и экзокортекс
@@ -105,7 +105,7 @@ created: 2026-02-10
 
 ```
                     01A-bounded-context
-                    01B-distinctions (D.DTP.001–014)
+                    01B-distinctions (DP.D.001–014)
                            │
               ┌────────────┼────────────────┐
               ▼            ▼                ▼
@@ -114,7 +114,7 @@ created: 2026-02-10
          │    │           │                │
          │    │      ┌────┼────┐           │
          │    │      ▼    ▼    ▼           │
-         │    │  AGT.012  AISYS.013  DP.NAV.001
+         │    │  DP.AGENT.012  DP.AISYS.013  DP.NAV.001
          │    │  (Стратег) (Экстрактор) (навигация)
          │    │               │
          │    │          DP.M.001
@@ -141,7 +141,7 @@ created: 2026-02-10
 | DP.ARCH.001 | DP.AGENT.001 | Слой 3 архитектуры = ИИ-системы |
 | DP.ARCH.001 | DP.SYS.001 | Слой 2 архитектуры = Сервисы |
 | DP.ARCH.001 | DP.EXOCORTEX.001 | Точка подключения пользователя |
-| DP.AGENT.001 | AGT.012 | Паспорт конкретной ИИ-системы |
+| DP.AGENT.001 | DP.AGENT.012 | Паспорт конкретной ИИ-системы |
 | DP.AGENT.001 | DP.AISYS.013 | Паспорт конкретной ИИ-системы |
 | DP.AISYS.013 | DP.M.001 | Реализует метод экстракции |
 | DP.M.001 | DP.WP.001 | Метод порождает рабочий продукт |
@@ -153,7 +153,7 @@ created: 2026-02-10
 
 ## 9. Кросс-Pack связи
 
-| Этот Pack (DTP) | Внешний Pack | Связь |
+| Этот Pack (DP) | Внешний Pack | Связь |
 |-----------------|-------------|-------|
 | DP.CONCEPT.001 (цифровой двойник) | `spf-personal-pack:PD.CHR.*` | Модель двойника использует характеристики созидателя |
 | DP.AGENT.001 (ИИ-системы) | `spf-ecosystem-pack:EC.*` | ИИ-системы обслуживают экосистему |

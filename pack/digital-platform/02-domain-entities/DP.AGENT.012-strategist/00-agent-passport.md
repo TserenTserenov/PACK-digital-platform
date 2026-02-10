@@ -1,5 +1,5 @@
 ---
-id: AGT.012
+id: DP.AGENT.012
 type: agent-passport
 status: draft
 created: 2026-02-07

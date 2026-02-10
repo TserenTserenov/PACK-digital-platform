@@ -1,5 +1,5 @@
 ---
-id: AGT.012.SC.02
+id: DP.AGENT.012.SC.02
 type: scenario
 trigger: scheduled
 schedule: "7:00 daily"
