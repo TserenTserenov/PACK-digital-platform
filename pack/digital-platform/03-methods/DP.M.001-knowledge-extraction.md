@@ -1,5 +1,5 @@
 ---
-id: DP.METHOD.001
+id: DP.M.001
 type: method
 status: draft
 created: 2026-02-10

@@ -88,7 +88,7 @@ spf-digital-platform-pack/
         │   ├── DP.ASSIST.001          #   (superseded → DP.AGENT.001)
         │   └── DP.AGENT.012-strategist/  # Паспорт Стратега + сценарии
         ├── 03-methods/                # Методы
-        │   └── DP.METHOD.001          #   Экстракция знаний
+        │   └── DP.M.001               #   Экстракция знаний
         ├── 04-work-products/          # Рабочие продукты
         │   └── DP.WP.001             #   Отчёт экстракции
         ├── 05-failure-modes/          # Типовые ошибки

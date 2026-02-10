@@ -182,6 +182,6 @@ interface: both
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — слой 3, IPO-паттерн
 - [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — реестр, паспорт
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — capture-to-pack как примитив
-- [DP.METHOD.001 Метод экстракции знаний](../03-methods/DP.METHOD.001-knowledge-extraction.md)
+- [DP.M.001 Метод экстракции знаний](../03-methods/DP.M.001-knowledge-extraction.md)
 - [DP.WP.001 Отчёт экстракции](../04-work-products/DP.WP.001-extraction-report.md)
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md)
