@@ -61,9 +61,12 @@
 
 ## Downstream outputs
 
-- [digital-twin-mcp](https://github.com/aisystant/digital-twin-mcp) — MCP-реализация цифрового двойника
-- [aist_bot](https://github.com/aisystant/aist_bot) — Telegram-бот (тонкий клиент)
+- [digital-twin-mcp](https://github.com/aisystant/digital-twin-mcp) — MCP-реализация цифрового двойника (instrument)
+- [aist_bot](https://github.com/aisystant/aist_bot) — Telegram-бот, тонкий клиент (instrument)
 - [strategist-agent](https://github.com/TserenTserenov/strategist-agent) — Агент Стратег (instrument)
+- [extractor-agent](https://github.com/TserenTserenov/extractor-agent) — Знание-Экстрактор, prompt-based ИИ-система (instrument)
+- [exocortex-setup-agent](https://github.com/TserenTserenov/exocortex-setup-agent) — Агент развёртывания экзокортекса (instrument)
+- [exocortex-template](https://github.com/TserenTserenov/exocortex-template) — Шаблон экзокортекса (format)
 - [my-strategy](https://github.com/TserenTserenov/my-strategy) — Личный стратегический хаб (governance)
 
 ## Maintainers
