@@ -162,10 +162,26 @@ interface: both
 | human_acceptance_rate | >70% (одобренных предложений) |
 | false_positive_rate | <20% (ненужных предложений) |
 
-## 9. Связанные документы
+## 9. Реализация (Downstream)
+
+| Репо | Статус | Описание |
+|------|--------|----------|
+| [extractor-agent](https://github.com/TserenTserenov/extractor-agent) | MVP | Prompt-based реализация: 3 промпта (session-close, on-demand, bulk-extraction), PROCESSES.md с 5 процессами |
+
+**Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close (автоматически) или по команде пользователя.
+
+**MVP-покрытие сценариев:**
+- Session-Capture (§ 4.1) → `prompts/session-close.md`
+- Bulk-Extraction (§ 4.2) → `prompts/bulk-extraction.md`
+- On-Demand → `prompts/on-demand.md`
+- Cross-Repo-Sync (§ 4.3) → planned
+- Knowledge-Audit (§ 4.4) → planned
+
+## 10. Связанные документы
 
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — слой 3, IPO-паттерн
 - [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — реестр, паспорт
+- [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — capture-to-pack как примитив
 - [DP.METHOD.001 Метод экстракции знаний](../03-methods/DP.METHOD.001-knowledge-extraction.md)
 - [DP.WP.001 Отчёт экстракции](../04-work-products/DP.WP.001-extraction-report.md)
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md)
