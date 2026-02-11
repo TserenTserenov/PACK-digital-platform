@@ -1,7 +1,9 @@
 ---
 id: DP.AGENT.001
+name: ИИ-агенты
 type: domain-entity
 status: active
+summary: "Реестр и классификация ИИ-агентов платформы: Стратег, Экстрактор, Проводник и др."
 created: 2026-02-07
 updated: 2026-02-10
 trust:

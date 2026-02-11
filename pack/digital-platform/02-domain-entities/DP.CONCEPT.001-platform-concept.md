@@ -1,7 +1,9 @@
 ---
 id: DP.CONCEPT.001
+name: Концепция платформы
 type: domain-entity
 status: active
+summary: "Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость"
 created: 2026-02-07
 migrated_from: ecosystem-development/B2.2.Architecture/3.2.1
 trust:

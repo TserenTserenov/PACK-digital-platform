@@ -1,7 +1,9 @@
 ---
 id: DP.EXOCORTEX.001
+name: Модульный экзокортекс
 type: domain-entity
 status: draft
+summary: "3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md"
 created: 2026-02-10
 updated: 2026-02-10
 trust:

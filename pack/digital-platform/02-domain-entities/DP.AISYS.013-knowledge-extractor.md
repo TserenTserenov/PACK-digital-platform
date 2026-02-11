@@ -1,7 +1,9 @@
 ---
 id: DP.AISYS.013
+name: Знание-Экстрактор
 type: ai-system-passport
 status: draft
+summary: "Prompt-based ИИ-система экстракции знаний из сессий в Pack-совместимые сущности"
 created: 2026-02-10
 trust:
   F: 3
