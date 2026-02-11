@@ -1,7 +1,9 @@
 ---
 id: DP.ASSIST.001
+name: ИИ-ассистенты (superseded)
 type: domain-entity
 status: superseded
+summary: "Объединены с DP.AGENT.001 — различие агент/ассистент сохранено как характеристика"
 superseded_by: DP.AGENT.001
 created: 2026-02-07
 updated: 2026-02-10

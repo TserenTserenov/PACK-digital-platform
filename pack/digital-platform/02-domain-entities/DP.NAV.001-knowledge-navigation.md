@@ -1,7 +1,9 @@
 ---
 id: DP.NAV.001
+name: Навигация знаний
 type: domain-entity
 status: draft
+summary: "4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream"
 created: 2026-02-10
 trust:
   F: 3

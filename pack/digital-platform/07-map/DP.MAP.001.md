@@ -1,162 +1,135 @@
 ---
 id: DP.MAP.001
-type: pack-map
-status: draft
-created: 2026-02-10
+name: Pack Navigation Map
+scope: full-pack
+created: 2026-02-11
+last_updated: 2026-02-11
+generated: true
 ---
 
-# Навигационная карта Pack'а: ИТ-платформа и цифровой двойник
+# [DP.MAP.001] Pack Navigation Map
 
-> Полная карта всех сущностей Pack'а с типами, статусами и связями.
-> Обновляется при добавлении/удалении сущностей.
+> Auto-generated from frontmatter on 2026-02-11. Do not edit manually.
 
-## 1. Обзор
+---
 
-| Категория | Количество |
-|-----------|-----------|
-| Доменный контракт | 3 файла (bounded context + distinctions + ontology) |
-| Доменные сущности | 8 сущностей + 1 superseded |
-| Методы | 1 |
-| Рабочие продукты | 1 |
-| Failure modes | 2 |
-| SoTA | 0 |
-| **Итого** | **16 файлов** |
+## Statistics
 
-## 2. Доменный контракт (01-domain-contract)
+| Kind | Count |
+|------|-------|
+| AGENT (AGENT) | 11 |
+| AISYS (AISYS) | 1 |
+| ARCH (ARCH) | 1 |
+| ASSIST (ASSIST) | 1 |
+| CONCEPT (CONCEPT) | 1 |
+| EXOCORTEX (EXOCORTEX) | 1 |
+| Failure Modes (FM) | 2 |
+| Methods (M) | 1 |
+| Maps (MAP) | 1 |
+| NAV (NAV) | 1 |
+| SYS (SYS) | 1 |
+| Work Products (WP) | 1 |
+| **Total** | **23** |
 
-| Файл | Содержание |
-|------|------------|
-| [01A-bounded-context.md](../01-domain-contract/01A-bounded-context.md) | Определение области, ключевые понятия, scope, связи |
-| [01B-distinctions.md](../01-domain-contract/01B-distinctions.md) | 15 различений (DP.D.001–DP.D.015) |
-| [ontology.md](../../../ontology.md) | Онтология домена: виды сущностей, глоссарий, связи (SPF.SPEC.002) |
+## Methods
 
-### Реестр различений
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.M.001 | Извлечение знаний | Трансформация сырой информации в Pack-совместимые сущности через обнаружение, классификацию и формализацию | draft |
 
-| ID | Различение | Статус |
-|----|-----------|--------|
-| DP.D.001 | Объект ≠ Модель | active |
-| DP.D.002 | Модель ≠ Данные | active |
-| DP.D.003 | Данные ≠ Представление | active |
-| DP.D.004 | Индикатор ≠ Факт | active |
-| DP.D.005 | Входной индикатор ≠ Производный индикатор | active |
-| DP.D.006 | Генеративный текст ≠ Source-of-truth | active |
-| DP.D.007 | Качество модели ≠ Качество данных | active |
-| DP.D.008 | Синхронизация ≠ Копирование | active |
-| DP.D.009 | ИИ-агент ≠ ИИ-ассистент | active |
-| DP.D.010 | Архитектурная характеристика ≠ Архитектурный принцип | active |
-| DP.D.011 | Platform-space ≠ User-space | active |
-| DP.D.012 | Знание ≠ Информация | active |
-| DP.D.013 | Навигация ≠ Поиск | active |
-| DP.D.014 | Оперативная память ≠ Справочник | active |
-| DP.D.015 | ИИ-система ≠ ИТ-система | active |
+## Work Products
 
-## 3. Доменные сущности (02-domain-entities)
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.WP.001 | Отчёт экстракции | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
 
-### 3.1. Архитектура и инфраструктура
+## Failure Modes
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.ARCH.001](../02-domain-entities/DP.ARCH.001-platform-architecture.md) | Архитектура платформы | draft | 4-слойная модель, 3 характеристики, IPO, отчуждаемость |
-| [DP.CONCEPT.001](../02-domain-entities/DP.CONCEPT.001-platform-concept.md) | Концепция платформы | draft | Цифровой двойник, модель созидателя |
-| [DP.SYS.001](../02-domain-entities/DP.SYS.001-deterministic-systems.md) | Детерминированные системы | draft | Сервисы, MCP-серверы (Слой 2), включая Заметочник (SYS.015) |
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.FM.001 | Информация как знание | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
+| DP.FM.002 | Смешение слоёв | Смешение слоёв архитектуры платформы: код в Pack, знания в Downstream, UI в архитектуре | draft |
 
-### 3.2. ИИ-системы
+## Maps
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.AGENT.001](../02-domain-entities/DP.AGENT.001-ai-agents.md) | ИИ-системы платформы | draft | Унифицированный реестр (16 систем), классификация, паспорт |
-| [DP.ASSIST.001](../02-domain-entities/DP.ASSIST.001-ai-assistants.md) | ИИ-ассистенты | **superseded** | → DP.AGENT.001 (ассистенты = ИИ-системы с orientation: human) |
-| [DP.AGENT.012](../02-domain-entities/DP.AGENT.012-strategist/00-agent-passport.md) | Стратег | draft | Паспорт агента, сценарии, шаблоны, Hub-and-Spoke, WP Gate |
-| [DP.AISYS.013](../02-domain-entities/DP.AISYS.013-knowledge-extractor.md) | Знание-Экстрактор | draft | ИИ-система экстракции знаний, 4 сценария |
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.MAP.001 | Pack Navigation Map | — | — |
 
-### 3.3. Навигация и экзокортекс
+## Domain-Specific Entities
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.NAV.001](../02-domain-entities/DP.NAV.001-knowledge-navigation.md) | Навигация знаний | draft | 4 уровня навигации, кросс-репо ссылки |
-| [DP.EXOCORTEX.001](../02-domain-entities/DP.EXOCORTEX.001-modular-exocortex.md) | Модульный экзокортекс | draft | 3-слойная архитектура инструкций, шаблоны, отчуждаемость |
+### AGENT
 
-## 4. Методы (03-methods)
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.AGENT.001 | ИИ-агенты | Реестр и классификация ИИ-агентов платформы: Стратег, Экстрактор, Проводник и др. | active |
+| DP.AGENT.012 | 00 Agent Passport | — | draft |
+| DP.AGENT.012.SC.01 | 01 Strategy Session | — | draft |
+| DP.AGENT.012.SC.02 | — План дня | — | draft |
+| DP.AGENT.012.SC.03 | 03 Week Review | — | draft |
+| DP.AGENT.012.SC.04 | 04 Month Report | — | draft |
+| DP.AGENT.012.SC.05 | 01 Evening Review | — | draft |
+| DP.AGENT.012.SC.06 | 02 Check Plan | — | draft |
+| DP.AGENT.012.SC.07 | 03 Update Priorities | — | draft |
+| DP.AGENT.012.SC.08 | 04 Add Workproduct | — | draft |
+| DP.AGENT.012.SCENARIOS | 00 Scenarios Index | — | draft |
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.M.001](../03-methods/DP.M.001-knowledge-extraction.md) | Метод экстракции знаний | draft | 5 шагов: обнаружение → классификация → маршрутизация → формализация → валидация |
+### AISYS
 
-## 5. Рабочие продукты (04-work-products)
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.AISYS.013 | Знание-Экстрактор | Prompt-based ИИ-система экстракции знаний из сессий в Pack-совместимые сущности | draft |
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.WP.001](../04-work-products/DP.WP.001-extraction-report.md) | Отчёт экстракции | draft | Структурированный список кандидатов с вердиктами |
+### ARCH
 
-## 6. Failure Modes (05-failure-modes)
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ARCH.001 | Архитектура платформы | 3-слойная архитектура ИТ-платформы с 4 характеристиками: эволюционируемость, масштабируемость, обучаемость, генеративность | active |
 
-| ID | Название | Статус | Описание |
-|----|----------|--------|----------|
-| [DP.FM.001](../05-failure-modes/DP.FM.001-information-as-knowledge.md) | Информация как знание | draft | Размещение неформализованной информации в Pack |
-| [DP.FM.002](../05-failure-modes/DP.FM.002-layer-conflation.md) | Смешение слоёв | draft | Логика одного слоя в другом слое |
+### ASSIST
 
-## 7. SoTA (06-sota)
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ASSIST.001 | ИИ-ассистенты (superseded) | Объединены с DP.AGENT.001 — различие агент/ассистент сохранено как характеристика | superseded |
 
-Пока пусто. Планируемые аннотации:
-- SoTA по MCP (Model Context Protocol)
-- SoTA по FSM-архитектурам ИИ-ассистентов
-- SoTA по knowledge extraction из LLM-сессий
+### CONCEPT
 
-## 8. Граф связей
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.CONCEPT.001 | Концепция платформы | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
 
-```
-                    01A-bounded-context
-                    01B-distinctions (DP.D.001–014)
-                           │
-              ┌────────────┼────────────────┐
-              ▼            ▼                ▼
-        DP.ARCH.001   DP.AGENT.001    DP.EXOCORTEX.001
-        (архитектура) (ИИ-системы)    (экзокортекс)
-         │    │           │                │
-         │    │      ┌────┼────┐           │
-         │    │      ▼    ▼    ▼           │
-         │    │  DP.AGENT.012  DP.AISYS.013  DP.NAV.001
-         │    │  (Стратег) (Экстрактор) (навигация)
-         │    │               │
-         │    │          DP.M.001
-         │    │          (метод экстракции)
-         │    │               │
-         │    │          DP.WP.001
-         │    │          (отчёт экстракции)
-         │    │               │
-         │    │     ┌─────────┴─────────┐
-         │    │     ▼                   ▼
-         │    │  DP.FM.001          DP.FM.002
-         │    │  (информация        (смешение
-         │    │   как знание)        слоёв)
-         │    │
-         ▼    ▼
-    DP.SYS.001  DP.CONCEPT.001
-    (сервисы)   (концепция)
-```
+### EXOCORTEX
 
-### Ключевые связи
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.EXOCORTEX.001 | Модульный экзокортекс | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 
-| От | К | Тип связи |
-|----|---|-----------|
-| DP.ARCH.001 | DP.AGENT.001 | Слой 3 архитектуры = ИИ-системы |
-| DP.ARCH.001 | DP.SYS.001 | Слой 2 архитектуры = Сервисы |
-| DP.ARCH.001 | DP.EXOCORTEX.001 | Точка подключения пользователя |
-| DP.AGENT.001 | DP.AGENT.012 | Паспорт конкретной ИИ-системы |
-| DP.AGENT.001 | DP.AISYS.013 | Паспорт конкретной ИИ-системы |
-| DP.AISYS.013 | DP.M.001 | Реализует метод экстракции |
-| DP.M.001 | DP.WP.001 | Метод порождает рабочий продукт |
-| DP.M.001 | DP.FM.001 | Нарушение метода → failure mode |
-| DP.ARCH.001 | DP.FM.002 | Нарушение архитектуры → failure mode |
-| DP.NAV.001 | DP.MAP.001 | Карта = уровень 3 навигации |
-| DP.EXOCORTEX.001 | DP.NAV.001 | Memory содержит навигационные ссылки |
-| DP.ASSIST.001 | DP.AGENT.001 | superseded (объединены) |
+### NAV
 
-## 9. Кросс-Pack связи
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.NAV.001 | Навигация знаний | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 
-| Этот Pack (DP) | Внешний Pack | Связь |
-|-----------------|-------------|-------|
-| DP.CONCEPT.001 (цифровой двойник) | `spf-personal-pack:PD.CHR.*` | Модель двойника использует характеристики созидателя |
-| DP.AGENT.001 (ИИ-системы) | `spf-ecosystem-pack:EC.*` | ИИ-системы обслуживают экосистему |
-| DP.M.001 (экстракция) | `spf-personal-pack`, `spf-ecosystem-pack` | Метод применим ко всем Pack'ам |
-| DP.ARCH.001 (MCP-реестр) | `spf-personal-pack:PD.*` | knowledge-base-mcp читает данные созидателя |
+### SYS
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.SYS.001 | Детерминированные системы | Реестр детерминированных подсистем платформы: MCP-серверы, базы данных, сервисы | active |
+
+## Warnings
+
+- Missing `summary`: DP.AGENT.012 (00-agent-passport.md)
+- Missing `summary`: DP.AGENT.012.SCENARIOS (00-scenarios-index.md)
+- Missing `summary`: DP.AGENT.012.SC.05 (01-evening-review.md)
+- Missing `summary`: DP.AGENT.012.SC.06 (02-check-plan.md)
+- Missing `summary`: DP.AGENT.012.SC.07 (03-update-priorities.md)
+- Missing `summary`: DP.AGENT.012.SC.08 (04-add-workproduct.md)
+- Missing `summary`: DP.AGENT.012.SC.01 (01-strategy-session.md)
+- Missing `summary`: DP.AGENT.012.SC.02 (02-day-plan.md)
+- Missing `summary`: DP.AGENT.012.SC.03 (03-week-review.md)
+- Missing `summary`: DP.AGENT.012.SC.04 (04-month-report.md)
+- Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
+
+---
+
+*Generated by `scripts/generate-map.py` on 2026-02-11*

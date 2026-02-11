@@ -1,7 +1,9 @@
 ---
 id: DP.SYS.001
+name: Детерминированные системы
 type: domain-entity
 status: active
+summary: "Реестр детерминированных подсистем платформы: MCP-серверы, базы данных, сервисы"
 created: 2026-02-07
 migrated_from: ecosystem-development/B2.2.Architecture/3.2.3
 trust:
