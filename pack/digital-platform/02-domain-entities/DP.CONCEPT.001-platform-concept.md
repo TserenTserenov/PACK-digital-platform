@@ -5,7 +5,7 @@ type: domain-entity
 status: active
 summary: "Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость"
 created: 2026-02-07
-migrated_from: DS-ops/B2.2.Architecture/3.2.1
+migrated_from: DS-ecosystem-development/B2.2.Architecture/3.2.1
 trust:
   F: 4
   G: domain

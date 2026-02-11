@@ -44,7 +44,7 @@ agent: Strategist
 
 | Репо | Коммитов | РП |
 |------|----------|-----|
-| DS-ops | X | Y |
+| DS-ecosystem-development | X | Y |
 | PACK-digital-platform | X | Y |
 | PACK-personal | X | Y |
 

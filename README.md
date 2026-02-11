@@ -130,7 +130,7 @@ PACK-digital-platform/
 - НЕ содержит кода (это downstream/instrument)
 - НЕ содержит UI/UX (это downstream/surface)
 - НЕ определяет индикаторы созидателя (это PACK-personal)
-- НЕ содержит планы проекта (это DS-ops)
+- НЕ содержит планы проекта (это DS-ecosystem-development)
 
 ---
 
