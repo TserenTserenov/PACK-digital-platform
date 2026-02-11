@@ -18,7 +18,7 @@ generated: true
 | Kind | Count |
 |------|-------|
 | AGENT (AGENT) | 11 |
-| AISYS (AISYS) | 1 |
+| AISYS (AISYS) | 2 |
 | ARCH (ARCH) | 1 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
@@ -29,7 +29,7 @@ generated: true
 | NAV (NAV) | 1 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 1 |
-| **Total** | **23** |
+| **Total** | **24** |
 
 ## Methods
 
@@ -79,6 +79,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.AISYS.013 | Знание-Экстрактор | Prompt-based ИИ-система экстракции знаний из сессий в Pack-совместимые сущности | draft |
+| DP.AISYS.014 | AIST Bot | Telegram-бот экосистемы: тонкий клиент с сервисным реестром, ИИ-консультантом, биллингом и связью с цифровым двойником | draft |
 
 ### ARCH
 
