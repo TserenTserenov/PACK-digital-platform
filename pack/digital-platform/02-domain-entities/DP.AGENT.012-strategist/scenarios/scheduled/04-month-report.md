@@ -4,6 +4,7 @@ type: scenario
 trigger: scheduled
 schedule: "last day of month"
 status: draft
+summary: "Итоговый отчёт за месяц: агрегация недельных данных, проверка выполнения приоритетов, анализ трендов и достижений"
 created: 2026-02-07
 ---
 

@@ -4,6 +4,7 @@ type: scenario
 trigger: scheduled
 schedule: "7:00 daily"
 status: draft
+summary: "Ежедневное планирование (7:00): апдейт вчера по коммитам, контекст недели и план дня с рекомендацией старта"
 created: 2026-02-07
 ---
 

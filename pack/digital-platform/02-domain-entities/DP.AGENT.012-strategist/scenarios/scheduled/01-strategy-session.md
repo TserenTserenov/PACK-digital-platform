@@ -4,6 +4,7 @@ type: scenario
 trigger: scheduled
 schedule: "7:00 Monday"
 status: draft
+summary: "Еженедельная сессия стратегирования (пн 7:00): анализ прошлой недели, сдвиг месячного окна и формирование плана на неделю"
 created: 2026-02-07
 ---
 

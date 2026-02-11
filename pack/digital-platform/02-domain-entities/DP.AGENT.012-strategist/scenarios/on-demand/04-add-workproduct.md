@@ -3,6 +3,7 @@ id: DP.AGENT.012.SC.08
 type: scenario
 trigger: on-demand
 status: draft
+summary: "Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план"
 created: 2026-02-07
 ---
 

@@ -63,16 +63,16 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.AGENT.001 | ИИ-агенты | Реестр и классификация ИИ-агентов платформы: Стратег, Экстрактор, Проводник и др. | active |
-| DP.AGENT.012 | 00 Agent Passport | — | draft |
-| DP.AGENT.012.SC.01 | 01 Strategy Session | — | draft |
-| DP.AGENT.012.SC.02 | — План дня | — | draft |
-| DP.AGENT.012.SC.03 | 03 Week Review | — | draft |
-| DP.AGENT.012.SC.04 | 04 Month Report | — | draft |
-| DP.AGENT.012.SC.05 | 01 Evening Review | — | draft |
-| DP.AGENT.012.SC.06 | 02 Check Plan | — | draft |
-| DP.AGENT.012.SC.07 | 03 Update Priorities | — | draft |
-| DP.AGENT.012.SC.08 | 04 Add Workproduct | — | draft |
-| DP.AGENT.012.SCENARIOS | 00 Scenarios Index | — | draft |
+| DP.AGENT.012 | 00 Agent Passport | Агент преобразует намерения в структурированные планы рабочих продуктов на месяц, неделю и день с отслеживанием выполнения | draft |
+| DP.AGENT.012.SC.01 | 01 Strategy Session | Еженедельная сессия стратегирования (пн 7:00): анализ прошлой недели, сдвиг месячного окна и формирование плана на неделю | draft |
+| DP.AGENT.012.SC.02 | — План дня | Ежедневное планирование (7:00): апдейт вчера по коммитам, контекст недели и план дня с рекомендацией старта | draft |
+| DP.AGENT.012.SC.03 | 03 Week Review | Итоговое ревью недели (вс 22:00): агрегация дневных планов, анализ коммитов, расчёт статистики и публикация в клуб | draft |
+| DP.AGENT.012.SC.04 | 04 Month Report | Итоговый отчёт за месяц: агрегация недельных данных, проверка выполнения приоритетов, анализ трендов и достижений | draft |
+| DP.AGENT.012.SC.05 | 01 Evening Review | Вечерний итог дня по запросу: сопоставление коммитов со статусами РП, выявление незапланированного, carry-over на завтра | draft |
+| DP.AGENT.012.SC.06 | 02 Check Plan | Сверка задачи с планом по запросу: классификация на in-plan / aligned / unplanned / urgent с рекомендациями действия | draft |
+| DP.AGENT.012.SC.07 | 03 Update Priorities | Изменение приоритетов на уровне дня/недели/месяца: определение типа изменения, каскадные эффекты, diff и коммит | draft |
+| DP.AGENT.012.SC.08 | 04 Add Workproduct | Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план | draft |
+| DP.AGENT.012.SCENARIOS | 00 Scenarios Index | Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных | draft |
 
 ### AISYS
 
@@ -118,16 +118,6 @@ generated: true
 
 ## Warnings
 
-- Missing `summary`: DP.AGENT.012 (00-agent-passport.md)
-- Missing `summary`: DP.AGENT.012.SCENARIOS (00-scenarios-index.md)
-- Missing `summary`: DP.AGENT.012.SC.05 (01-evening-review.md)
-- Missing `summary`: DP.AGENT.012.SC.06 (02-check-plan.md)
-- Missing `summary`: DP.AGENT.012.SC.07 (03-update-priorities.md)
-- Missing `summary`: DP.AGENT.012.SC.08 (04-add-workproduct.md)
-- Missing `summary`: DP.AGENT.012.SC.01 (01-strategy-session.md)
-- Missing `summary`: DP.AGENT.012.SC.02 (02-day-plan.md)
-- Missing `summary`: DP.AGENT.012.SC.03 (03-week-review.md)
-- Missing `summary`: DP.AGENT.012.SC.04 (04-month-report.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 
 ---
