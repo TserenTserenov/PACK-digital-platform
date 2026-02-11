@@ -10,6 +10,8 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  produced_by: [DP.M.001]
 ---
 
 # Отчёт экстракции знаний

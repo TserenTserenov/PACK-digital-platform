@@ -5,12 +5,14 @@ type: domain-entity
 status: active
 summary: "Реестр детерминированных подсистем платформы: MCP-серверы, базы данных, сервисы"
 created: 2026-02-07
-migrated_from: DS-ops/B2.2.Architecture/3.2.3
+migrated_from: DS-ecosystem-development/B2.2.Architecture/3.2.3
 trust:
   F: 4
   G: domain
   R: 0.7
 epistemic_stage: evidence
+related:
+  uses: [DP.ARCH.001]
 ---
 
 # Детерминированные ИТ-системы

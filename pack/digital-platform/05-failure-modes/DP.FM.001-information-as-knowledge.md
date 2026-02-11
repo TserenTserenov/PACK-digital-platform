@@ -10,6 +10,9 @@ trust:
   G: domain
   R: 0.7
 epistemic_stage: formed
+related:
+  violates: [DP.D.012]
+  applies_to: [DP.M.001]
 ---
 
 # FM: Размещение информации в Pack без экстракции

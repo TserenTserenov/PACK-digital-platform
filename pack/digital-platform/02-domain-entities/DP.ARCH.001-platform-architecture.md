@@ -11,6 +11,8 @@ trust:
   G: domain
   R: 0.8
 epistemic_stage: evidence
+related:
+  uses: [DP.CONCEPT.001]
 ---
 
 # Архитектура ИТ-платформы

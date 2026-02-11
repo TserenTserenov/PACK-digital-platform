@@ -10,6 +10,9 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  violates: [DP.D.010]
+  applies_to: [DP.ARCH.001]
 ---
 
 # FM: Смешение архитектурных слоёв

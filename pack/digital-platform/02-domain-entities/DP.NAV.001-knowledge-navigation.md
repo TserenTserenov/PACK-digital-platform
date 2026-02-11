@@ -10,6 +10,8 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  uses: [DP.ARCH.001, DP.EXOCORTEX.001]
 ---
 
 # Навигация знаний
@@ -41,7 +43,7 @@ epistemic_stage: emerging
 
 **Что:** Единый реестр всех репозиториев с метаданными.
 
-**Где:** `DS-ops/0.OPS/REPOSITORY-REGISTRY.md` (существует).
+**Где:** `DS-ecosystem-development/0.OPS/REPOSITORY-REGISTRY.md` (существует).
 
 **Содержит:** Для каждого репо — тип, система, содержание, source-of-truth, upstream/downstream.
 

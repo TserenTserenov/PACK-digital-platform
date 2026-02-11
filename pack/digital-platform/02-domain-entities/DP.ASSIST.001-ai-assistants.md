@@ -7,12 +7,14 @@ summary: "Объединены с DP.AGENT.001 — различие агент/�
 superseded_by: DP.AGENT.001
 created: 2026-02-07
 updated: 2026-02-10
-migrated_from: DS-ops/B2.2.Architecture/3.2.4
+migrated_from: DS-ecosystem-development/B2.2.Architecture/3.2.4
 trust:
   F: 4
   G: domain
   R: 0.7
 epistemic_stage: formed
+related:
+  superseded_by: [DP.AGENT.001]
 ---
 
 # ИИ-ассистенты платформы (superseded)

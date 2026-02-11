@@ -11,6 +11,8 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  uses: [DP.ARCH.001, DP.NAV.001]
 ---
 
 # Модульный экзокортекс
@@ -154,8 +156,8 @@ epistemic_stage: emerging
 
 | Категория | Где | Пример |
 |-----------|-----|--------|
-| Пользовательские сценарии | `DS-ops/PROCESSES.md` | Рабочая сессия Claude Code |
-| Платформенные сценарии | `DS-ops/PROCESSES.md` | Day-Close |
+| Пользовательские сценарии | `DS-ecosystem-development/PROCESSES.md` | Рабочая сессия Claude Code |
+| Платформенные сценарии | `DS-ecosystem-development/PROCESSES.md` | Day-Close |
 | Внутренние процессы | `<repo>/PROCESSES.md` | Day-Plan (Стратег), FSM routing (бот) |
 
 ### 5.3. Ступенчатое правило
@@ -164,7 +166,7 @@ epistemic_stage: emerging
 |-------------------|-------------------------------|
 | Баг-фикс, ≤15 мин | Нет |
 | Изменение внутри одной системы | PROCESSES.md этого репо |
-| Межсистемная фича | DS-ops/PROCESSES.md |
+| Межсистемная фича | DS-ecosystem-development/PROCESSES.md |
 | Новая система | Сценарий + все процессы + данные (ВДВ) |
 
 ### 5.4. Формат описания (шаблон)

@@ -9,6 +9,9 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  component_of: [DP.AGENT.001]
+  uses: [DP.EXOCORTEX.001]
 ---
 
 # Strategist (Стратег)

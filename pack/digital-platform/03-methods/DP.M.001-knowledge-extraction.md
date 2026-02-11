@@ -10,6 +10,10 @@ trust:
   G: domain
   R: 0.5
 epistemic_stage: emerging
+related:
+  produces: [DP.WP.001]
+  fails_with: [DP.FM.001]
+  operationalized_by: [DP.AISYS.013]
 ---
 
 # Метод экстракции знаний

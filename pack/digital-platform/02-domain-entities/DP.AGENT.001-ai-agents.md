@@ -12,6 +12,9 @@ trust:
   R: 0.7
 epistemic_stage: formed
 note: "Retitled from 'ИИ-агенты' to 'ИИ-системы'. ID preserved for backward compatibility."
+related:
+  supersedes: [DP.ASSIST.001]
+  uses: [DP.ARCH.001]
 ---
 
 # ИИ-системы платформы

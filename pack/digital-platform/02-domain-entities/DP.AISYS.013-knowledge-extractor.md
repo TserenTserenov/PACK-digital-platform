@@ -13,6 +13,9 @@ epistemic_stage: emerging
 orientation: system
 initiative: both
 interface: both
+related:
+  uses: [DP.M.001]
+  produces: [DP.WP.001]
 ---
 
 # Знание-Экстрактор (Knowledge Extractor)
