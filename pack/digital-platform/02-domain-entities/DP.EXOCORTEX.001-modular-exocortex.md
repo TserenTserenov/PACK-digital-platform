@@ -29,7 +29,7 @@ epistemic_stage: emerging
 | 2 | Смешаны владельцы протоколов (Claude Code vs Стратег) | Каждый протокол помечен владельцем (session / launchd / manual) |
 | 3 | MEMORY.md — дамп всего (лимит 200 строк, обрезается) | Memory ≤100 строк: только оперативный контекст + ссылки |
 | 4 | Нет разделения «всегда помни» vs «прочитай когда нужно» | 2-слойная архитектура: auto-load (Слой 1+2) vs on-demand (Слой 3) |
-| 5 | memory/*.md не версионируется | Backup → my-strategy/exocortex/ (on Close + Day-Close) |
+| 5 | memory/*.md не версионируется | Backup → DS-strategy/exocortex/ (on Close + Day-Close) |
 | 6 | Нет описания межсистемных взаимодействий | PROCESSES.md с ВДВ-паттерном |
 
 ## 3. Двухуровневая архитектура инструкций
@@ -53,7 +53,7 @@ epistemic_stage: emerging
 │  правила по типам, чеклисты, уроки                   │
 │                                                      │
 │  Системно-специфичное: → <repo>/CLAUDE.md            │
-│  Backup: → my-strategy/exocortex/                    │
+│  Backup: → DS-strategy/exocortex/                    │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -107,7 +107,7 @@ epistemic_stage: emerging
 - ≤10 файлов, ≤100 строк каждый
 - Только кросс-системное (нужно в любой сессии независимо от репо)
 - Системно-специфичное → `<repo>/CLAUDE.md`
-- Backup → `my-strategy/exocortex/` (on Close + Day-Close)
+- Backup → `DS-strategy/exocortex/` (on Close + Day-Close)
 
 **Тест размещения:** Нужно ли это Claude в сессии по ДРУГОМУ репо?
 - Да → memory/
@@ -130,11 +130,10 @@ epistemic_stage: emerging
 | Work (Capture-to-Pack) | **Claude Code** (сессия) | CLAUDE.md |
 | Close | **Claude Code** (сессия) | CLAUDE.md |
 | Day-Close | **Стратег** (launchd) | Pack (DP.AGENT.012) |
-| Strategy-Cascade | **Стратег** (launchd) | Pack (DP.AGENT.012) |
 | Обновление Memory | **Claude Code** (Close) + **Стратег** (weekly) | CLAUDE.md + Pack |
 | Backup экзокортекса | **Claude Code** (Close) + **Стратег** (Day-Close) | CLAUDE.md + Pack |
 
-**Правило:** Протоколы Стратега (Day-Close, Strategy-Cascade) НЕ описываются в CLAUDE.md. Их место — паспорт Стратега в Pack или README.md strategist-agent.
+**Правило:** Протоколы Стратега (Day-Close и др.) НЕ описываются в CLAUDE.md. Их место — паспорт Стратега в Pack или README.md DS-strategist.
 
 > **Протокол ≠ Skill (Anthropic).** Наши «протоколы» — поведенческие инструкции для ИИ-системы. Anthropic Skills — техническая фича Claude Code (slash-команды). Протокол может быть реализован через Skill (downstream), но протокол — это знание о поведении, а slash-command — инструмент.
 
@@ -155,8 +154,8 @@ epistemic_stage: emerging
 
 | Категория | Где | Пример |
 |-----------|-----|--------|
-| Пользовательские сценарии | `ecosystem-development/PROCESSES.md` | Рабочая сессия Claude Code |
-| Платформенные сценарии | `ecosystem-development/PROCESSES.md` | Day-Close, Strategy-Cascade |
+| Пользовательские сценарии | `DS-ops/PROCESSES.md` | Рабочая сессия Claude Code |
+| Платформенные сценарии | `DS-ops/PROCESSES.md` | Day-Close |
 | Внутренние процессы | `<repo>/PROCESSES.md` | Day-Plan (Стратег), FSM routing (бот) |
 
 ### 5.3. Ступенчатое правило
@@ -165,7 +164,7 @@ epistemic_stage: emerging
 |-------------------|-------------------------------|
 | Баг-фикс, ≤15 мин | Нет |
 | Изменение внутри одной системы | PROCESSES.md этого репо |
-| Межсистемная фича | ecosystem-development/PROCESSES.md |
+| Межсистемная фича | DS-ops/PROCESSES.md |
 | Новая система | Сценарий + все процессы + данные (ВДВ) |
 
 ### 5.4. Формат описания (шаблон)
@@ -211,16 +210,16 @@ CLAUDE.md состоит из **модулей**. Каждый модуль:
 
 | Репо | Тип | Назначение |
 |------|-----|------------|
-| [exocortex-template](https://github.com/TserenTserenov/exocortex-template) | Format | Шаблон: CLAUDE.md + memory/ + .claude/settings + strategist-agent + my-strategy |
-| [exocortex-setup-agent](https://github.com/TserenTserenov/exocortex-setup-agent) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
+| [FMT-exocortex](https://github.com/TserenTserenov/FMT-exocortex) | Format | Шаблон: CLAUDE.md + memory/ + .claude/settings + DS-strategist + DS-strategy |
+| [DS-exocortex-setup](https://github.com/TserenTserenov/DS-exocortex-setup) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
 
 **Процесс:**
 ```
-exocortex-template (Format)
+FMT-exocortex (Format)
         ↓ fork
-exocortex-setup-agent (bash setup.sh или Claude Code prompt)
+DS-exocortex-setup (bash setup.sh или Claude Code prompt)
         ↓ configure
-Персональный экзокортекс: CLAUDE.md + Memory + Стратег + my-strategy
+Персональный экзокортекс: CLAUDE.md + Memory + Стратег + DS-strategy
 ```
 
 **Переменные при развёртывании:** GitHub username, workspace dir, Claude CLI path, timezone, home dir.
