@@ -1,4 +1,4 @@
-# CLAUDE.md — spf-digital-platform-pack
+# CLAUDE.md — PACK-digital-platform
 
 > **Общие инструкции:** см. `/Users/tserentserenov/Github/CLAUDE.md`
 >
@@ -79,4 +79,4 @@ pack/digital-platform/
 |-------------|------|
 | SPF | Upstream — форма и процесс |
 | FPF | Upstream (через SPF) — первые принципы |
-| ecosystem-development | Downstream — управление экосистемой |
+| DS-ops | Downstream — управление экосистемой |

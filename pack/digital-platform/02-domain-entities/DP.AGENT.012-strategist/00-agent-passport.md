@@ -84,16 +84,16 @@ epistemic_stage: emerging
 
 | Источник | Данные |
 |----------|--------|
-| `~/Github/my-strategy/current/` | Агрегированные планы (HUB) |
+| `~/Github/DS-strategy/current/` | Агрегированные планы (HUB) |
 | `~/Github/*/WORKPLAN.md` | Планы каждого репо (SPOKE) |
-| `~/Github/my-strategy/dissatisfactions/` | Неудовлетворённости |
-| `~/Github/my-strategy/reviews/` | История ревью |
+| `~/Github/DS-strategy/dissatisfactions/` | Неудовлетворённости |
+| `~/Github/DS-strategy/reviews/` | История ревью |
 | Git log (все репо) | Коммиты за период |
 
 ### 3.1.1. Hub-and-Spoke архитектура
 
 ```
-    my-strategy (HUB)          ← агрегированные личные планы
+    DS-strategy (HUB)          ← агрегированные личные планы
          │
     Стратег обходит WORKPLAN.md
          │
@@ -102,7 +102,7 @@ epistemic_stage: emerging
   repo1 repo2 repo3 ... repoN   ← WORKPLAN.md в корне каждого репо
 ```
 
-**Агрегация:** Стратег обходит все `~/Github/*/WORKPLAN.md`, собирает РП, формирует агрегированный план в `my-strategy/current/`.
+**Агрегация:** Стратег обходит все `~/Github/*/WORKPLAN.md`, собирает РП, формирует агрегированный план в `DS-strategy/current/`.
 
 **Обратная синхронизация:** При обновлении приоритетов Стратег обновляет соответствующие `WORKPLAN.md` в целевых репо.
 
@@ -236,21 +236,21 @@ context:
 
 ### 9.1. Текущие
 
-- **my-strategy** — личный стратегический хаб (HUB, private)
+- **DS-strategy** — личный стратегический хаб (HUB, private)
 - **WORKPLAN.md** — операционные планы в каждом репо (SPOKE)
 - **GitHub** — источник коммитов из всех репо
-- **ecosystem-development** — командные планы
+- **DS-ops** — командные планы
 
 ### 9.2. Будущие
 
 - **Aist Bot (Telegram)** — отчёты и стратегирование через бот
-- **digital-twin-mcp** — данные о пользователе
+- **DS-twin** — данные о пользователе
 - **Toggl** — фактическое время
-- **spf-personal-pack** — знания ПРС для стратегирования
+- **PACK-personal** — знания ПРС для стратегирования
 
 ## 10. Связанные документы
 
 - [Индекс сценариев](scenarios/00-scenarios-index.md)
 - [Шаблоны](templates/)
 - [DP.AGENT.001 Реестр агентов](../DP.AGENT.001-ai-agents.md)
-- [my-strategy (HUB)](https://github.com/TserenTserenov/my-strategy) — личный стратегический репозиторий
+- [DS-strategy (HUB)](https://github.com/TserenTserenov/DS-strategy) — личный стратегический репозиторий

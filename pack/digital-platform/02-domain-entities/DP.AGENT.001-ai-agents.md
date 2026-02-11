@@ -139,10 +139,10 @@ scenarios: [...]      # Список сценариев (как у Страте�
     └── → RhythmKeeper (напоминания)
 
 Стратег (both, both)
-    ├── → digital-twin-mcp (данные)
+    ├── → DS-twin (данные)
     └── → user-repos MCP (файлы)
 
-Знание-Экстрактор (system, both) → реализация: extractor-agent
+Знание-Экстрактор (system, both) → реализация: DS-extractor
     ├── → pack-MCP (структура пака)
     ├── → user-repos MCP (источники)
     └── → guides-mcp (нормативы)

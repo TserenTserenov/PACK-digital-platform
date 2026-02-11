@@ -37,7 +37,7 @@ created: 2026-02-07
 | `name` | От пользователя | "Паспорт агента Strategist" |
 | `area` | Определить или спросить | digital-platform |
 | `kernel` | Определить или спросить | C (IT-Platform) |
-| `repo` | Определить или спросить | spf-digital-platform-pack |
+| `repo` | Определить или спросить | PACK-digital-platform |
 | `budget` | Спросить | 4h |
 | `priority` | Спросить или P2 по умолчанию | P1 |
 | `criteria` | Спросить | Чеклист готовности |
@@ -110,7 +110,7 @@ created: 2026-02-07
 |---------|----------|-----------|
 | Область | digital-platform | [другая] |
 | Ядро | C (IT-Platform) | [другое] |
-| Репо | spf-digital-platform-pack | [другой] |
+| Репо | PACK-digital-platform | [другой] |
 | Бюджет | ? | [указать часы] |
 | Приоритет | P2 | [P1/P3] |
 

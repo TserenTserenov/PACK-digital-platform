@@ -32,13 +32,13 @@
 
 ### Вне scope
 
-- Код MCP-сервиса (это digital-twin-mcp — downstream/instrument)
-- Код бота (это aist_bot — downstream/instrument)
-- Код Стратега (это strategist-agent — downstream/instrument)
+- Код MCP-сервиса (это DS-twin — downstream/instrument)
+- Код бота (это DS-aist-bot — downstream/instrument)
+- Код Стратега (это DS-strategist — downstream/instrument)
 - UI/UX (это downstream/surface)
-- Содержание индикаторов созидателя (это spf-personal-pack)
-- Знания об экосистеме (это spf-ecosystem-pack)
-- Планы, сроки, реестры проекта (это ecosystem-development — downstream/governance)
+- Содержание индикаторов созидателя (это PACK-personal)
+- Знания об экосистеме (это PACK-ecosystem)
+- Планы, сроки, реестры проекта (это DS-ops — downstream/governance)
 
 ## Расширенные виды (SPF.SPEC.001)
 
@@ -71,17 +71,17 @@
 
 - [TserenTserenov/SPF](https://github.com/TserenTserenov/SPF) — Second Principles Framework
 - [ailev/FPF](https://github.com/ailev/FPF) — First Principles Framework
-- [aisystant/spf-personal-pack](https://github.com/aisystant/spf-personal-pack) — контракт индикаторов созидателя
+- [aisystant/PACK-personal](https://github.com/aisystant/PACK-personal) — контракт индикаторов созидателя
 
 ## Downstream outputs
 
-- [digital-twin-mcp](https://github.com/aisystant/digital-twin-mcp) — MCP-реализация цифрового двойника (instrument)
-- [aist_bot](https://github.com/aisystant/aist_bot) — Telegram-бот, тонкий клиент (instrument)
-- [strategist-agent](https://github.com/TserenTserenov/strategist-agent) — Агент Стратег (instrument)
-- [extractor-agent](https://github.com/TserenTserenov/extractor-agent) — Знание-Экстрактор, prompt-based ИИ-система (instrument)
-- [exocortex-setup-agent](https://github.com/TserenTserenov/exocortex-setup-agent) — Агент развёртывания экзокортекса (instrument)
-- [exocortex-template](https://github.com/TserenTserenov/exocortex-template) — Шаблон экзокортекса (format)
-- [my-strategy](https://github.com/TserenTserenov/my-strategy) — Личный стратегический хаб (governance)
+- [DS-twin](https://github.com/aisystant/DS-twin) — MCP-реализация цифрового двойника (instrument)
+- [DS-aist-bot](https://github.com/aisystant/DS-aist-bot) — Telegram-бот, тонкий клиент (instrument)
+- [DS-strategist](https://github.com/TserenTserenov/DS-strategist) — Агент Стратег (instrument)
+- [DS-extractor](https://github.com/TserenTserenov/DS-extractor) — Знание-Экстрактор, prompt-based ИИ-система (instrument)
+- [DS-exocortex-setup](https://github.com/TserenTserenov/DS-exocortex-setup) — Агент развёртывания экзокортекса (instrument)
+- [FMT-exocortex](https://github.com/TserenTserenov/FMT-exocortex) — Шаблон экзокортекса (format)
+- [DS-strategy](https://github.com/TserenTserenov/DS-strategy) — Личный стратегический хаб (governance)
 
 ## Maintainers
 

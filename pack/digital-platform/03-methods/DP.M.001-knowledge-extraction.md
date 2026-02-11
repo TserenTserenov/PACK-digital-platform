@@ -77,9 +77,9 @@ epistemic_stage: emerging
 | Правило (урок) | `memory/<topic>.md` | Свободный формат |
 
 **Определение Pack'а:**
-- Знание о созидателе → `spf-personal-pack`
-- Знание о платформе/ИТ → `spf-digital-platform-pack`
-- Знание об экосистеме → `spf-ecosystem-pack`
+- Знание о созидателе → `PACK-personal`
+- Знание о платформе/ИТ → `PACK-digital-platform`
+- Знание об экосистеме → `PACK-ecosystem`
 - Кросс-доменное → ближайший по контексту Pack
 
 ### 4.4. Формализация (Formalization)

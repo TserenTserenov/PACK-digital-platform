@@ -168,7 +168,7 @@ interface: both
 
 | Репо | Статус | Описание |
 |------|--------|----------|
-| [extractor-agent](https://github.com/TserenTserenov/extractor-agent) | MVP | Prompt-based реализация: 3 промпта (session-close, on-demand, bulk-extraction), PROCESSES.md с 5 процессами |
+| [DS-extractor](https://github.com/TserenTserenov/DS-extractor) | MVP | Prompt-based реализация: 3 промпта (session-close, on-demand, bulk-extraction), PROCESSES.md с 5 процессами |
 
 **Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close (автоматически) или по команде пользователя.
 

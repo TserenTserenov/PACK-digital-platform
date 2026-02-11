@@ -62,7 +62,7 @@ Pack — source-of-truth предметной области. Размещени
 
 | Тип информации | Правильное место | Путь к Pack |
 |---------------|-----------------|-------------|
-| Быстрая мысль | `my-strategy/inbox/` | Стратегирование → экстракция |
+| Быстрая мысль | `DS-strategy/inbox/` | Стратегирование → экстракция |
 | Черновик из сессии | Skill Close → capture-to-pack | Session-capture → отчёт → Pack |
 | Пост/статья | Inbox или Downstream | Bulk-extraction → отчёт → Pack |
 | Код с комментариями | Instrument-репо | Cross-repo-sync → Pack |

@@ -32,7 +32,7 @@ type: extraction-report
 source: session | bulk | audit
 date: YYYY-MM-DD
 session_id: (опционально)
-pack_target: spf-digital-platform-pack | spf-personal-pack | spf-ecosystem-pack
+pack_target: PACK-digital-platform | PACK-personal | PACK-ecosystem
 ---
 ```
 
@@ -59,7 +59,7 @@ pack_target: spf-digital-platform-pack | spf-personal-pack | spf-ecosystem-pack
 - **Источник:** Сессия 2026-02-10, рефакторинг бота
 - **Сырой текст:** «Оказалось, что FSM-стейт должен быть idempotent — повторный вход не должен менять данные»
 - **Классификация:** failure-mode
-- **Маршрут:** spf-digital-platform-pack/05-failure-modes/DP.FM.XXX-non-idempotent-state.md
+- **Маршрут:** PACK-digital-platform/05-failure-modes/DP.FM.XXX-non-idempotent-state.md
 - **Формализованный текст:**
   > **FM: Неидемпотентное состояние FSM.** Повторный вход в состояние изменяет данные пользователя. Антипаттерн: side-effect в onEnter без проверки текущего состояния.
 - **Вердикт:** accept

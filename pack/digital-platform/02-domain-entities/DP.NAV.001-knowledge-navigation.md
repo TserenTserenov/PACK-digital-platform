@@ -41,7 +41,7 @@ epistemic_stage: emerging
 
 **Что:** Единый реестр всех репозиториев с метаданными.
 
-**Где:** `ecosystem-development/0.OPS/REPOSITORY-REGISTRY.md` (существует).
+**Где:** `DS-ops/0.OPS/REPOSITORY-REGISTRY.md` (существует).
 
 **Содержит:** Для каждого репо — тип, система, содержание, source-of-truth, upstream/downstream.
 
@@ -77,10 +77,10 @@ epistemic_stage: emerging
 
 **Формат между репо (кросс-репо):**
 ```markdown
-[spf-personal-pack:PD.CHR.001](https://github.com/aisystant/spf-personal-pack/.../PD.CHR.001-characteristics.md)
+[PACK-personal:PD.CHR.001](https://github.com/aisystant/PACK-personal/.../PD.CHR.001-characteristics.md)
 ```
 
-**Сокращённый формат для ссылок в тексте:** `spf-personal-pack:PD.CHR.001`
+**Сокращённый формат для ссылок в тексте:** `PACK-personal:PD.CHR.001`
 
 ## 5. Эволюционируемость навигации
 

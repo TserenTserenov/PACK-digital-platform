@@ -1,4 +1,4 @@
-мое# spf-digital-platform-pack
+мое# PACK-digital-platform
 
 > **Тип репозитория:** `Pack`
 
@@ -67,7 +67,7 @@
 ## Структура
 
 ```
-spf-digital-platform-pack/
+PACK-digital-platform/
 ├── README.md                          # Этот файл
 ├── REPO-TYPE.md                       # Метаданные репо
 ├── WORKPLAN.md                        # Операционный план развития Pack'а
@@ -116,21 +116,21 @@ spf-digital-platform-pack/
 
 - [SPF](https://github.com/TserenTserenov/SPF) — Second Principles Framework (форма и процесс)
 - [FPF](https://github.com/ailev/FPF) — First Principles Framework (содержание мышления)
-- [spf-personal-pack](https://github.com/aisystant/spf-personal-pack) — знания о созидателе (характеристики, состояния)
+- [PACK-personal](https://github.com/aisystant/PACK-personal) — знания о созидателе (характеристики, состояния)
 
 ## Downstream (что строится на основе этого Pack'а)
 
-- [digital-twin-mcp](https://github.com/aisystant/digital-twin-mcp) — MCP-реализация цифрового двойника
-- [aist_bot](https://github.com/aisystant/aist_bot) — Telegram-бот (тонкий клиент)
-- [strategist-agent](https://github.com/TserenTserenov/strategist-agent) — Агент Стратег
-- [my-strategy](https://github.com/TserenTserenov/my-strategy) — Личный стратегический хаб
+- [DS-twin](https://github.com/aisystant/DS-twin) — MCP-реализация цифрового двойника
+- [DS-aist-bot](https://github.com/aisystant/DS-aist-bot) — Telegram-бот (тонкий клиент)
+- [DS-strategist](https://github.com/TserenTserenov/DS-strategist) — Агент Стратег
+- [DS-strategy](https://github.com/TserenTserenov/DS-strategy) — Личный стратегический хаб
 
 ## Non-goals
 
 - НЕ содержит кода (это downstream/instrument)
 - НЕ содержит UI/UX (это downstream/surface)
-- НЕ определяет индикаторы созидателя (это spf-personal-pack)
-- НЕ содержит планы проекта (это ecosystem-development)
+- НЕ определяет индикаторы созидателя (это PACK-personal)
+- НЕ содержит планы проекта (это DS-ops)
 
 ---
 

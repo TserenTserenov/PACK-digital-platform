@@ -44,9 +44,9 @@ agent: Strategist
 
 | Репо | Коммитов | РП |
 |------|----------|-----|
-| ecosystem-development | X | Y |
-| spf-digital-platform-pack | X | Y |
-| spf-personal-pack | X | Y |
+| DS-ops | X | Y |
+| PACK-digital-platform | X | Y |
+| PACK-personal | X | Y |
 
 ---
 

@@ -121,8 +121,8 @@ done
 
 | Репо | Коммитов | РП |
 |------|----------|-----|
-| ecosystem-development | X | Y |
-| spf-digital-platform-pack | X | Y |
+| DS-ops | X | Y |
+| PACK-digital-platform | X | Y |
 | ... | ... | ... |
 
 ## Инсайты

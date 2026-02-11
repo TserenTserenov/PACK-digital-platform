@@ -87,7 +87,7 @@
 │   └── ИИ-ассистент (orientation: human, по запросу)
 └── ИТ-система (SYS) — детерминированная, без LLM
     ├── Сервис (CRM, LMS, Биллинг)
-    └── MCP-сервер (digital-twin-mcp, fsm-mcp)
+    └── MCP-сервер (DS-twin, fsm-mcp)
 ```
 
 ```
