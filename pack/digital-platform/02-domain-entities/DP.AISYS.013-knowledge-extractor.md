@@ -78,44 +78,127 @@ related:
 | Pack-совместимые сущности | Markdown-файлы с frontmatter | Pack-репозитории (после одобрения) |
 | Commit proposals | Diffs для человеческого ревью | Git (после одобрения) |
 
-## 4. Сценарии
+## 4. Сценарии и карта вызовов
 
-### 4.1. Session-Capture (в реальном времени)
+### 4.0. Полная карта триггеров
 
-**Триггер:** Естественный рубеж в рабочей сессии (завершена подзадача, обнаружен паттерн, принято решение).
+| # | Триггер | Сценарий | Вызывающий | Процесс KE |
+|---|---------|----------|-----------|-------------|
+| 1 | Мелкое правило в сессии (1-3 строки) | Claude пишет напрямую | Claude (root/repo) | **Нет** (capture-to-pack) |
+| 2 | Исчезающая заметка (.текст в TG) | Бот → inbox → KE | launchd / ручной | Inbox-Check |
+| 3 | Inbox по расписанию | Проверка captures | launchd (2-3ч) | Inbox-Check |
+| 4 | Закрытие сессии | Сбор всех captures | Claude (root/repo) | Session-Close |
+| 5 | Явный запрос пользователя | `/extract`, «запиши в Pack» | Claude (root/repo) | On-Demand |
+| 6 | Загрузка документа | Пакетная обработка | Claude (root/repo) | Bulk Extraction |
+| 7 | Изменился Pack | Проверка downstream | Claude / git hook | Cross-Repo Sync |
+| 8 | Изменилась ontology.md | Синхронизация онтологий | Claude / git hook | Ontology Sync |
+| 9 | Периодический аудит | Ревизия Pack'ов | launchd (ежемесячно) | Knowledge Audit |
+
+> **Исключение #1:** Мелкие правила (1-3 строки, одобрены пользователем) — Claude записывает напрямую в CLAUDE.md или memory/, **без вызова Экстрактора**. Это единственный сценарий, который обходит KE. Обоснование: overhead формализации > ценность для правила в 1-3 строки.
+
+### 4.0.1. Архитектура вызывающих
+
+```
+                    ┌─────────────┐
+                    │  Экстрактор │
+                    │  (7 проц.)  │
+                    └──────▲──────┘
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+    ┌─────┴─────┐   ┌─────┴─────┐   ┌─────┴─────┐
+    │  Claude   │   │  launchd  │   │  Событие  │
+    │ (сессия)  │   │(расписание)│  │(git hook, │
+    │           │   │           │   │ бот)      │
+    └─────┬─────┘   └─────┴─────┘   └─────┬─────┘
+          │               │               │
+    ┌─────┴─────┐   ┌─────┴─────┐   ┌─────┴─────┐
+    │• Root     │   │• Inbox-   │   │• Cross-   │
+    │  Claude   │   │  Check    │   │  Repo Sync│
+    │• Repo     │   │• Knowledge│   │• Ontology │
+    │  Claude   │   │  Audit    │   │  Sync     │
+    │           │   │           │   │           │
+    │Процессы:  │   │           │   │           │
+    │ Session-  │   │           │   │           │
+    │  Close    │   │           │   │           │
+    │ On-Demand │   │           │   │           │
+    │ Bulk      │   │           │   │           │
+    └───────────┘   └───────────┘   └───────────┘
+```
+
+**Claude root** (`~/Github`) — вызывает KE при Close и On-Demand из любого контекста.
+**Claude repo** (`<repo>/`) — вызывает KE при Close и On-Demand из контекста репо.
+**launchd** — периодический вызов Inbox-Check и Knowledge Audit.
+**Событие** — git hook после коммита в Pack запускает Cross-Repo Sync / Ontology Sync.
+
+### 4.1. Session-Close (закрытие сессии)
+
+**Триггер:** Пользователь говорит «закрываю сессию» / РП завершён.
+**Вызывающий:** Claude (root или repo) → протокол Close (CLAUDE.md § 2).
 
 **Поток:**
 ```
-Рубеж в сессии → Экстрактор проверяет → Анонс «Capture: X → Y» → Одобрение → Запись
+Закрытие сессии → KE собирает captures + ищет пропущенные → Extraction Report → Ревью → Pack
 ```
 
-**Примитивная реализация:** Текущий скилл capture-to-pack в CLAUDE.md. Экстрактор формализует этот паттерн как ИИ-систему.
+### 4.2. On-Demand (явный запрос)
 
-### 4.2. Bulk-Extraction (пакетная обработка)
+**Триггер:** Пользователь явно просит зафиксировать знание: `/extract`, «запиши в Pack».
+**Вызывающий:** Claude (root или repo).
+
+**Поток:**
+```
+Запрос → KE формализует один кандидат → Предложение → Одобрение → Pack
+```
+
+### 4.3. Bulk-Extraction (пакетная обработка)
 
 **Триггер:** Пользователь загрузил документ, гайд, пост для обработки.
+**Вызывающий:** Claude (root или repo).
 
 **Поток:**
 ```
-Документ → Экстрактор анализирует → Отчёт с кандидатами → Ревью → Размещение
+Документ → KE анализирует → Отчёт с кандидатами → Ревью → Размещение
 ```
 
-### 4.3. Cross-Repo-Sync (синхронизация между репо)
+### 4.4. Cross-Repo-Sync (синхронизация между репо)
 
 **Триггер:** Изменение в Pack → проверка, нужно ли обновить downstream.
+**Вызывающий:** Claude / git hook.
 
 **Поток:**
 ```
-Изменение в Pack → Экстрактор проверяет downstream → Список предложений → Ревью
+Изменение в Pack → KE проверяет downstream → Список предложений → Ревью
 ```
 
-### 4.4. Knowledge-Audit (аудит знаний)
+### 4.5. Knowledge-Audit (аудит знаний)
 
 **Триггер:** По расписанию (monthly) или по запросу.
+**Вызывающий:** launchd / пользователь.
 
 **Поток:**
 ```
 Обход всех Pack → Проверка полноты, устаревших записей, битых ссылок → Отчёт
+```
+
+### 4.6. Inbox-Check (проверка inbox)
+
+**Триггер:** Расписание (каждые 2-3 часа) или ручной запуск.
+**Вызывающий:** launchd / ручной.
+
+**Поток:**
+```
+inbox/captures.md → KE формализует pending записи → Extraction Report → TG-уведомление → Одобрение → Pack
+```
+
+### 4.7. Ontology-Sync (синхронизация онтологий)
+
+**Триггер:** Изменение ontology.md в любом Pack.
+**Вызывающий:** Claude / git hook.
+
+**Поток:**
+```
+Pack ontology изменилась → KE сравнивает с мастером → Sync Report → Одобрение → Обновление мастера + downstream
 ```
 
 ## 5. Переносимость (отчуждаемость)
@@ -171,16 +254,21 @@ related:
 
 | Репо | Статус | Описание |
 |------|--------|----------|
-| [DS-extractor](https://github.com/TserenTserenov/DS-extractor) | MVP | Prompt-based реализация: 3 промпта (session-close, on-demand, bulk-extraction), PROCESSES.md с 5 процессами |
+| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 6 промптов, PROCESSES.md с 7 процессами |
 
-**Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close (автоматически) или по команде пользователя.
+**Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close, по команде пользователя, по расписанию (launchd), или по событию (git hook).
 
-**MVP-покрытие сценариев:**
-- Session-Capture (§ 4.1) → `prompts/session-close.md`
-- Bulk-Extraction (§ 4.2) → `prompts/bulk-extraction.md`
-- On-Demand → `prompts/on-demand.md`
-- Cross-Repo-Sync (§ 4.3) → planned
-- Knowledge-Audit (§ 4.4) → planned
+**Покрытие сценариев:**
+
+| Сценарий (§ 4) | Промпт | Статус |
+|-----------------|--------|--------|
+| Session-Close (§ 4.1) | `prompts/session-close.md` | Готов к тесту |
+| On-Demand (§ 4.2) | `prompts/on-demand.md` | Готов к тесту |
+| Bulk-Extraction (§ 4.3) | `prompts/bulk-extraction.md` | Готов к тесту |
+| Cross-Repo-Sync (§ 4.4) | `prompts/cross-repo-sync.md` | Готов к тесту |
+| Knowledge-Audit (§ 4.5) | `prompts/knowledge-audit.md` | Готов к тесту |
+| Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Описан в PROCESSES.md |
+| Ontology-Sync (§ 4.7) | `prompts/ontology-sync.md` | Готов к тесту |
 
 ## 10. Связанные документы
 
