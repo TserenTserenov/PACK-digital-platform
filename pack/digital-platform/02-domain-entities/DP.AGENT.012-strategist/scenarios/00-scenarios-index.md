@@ -25,6 +25,8 @@ created: 2026-02-07
         ↓
         day-plan
 
+23:00   note-review   note-review  note-review (→ день-план читает предложения)
+
 22:00      —            —         week-review
 
 Последний день месяца: month-report
@@ -32,7 +34,7 @@ created: 2026-02-07
 
 ---
 
-## Сценарии по расписанию (4 шт.)
+## Сценарии по расписанию (5 шт.)
 
 | # | Сценарий | Файл | Триггер | Выход |
 |---|----------|------|---------|-------|
@@ -40,6 +42,7 @@ created: 2026-02-07
 | 2 | Day Plan | [02-day-plan.md](scheduled/02-day-plan.md) | 7:00 ежедневно | План дня + апдейт вчера |
 | 3 | Week Review | [03-week-review.md](scheduled/03-week-review.md) | 22:00 Вс | Итоги недели (для клуба) |
 | 4 | Month Report | [04-month-report.md](scheduled/04-month-report.md) | Последний день месяца | Отчёт за месяц |
+| 5 | Note-Review / Разборщик | [05-note-review.md](scheduled/05-note-review.md) | 23:00 ежедневно | Классификация заметок + предложения |
 
 ---
 
@@ -110,6 +113,7 @@ created: 2026-02-07
 | `/check-plan` | check-plan |
 | `/update-priorities` | update-priorities |
 | `/add-wp` | add-workproduct |
+| `/note-review` | note-review / Разборщик |
 
 ---
 
