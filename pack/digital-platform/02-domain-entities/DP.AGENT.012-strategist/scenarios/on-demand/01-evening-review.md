@@ -3,6 +3,7 @@ id: DP.AGENT.012.SC.05
 type: scenario
 trigger: on-demand
 status: draft
+summary: "Вечерний итог дня по запросу: сопоставление коммитов со статусами РП, выявление незапланированного, carry-over на завтра"
 created: 2026-02-07
 ---
 

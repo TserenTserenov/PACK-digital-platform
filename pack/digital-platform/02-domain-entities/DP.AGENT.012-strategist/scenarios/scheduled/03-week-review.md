@@ -4,6 +4,7 @@ type: scenario
 trigger: scheduled
 schedule: "22:00 Sunday"
 status: draft
+summary: "Итоговое ревью недели (вс 22:00): агрегация дневных планов, анализ коммитов, расчёт статистики и публикация в клуб"
 created: 2026-02-07
 ---
 
@@ -121,7 +122,7 @@ done
 
 | Репо | Коммитов | РП |
 |------|----------|-----|
-| DS-ops | X | Y |
+| DS-ecosystem-development | X | Y |
 | PACK-digital-platform | X | Y |
 | ... | ... | ... |
 

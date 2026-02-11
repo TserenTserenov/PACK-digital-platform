@@ -3,6 +3,7 @@ id: DP.AGENT.012.SC.06
 type: scenario
 trigger: on-demand
 status: draft
+summary: "Сверка задачи с планом по запросу: классификация на in-plan / aligned / unplanned / urgent с рекомендациями действия"
 created: 2026-02-07
 ---
 

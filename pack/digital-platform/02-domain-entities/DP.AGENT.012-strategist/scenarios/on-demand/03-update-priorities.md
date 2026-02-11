@@ -3,6 +3,7 @@ id: DP.AGENT.012.SC.07
 type: scenario
 trigger: on-demand
 status: draft
+summary: "Изменение приоритетов на уровне дня/недели/месяца: определение типа изменения, каскадные эффекты, diff и коммит"
 created: 2026-02-07
 ---
 

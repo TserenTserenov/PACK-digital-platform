@@ -2,6 +2,7 @@
 id: DP.AGENT.012.SCENARIOS
 type: scenarios-index
 status: draft
+summary: "Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных"
 created: 2026-02-07
 ---
 
