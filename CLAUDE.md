@@ -79,4 +79,4 @@ pack/digital-platform/
 |-------------|------|
 | SPF | Upstream — форма и процесс |
 | FPF | Upstream (через SPF) — первые принципы |
-| DS-ops | Downstream — управление экосистемой |
+| DS-ecosystem-development | Downstream — управление экосистемой |
