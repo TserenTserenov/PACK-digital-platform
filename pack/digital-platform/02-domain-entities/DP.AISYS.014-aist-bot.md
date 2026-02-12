@@ -80,6 +80,66 @@ related:
 | Знание о домене | Через MCP (guides, knowledge) |
 | Deep links | Может не только объяснить, но и перенаправить в нужный сервис |
 
+#### 4.1.1. Self-Knowledge (Самознание)
+
+Трёхуровневая модель самознания — бот знает о себе и может точно отвечать на вопросы о своей структуре и возможностях. **Эта секция — source-of-truth** для знаний бота о себе. Бот читает её при запуске и кеширует.
+
+| Уровень | Содержит | Источник | Обновляется | Скорость |
+|---------|----------|----------|-------------|----------|
+| **L1: Кеш** | Описания, сценарии, FAQ (из этой секции) + граф сервисов из реестра | Pack (этот файл) → кеш в памяти | Раз в день / при рестарте | ~100ms |
+| **L2: MCP** | Полная база знаний Pack через MCP + быстрая модель | MCP-запрос к Pack | По запросу | ~1-3 сек |
+| **L3: Полный поиск** | MCP guides + knowledge + Sonnet | MCP-поиск + Claude | По запросу | ~3-8 сек |
+
+**Реализация:** `core/self_knowledge.py` — читает эту секцию из Pack, мержит с ServiceRegistry, кеширует по языкам.
+
+**Три пути обработки вопросов:**
+- L1: FAQ-матч или частый вопрос → мгновенный ответ из кеша
+- L2: Вопрос о боте, не в кеше → Claude Haiku + self-knowledge (без MCP-поиска)
+- L3: Доменный вопрос → MCP-поиск + Claude Sonnet + self-knowledge в system prompt
+
+##### Идентичность бота
+
+**Имя:** AIST Bot (@aist_me_bot)
+
+**Назначение (ru):** Бот-наставник для систематического обучения и личного развития. Помогает изучать системное мышление через структурированные программы, отвечает на вопросы, ведёт заметки и отслеживает прогресс.
+
+**Назначение (en):** Mentor bot for systematic learning and personal development. Helps study systems thinking through structured programs, answers questions, keeps notes, and tracks progress.
+
+**Как задать вопрос (ru):** Начни сообщение с `?` чтобы задать вопрос консультанту в любой момент.
+
+**Как задать вопрос (en):** Start your message with `?` to ask the consultant a question at any time.
+
+##### Сценарии
+
+| # | Сценарий | Команда | Описание (ru) | Описание (en) |
+|---|----------|---------|---------------|---------------|
+| 1 | Онбординг | `/start` | Первый запуск: знакомство, заполнение профиля, выбор режима | First launch: introduction, profile setup, mode selection |
+| 2 | Выбор режима | `/mode` | Переключение между Марафоном, Лентой и другими программами | Switch between Marathon, Feed, and other programs |
+| 3 | Марафон | `/learn` (mode=marathon) | 14-дневная программа: каждый день теория → вопрос на понимание → бонусный вопрос → практическое задание. Прогресс сохраняется | 14-day program: daily theory → comprehension question → bonus question → practical task. Progress is saved |
+| 4 | Лента | `/learn` (mode=feed) | Гибкий режим: выбираешь до 3 тем, получаешь ежедневные дайджесты с углублением | Flexible mode: choose up to 3 topics, receive daily digests with increasing depth |
+| 5 | Тест систематичности | `/test` | Data-driven тест уровня системного мышления по таксономии Блума (знание → понимание → применение). Результат с персональной рекомендацией | Data-driven systems thinking assessment using Bloom taxonomy. Results with personal recommendation |
+| 6 | Консультация | `?вопрос` | Задать вопрос консультанту из любого места в боте. Ответ на основе базы знаний и MCP | Ask the consultant a question from anywhere in the bot. Answer based on knowledge base and MCP |
+| 7 | Заметки | `.текст` | Три способа: `.текст` (прямая), `.` + reply, `.` + forward. Заметки сохраняются для анализа | Three ways: `.text` (direct), `.` + reply, `.` + forward. Notes are saved for analysis |
+| 8 | Прогресс | `/progress` | Статистика обучения: пройденные темы, текущий день марафона, выполненные задания | Learning stats: completed topics, current marathon day, completed tasks |
+| 9 | Планы (Стратег) | `/rp`, `/plan`, `/report` | Интеграция со Стратегом: список рабочих продуктов, план на неделю, отчёт | Strategist integration: work products list, weekly plan, report |
+| 10 | Настройки | `/settings` | Язык интерфейса, имя, профессия, интересы. Языки: ru, en, es, fr | Interface language, name, occupation, interests. Languages: ru, en, es, fr |
+| 11 | Цифровой двойник | `/twin` | Персональный профиль: данные об обучении, интересах и прогрессе для рекомендаций | Personal profile: learning data, interests, and progress for recommendations |
+| 12 | Помощь | `/help` | Полный список команд и возможностей бота с описаниями | Full list of bot commands and capabilities with descriptions |
+| 13 | Экспорт | `/export` | Экспорт данных пользователя | Export user data |
+
+##### FAQ
+
+| # | Вопрос (ru) | Вопрос (en) | Ключевые слова | Ответ (ru) | Ответ (en) |
+|---|-------------|-------------|----------------|------------|------------|
+| 1 | Как начать обучение? | How to start learning? | начать, старт, start, begin | Используй `/learn`. Если ещё не выбран режим — бот предложит выбрать Марафон или Ленту через `/mode`. | Use `/learn`. If no mode is selected yet, the bot will offer to choose Marathon or Feed via `/mode`. |
+| 2 | Как работает Марафон? | How does the Marathon work? | марафон, marathon, 14 дн | Марафон — 14-дневная программа. Каждый день: теоретический урок + практическое задание. Прогресс сохраняется, можно продолжить с того места, где остановился. | Marathon is a 14-day program. Each day: theory lesson + practical task. Progress is saved, you can continue where you left off. |
+| 3 | Как работает Лента? | How does the Feed work? | лент, feed, дайджест | Лента — гибкий режим обучения. Выбираешь до 3 интересных тем, получаешь ежедневные дайджесты с постепенным углублением. | Feed is a flexible learning mode. Choose up to 3 topics, receive daily digests with gradual deepening. |
+| 4 | Как сменить язык? | How to change the language? | язык, language, english | Открой `/settings` и выбери нужный язык. Доступны: русский, английский, испанский, французский. | Open `/settings` and select the desired language. Available: Russian, English, Spanish, French. |
+| 5 | Как создать заметку? | How to create a note? | замет, note, запис | Три способа: 1) `.текст` — точка и текст. 2) Ответь на сообщение с точкой. 3) Перешли сообщение и добавь точку. | Three ways: 1) `.text` — dot and text. 2) Reply to a message with a dot. 3) Forward a message and add a dot. |
+| 6 | Как пройти тест? | How to take the test? | тест, оценк, assessment, уров | Используй `/test` — бот проведёт тест систематичности и покажет результат с рекомендацией. | Use `/test` — the bot will conduct an assessment and show results with a recommendation. |
+| 7 | Как задать вопрос? | How to ask a question? | помощ, помог, help, вопрос | Начни сообщение с `?` и напиши вопрос. Например: `?Что такое системное мышление?` Консультант доступен из любого места. | Start with `?` and type your question. Example: `?What is systems thinking?` The consultant is available from anywhere. |
+| 8 | Как работать с планами? | How to work with plans? | план, рп, plan, report | Используй `/rp` для списка рабочих продуктов, `/plan` для плана на неделю, `/report` для отчёта. Интегрировано со Стратегом. | Use `/rp` for work products, `/plan` for weekly plan, `/report` for a report. Integrated with the Strategist. |
+
 ### 4.2. Слой 2: Меню-генератор
 
 Меню **генерируется** из реестра сервисов, а не захардкожено.
