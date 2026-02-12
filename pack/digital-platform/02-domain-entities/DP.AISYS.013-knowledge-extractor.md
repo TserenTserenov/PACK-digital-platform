@@ -188,7 +188,7 @@ related:
 
 **Поток:**
 ```
-inbox/captures.md → KE формализует pending записи → Extraction Report → TG-уведомление → Одобрение → Pack
+inbox/captures.md → KE формализует pending записи → Extraction Report → Notify (→ SYS.016 Синхронизатор) → Одобрение → Pack
 ```
 
 ### 4.7. Ontology-Sync (синхронизация онтологий)
@@ -254,7 +254,7 @@ Pack ontology изменилась → KE сравнивает с мастеро
 
 | Репо | Статус | Описание |
 |------|--------|----------|
-| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 7 промптов, PROCESSES.md с 7 процессами, автоматизация (launchd + TG) |
+| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 7 промптов, PROCESSES.md с 7 процессами, автоматизация (launchd). Уведомления делегированы SYS.016 Синхронизатору |
 
 **Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close, по команде пользователя, по расписанию (launchd), или по событию (git hook).
 

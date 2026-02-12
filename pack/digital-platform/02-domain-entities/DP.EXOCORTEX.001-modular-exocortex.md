@@ -134,6 +134,9 @@ related:
 | Day-Close | **Стратег** (launchd) | Pack (DP.AGENT.012) |
 | Обновление Memory | **Claude Code** (Close) + **Стратег** (weekly) | CLAUDE.md + Pack |
 | Backup экзокортекса | **Claude Code** (Close) + **Стратег** (Day-Close) | CLAUDE.md + Pack |
+| Notify (уведомления) | **Синхронизатор** (SYS.016) | DS-synchronizer |
+
+**Правило:** Все уведомления агентов (Стратег, Экстрактор) делегированы Синхронизатору. Агенты вызывают `DS-synchronizer/scripts/notify.sh`, не отправляют в Telegram напрямую.
 
 **Правило:** Протоколы Стратега (Day-Close и др.) НЕ описываются в CLAUDE.md. Их место — паспорт Стратега в Pack или README.md DS-strategist.
 
