@@ -141,6 +141,7 @@ related:
 | 6 | Как пройти тест? | How to take the test? | тест, оценк, assessment, уров | Используй `/test` — бот проведёт тест систематичности и покажет результат с рекомендацией. | Use `/test` — the bot will conduct an assessment and show results with a recommendation. |
 | 7 | Как задать вопрос? | How to ask a question? | помощ, помог, help, вопрос | Начни сообщение с `?` и напиши вопрос. Например: `?Что такое системное мышление?` Консультант доступен из любого места. | Start with `?` and type your question. Example: `?What is systems thinking?` The consultant is available from anywhere. |
 | 8 | Как работать с планами? | How to work with plans? | план, рп, plan, report | Используй `/rp` для списка рабочих продуктов, `/plan` для плана на неделю, `/report` для отчёта. Интегрировано со Стратегом. | Use `/rp` for work products, `/plan` for weekly plan, `/report` for a report. Integrated with the Strategist. |
+| 9 | Кто ты? | Who are you? | кто ты, кто вы, who are you, what are you | Я — AIST Bot, бот-наставник для систематического обучения. Помогаю изучать системное мышление через марафон (`/learn`) или ленту, веду заметки, отслеживаю прогресс. Начни с `/mode` для выбора режима. | I'm AIST Bot, a mentor bot for systematic learning. I help study systems thinking through marathon (`/learn`) or feed, keep notes, and track progress. Start with `/mode` to choose a mode. |
 
 ### 4.2. Слой 2: Меню-генератор
 
