@@ -267,7 +267,7 @@ Pack ontology изменилась → KE сравнивает с мастеро
 | Bulk-Extraction (§ 4.3) | `prompts/bulk-extraction.md` | Готов к тесту |
 | Cross-Repo-Sync (§ 4.4) | `prompts/cross-repo-sync.md` | Готов к тесту |
 | Knowledge-Audit (§ 4.5) | `prompts/knowledge-audit.md` | Готов к тесту |
-| Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Готов к тесту |
+| Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Работает (launchd 3h) |
 | Ontology-Sync (§ 4.7) | `prompts/ontology-sync.md` | Готов к тесту |
 
 ## 10. Связанные документы
