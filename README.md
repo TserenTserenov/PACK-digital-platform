@@ -118,6 +118,19 @@ PACK-digital-platform/
 - [FPF](https://github.com/ailev/FPF) — First Principles Framework (содержание мышления)
 - [PACK-personal](https://github.com/aisystant/PACK-personal) — знания о созидателе (характеристики, состояния)
 
+## Действующие исполнители экзокортекса
+
+> Исполнитель — система (ИИ или скрипт), выполняющая автономную работу по расписанию или триггеру. Правило: пока только скрипт — живёт в родительском репо; появился промпт — выделяется в отдельное DS-репо.
+
+| # | Исполнитель | Вид | Репо | Расписание / триггер |
+|---|------------|-----|------|---------------------|
+| 1 | **Стратег** (AISYS.012) | ИИ-агент | DS-strategist-agent/ | launchd: 4:00 daily + Пн 00:00 + boot |
+| 2 | **Экстрактор** (AISYS.013) | ИИ-агент | DS-extractor-agent/ | launchd: каждые 3ч + Claude (Close) |
+| 3 | **AIST Bot** (AISYS.014) | ИИ-ассистент | DS-aist-bot/ | Telegram (пользователь / сервер) |
+| 4 | **Синхронизатор** (SYS.016) | Скрипт | DS-synchronizer/ | launchd: каждые 2 мин + boot |
+
+Полные реестры: [DP.AGENT.001](pack/digital-platform/02-domain-entities/DP.AGENT.001-ai-agents.md) (ИИ-системы), [DP.SYS.001](pack/digital-platform/02-domain-entities/DP.SYS.001-deterministic-systems.md) (детерминированные).
+
 ## Downstream (что строится на основе этого Pack'а)
 
 - [DS-twin](https://github.com/aisystant/DS-twin) — MCP-реализация цифрового двойника
