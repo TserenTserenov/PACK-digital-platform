@@ -254,7 +254,7 @@ Pack ontology изменилась → KE сравнивает с мастеро
 
 | Репо | Статус | Описание |
 |------|--------|----------|
-| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 6 промптов, PROCESSES.md с 7 процессами |
+| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 7 промптов, PROCESSES.md с 7 процессами, автоматизация (launchd + TG) |
 
 **Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close, по команде пользователя, по расписанию (launchd), или по событию (git hook).
 
@@ -267,7 +267,7 @@ Pack ontology изменилась → KE сравнивает с мастеро
 | Bulk-Extraction (§ 4.3) | `prompts/bulk-extraction.md` | Готов к тесту |
 | Cross-Repo-Sync (§ 4.4) | `prompts/cross-repo-sync.md` | Готов к тесту |
 | Knowledge-Audit (§ 4.5) | `prompts/knowledge-audit.md` | Готов к тесту |
-| Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Описан в PROCESSES.md |
+| Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Готов к тесту |
 | Ontology-Sync (§ 4.7) | `prompts/ontology-sync.md` | Готов к тесту |
 
 ## 10. Связанные документы
