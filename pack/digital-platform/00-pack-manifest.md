@@ -93,6 +93,7 @@
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности через обнаружение, классификацию и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
 | DP.M.003 | Context Engineering Protocol | M | Метод проектирования контекста ИИ-агента: Write/Select/Compress/Isolate → CLAUDE.md + memory/ + Pack layers | draft |
+| DP.M.004 | Адаптивная персонализация по состоянию | M | Адаптация контента обучения (промпты, bloom_level, тематика) на основе состояния пользователя из теста систематичности | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |

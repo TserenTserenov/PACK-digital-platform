@@ -24,13 +24,13 @@ generated: true
 | CONCEPT (CONCEPT) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 2 |
-| Methods (M) | 3 |
+| Methods (M) | 4 |
 | Maps (MAP) | 1 |
 | NAV (NAV) | 1 |
 | SoTA Annotations (SOTA) | 12 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **39** |
+| **Total** | **40** |
 
 ## Methods
 
@@ -39,6 +39,7 @@ generated: true
 | DP.M.001 | Извлечение знаний | Трансформация сырой информации в Pack-совместимые сущности через обнаружение, классификацию и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
 | DP.M.003 | Context Engineering Protocol | Метод проектирования контекста ИИ-агента: Write/Select/Compress/Isolate → CLAUDE.md + memory/ + Pack layers | draft |
+| DP.M.004 | Адаптивная персонализация по состоянию | Адаптация контента обучения (промпты, bloom_level, тематика) на основе состояния пользователя из теста систематичности | draft |
 
 ## Work Products
 

@@ -14,7 +14,7 @@ orientation: human
 initiative: both
 interface: dialogue
 related:
-  uses: [DP.ARCH.001, DP.AGENT.001, DP.NAV.001]
+  uses: [DP.ARCH.001, DP.AGENT.001, DP.NAV.001, DP.M.004]
   integrates: [DP.AISYS.012, DP.AISYS.013]
 ---
 
@@ -119,7 +119,7 @@ related:
 | 2 | Выбор режима | `/mode` | ✅ | Переключение между Марафоном, Лентой и другими программами | Switch between Marathon, Feed, and other programs |
 | 3 | Марафон | `/learn` (mode=marathon) | ✅ | 14-дневная программа: каждый день теория → вопрос на понимание → бонусный вопрос → практическое задание. Прогресс сохраняется | 14-day program: daily theory → comprehension question → bonus question → practical task. Progress is saved |
 | 4 | Лента | `/learn` (mode=feed) | ✅ | Гибкий режим: выбираешь до 3 тем, получаешь ежедневные дайджесты с углублением | Flexible mode: choose up to 3 topics, receive daily digests with increasing depth |
-| 5 | Тест систематичности | `/test` | ✅ | Data-driven тест уровня системного мышления по таксономии Блума (знание → понимание → применение). Результат с персональной рекомендацией | Data-driven systems thinking assessment using Bloom taxonomy. Results with personal recommendation |
+| 5 | Тест систематичности | `/test` | ✅ | Data-driven тест: 12 вопросов → состояние (Хаос/Тупик/Поворот) → адаптация контента Марафона и Ленты через DP.M.004 (стиль, bloom_level, тематика) | Data-driven assessment: 12 questions → state (Chaos/Deadlock/Turning Point) → content adaptation for Marathon and Feed via DP.M.004 (style, bloom_level, topics) |
 | 6 | Консультация | `?вопрос` | ✅ | Задать вопрос консультанту из любого места в боте. Ответ на основе базы знаний и MCP | Ask the consultant a question from anywhere in the bot. Answer based on knowledge base and MCP |
 | 7 | Заметки | `.текст` | ✅ | Три способа: `.текст` (прямая), `.` + reply, `.` + forward. Заметки сохраняются для анализа | Three ways: `.text` (direct), `.` + reply, `.` + forward. Notes are saved for analysis |
 | 8 | Прогресс | `/progress` | ✅ | Статистика обучения: пройденные темы, текущий день марафона, выполненные задания | Learning stats: completed topics, current marathon day, completed tasks |
@@ -191,6 +191,7 @@ user.has_access(service) = user.subscription ∪ user.purchases ∪ user.role
 
 | Функция | Данные | Результат |
 |---------|--------|-----------|
+| **Адаптивная персонализация** | assessment_state из /test | Стиль контента + bloom_level + тематика Ленты (DP.M.004) |
 | Частотный анализ | Какие кнопки нажимают | Адаптивный порядок меню |
 | Анализ застреваний | Где нажимают «Назад» | Упрощение навигации |
 | Цифровой двойник | Профиль + прогресс + заметки | **Персональная траектория обучения** |
