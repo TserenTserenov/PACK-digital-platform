@@ -24,24 +24,28 @@ generated: true
 | CONCEPT (CONCEPT) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 2 |
-| Methods (M) | 1 |
+| Methods (M) | 3 |
 | Maps (MAP) | 1 |
 | NAV (NAV) | 1 |
+| SoTA Annotations (SOTA) | 12 |
 | SYS (SYS) | 1 |
-| Work Products (WP) | 1 |
-| **Total** | **24** |
+| Work Products (WP) | 2 |
+| **Total** | **39** |
 
 ## Methods
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.M.001 | Извлечение знаний | Трансформация сырой информации в Pack-совместимые сущности через обнаружение, классификацию и формализацию | draft |
+| DP.M.002 | Применение стратегического DDD | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
+| DP.M.003 | Context Engineering Protocol | Метод проектирования контекста ИИ-агента: Write/Select/Compress/Isolate → CLAUDE.md + memory/ + Pack layers | draft |
 
 ## Work Products
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.WP.001 | Отчёт экстракции | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
+| DP.WP.002 | Ubiquitous Language | Единый язык домена: глоссарий терминов, прорастающий во все артефакты — код, UI, документацию, тикеты, планы | draft |
 
 ## Failure Modes
 
@@ -49,6 +53,23 @@ generated: true
 |----|------|---------|--------|
 | DP.FM.001 | Информация как знание | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
 | DP.FM.002 | Смешение слоёв | Смешение слоёв архитектуры платформы: код в Pack, знания в Downstream, UI в архитектуре | draft |
+
+## SoTA Annotations
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.SOTA.001 | DDD Strategic (Khononov) | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
+| DP.SOTA.002 | Context Engineering | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
+| DP.SOTA.003 | Open API Specifications | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
+| DP.SOTA.004 | GraphRAG + Knowledge Graphs | Комбинация vector search + knowledge graph traversal для multi-hop reasoning: 87% vs 23% accuracy по сравнению с базовым RAG | active |
+| DP.SOTA.005 | AI-Native Org Design | Организационная архитектура для AI-first: плоские иерархии, agent orchestration, end-to-end accountability вместо функциональных силосов | active |
+| DP.SOTA.006 | Agentic Development | Multi-agent orchestration: инженеры оркестрируют специализированных агентов, а не пишут код напрямую; requirement-to-deploy за часы | active |
+| DP.SOTA.007 | AI-Accelerated Ontology Engineering | LLM ускоряют онтологическую инженерию в 10x: моделирование, расширение, population, alignment, entity disambiguation | active |
+| DP.SOTA.008 | Real-Time Knowledge Capture | Capture during work, not after: знания фиксируются в момент обнаружения, а не ретроспективно — консенсус KM 2026 | active |
+| DP.SOTA.009 | Knowledge-Based Digital Twins | Персональные/enterprise knowledge graphs как digital twin: реплицируют перспективу, знания и предпочтения владельца | active |
+| DP.SOTA.010 | DSL → DSLM Evolution | Бифуркация DSL: классические domain-specific languages стабильны, фронтир ушёл в Domain-Specific Language Models (DSLM) | active |
+| DP.SOTA.011 | Coupling Model (Khononov 2024) | Многомерная модель связанности: knowledge coupling, distance coupling, volatility coupling — 4 уровня интеграции | active |
+| DP.SOTA.012 | Multi-Representation Knowledge Architecture | Model/View эволюционировал в multi-representation: vector + graph + hierarchical index, отделённые от surface (бот, курс, API) | active |
 
 ## Maps
 
