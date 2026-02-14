@@ -255,12 +255,13 @@ Telegram Update → Middleware → Router → Dispatcher → SM.handle()
 
 | Система | Интерфейс | Текущий статус |
 |---------|-----------|----------------|
-| Claude API | `clients/claude.py` | Active |
-| MCP guides/knowledge | `core/knowledge.py` | Active |
-| PostgreSQL | `core/storage.py` | Active |
-| GitHub API | `handlers/github.py` | In progress |
-| Стратег | `handlers/strategist.py` | In progress |
-| Цифровой двойник | `handlers/twin.py` | In progress |
+| Claude API (Sonnet/Haiku) | `clients/claude.py` | Active |
+| knowledge-mcp v3.1 (CF Workers AI, bge-m3) | `clients/mcp.py`, `core/knowledge.py` | Active |
+| PostgreSQL (Neon.com, asyncpg) | `db/`, asyncpg pool | Active |
+| aiogram 3.x | Telegram Bot Framework | Active |
+| GitHub API (OAuth) | `clients/github_api.py` | Active |
+| Стратег (TG integration) | `notify.sh` + `/rp`, `/plan`, `/report` | Active |
+| Цифровой двойник | `clients/digital_twin.py` | In progress |
 
 ## 7. Переносимость (отчуждаемость)
 
@@ -292,7 +293,7 @@ Telegram Update → Middleware → Router → Dispatcher → SM.handle()
 
 | Репо | Ветка | Статус |
 |------|-------|--------|
-| [DS-aist-bot](https://github.com/TserenTserenov/DS-aist-bot) / aist_bot_newarchitecture | new-architecture | Active |
+| [DS-IT-systems/aist_bot_newarchitecture](https://github.com/TserenTserenov/DS-IT-systems) | new-architecture | Active |
 
 ## 10. Связанные документы
 
