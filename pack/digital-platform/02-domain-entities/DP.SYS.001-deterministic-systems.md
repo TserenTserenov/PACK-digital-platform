@@ -41,7 +41,7 @@ related:
 | SYS.014 | **Apps SDK** | Расширения и маркетплейс |
 | SYS.015 | **Заметочник** | Быстрый захват заметок из интерфейсов |
 | SYS.016 | **Синхронизатор** | Watch → Detect → Route → Notify + Pack → Projection → Downstream: синхронизация файлов, наблюдение за изменениями, вызов агентов, проецирование знаний, центральный dispatch |
-| SYS.017 | **Knowledge MCP** | Unified MCP-сервер знаний: семантический поиск по Pack + guides |
+| SYS.017 | **Knowledge MCP** | Unified MCP-сервер знаний: гибридный поиск (semantic + keyword) по Pack + guides |
 
 ## 3. Цифровой двойник (SYS.001)
 
@@ -112,15 +112,17 @@ LMS/CRM/Клуб → Event Bus → Activity Hub → Цифровой двойн�
 
 ### 6.2. Knowledge MCP (SYS.017)
 
-**Назначение:** Единый MCP-сервер для семантического поиска по доменным знаниям (Pack) и учебному контенту (guides).
+**Назначение:** Единый MCP-сервер для гибридного поиска (semantic + keyword) по доменным знаниям (Pack) и учебному контенту (guides).
 
-**Стек:** Cloudflare Workers + SurrealDB + OpenAI embeddings (`text-embedding-3-large`)
+**Стек:** Cloudflare Workers AI + Neon PostgreSQL (pgvector + pg_trgm + tsvector) + bge-m3 embeddings (1024d)
+
+**Поиск (DP.D.024):** keyword-first routing + vector fallback. Коды сущностей (`DP.AGENT.001`) → keyword path (pg_trgm ILIKE + tsvector FTS, ~5ms). Естественный язык → vector path (cosine similarity, ~300ms). Keyword miss → автофолбэк на vector.
 
 **Tools:**
 
 | Тул | Назначение | Ключевые параметры |
 |-----|-----------|-------------------|
-| `search` | Семантический поиск | `query`, `source?`, `source_type?`, `limit?` |
+| `search` | Гибридный поиск (keyword-first + vector fallback) | `query`, `source?`, `source_type?`, `limit?` |
 | `get_document` | Получить документ по имени | `filename`, `source?` |
 | `list_sources` | Список доступных баз знаний | `source_type?` |
 
@@ -132,28 +134,29 @@ LMS/CRM/Клуб → Event Bus → Activity Hub → Цифровой двойн�
 | `guides` | Учебный контент | Курсы Aisystant |
 | `ds` | Процессы, реестры (не код) | DS-ecosystem-development |
 
-**Схема документа в SurrealDB:**
+**Схема документа в Neon PostgreSQL:**
 ```
 documents {
-  filename: string     // относительный путь
-  content: string      // полный текст
-  source: string       // имя источника (репо)
-  source_type: string  // pack | guides | ds
-  embedding: float[]   // вектор 3072d
-  hash: string         // SHA-256 для инкрементальной индексации
+  filename: text           // относительный путь
+  content: text            // полный текст
+  source: text             // имя источника (репо)
+  source_type: text        // pack | guides | ds
+  embedding: vector(1024)  // bge-m3 1024d
+  hash: text               // SHA-256 для инкрементальной индексации
+  search_vector: tsvector  // полнотекстовый индекс
 }
 ```
 
 **Data flow:**
 ```
-Pack/DS repo → ingest.ts (скрипт) → OpenAI → SurrealDB ← Knowledge MCP ← Bot/Claude
+Pack/DS repo → ingest.ts (скрипт) → CF Workers AI (bge-m3) → Neon pgvector ← Knowledge MCP ← Bot/Claude
 ```
 
 ### 6.3. Personal MCP (будущее)
 
 Компонент экзокортекса пользователя. Разворачивается при форке template-репо (FMT-exocortex-template). Содержит личные данные: стратегию, планы, заметки. Доступ по API-ключу.
 
-**Реализация:** knowledge-mcp fork с отдельной SurrealDB базой и API-key auth.
+**Реализация:** knowledge-mcp fork с отдельной Neon базой и API-key auth.
 
 ## 7. Синхронизатор (SYS.016)
 

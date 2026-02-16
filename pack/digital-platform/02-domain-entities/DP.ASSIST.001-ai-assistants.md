@@ -213,7 +213,7 @@ Webhook → Validate → HTTP(Context) → Build Prompt → LLM → Format → R
 | LLM | GPT-4o / Claude 3.5 Sonnet / Claude 3 Haiku |
 | Протокол | MCP (Model Context Protocol) |
 | FSM-архитектура | Finite State Machine для сценариев |
-| Хранилище | SurrealDB (через Twin MCP) |
+| Хранилище | Neon PostgreSQL (через Twin MCP + Knowledge MCP) |
 
 ## 8. Связанные документы
 
