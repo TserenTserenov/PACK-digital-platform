@@ -23,14 +23,14 @@ generated: true
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 3 |
+| Failure Modes (FM) | 4 |
 | Methods (M) | 6 |
 | Maps (MAP) | 1 |
 | NAV (NAV) | 1 |
 | SoTA Annotations (SOTA) | 12 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **43** |
+| **Total** | **44** |
 
 ## Methods
 
@@ -57,6 +57,7 @@ generated: true
 | DP.FM.001 | Информация как знание | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
 | DP.FM.002 | Смешение слоёв | Смешение слоёв архитектуры платформы: код в Pack, знания в Downstream, UI в архитектуре | draft |
 | DP.FM.003 | Контекстная слепота AI-агента | Ускорение генерации модели без ресурсов на добычу контекста = ускорение самообмана. AI-агент не может сам получить живой контекст из реальной жизни | draft |
+| DP.FM.004 | Narrow Pregeneration Scope | — | draft |
 
 ## SoTA Annotations
 
@@ -144,6 +145,7 @@ generated: true
 
 ## Warnings
 
+- Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 
 ---
