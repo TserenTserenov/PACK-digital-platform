@@ -13,8 +13,9 @@ epistemic_stage: emerging
 orientation: human
 initiative: both
 interface: dialogue
+updated: 2026-02-18
 related:
-  uses: [DP.ARCH.001, DP.ARCH.002, DP.AGENT.001, DP.NAV.001, DP.M.004]
+  uses: [DP.ARCH.001, DP.ARCH.002, DP.AGENT.001, DP.NAV.001, DP.M.004, DP.RUNBOOK.001]
   integrates: [DP.AISYS.012, DP.AISYS.013]
 ---
 
@@ -133,6 +134,8 @@ related:
 | 14 | Язык | `/language` | ✅ | Быстрая смена языка интерфейса (ru, en, es, fr) | Quick interface language change (ru, en, es, fr) |
 | 15 | Цифровой двойник | `/twin` | 🚧 | Подключение и синхронизация с персональным цифровым двойником. Настройки → Подключения → Цифровой двойник. При согласии 10 полей профиля переливаются в ЦД | Connect and sync with personal digital twin. Settings → Connections → Digital Twin. With consent, 10 profile fields transfer to DT |
 | 16 | Экспорт | `/export` | 📋 | Экспорт данных пользователя | Export user data |
+| 17 | Аналитика (dev) | `/analytics` | ✅ | Сводная аналитика IWE: DAU/WAU/MAU, сессии, latency, retention D1/D7/D30, тренды. Только для разработчика | IWE summary analytics: DAU/WAU/MAU, sessions, latency, retention D1/D7/D30, trends. Dev-only |
+| 18 | L1 Unstick | — (auto) | ✅ | Автоматическое восстановление застрявших пользователей: 3+ ошибки за 5 мин или stuck в state >60 мин → сброс FSM → mode_select + извинение. Scheduler каждые 5 мин | Automatic recovery of stuck users: 3+ errors in 5 min or stuck in state >60 min → FSM reset → mode_select + apology. Scheduler every 5 min |
 
 ##### FAQ
 
@@ -201,6 +204,9 @@ user.has_access(service) = user.subscription ∪ user.purchases ∪ user.role
 | Функция | Данные | Результат |
 |---------|--------|-----------|
 | **Адаптивная персонализация** | assessment_state из /test | Стиль контента + bloom_level + тематика Ленты (DP.M.004) |
+| **Session tracking** | user_sessions (30-мин timeout) | Avg duration, requests/session, entry/exit points |
+| **/analytics** (dev) | DAU/WAU/MAU, sessions, latency, retention | Сводный отчёт для разработчика |
+| **L1 Unstick** | error_logs (3+ за 5 мин), request_traces (stuck >60 мин) | Автоматический reset FSM → mode_select |
 | Частотный анализ | Какие кнопки нажимают | Адаптивный порядок меню |
 | Анализ застреваний | Где нажимают «Назад» | Упрощение навигации |
 | Цифровой двойник | Профиль + прогресс + заметки | **Персональная траектория обучения** |

@@ -28,10 +28,11 @@ generated: true
 | Methods (M) | 6 |
 | Maps (MAP) | 1 |
 | NAV (NAV) | 1 |
+| RUNBOOK (RUNBOOK) | 1 |
 | SoTA Annotations (SOTA) | 12 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **46** |
+| **Total** | **47** |
 
 ## Distinctions
 
@@ -144,6 +145,12 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.NAV.001 | Навигация знаний | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
+
+### RUNBOOK
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.RUNBOOK.001 | Runbook: Aist Bot Errors | Каталог типичных ошибок Aist Bot с классификацией по уровням (L1-L4), автоматическими действиями и ручными fix'ами | draft |
 
 ### SYS
 
