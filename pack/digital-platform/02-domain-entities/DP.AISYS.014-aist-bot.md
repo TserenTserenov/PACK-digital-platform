@@ -306,7 +306,18 @@ Telegram Update → Middleware → Router → Dispatcher → SM.handle()
 
 | Система | Интерфейс | Текущий статус |
 |---------|-----------|----------------|
-| Claude API (Sonnet/Haiku) | `clients/claude.py` | Active |
+| Claude API (Sonnet + Haiku, model routing) | `clients/claude.py` | Active |
+
+#### 6.3.1. Model Routing (Route-by-Complexity)
+
+Бот использует два Claude-модели с роутингом по сложности задачи:
+
+| Модель | Задачи | Критерий |
+|--------|--------|----------|
+| **Haiku** | Feed «почему это важно», FAQ L1/L2, /mydata | Структурированный вывод, latency-critical |
+| **Sonnet** | Уроки, практика, вопросы, консультации L3, tool_use | Креативный/аналитический вывод |
+
+**Принцип:** дешёвая модель для структурированных задач, мощная — для creative reasoning. Вызывающий код передаёт `model=CLAUDE_MODEL_HAIKU` явно; default = Sonnet. Экономия: ~40% стоимости API при сохранении качества ответов.
 | knowledge-mcp v3.1 (CF Workers AI, bge-m3) | `clients/mcp.py`, `core/knowledge.py` | Active |
 | PostgreSQL (Neon.com, asyncpg) | `db/`, asyncpg pool | Active |
 | aiogram 3.x | Telegram Bot Framework | Active |
