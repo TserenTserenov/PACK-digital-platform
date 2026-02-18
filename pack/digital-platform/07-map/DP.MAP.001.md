@@ -22,7 +22,7 @@ generated: true
 | ARCH (ARCH) | 2 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 1 |
+| Distinctions (D) | 2 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 4 |
 | Methods (M) | 6 |
@@ -32,13 +32,14 @@ generated: true
 | SoTA Annotations (SOTA) | 12 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **47** |
+| **Total** | **48** |
 
 ## Distinctions
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.D.025 | Harness ≠ Agent | Harness (упряжь/обвязка) определяет результат больше, чем мощность агента/модели | active |
+| DP.D.027 | Content Budget Model (3 оси) | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 
 ## Methods
 
