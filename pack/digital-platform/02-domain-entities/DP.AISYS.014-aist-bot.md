@@ -173,6 +173,72 @@ related:
 | T9 | Хочу начать всё заново | I want to start over | заново, сначала, start over, reset everything, с нуля, обнулить всё | Есть два вида сброса в `/settings` → «Сброс»:\n\n1) «Сбросить марафон» — начнёшь с 1-го дня, ответы сохранятся.\n2) «Сбросить статистику» — обнулятся серии активных дней.\n\nЕсли хочешь сменить режим (Марафон ↔ Лента) — используй `/mode`. Полный сброс всех данных: `/settings` → «Сброс» → все варианты. | There are two types of reset in `/settings` → "Reset":\n\n1) "Reset marathon" — start from day 1, answers are preserved.\n2) "Reset statistics" — active day streaks reset.\n\nIf you want to switch mode (Marathon ↔ Feed) — use `/mode`. Full data reset: `/settings` → "Reset" → all options. |
 | T10 | Консультант не понимает мой вопрос | Consultant doesn't understand my question | не понимает, не знает, глупый, doesn't understand, wrong answer, неправильный ответ, не по теме | Попробуй переформулировать вопрос — начни с `?` и будь конкретнее. Например, вместо `?системы` напиши `?что такое системное мышление и зачем оно нужно?`. Консультант лучше отвечает на полные вопросы. Если ответ не помог — нажми 👎 чтобы дать обратную связь, это поможет улучшить консультанта. | Try rephrasing your question — start with `?` and be more specific. For example, instead of `?systems`, write `?what is systems thinking and why is it needed?`. The consultant works better with complete questions. If the answer didn't help — tap 👎 to give feedback, this helps improve the consultant. |
 
+##### Модель платформы
+
+> Когда пользователь спрашивает о своём «уровне», «статусе», «доступе», «тарифе», «подписке», «возможностях», «что доступно», «как расти», «что бесплатно», «сколько стоит» — он спрашивает об этой модели.
+
+**Бесплатно (навсегда):**
+- Марафон 14 дней (/learn) — структурированная программа обучения
+- Тест систематичности (/test) — определяет состояние и адаптирует контент
+- Прогресс (/progress) — статистика обучения
+- Профиль (/profile) и Настройки (/settings)
+
+**По подписке:**
+- Лента (/feed) — персональные ежедневные дайджесты по выбранным темам
+- Консультант (?вопрос) — ответы на основе базы знаний с расширенным контекстом
+- Заметки (.текст) — сохранение мыслей и идей
+- Планы (/rp /plan /report) — интеграция со Стратегом
+
+**Подписка:** Telegram Stars. Первые 15 дней — бесплатно (пробный период). Ранние подписчики сохраняют цену навсегда. Оформить: /settings → Подписка.
+
+**Усиление персонализации:**
+- Заполни профиль (/profile) — бот подстроит контент под тебя
+- Пройди тест (/test) — бот адаптирует стиль и сложность
+- Подключи Цифровой двойник (/settings → Подключения) — бот учтёт твои цели, проблемы и интересы
+- Подключи GitHub (/settings → Подключения) — бот учтёт персональный контекст из твоего репозитория
+
+**Цифровой двойник:** персональное хранилище целей, проблем, интересов и самооценки. Позволяет боту давать индивидуальные рекомендации.
+
+**Программы обучения на платформе:**
+- Личное развитие (ЛР) — вводная, подходит всем
+- Рабочее развитие (РР) — для менеджеров и инженеров
+- Исследовательское развитие (ИР) — для исследователей
+
+Посмотреть свои данные и текущий уровень: /mydata.
+
+[EN]
+
+When a user asks about their "level", "status", "access", "plan", "subscription", "capabilities", "what's available", "how to grow", "what's free", "how much" — they are asking about this model.
+
+**Free (forever):**
+- 14-day Marathon (/learn) — structured learning program
+- Systematicity Test (/test) — identifies state and adapts content
+- Progress (/progress) — learning statistics
+- Profile (/profile) and Settings (/settings)
+
+**Subscription required:**
+- Feed (/feed) — personal daily digests on chosen topics
+- Consultant (?question) — knowledge-base answers with extended context
+- Notes (.text) — saving thoughts and ideas
+- Plans (/rp /plan /report) — Strategist integration
+
+**Subscription:** Telegram Stars. First 15 days free (trial). Early subscribers keep their price forever. Subscribe: /settings → Subscription.
+
+**Enhancing personalization:**
+- Fill your profile (/profile) — bot tailors content for you
+- Take the test (/test) — bot adapts style and difficulty
+- Connect Digital Twin (/settings → Connections) — bot considers your goals, problems and interests
+- Connect GitHub (/settings → Connections) — bot uses your personal context from your repository
+
+**Digital Twin:** personal storage for goals, problems, interests, and self-assessment. Enables the bot to give individual recommendations.
+
+**Learning programs on the platform:**
+- Personal Development (ЛР) — introductory, fits everyone
+- Professional Development (РР) — for managers and engineers
+- Research Development (ИР) — for researchers
+
+View your data and current level: /mydata.
+
 ### 4.2. Слой 2: Меню-генератор
 
 Меню **генерируется** из реестра сервисов, а не захардкожено.
