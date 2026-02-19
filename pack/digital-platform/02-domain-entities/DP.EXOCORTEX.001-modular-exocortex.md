@@ -239,7 +239,7 @@ DS-exocortex-setup (bash setup.sh или Claude Code prompt)
 
 ## 9. Разделение Standard / Personal
 
-> Решает проблему: «обновления стандарта ломают личные настройки». Подробнее: [DP.ARCH.002 Тиры обслуживания](DP.ARCH.002-service-tiers.md) § 6.
+> Решает проблему: «обновления стандарта ломают личные настройки». Подробнее: [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md) § 7.
 
 ```
 exocortex/
@@ -289,7 +289,7 @@ exocortex/
 
 ## 11. Связанные документы
 
-- [DP.ARCH.002 Тиры обслуживания](DP.ARCH.002-service-tiers.md) — T1-T4: кто что получает, Standard/Personal разделение
+- [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md) — T1–T5: конфигурация среды по тирам, Standard/Personal разделение
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — отчуждаемость как принцип
 - [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — Claude Code и Стратег как владельцы протоколов
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — Memory содержит ссылки (уровень 4 навигации)
