@@ -5,7 +5,7 @@ type: domain-entity
 status: draft
 summary: "3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md"
 created: 2026-02-10
-updated: 2026-02-10
+updated: 2026-02-19
 trust:
   F: 3
   G: domain
@@ -117,10 +117,11 @@ related:
 
 | Файл | Что содержит |
 |------|-------------|
-| `hard-distinctions.md` | Жёсткие различения (11 пар) |
+| `hard-distinctions.md` | Жёсткие различения (19 пар) |
 | `fpf-reference.md` | Навигация по FPF, терминология, принципы |
-| `repo-type-rules.md` | Правила Pack/Downstream/Framework/Format |
+| `repo-type-rules.md` | Правила Pack/Downstream/Framework/Format/Foundation |
 | `checklists.md` | Чеклисты перед ответом/изменением/созданием |
+| `sota-reference.md` | SOTA-практики (18 шт.: Platform + Pack Architecture) |
 | `wp-gate-lesson.md` | Урок о WP Gate (мета-знание) |
 | `claude-md-maintenance.md` | Обслуживание CLAUDE.md |
 
@@ -215,19 +216,49 @@ CLAUDE.md состоит из **модулей**. Каждый модуль:
 
 | Репо | Тип | Назначение |
 |------|-----|------------|
-| [FMT-exocortex](https://github.com/TserenTserenov/FMT-exocortex) | Format | Шаблон: CLAUDE.md + memory/ + .claude/settings + DS-strategist + DS-strategy |
-| [DS-exocortex-setup](https://github.com/TserenTserenov/DS-exocortex-setup) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
+| [FMT-exocortex-template](https://github.com/TserenTserenov/FMT-exocortex-template) | Format | Шаблон: CLAUDE.md + memory/ + LEARNING-PATH.md + ONTOLOGY.md + strategist-agent/ + my-strategy/ |
+| [DS-exocortex-setup-agent](https://github.com/TserenTserenov/DS-exocortex-setup-agent) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
 
 **Процесс:**
 ```
-FMT-exocortex (Format)
+FMT-exocortex-template (Format)
         ↓ fork
-DS-exocortex-setup (bash setup.sh или Claude Code prompt)
+DS-exocortex-setup-agent (bash setup.sh или Claude Code prompt)
         ↓ configure
 Персональный экзокортекс: CLAUDE.md + Memory + Стратег + DS-strategy
 ```
 
-**Переменные при развёртывании:** GitHub username, workspace dir, Claude CLI path, timezone, home dir.
+**Переменные при развёртывании:** `{{GITHUB_USER}}`, `{{WORKSPACE_DIR}}`, `{{CLAUDE_PATH}}`, `{{TIMEZONE_HOUR}}`, `{{TIMEZONE_DESC}}`, `{{HOME_DIR}}`, `{{CLAUDE_PROJECT_SLUG}}`.
+
+### 7.1. Непрерывное обновление (template-sync)
+
+```
+Авторская сторона:
+  Авторские репо → template-sync.sh → FMT-exocortex-template (GitHub)
+
+Пользовательская сторона:
+  FMT-exocortex-template → update.sh → git fetch upstream → merge
+```
+
+**Template-sync покрывает 17 файлов:**
+
+| Группа | Файлы | Трансформация |
+|--------|-------|---------------|
+| CLAUDE.md | 1 | placeholder-sub + strip-author |
+| memory/*.md (standard) | 7 | passthrough |
+| MEMORY.md | 1 | skeleton (из templates/) |
+| Промпты Стратега | 6 | placeholder-sub |
+| Скрипты Стратега | 1 | placeholder-sub |
+| Launchd plist | 1 | placeholder-sub |
+
+**НЕ покрыты template-sync (ручное обслуживание):**
+
+| Файл | Причина | Когда обновлять |
+|------|---------|-----------------|
+| ONTOLOGY.md | Меняется редко, структурные изменения требуют ручной проверки | При изменении типов репо, иерархии принципов |
+| REPO-TYPE.md | Стабилен (Format = fixed) | Практически никогда |
+| README.md | Уникальный контент, автогенерация невозможна | При изменении Getting Started, тиров |
+| LEARNING-PATH.md | Уникальный контент (ссылки на знания) | При добавлении новых Pack, агентов, принципов |
 
 ## 8. ВДВ-паттерн экзокортекса
 
@@ -279,6 +310,8 @@ exocortex/
 | **memory/*.md** | Кросс-системные справочники | По ссылкам | Различения, FPF, правила типов, уроки |
 | **PROCESSES.md** | Описание процессов и сценариев | По необходимости | ВДВ-описания взаимодействий |
 | **WP Context File** | Файл контекста РП: накопленная история работы между сессиями. Живёт в inbox/, архивируется при done | При Close (Claude Code) | inbox/WP-{N}-{slug}.md |
+| **LEARNING-PATH.md** | Карта знаний для пользователя: что изучить и где найти. 13 разделов: ZP, FPF, SPF, Pack, типы репо, агенты, протоколы, процессы | Вручную (при новых Pack, агентах, принципах) | Онбординг T3/T4 |
+| **ONTOLOGY.md** | Глоссарий понятий экзокортекса: пространства, слои, протоколы, иерархия, типы репо, механизм обновлений | Вручную (при структурных изменениях) | Навигация по архитектуре |
 
 **Ключевые различения:**
 - **Протокол ≠ Anthropic Skill**: Протокол = знание о поведении. Skill = техническая фича (slash-command).
