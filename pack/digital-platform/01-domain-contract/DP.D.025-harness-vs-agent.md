@@ -11,8 +11,9 @@ trust:
   G: external
   R: 0.8
 related:
-  integrates_with: [DP.SOTA.002, DP.SOTA.006, DP.D.023]
-tags: [harness-engineering, agent, environment, openai]
+  integrates_with: [DP.SOTA.002, DP.SOTA.006, DP.D.023, DP.D.029]
+  see_also: [DP.SOTA.013, DP.M.007]
+tags: [harness-engineering, agent, environment, openai, inductive-bias]
 ---
 
 # Harness (Упряжь) ≠ Agent (Агент)
@@ -53,4 +54,16 @@ tags: [harness-engineering, agent, environment, openai]
 | Agent legibility | Knowledge legibility |
 | Template harness | Template-exocortex |
 
-> Источники: OpenAI «Harness Engineering» (2026-02-11), Can Boluk «The Harness Problem» (2026-02-12), Martin Fowler «Harness Engineering» (2026)
+## Harness как Inductive Bias
+
+Harness для AI-агента — это аналог **inductive bias** в машинном обучении: набор ограничений, отсекающих бесплодные области поиска и направляющих в продуктивные (DP.SOTA.013).
+
+| ML | Платформа |
+|----|-----------|
+| Innate bias (архитектура: трансформер, JEPA) | Архитектура платформы (3-слойная, DP.ARCH.001) |
+| Inductive bias (обучение: данные, curriculum) | Harness (контекст, ограничения, валидация) |
+| Принципы (0→1→2→3) | FPF → SPF → Pack → CLAUDE.md |
+
+Статья «From Kepler to Newton» (arxiv 2602.06923): три минимальных inductive bias — spatial smoothness, stability, temporal locality — превращают трансформер из curve-fitter в «физика». Аналогия: три компонента harness (Context Engineering + Architectural Constraints + Garbage Collection) превращают LLM из «кабинетного учёного» в полезного агента.
+
+> Источники: OpenAI «Harness Engineering» (2026-02-11), Can Boluk «The Harness Problem» (2026-02-12), Martin Fowler «Harness Engineering» (2026), Левенчук «Как поумнеть» (2026-02-19)
