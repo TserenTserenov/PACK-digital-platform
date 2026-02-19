@@ -93,6 +93,7 @@ related:
 | 7 | Изменился Pack | Проверка downstream | Claude / git hook | Cross-Repo Sync |
 | 8 | Изменилась ontology.md | Синхронизация онтологий | Claude / git hook | Ontology Sync |
 | 9 | Периодический аудит | Ревизия Pack'ов | launchd (ежемесячно) | Knowledge Audit |
+| 10 | KE записал в Pack | Переиндексация изменённых источников | Claude (Close) | **Selective Reindex** |
 
 > **Исключение #1:** Мелкие правила (1-3 строки, одобрены пользователем) — Claude записывает напрямую в CLAUDE.md или memory/, **без вызова Экстрактора**. Это единственный сценарий, который обходит KE. Обоснование: overhead формализации > ценность для правила в 1-3 строки.
 
@@ -123,6 +124,8 @@ related:
     │  Close    │   │           │   │           │
     │ On-Demand │   │           │   │           │
     │ Bulk      │   │           │   │           │
+    │ Selective │   │           │   │           │
+    │  Reindex  │   │           │   │           │
     └───────────┘   └───────────┘   └───────────┘
 ```
 
@@ -201,6 +204,29 @@ inbox/captures.md → KE формализует pending записи → Extract
 Pack ontology изменилась → KE сравнивает с мастером → Sync Report → Одобрение → Обновление мастера + downstream
 ```
 
+### 4.8. Selective Reindex (переиндексация после экстракции)
+
+**Триггер:** KE (Session-Close, шаг 8) записал ≥1 файл в Pack-репозиторий.
+**Вызывающий:** Claude (протокол Close, после шага 8 — Применение).
+
+**Поток:**
+```
+KE записал в Pack → selective-reindex.sh <source> [<source>...] → ingest.ts --source <pack> → knowledge-mcp searchable
+```
+
+**Правила:**
+
+| Условие | Действие | Обоснование |
+|---------|----------|-------------|
+| KE записал 1-20 файлов в Pack | Запустить selective-reindex для затронутых source | 5-10 сек, знание searchable сразу |
+| KE записал >20 файлов | Отложить до daily reindex (02:00) | Риск CF API rate limit |
+| KE записал только в CLAUDE.md / memory | Не индексировать | Не в search index |
+| KE записал в DS-my-strategy (governance) | Не индексировать | Governance ≠ domain knowledge |
+
+**SLA:** Pack-сущности, одобренные в Session-Close, становятся searchable через knowledge-mcp **в течение 5 минут** после Close (при ≤20 файлов). При >20 файлов — в течение 24 часов (daily reindex 02:00).
+
+**Safety net:** Daily reindex (02:00, scheduler.sh) остаётся как гарантия полноты. Selective reindex — оптимизация latency, не замена.
+
 ## 5. Переносимость (отчуждаемость)
 
 > Platform-space ≠ User-space (DP.D.011)
@@ -269,6 +295,7 @@ Pack ontology изменилась → KE сравнивает с мастеро
 | Knowledge-Audit (§ 4.5) | `prompts/knowledge-audit.md` | Готов к тесту |
 | Inbox-Check (§ 4.6) | `prompts/inbox-check.md` | Работает (launchd 3h) |
 | Ontology-Sync (§ 4.7) | `prompts/ontology-sync.md` | Готов к тесту |
+| Selective Reindex (§ 4.8) | `scripts/selective-reindex.sh` | Готов к тесту |
 
 ## 10. Связанные документы
 
