@@ -282,6 +282,14 @@ def build_claude_context(user) -> dict:
 
 **Экзокортекс начинается с T3** (ЦД + стандартная методология) и становится **полным в T4** (+ personal + git + агенты).
 
+## 10.1. MCP Access Model (решение Архитектора 19 фев)
+
+> **knowledge-mcp — публичный для всех** (не только для тиров платформы). Один инстанс, общие знания домена (Pack + онтология). Даже внешние клиенты (не пользователи платформы) могут использовать knowledge-mcp.
+>
+> **digital-twin-mcp — приватный** (фильтрация по user_id). Персональные данные. Требует изоляции.
+>
+> Подробнее: [DP.D.031 MCP Access Model](../01-domain-contract/DP.D.031-mcp-access-model.md)
+
 ## 11. Коммерческая модель
 
 ### 11.1. Два канала оплаты
@@ -324,6 +332,9 @@ def build_claude_context(user) -> dict:
 | **Стоимость для платформы** | Anthropic API costs на T2 (tool_use), T3 (+DT + standard CLAUDE.md в system prompt) |
 | **Trial** | Бот: 15 дней (реализовано). Программы: trial? |
 | **Кросс-продажи** | Скидка на TG Stars при покупке программы? Bundle? |
+| **Изоляция данных (C5)** | Как защитить данные пользователей друг от друга в multi-tenant? RLS, schemas, отдельные DB? (решение Архитектора 19 фев: **открыт**) |
+| **Архитектура тиров B1-B8** | Детали переходов T1→T2→T3→T4. Хранение прогресса, интеграция с Aisystant, cloud-managed vs self-hosted. (решение Архитектора 19 фев: **ждём прояснения платформы**) |
+| **Взаимодействие агентов** | Конфигурация агентов (может/не может) + коммуникация через Discourse. (решение Архитектора 19 фев: **Андрей исследует Discourse**) |
 
 ## 12. Конверсионная воронка бота
 
@@ -545,3 +556,6 @@ PLATFORM_URLS = {
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — Standard/Personal файлы, слои инструкций
 - [DP.AISYS.014 AIST Bot](DP.AISYS.014-aist-bot.md) — реализация T1-T3 через бота, консультация "?"
 - [DP.M.003 Context Engineering](../03-methods/DP.M.003-context-engineering.md) — метод формирования контекста по тиру
+- [DP.D.030 Deployment Topology](../01-domain-contract/DP.D.030-deployment-topology.md) — Railway + CF + Neon + GitHub → K8s
+- [DP.D.031 MCP Access Model](../01-domain-contract/DP.D.031-mcp-access-model.md) — knowledge-mcp публичный, digital-twin-mcp приватный
+- [DP.D.032 Unified Circuit Breaker](../01-domain-contract/DP.D.032-unified-circuit-breaker.md) — единый паттерн для всех зависимостей
