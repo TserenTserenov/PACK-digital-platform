@@ -179,13 +179,15 @@ related:
 
 > Когда пользователь спрашивает о своём «уровне», «статусе», «доступе», «тарифе», «подписке», «возможностях», «что доступно», «как расти», «что бесплатно», «сколько стоит» — он спрашивает об этой модели.
 
-**Бесплатно (навсегда):**
+Платформа имеет 5 уровней обслуживания (тиров). Каждый следующий включает всё из предыдущего. T1-T4 доступны пользователям, T5 — владельцу платформы.
+
+**🟢 T1 — Старт** (бесплатно, навсегда):
 - Марафон 14 дней (/learn) — структурированная программа обучения
 - Тест систематичности (/test) — определяет состояние и адаптирует контент
 - Прогресс (/progress) — статистика обучения
 - Профиль (/profile) и Настройки (/settings)
 
-**По подписке:**
+**📘 T2 — Изучение** (подписка Telegram Stars):
 - Лента (/feed) — персональные ежедневные дайджесты по выбранным темам
 - Консультант (?вопрос) — ответы на основе базы знаний с расширенным контекстом
 - Заметки (.текст) — сохранение мыслей и идей
@@ -193,11 +195,24 @@ related:
 
 **Подписка:** Telegram Stars. Первые 15 дней — бесплатно (пробный период). Ранние подписчики сохраняют цену навсегда. Оформить: /settings → Подписка.
 
-**Усиление персонализации:**
+**🧬 T3 — Персонализация** (подключён Цифровой двойник):
+- Персональные рекомендации на основе целей, проблем и интересов
+- Полный профиль с проекцией в ЦД (10 полей)
+- Усиленная адаптация контента
+
+Как перейти на T3:
 - Заполни профиль (/profile) — бот подстроит контент под тебя
 - Пройди тест (/test) — бот адаптирует стиль и сложность
 - Подключи Цифровой двойник (/settings → Подключения) — бот учтёт твои цели, проблемы и интересы
-- Подключи GitHub (/settings → Подключения) — бот учтёт персональный контекст из твоего репозитория
+
+**🚀 T4 — Созидание** (локальный экзокортекс):
+- Claude Code + агенты (Стратег, Экстрактор, Синхронизатор)
+- Личная база знаний (Pack)
+- GitHub-интеграция (/settings → Подключения)
+
+**⚙️ T5 — Администрирование** (владелец платформы):
+- Управление всеми системами, агентами и инфраструктурой
+- Полный доступ к аналитике, конфигурации и деплою
 
 **Цифровой двойник:** персональное хранилище целей, проблем, интересов и самооценки. Позволяет боту давать индивидуальные рекомендации.
 
@@ -212,13 +227,15 @@ related:
 
 When a user asks about their "level", "status", "access", "plan", "subscription", "capabilities", "what's available", "how to grow", "what's free", "how much" — they are asking about this model.
 
-**Free (forever):**
+The platform has 5 service tiers. Each tier includes everything from the previous one. T1-T4 are available to users, T5 is for the platform owner.
+
+**🟢 T1 — Start** (free, forever):
 - 14-day Marathon (/learn) — structured learning program
 - Systematicity Test (/test) — identifies state and adapts content
 - Progress (/progress) — learning statistics
 - Profile (/profile) and Settings (/settings)
 
-**Subscription required:**
+**📘 T2 — Learning** (Telegram Stars subscription):
 - Feed (/feed) — personal daily digests on chosen topics
 - Consultant (?question) — knowledge-base answers with extended context
 - Notes (.text) — saving thoughts and ideas
@@ -226,11 +243,24 @@ When a user asks about their "level", "status", "access", "plan", "subscription"
 
 **Subscription:** Telegram Stars. First 15 days free (trial). Early subscribers keep their price forever. Subscribe: /settings → Subscription.
 
-**Enhancing personalization:**
+**🧬 T3 — Personalization** (Digital Twin connected):
+- Personal recommendations based on goals, problems and interests
+- Full profile with DT projection (10 fields)
+- Enhanced content adaptation
+
+How to reach T3:
 - Fill your profile (/profile) — bot tailors content for you
 - Take the test (/test) — bot adapts style and difficulty
 - Connect Digital Twin (/settings → Connections) — bot considers your goals, problems and interests
-- Connect GitHub (/settings → Connections) — bot uses your personal context from your repository
+
+**🚀 T4 — Creation** (local exocortex):
+- Claude Code + agents (Strategist, Extractor, Synchronizer)
+- Personal knowledge base (Pack)
+- GitHub integration (/settings → Connections)
+
+**⚙️ T5 — Administration** (platform owner):
+- Full management of all systems, agents, and infrastructure
+- Complete access to analytics, configuration, and deployment
 
 **Digital Twin:** personal storage for goals, problems, interests, and self-assessment. Enables the bot to give individual recommendations.
 
