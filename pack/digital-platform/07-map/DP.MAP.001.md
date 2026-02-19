@@ -22,7 +22,7 @@ generated: true
 | ARCH (ARCH) | 2 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 4 |
+| Distinctions (D) | 7 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 5 |
 | Methods (M) | 7 |
@@ -32,7 +32,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **53** |
+| **Total** | **56** |
 
 ## Distinctions
 
@@ -42,6 +42,9 @@ generated: true
 | DP.D.027 | Content Budget Model (3 оси) | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | Данные пользователя растут с тиром платформы: T1 базовые знания (без персонализации) → T2 минимальная персонализация (профиль + история) → T3 цифровой двойник (ИИ знает контекст) → T4 личный контекст + ИИ-агенты (со-мыслитель) → T5 управление экосистемой | active |
 | DP.D.029 | Language Model ≠ World Model | LLM = пассивные знания о мире из текстов (кабинетный учёный). World Model = активная модель, обновляемая из взаимодействия с реальностью (инженер). Критерий: замыкает ли система цикл действие-измерение-обновление | active |
+| DP.D.030 | Топология деплоя платформы | Railway (бот) + CF Workers (MCP) + Neon (DB + pgvector) + GitHub (код + шаблон). Позже Railway → Kubernetes. Каждый сервис — в своей экологической нише (compute vs edge vs serverless DB vs VCS) | active |
+| DP.D.031 | MCP Access Model: публичный vs приватный | knowledge-mcp (Pack + онтология) — публичный для всех (один инстанс, общие знания). digital-twin-mcp — приватный (фильтрация по user_id, персональные данные). Критерий: знания ≠ данные пользователя | active |
+| DP.D.032 | Единый Circuit Breaker для внешних зависимостей | Один паттерн circuit breaker для всех внешних зависимостей (Claude API, MCP, Neon). Цель: предотвратить циклические запросы, которые списывают деньги. Не per-client — единый middleware | active |
 
 ## Methods
 
