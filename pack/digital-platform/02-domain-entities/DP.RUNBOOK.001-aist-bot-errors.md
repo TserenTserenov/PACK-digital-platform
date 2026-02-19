@@ -95,7 +95,79 @@ related:
 | Эта сущность (§3) | `DS-fixer-agent/runbook/patterns.yaml` | YAML (runtime) |
 | Эта сущность (§3) | `core/unstick.py` (L1 in-process) | Python (embedded) |
 
-## 5. Связанные документы
+## 5. Grafana Cloud Alerting
+
+Независимый канал мониторинга (не зависит от процесса бота). Grafana Cloud подключён к Neon DB (PostgreSQL datasource).
+
+### 5.1. Contact Point
+
+| Параметр | Значение |
+|----------|----------|
+| **Тип** | Telegram |
+| **Имя** | aist-bot-telegram |
+| **Получатель** | DEVELOPER_CHAT_ID |
+| **Формат** | HTML (🚨 GRAFANA ALERT → alertname: summary) |
+
+### 5.2. Alert Rules
+
+| # | Правило | Интервал | Порог | For | Severity | Что ловит |
+|---|---------|----------|-------|-----|----------|-----------|
+| 1 | **L3+ Critical Errors** | 5 мин | >0 L3/L4 не-эскалированных | 0s | critical | L3/L4 ошибки — немедленная реакция |
+| 2 | **Unknown Error Spike** | 15 мин | >5 unknown с count≥3 | 5 мин | warning | Всплеск неклассифицированных — нужен triage для RUNBOOK |
+| 3 | **Error Rate Anomaly** | 15 мин | >50 ошибок/час | 5 мин | warning | Аномальный уровень — проверить Claude API, Neon, Railway |
+| 4 | **Bot Heartbeat Lost** | 1 час | >24ч без записей | 30 мин | info | Бот может быть остановлен |
+
+### 5.3. Dashboard
+
+`monitoring/grafana-dashboard.json` — 8 панелей: Errors (24h), L3+ Errors, Unknown Errors, Unique Errors, L1 Recoveries, Error Rate by Category, Severity Distribution, Recent Classified Errors, Unknown Errors (Triage).
+
+**Setup:** `monitoring/setup-grafana-alerts.sh` (env vars: GRAFANA_URL, GRAFANA_TOKEN, GRAFANA_DS_UID, TG_BOT_TOKEN, TG_CHAT_ID).
+
+## 6. L2 Auto-Fix Pipeline (TG Approval)
+
+Автоматическая диагностика и исправление ошибок с подтверждением разработчика через Telegram.
+
+### 6.1. Поток
+
+```
+error_logs (severity='L2', count≥3, last 15 min)
+  ↓ scheduler (каждые 15 мин)
+core/autofix.py → detect + fetch file from GitHub
+  ↓
+Claude Sonnet: диагноз + minimal fix + ArchGate (6 dims)
+  ↓ (filter: confidence != low, archgate >= 8)
+pending_fixes table → TG message [✅ Применить] [❌ Отклонить]
+  ↓
+✅ → GitHub API: branch fix/<key> → commit → PR
+❌ → mark rejected
+```
+
+### 6.2. Ограничения безопасности
+
+| Правило | Значение |
+|---------|----------|
+| Макс. файлов на fix | 3 |
+| Макс. предложений за цикл | 3 |
+| Защищённые файлы | db/models.py, core/scheduler.py, bot.py, config/ |
+| Деду-пликация | Unique index на error_key (не предлагать повторно) |
+| Всегда через PR | Никогда прямой push в main |
+| ArchGate gate | Только решения с оценкой ≥8/10 |
+| Graceful degradation | Без GITHUB_BOT_PAT — автофикс отключён |
+
+### 6.3. Таблица pending_fixes
+
+| Поле | Тип | Назначение |
+|------|-----|-----------|
+| error_log_id | INTEGER | Ссылка на ошибку |
+| error_key | TEXT | Деду-пликация |
+| status | TEXT | pending → approved → applied / rejected / failed |
+| diagnosis | TEXT | Диагноз от Claude |
+| archgate_eval | TEXT (JSON) | Оценка по 6 измерениям |
+| proposed_diff | TEXT (JSON) | file_path + original_code + fixed_code |
+| pr_url | TEXT | URL созданного PR |
+| tg_message_id | BIGINT | Для редактирования сообщения после одобрения |
+
+## 7. Связанные документы
 
 - [DP.AISYS.014 Aist Bot](DP.AISYS.014-aist-bot.md) — паспорт бота
 - [DP.AGENT.001 ИИ-агенты](DP.AGENT.001-ai-agents.md) — I7 Наладчик
