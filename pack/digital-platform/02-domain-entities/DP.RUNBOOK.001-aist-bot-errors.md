@@ -32,6 +32,46 @@ related:
 | **L3** | Restart | Автоматический (по порогу) | 1-3 мин | Script (Railway API) |
 | **L4** | Escalate | Уведомление человеку | <1 мин | I7 → GitHub Issue + TG |
 
+### 2.1. L1 — Unstick (полностью автоматический)
+
+**Что:** Бот сам обнаруживает и исправляет проблему. Пользователь может даже не заметить.
+
+**Механика:** Scheduler каждые 5 мин проверяет `error_logs` + `user_states`. Если обнаружены симптомы (3+ ошибки за 5 мин, stuck >60 мин, rate limit, flood control) — бот автоматически выполняет действие: сброс FSM → mode_select, retry с backoff, skip + лог, fallback-контент. Код: `core/unstick.py` (in-process, не требует внешних сервисов).
+
+**Примеры:** dead-end state, stuck user, Claude 429/529, TG flood control, blocked by user.
+
+**Участие человека:** Не требуется. Информация доступна в `/errors` (dev-команда).
+
+### 2.2. L2 — Auto-Fix (диагностика + PR с подтверждением)
+
+**Что:** Ошибка в коде, которую можно исправить автоматически. Бот предлагает исправление, человек одобряет.
+
+**Механика:** Scheduler каждые 15 мин ищет L2-ошибки (count >= 3, последние 15 мин). Для каждой: (1) fetch исходного файла через GitHub API, (2) Claude Sonnet анализирует ошибку + код → диагноз + минимальный fix + ArchGate-оценка, (3) фильтр: confidence != low, ArchGate >= 8, (4) TG-сообщение разработчику с кнопками [Применить / Отклонить], (5) на «Применить» → создаётся ветка `fix/<key>` → коммит → PR на GitHub. Код: `core/autofix.py`.
+
+**Примеры:** state corruption, query timeout, invalid Claude/MCP response, message too long.
+
+**Участие человека:** Два шага — одобрение в TG (кнопка) + merge PR на GitHub → Railway auto-deploy.
+
+### 2.3. L3 — Restart (автоматический перезапуск)
+
+**Что:** Инфраструктурная проблема, которую исправляет перезапуск. Код менять не нужно.
+
+**Механика:** (планируется) По порогу (pool exhaustion, connection timeout) — скрипт вызывает Railway API для перезапуска сервиса. Пока реализовано: Grafana Alert Rule #1 (L3+ Critical) отправляет уведомление в TG → ручной restart через Railway dashboard.
+
+**Примеры:** pool exhaustion (too many connections), connection timeout, MCP connection failure.
+
+**Участие человека:** Пока — ручной restart через Railway dashboard по Grafana-алерту. После реализации L3-скрипта — без участия.
+
+### 2.4. L4 — Escalate (уведомление человеку)
+
+**Что:** Критическая проблема, которую нельзя исправить автоматически. Требуется вмешательство разработчика.
+
+**Механика:** Scheduler каждые 15 мин проверяет L4-ошибки (count >= 2, не эскалированные). Отправляет TG-сообщение с описанием + suggested action. Grafana Alert Rules #1-#4 — независимый канал (работает даже если бот упал). Код: `core/error_classifier.py:check_escalation()`.
+
+**Примеры:** migration failure (relation does not exist), scheduler stuck (asyncio deadlock).
+
+**Участие человека:** Полное — ручная диагностика и исправление по инструкциям из RUNBOOK.
+
 ## 3. Категории ошибок
 
 ### 3.1. FSM (State Machine)
