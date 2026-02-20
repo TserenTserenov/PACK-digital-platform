@@ -248,7 +248,29 @@ LMS/Клуб → Activity Hub → Proof-of-Impact → Token Economy
 | **Персональные данные** | Read/Write per user | DS-twin, user-repos | Только владелец + делегированные |
 | **Сервисы** | Read/Write | fsm-mcp, linear, github | По авторизации |
 
-## 9. Связанные документы
+## 9. Взаимодействие ИИ-систем (слой 3)
+
+> Перенесено из DP.AGENT.001 — диаграмма взаимодействия систем слоя 3 принадлежит архитектуре, не классификации.
+
+```
+Проводник (human, dialogue)
+    ├── → RouteGuide (стратегия маршрута)
+    │        └── → TrajectoryPlanner (детализация)
+    │                 └── → DailyAssignmentBuilder (задания)
+    ├── → ProgressAnalyst (анализ)
+    └── → RhythmKeeper (напоминания)
+
+Стратег (both, both)
+    ├── → DS-twin (данные)
+    └── → user-repos MCP (файлы)
+
+Знание-Экстрактор (system, both)
+    ├── → pack-MCP (структура пака)
+    ├── → user-repos MCP (источники)
+    └── → guides-mcp (нормативы)
+```
+
+## 10. Связанные документы
 
 - [DP.CONCEPT.001 Концепция платформы](DP.CONCEPT.001-platform-concept.md)
 - [DP.AGENT.001 ИИ-системы платформы](DP.AGENT.001-ai-agents.md)
