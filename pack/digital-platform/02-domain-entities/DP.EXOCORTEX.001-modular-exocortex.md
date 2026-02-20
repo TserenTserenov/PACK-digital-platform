@@ -135,11 +135,11 @@ related:
 | Day-Close | **Стратег** (launchd) | Pack (DP.AGENT.012) |
 | Обновление Memory | **Claude Code** (Close) + **Стратег** (weekly) | CLAUDE.md + Pack |
 | Backup экзокортекса | **Claude Code** (Close) + **Стратег** (Day-Close) | CLAUDE.md + Pack |
-| Notify (уведомления) | **Синхронизатор** (SYS.016) | DS-synchronizer |
+| Notify (уведомления) | **Синхронизатор** (SYS.016) | DS-ai-systems/synchronizer |
 
-**Правило:** Все уведомления агентов (Стратег, Экстрактор) делегированы Синхронизатору. Агенты вызывают `DS-synchronizer/scripts/notify.sh`, не отправляют в Telegram напрямую.
+**Правило:** Все уведомления агентов (Стратег, Экстрактор) делегированы Синхронизатору. Агенты вызывают `DS-ai-systems/synchronizer/scripts/notify.sh`, не отправляют в Telegram напрямую.
 
-**Правило:** Протоколы Стратега (Day-Close и др.) НЕ описываются в CLAUDE.md. Их место — паспорт Стратега в Pack или README.md DS-strategist.
+**Правило:** Протоколы Стратега (Day-Close и др.) НЕ описываются в CLAUDE.md. Их место — паспорт Стратега в Pack или DS-ai-systems/strategist/README.md.
 
 > **Протокол ≠ Skill (Anthropic).** Наши «протоколы» — поведенческие инструкции для ИИ-системы. Anthropic Skills — техническая фича Claude Code (slash-команды). Протокол может быть реализован через Skill (downstream), но протокол — это знание о поведении, а slash-command — инструмент.
 
@@ -217,13 +217,13 @@ CLAUDE.md состоит из **модулей**. Каждый модуль:
 | Репо | Тип | Назначение |
 |------|-----|------------|
 | [FMT-exocortex-template](https://github.com/TserenTserenov/FMT-exocortex-template) | Format | Шаблон: CLAUDE.md + memory/ + LEARNING-PATH.md + ONTOLOGY.md + strategist-agent/ + my-strategy/ |
-| [DS-exocortex-setup-agent](https://github.com/TserenTserenov/DS-exocortex-setup-agent) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
+| [DS-ai-systems/setup](https://github.com/TserenTserenov/DS-ai-systems) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
 
 **Процесс:**
 ```
 FMT-exocortex-template (Format)
         ↓ fork
-DS-exocortex-setup-agent (bash setup.sh или Claude Code prompt)
+DS-ai-systems/setup (bash setup.sh или Claude Code prompt)
         ↓ configure
 Персональный экзокортекс: CLAUDE.md + Memory + Стратег + DS-strategy
 ```

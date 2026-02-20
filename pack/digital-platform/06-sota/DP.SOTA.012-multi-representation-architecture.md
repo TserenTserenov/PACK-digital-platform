@@ -62,7 +62,7 @@ tags: [model-view, multi-representation, knowledge-architecture, vector, graph, 
 
 1. **Одна модель → много views.** Не дублировать знания в downstream. Проецировать.
 2. **При добавлении нового surface** (бот, курс, API) — создавать view, не копировать Pack.
-3. **Синхронизатор (DS-synchronizer)** — инструмент проекции, не копирования (DP.D.008).
+3. **Синхронизатор (DS-ai-systems/synchronizer)** — инструмент проекции, не копирования (DP.D.008).
 4. **При проектировании MCP** — каждый tool = view над Pack: `pack_search` = semantic view, `pack_graph` = graph view, `pack_get` = full entity view.
 
 ## 7. Источники

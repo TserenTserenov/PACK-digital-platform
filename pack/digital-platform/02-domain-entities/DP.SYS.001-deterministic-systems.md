@@ -187,7 +187,7 @@ Pack/DS repo → ingest.ts (скрипт) → CF Workers AI (bge-m3) → Neon pg
 - Канал: Telegram API (HTML + inline keyboard)
 - Env: `~/.config/aist/env`
 
-**Реализация:** [DS-synchronizer](https://github.com/TserenTserenov/DS-synchronizer)
+**Реализация:** [DS-ai-systems/synchronizer](https://github.com/TserenTserenov/DS-ai-systems)
 
 ## 8. Связанные документы
 

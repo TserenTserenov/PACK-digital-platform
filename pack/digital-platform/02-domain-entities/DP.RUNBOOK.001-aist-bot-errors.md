@@ -132,7 +132,7 @@ related:
 
 | Source (Pack) | Target (Downstream) | Формат |
 |---------------|---------------------|--------|
-| Эта сущность (§3) | `DS-fixer-agent/runbook/patterns.yaml` | YAML (runtime) |
+| Эта сущность (§3) | `DS-ai-systems/fixer/runbook/patterns.yaml` | YAML (runtime) |
 | Эта сущность (§3) | `core/unstick.py` (L1 in-process) | Python (embedded) |
 
 ## 5. Grafana Cloud Alerting
