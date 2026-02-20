@@ -22,7 +22,7 @@ generated: true
 | ARCH (ARCH) | 2 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 7 |
+| Distinctions (D) | 8 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 7 |
 | Methods (M) | 7 |
@@ -32,7 +32,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **58** |
+| **Total** | **59** |
 
 ## Distinctions
 
@@ -45,6 +45,7 @@ generated: true
 | DP.D.030 | Топология деплоя платформы | Railway (бот) + CF Workers (MCP) + Neon (DB + pgvector) + GitHub (код + шаблон). Позже Railway → Kubernetes. Каждый сервис — в своей экологической нише (compute vs edge vs serverless DB vs VCS) | active |
 | DP.D.031 | MCP Access Model: публичный vs приватный | knowledge-mcp (Pack + онтология) — публичный для всех (один инстанс, общие знания). digital-twin-mcp — приватный (фильтрация по user_id, персональные данные). Критерий: знания ≠ данные пользователя | active |
 | DP.D.032 | Единый Circuit Breaker для внешних зависимостей | Один паттерн circuit breaker для всех внешних зависимостей (Claude API, MCP, Neon). Цель: предотвратить циклические запросы, которые списывают деньги. Не per-client — единый middleware | active |
+| DP.D.033 | Role-Centric Architecture (Ролецентричная архитектура) | Роль описывается независимо от исполнителя. Исполнитель выбирается и подготавливается отдельно. Роль = маска, которую надевает система (сама — если агент, или по воле другого агента — если инструмент). Одно имя (например, 'Синхронизатор') может обозначать и роль, и систему-исполнителя — это разные ракурсы, не тождество. | active |
 
 ## Methods
 
