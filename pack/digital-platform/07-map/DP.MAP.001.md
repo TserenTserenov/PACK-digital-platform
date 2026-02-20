@@ -24,7 +24,7 @@ generated: true
 | CONCEPT (CONCEPT) | 1 |
 | Distinctions (D) | 7 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 6 |
+| Failure Modes (FM) | 7 |
 | Methods (M) | 7 |
 | Maps (MAP) | 1 |
 | NAV (NAV) | 1 |
@@ -32,7 +32,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **57** |
+| **Total** | **58** |
 
 ## Distinctions
 
@@ -75,6 +75,7 @@ generated: true
 | DP.FM.004 | Narrow Pregeneration Scope | — | draft |
 | DP.FM.005 | Дрейф модель–реальность (Model-Reality Drift) | AI-агент без петли измерения деградирует в самосогласованный текст: внутренняя непротиворечивость растёт, но близость к реальности падает. Двойной дрейф: мир меняется + цели агента дрейфуют | draft |
 | DP.FM.006 | Когнитивный долг как следствие агентного ИИ | Агентный ИИ производит код быстрее, чем разработчики успевают строить теорию системы. Техдолг — в коде, когнитивный долг — в головах. Программа — это теория в головах, код — лишь проекция | draft |
+| DP.FM.007 | Дрейф представлений (View Drift) | View-файлы (README, CLAUDE.md, REGISTRY, посты) рассинхронизируются с model-файлами (Pack-сущности, код, файловая система). Причина: отсутствие автоматической валидации claims в view-файлах при изменении model. | draft |
 
 ## SoTA Annotations
 
