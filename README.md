@@ -105,13 +105,14 @@ PACK-digital-platform/
         ├── 04-work-products/          # Рабочие продукты (2)
         │   ├── DP.WP.001             #   Отчёт экстракции
         │   └── DP.WP.002             #   Ubiquitous Language
-        ├── 05-failure-modes/          # Типовые ошибки (6)
+        ├── 05-failure-modes/          # Типовые ошибки (7)
         │   ├── DP.FM.001             #   Информация как знание
         │   ├── DP.FM.002             #   Смешение слоёв
         │   ├── DP.FM.003             #   Context Blindness
         │   ├── DP.FM.004             #   Narrow Pregeneration Scope
         │   ├── DP.FM.005             #   Model-Reality Drift
-        │   └── DP.FM.006             #   Когнитивный долг (Agentic AI)
+        │   ├── DP.FM.006             #   Когнитивный долг (Agentic AI)
+        │   └── DP.FM.007             #   View Drift (дрейф представлений)
         ├── 06-sota/                   # SoTA-аннотации (13)
         │   ├── DP.SOTA.001           #   DDD Strategic (Khononov)
         │   ├── DP.SOTA.002           #   Context Engineering
@@ -167,4 +168,4 @@ PACK-digital-platform/
 
 ---
 
-*Pack v0.2.2 | 75 сущностей (32 D, 13 SOTA, 7 M, 6 FM, 2 WP + entities) | Построен по [SPF](https://github.com/TserenTserenov/SPF) (Second Principles Framework)*
+*Pack v0.2.2 | 76 сущностей (32 D, 13 SOTA, 7 M, 7 FM, 2 WP + entities) | Построен по [SPF](https://github.com/TserenTserenov/SPF) (Second Principles Framework)*
