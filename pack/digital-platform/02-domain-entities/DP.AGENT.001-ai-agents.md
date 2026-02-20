@@ -85,6 +85,309 @@ related:
 | R6 | **Кодировщик** | Платформа DP | Реализация кода, Рефакторинг | A1 Claude (CLI) | Код, коммиты |
 | R7 | **Триажёр техдолга** | Платформа DP | Triage session (Issue Funnel) | A1 Claude (CLI) | Приоритизированный backlog |
 
+> **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
+
+<details>
+<summary><strong>R3 Консультант</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Консультант"
+type: agential
+suprasystem: "Платформа DP"
+context: "Диалог с учеником: ответы на вопросы, проверка ДЗ, генерация контента"
+
+obligations:
+  - "Отвечать на вопросы ученика по материалу курса (knowledge-mcp)"
+  - "Проверять домашние задания с Bloom-aware обратной связью"
+  - "Генерировать ленту и марафон-контент по расписанию"
+  - "Использовать DT для персонализации ответов (proactive injection)"
+  - "Удерживать latency <3 сек для пользовательского опыта"
+
+expectations:
+  - from: "R16 Ученик"
+    expects: "Понятные ответы, соответствующие уровню ученика"
+  - from: "R12 Оценщик"
+    expects: "Оценки встроены в диалог (inline evaluation)"
+  - from: "R13 Проводник"
+    expects: "Контент соответствует текущему FSM-состоянию ученика"
+
+methods:
+  - name: "Knowledge-MCP Search"
+    description: "Поиск по 9 источникам (semantic + keyword) для ответа на вопрос"
+  - name: "DT Injection"
+    description: "Чтение цифрового двойника ученика → персонализация промпта"
+  - name: "Content Budget Model"
+    description: "Адаптация объёма ответа к tier + контексту (DP.D.027)"
+  - name: "Streaming SSE"
+    description: "Потоковая генерация ответа для минимизации воспринимаемой задержки"
+
+work_products:
+  - product: "Ответ на вопрос"
+    recipient: "R16 Ученик (TG message)"
+    trigger: "Ученик задал вопрос"
+  - product: "Проверка ДЗ"
+    recipient: "R16 Ученик (TG message + оценка)"
+    trigger: "Ученик отправил ДЗ"
+  - product: "Лента/Марафон контент"
+    recipient: "R16 Ученик (scheduled TG message)"
+    trigger: "Scheduler (pre-gen за 3ч)"
+
+current_holders:
+  - holder: "A1 Claude Haiku (via I1 Bot, Claude API)"
+    grade: 3
+    covers_scenarios: [Q&A, DZ-Check, Content-Generation]
+
+failure_modes:
+  - "DP.FM.001: Hallucination — ответ не основан на Pack/knowledge-mcp"
+  - "DP.FM.002: Tier Mismatch — контент не соответствует уровню ученика"
+
+related_roles:
+  - role: "R12 Оценщик"
+    interaction: "Оценщик оценивает ответы, Консультант встраивает оценку в диалог"
+  - role: "R13 Проводник"
+    interaction: "Проводник определяет FSM-контекст → Консультант адаптирует контент"
+  - role: "R16 Ученик"
+    interaction: "Прямой диалог: вопрос → ответ"
+```
+</details>
+
+<details>
+<summary><strong>R4 Автор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Автор"
+type: agential
+suprasystem: "Экосистема"
+context: "Создание контента: посты, презентации, питчи, описания"
+
+obligations:
+  - "Писать посты по content-плану Стратега"
+  - "Готовить презентации для семинаров (Marp + PDF)"
+  - "Создавать описания мероприятий и продуктовые материалы"
+  - "Соблюдать стиль и тон автора (голос владельца экзокортекса)"
+
+expectations:
+  - from: "R1 Стратег"
+    expects: "Content plan с темами, аудиторией, приоритетами"
+  - from: "R14 Заказчик"
+    expects: "Текст соответствует замыслу, не нужно существенно переписывать"
+  - from: "R15 Валидатор"
+    expects: "Пост готов к публикации после review"
+
+methods:
+  - name: "Topic Research"
+    description: "knowledge-mcp + Pack → сбор материала для поста"
+  - name: "Structured Writing"
+    description: "Заголовок → тезис → аргументация → вывод → CTA"
+  - name: "Marp Slides"
+    description: "Markdown → Marp → PDF для презентаций"
+
+work_products:
+  - product: "Пост (markdown)"
+    recipient: "R15 Валидатор → DS-Knowledge-Index/docs/"
+    trigger: "Content plan item"
+  - product: "Презентация (Marp + PDF)"
+    recipient: "R14 Заказчик (семинар)"
+    trigger: "Семинар запланирован"
+  - product: "Описание мероприятия"
+    recipient: "Платформа (systemsworld.club, TG)"
+    trigger: "Новое мероприятие"
+
+current_holders:
+  - holder: "A1 Claude (CLI interactive)"
+    grade: 3
+    covers_scenarios: [Post-Writing, Presentation, Description]
+
+failure_modes:
+  - "DP.FM.003: Voice Drift — стиль не соответствует голосу автора"
+
+related_roles:
+  - role: "R1 Стратег"
+    interaction: "Стратег → content plan → Автор реализует"
+  - role: "R15 Валидатор"
+    interaction: "Валидатор проверяет текст перед публикацией"
+```
+</details>
+
+<details>
+<summary><strong>R5 Архитектор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Архитектор"
+type: agential
+suprasystem: "Платформа DP"
+context: "Архитектурные решения, АрхГейт-оценки, структура экосистемы"
+
+obligations:
+  - "Оценивать каждое архитектурное предложение по ЭМОГСС (6 характеристик)"
+  - "Предлагать ТОЛЬКО решения с оценкой ≥8 по ArchGate"
+  - "Определять BC-маппинг: знание → какой Pack"
+  - "Поддерживать SOTA-справочник (memory/sota-reference.md)"
+  - "Проверять приоритетную тройку: Context Engineering, DDD Strategic, Coupling Model"
+
+expectations:
+  - from: "R6 Кодировщик"
+    expects: "Архитектура определена ДО начала кодирования"
+  - from: "R2 Экстрактор"
+    expects: "BC-маппинг и routing.md консистентны"
+  - from: "R14 Заказчик"
+    expects: "Обоснованные решения с таблицей ЭМОГСС"
+
+methods:
+  - name: "ArchGate (ЭМОГСС)"
+    description: "6 характеристик: Эволюционируемость, Масштабируемость, Обучаемость, Генеративность, Скорость, Современность"
+  - name: "SOTA Check"
+    description: "Проверка по sota-reference.md: 18 практик (12 Platform + 6 Pack)"
+  - name: "BC Mapping"
+    description: "Определение Bounded Context → маршрутизация в правильный Pack"
+  - name: "ADR (Architectural Decision Record)"
+    description: "Формализация решения: контекст, варианты, выбор, обоснование"
+
+work_products:
+  - product: "ADR / ArchGate оценка"
+    recipient: "R14 Заказчик, R6 Кодировщик"
+    trigger: "Архитектурное решение требуется"
+  - product: "BC-маппинг (routing.md update)"
+    recipient: "R2 Экстрактор"
+    trigger: "Новая предметная область или реорганизация Pack"
+  - product: "SOTA-обновления"
+    recipient: "memory/sota-reference.md → все роли"
+    trigger: "Обнаружена новая SOTA-практика"
+
+current_holders:
+  - holder: "A1 Claude (CLI interactive)"
+    grade: 3
+    covers_scenarios: [ArchGate, BC-Mapping, ADR, SOTA-Update]
+
+failure_modes:
+  - "DP.FM.020: Weak Architecture — решение с оценкой ≤7 принято без обоснования"
+  - "DP.FM.021: SOTA Ignorance — решение не учитывает доступные SOTA-практики"
+
+related_roles:
+  - role: "R6 Кодировщик"
+    interaction: "Архитектор → архитектура → Кодировщик реализует"
+  - role: "R2 Экстрактор"
+    interaction: "Архитектор определяет BC → Экстрактор маршрутизирует знание"
+  - role: "R1 Стратег"
+    interaction: "Стратег определяет приоритеты → Архитектор решает HOW"
+```
+</details>
+
+<details>
+<summary><strong>R6 Кодировщик</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Кодировщик"
+type: agential
+suprasystem: "Платформа DP"
+context: "Реализация кода, рефакторинг, баг-фиксы по архитектуре R5"
+
+obligations:
+  - "Реализовывать код по утверждённой архитектуре (R5)"
+  - "Следовать CLAUDE.md репо (exit protocol, code style)"
+  - "Не вводить security vulnerabilities (OWASP Top 10)"
+  - "Capture-to-Pack при обнаружении паттернов/антипаттернов"
+  - "Коммитить с осмысленными сообщениями, пушить с подтверждением"
+
+expectations:
+  - from: "R5 Архитектор"
+    expects: "Архитектура определена, ArchGate пройден"
+  - from: "R15 Валидатор"
+    expects: "Код работает, тесты проходят"
+  - from: "R14 Заказчик"
+    expects: "Минимальные изменения — не over-engineer"
+
+methods:
+  - name: "Incremental Implementation"
+    description: "Мелкие коммиты, каждый — рабочее состояние"
+  - name: "Read-Before-Edit"
+    description: "Понять существующий код ДО модификации"
+  - name: "Pilot-First Deployment"
+    description: "new-architecture → pilot branch → тестирование → prod"
+
+work_products:
+  - product: "Код (коммиты)"
+    recipient: "Git repo → R15 Валидатор (review) → prod"
+    trigger: "РП назначен, архитектура определена"
+  - product: "Capture (паттерн/антипаттерн)"
+    recipient: "R2 Экстрактор (через capture-to-pack)"
+    trigger: "Обнаружен при кодировании"
+
+current_holders:
+  - holder: "A1 Claude (CLI interactive)"
+    grade: 3
+    covers_scenarios: [Implementation, Refactoring, Bug-Fix]
+
+failure_modes:
+  - "DP.FM.022: Over-Engineering — добавлены фичи, не запрошенные заказчиком"
+  - "DP.FM.023: Security Hole — введена OWASP-уязвимость"
+
+related_roles:
+  - role: "R5 Архитектор"
+    interaction: "Архитектор → решение → Кодировщик реализует"
+  - role: "R7 Триажёр"
+    interaction: "Триажёр приоритизирует backlog → Кодировщик берёт задачи"
+  - role: "R11 Наладчик"
+    interaction: "Наладчик L4 → GitHub Issue → Кодировщик фиксит"
+```
+</details>
+
+<details>
+<summary><strong>R7 Триажёр техдолга</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Триажёр техдолга"
+type: agential
+suprasystem: "Платформа DP"
+context: "Приоритизация техдолга из трёх intake: unsatisfied-questions, fleeting-notes, captures"
+
+obligations:
+  - "Читать все три intake при открытии сессии техдолга"
+  - "Категоризировать замечания: L(atency), C(orrectness), U(sability), I(nfra)"
+  - "Оценивать бюджет каждого замечания"
+  - "Предлагать: что берём, что отложить, что отклонить"
+  - "Обновлять WP-debt backlog (приоритизированный список)"
+
+expectations:
+  - from: "R6 Кодировщик"
+    expects: "Backlog приоритизирован, задачи конкретны"
+  - from: "R14 Заказчик"
+    expects: "Критичное — сначала, некритичное — не копится"
+  - from: "R8 Синхронизатор"
+    expects: "Intake пополнены (code-scan, unsatisfied-report)"
+
+methods:
+  - name: "Issue Funnel"
+    description: "3 intake → triage → categorize (LCUI) → estimate → prioritize"
+  - name: "Impact Assessment"
+    description: "Сколько пользователей затронуто × severity × effort"
+
+work_products:
+  - product: "Приоритизированный backlog (WP-debt)"
+    recipient: "R6 Кодировщик, R14 Заказчик"
+    trigger: "Открытие сессии техдолга"
+  - product: "Triage Report"
+    recipient: "R14 Заказчик"
+    trigger: "Новые замечания в intake"
+
+current_holders:
+  - holder: "A1 Claude (CLI interactive)"
+    grade: 3
+    covers_scenarios: [Triage-Session]
+
+failure_modes:
+  - "DP.FM.024: Backlog Bloat — замечания копятся без triage"
+
+related_roles:
+  - role: "R6 Кодировщик"
+    interaction: "Триажёр приоритизирует → Кодировщик реализует"
+  - role: "R8 Синхронизатор"
+    interaction: "Синхронизатор наполняет intake (code-scan, unsatisfied)"
+  - role: "R11 Наладчик"
+    interaction: "L4 escalations → попадают в triage"
+```
+</details>
+
 #### Функциональные роли (Grade 0+, со смешанными сценариями)
 
 | # | Роль | Suprasystem | Сценарии (Grade) | Текущие Holders | Рабочие продукты |
@@ -95,6 +398,69 @@ related:
 | R11 | **Наладчик** | Платформа DP | L1 Unstick (1), L3 Restart (0), **L2 Auto-fix (2)**, **L4 Escalate (3)** | I7 bash/bot (Grade 0-1), A1 Claude (Grade 2-3) | Fix PRs, Restarts, GitHub Issues |
 | R12 | **Оценщик** | Платформа DP | Bloom Eval (2), WP Validation (1-2), Fixation (1) | I8 bot code (Grade 1), A1 Claude (Grade 2) | Оценки, валидации, заметки |
 | R13 | **Проводник** | Платформа DP | FSM Routing (1), Access Control (0) | I1 Bot (Grade 1) | Маршрутизация, gating |
+
+> **R8-R12** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator)
+
+<details>
+<summary><strong>R13 Проводник</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Проводник"
+type: functional
+suprasystem: "Платформа DP"
+context: "Маршрутизация пользователя по FSM-сценариям, контроль доступа по tier"
+
+obligations:
+  - "Маршрутизировать пользователя между FSM-состояниями (марафон/лента/Q&A)"
+  - "Контролировать доступ к функциям по tier (T1-T5)"
+  - "Показывать кнопки и команды соответственно tier"
+  - "Не допускать dead-ends в FSM (все состояния имеют выход)"
+  - "Перенаправлять на оплату при попытке доступа к закрытым функциям"
+
+expectations:
+  - from: "R16 Ученик"
+    expects: "Понятная навигация, кнопки соответствуют контексту"
+  - from: "R3 Консультант"
+    expects: "FSM-контекст корректно передан для генерации"
+  - from: "R12 Оценщик"
+    expects: "После оценки FSM переходит к следующему шагу"
+
+methods:
+  - name: "FSM Routing"
+    description: "aiogram FSM → определение текущего состояния → доступные переходы"
+  - name: "Tier Gating"
+    description: "user_profile.tier → набор доступных команд и кнопок"
+  - name: "Progressive Disclosure"
+    description: "Показывать функции постепенно по мере роста tier"
+
+work_products:
+  - product: "FSM Transition"
+    recipient: "R16 Ученик (TG keyboard/inline buttons)"
+    trigger: "Пользователь нажал кнопку или ввёл команду"
+  - product: "Access Control Decision"
+    recipient: "R3 Консультант, R12 Оценщик (разрешение/запрет)"
+    trigger: "Каждый запрос пользователя"
+
+current_holders:
+  - holder: "I1 Бот (aiogram FSM, middleware)"
+    grade: 1
+    covers_scenarios: [FSM-Routing, Access-Control, Tier-Gating]
+
+failure_modes:
+  - "DP.FM.025: Dead-End State — пользователь застрял без кнопок выхода"
+  - "DP.FM.026: Tier Leak — пользователь получил доступ к функции выше своего tier"
+
+related_roles:
+  - role: "R3 Консультант"
+    interaction: "Проводник определяет контекст → Консультант генерирует контент"
+  - role: "R12 Оценщик"
+    interaction: "Оценщик завершает оценку → Проводник переводит в следующее состояние"
+  - role: "R11 Наладчик"
+    interaction: "Наладчик L1 расклинивает застрявших пользователей"
+  - role: "R16 Ученик"
+    interaction: "Прямое взаимодействие: кнопки, команды, навигация"
+```
+</details>
 
 #### Роли Пользователя (A2) — 7 ролей
 
