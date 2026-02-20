@@ -124,10 +124,10 @@ PACK-digital-platform/
 
 | # | Исполнитель | Вид | Репо | Расписание / триггер |
 |---|------------|-----|------|---------------------|
-| 1 | **Стратег** (AISYS.012) | ИИ-агент | DS-strategist-agent/ | launchd: 4:00 daily + Пн 00:00 + boot |
-| 2 | **Экстрактор** (AISYS.013) | ИИ-агент | DS-extractor-agent/ | launchd: каждые 3ч + Claude (Close) |
+| 1 | **Стратег** (AISYS.012) | ИИ-агент | DS-ai-systems/strategist/ | launchd: 4:00 daily + Пн 00:00 + boot |
+| 2 | **Экстрактор** (AISYS.013) | ИИ-агент | DS-ai-systems/extractor/ | launchd: каждые 3ч + Claude (Close) |
 | 3 | **AIST Bot** (AISYS.014) | ИИ-ассистент | DS-aist-bot/ | Telegram (пользователь / сервер) |
-| 4 | **Синхронизатор** (SYS.016) | Скрипт | DS-synchronizer/ | launchd: каждые 2 мин + boot |
+| 4 | **Синхронизатор** (SYS.016) | Скрипт | DS-ai-systems/synchronizer/ | launchd: каждые 2 мин + boot |
 
 Полные реестры: [DP.AGENT.001](pack/digital-platform/02-domain-entities/DP.AGENT.001-ai-agents.md) (ИИ-системы), [DP.SYS.001](pack/digital-platform/02-domain-entities/DP.SYS.001-deterministic-systems.md) (детерминированные).
 

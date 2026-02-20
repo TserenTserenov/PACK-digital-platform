@@ -280,7 +280,7 @@ KE записал в Pack → selective-reindex.sh <source> [<source>...] → in
 
 | Репо | Статус | Описание |
 |------|--------|----------|
-| [DS-extractor-agent](https://github.com/TserenTserenov/DS-extractor-agent) | MVP | Prompt-based реализация: 7 промптов, PROCESSES.md с 7 процессами, автоматизация (launchd). Уведомления делегированы SYS.016 Синхронизатору |
+| [DS-ai-systems/extractor](https://github.com/TserenTserenov/DS-ai-systems) | MVP | Prompt-based реализация: 7 промптов, PROCESSES.md с 7 процессами, автоматизация (launchd). Уведомления делегированы SYS.016 Синхронизатору |
 
 **Архитектура реализации:** Без кода — целиком на промптах Claude Code. Запуск: через Protocol Close, по команде пользователя, по расписанию (launchd), или по событию (git hook).
 
