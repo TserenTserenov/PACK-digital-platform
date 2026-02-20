@@ -21,7 +21,7 @@
 
 **ИИ-системы** и **детерминированные системы** — виды **систем платформы** (DP.D.015), работающие как пиры внутри слоя обработки. Интерфейс не обращается к данным напрямую. ИИ-система не знает какой UI у пользователя.
 
-### 4 архитектурные характеристики
+### 6 архитектурных характеристик (ЭМОГСС)
 
 | Характеристика | Определение | Статус |
 |----------------|-------------|--------|
@@ -29,6 +29,8 @@
 | **Масштабируемость** | Бесконечное подключение пользователей без изменения архитектуры | active |
 | **Обучаемость** | Платформа улучшает решения на основе данных и обратной связи | active |
 | **Генеративность** | Платформа порождает созидателей: общее знание → шаблон → fork → собственная система | active |
+| **Скорость** | Задержка от запроса до результата: бот <3 сек, CLI <1 сек | active |
+| **Современность** | Соответствие SOTA-практикам; АрхГейт при каждом решении | active |
 
 ### ИИ-системы (не «агенты» и не «ассистенты»)
 
@@ -77,25 +79,43 @@ PACK-digital-platform/
         ├── 00-pack-manifest.md        # Манифест v0.2.0
         ├── 01-domain-contract/        # Контракт домена
         │   ├── 01A-bounded-context.md #   Scope, понятия, связи
-        │   └── 01B-distinctions.md    #   14 различений (DP.D.001–014)
+        │   ├── 01B-distinctions.md    #   14 базовых различений (DP.D.001–014)
+        │   └── DP.D.015–032           #   18 расширенных различений
         ├── 02-domain-entities/        # Сущности домена
         │   ├── DP.ARCH.001            #   Архитектура (3 слоя, 6 характеристик ЭМОГСС)
+        │   ├── DP.ARCH.002            #   Тиры обслуживания (T1–T5)
         │   ├── DP.AGENT.001           #   ИИ-системы (реестр 16 систем)
+        │   ├── DP.AGENT.012-strategist/  # Паспорт Стратега + 8 сценариев
         │   ├── DP.AISYS.013           #   Знание-Экстрактор
+        │   ├── DP.AISYS.014           #   Бот AIST
         │   ├── DP.NAV.001             #   Навигация знаний
         │   ├── DP.EXOCORTEX.001       #   Модульный экзокортекс
         │   ├── DP.CONCEPT.001         #   Концепция платформы
         │   ├── DP.SYS.001             #   Детерминированные системы
-        │   ├── DP.ASSIST.001          #   (superseded → DP.AGENT.001)
-        │   └── DP.AGENT.012-strategist/  # Паспорт Стратега + сценарии
-        ├── 03-methods/                # Методы
-        │   └── DP.M.001               #   Экстракция знаний
-        ├── 04-work-products/          # Рабочие продукты
-        │   └── DP.WP.001             #   Отчёт экстракции
-        ├── 05-failure-modes/          # Типовые ошибки
+        │   ├── DP.RUNBOOK.001         #   Каталог ошибок бота (L1–L4)
+        │   └── DP.ASSIST.001          #   (superseded → DP.AGENT.001)
+        ├── 03-methods/                # Методы (7)
+        │   ├── DP.M.001               #   Экстракция знаний
+        │   ├── DP.M.002               #   Стратегическое DDD
+        │   ├── DP.M.003               #   Context Engineering Protocol
+        │   ├── DP.M.004               #   Адаптивная персонализация
+        │   ├── DP.M.005               #   АрхГейт (ЭМОГСС)
+        │   ├── DP.M.006               #   Vibe-Check
+        │   └── DP.M.007               #   Intervention Loop
+        ├── 04-work-products/          # Рабочие продукты (2)
+        │   ├── DP.WP.001             #   Отчёт экстракции
+        │   └── DP.WP.002             #   Ubiquitous Language
+        ├── 05-failure-modes/          # Типовые ошибки (6)
         │   ├── DP.FM.001             #   Информация как знание
-        │   └── DP.FM.002             #   Смешение слоёв
-        ├── 06-sota/                   # SoTA-аннотации (пока пусто)
+        │   ├── DP.FM.002             #   Смешение слоёв
+        │   ├── DP.FM.003             #   Context Blindness
+        │   ├── DP.FM.004             #   Narrow Pregeneration Scope
+        │   ├── DP.FM.005             #   Model-Reality Drift
+        │   └── DP.FM.006             #   Когнитивный долг (Agentic AI)
+        ├── 06-sota/                   # SoTA-аннотации (13)
+        │   ├── DP.SOTA.001           #   DDD Strategic (Khononov)
+        │   ├── DP.SOTA.002           #   Context Engineering
+        │   ├── DP.SOTA.003–013       #   + 11 практик (API, GraphRAG, AI-Native и др.)
         └── 07-map/                    # Карта
             └── DP.MAP.001            #   Навигационная карта Pack'а
 ```
@@ -133,10 +153,10 @@ PACK-digital-platform/
 
 ## Downstream (что строится на основе этого Pack'а)
 
-- [DS-twin](https://github.com/aisystant/DS-twin) — MCP-реализация цифрового двойника
-- [DS-aist-bot](https://github.com/aisystant/DS-aist-bot) — Telegram-бот (тонкий клиент)
-- [DS-strategist](https://github.com/TserenTserenov/DS-strategist) — Агент Стратег
-- [DS-strategy](https://github.com/TserenTserenov/DS-strategy) — Личный стратегический хаб
+- [aist_bot_newarchitecture](https://github.com/aisystant/aist_bot_newarchitecture) — Telegram-бот (тонкий клиент)
+- [DS-ai-systems](https://github.com/TserenTserenov/DS-ai-systems) — Монорепо ИИ-систем (7 систем: стратег, экстрактор, синхронизатор и др.)
+- [digital-twin-mcp](https://github.com/aisystant/digital-twin-mcp) — MCP-сервер цифрового двойника
+- [DS-my-strategy](https://github.com/TserenTserenov/DS-my-strategy) — Личный стратегический хаб
 
 ## Non-goals
 
@@ -147,4 +167,4 @@ PACK-digital-platform/
 
 ---
 
-*Pack v0.2.1 | Построен по [SPF](https://github.com/TserenTserenov/SPF) (Second Principles Framework)*
+*Pack v0.2.2 | 75 сущностей (32 D, 13 SOTA, 7 M, 6 FM, 2 WP + entities) | Построен по [SPF](https://github.com/TserenTserenov/SPF) (Second Principles Framework)*
