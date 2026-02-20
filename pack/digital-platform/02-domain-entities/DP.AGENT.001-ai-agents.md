@@ -138,8 +138,8 @@ current_holders:
     covers_scenarios: [Q&A, DZ-Check, Content-Generation]
 
 failure_modes:
-  - "DP.FM.001: Hallucination — ответ не основан на Pack/knowledge-mcp"
-  - "DP.FM.002: Tier Mismatch — контент не соответствует уровню ученика"
+  - "Hallucination — ответ не основан на Pack/knowledge-mcp"
+  - "Tier Mismatch — контент не соответствует уровню ученика"
 
 related_roles:
   - role: "R12 Оценщик"
@@ -199,7 +199,7 @@ current_holders:
     covers_scenarios: [Post-Writing, Presentation, Description]
 
 failure_modes:
-  - "DP.FM.003: Voice Drift — стиль не соответствует голосу автора"
+  - "Voice Drift — стиль не соответствует голосу автора"
 
 related_roles:
   - role: "R1 Стратег"
@@ -260,8 +260,8 @@ current_holders:
     covers_scenarios: [ArchGate, BC-Mapping, ADR, SOTA-Update]
 
 failure_modes:
-  - "DP.FM.020: Weak Architecture — решение с оценкой ≤7 принято без обоснования"
-  - "DP.FM.021: SOTA Ignorance — решение не учитывает доступные SOTA-практики"
+  - "Weak Architecture — решение с оценкой ≤7 принято без обоснования"
+  - "SOTA Ignorance — решение не учитывает доступные SOTA-практики"
 
 related_roles:
   - role: "R6 Кодировщик"
@@ -319,8 +319,8 @@ current_holders:
     covers_scenarios: [Implementation, Refactoring, Bug-Fix]
 
 failure_modes:
-  - "DP.FM.022: Over-Engineering — добавлены фичи, не запрошенные заказчиком"
-  - "DP.FM.023: Security Hole — введена OWASP-уязвимость"
+  - "Over-Engineering — добавлены фичи, не запрошенные заказчиком"
+  - "Security Hole — введена OWASP-уязвимость"
 
 related_roles:
   - role: "R5 Архитектор"
@@ -376,7 +376,7 @@ current_holders:
     covers_scenarios: [Triage-Session]
 
 failure_modes:
-  - "DP.FM.024: Backlog Bloat — замечания копятся без triage"
+  - "Backlog Bloat — замечания копятся без triage"
 
 related_roles:
   - role: "R6 Кодировщик"
@@ -447,8 +447,8 @@ current_holders:
     covers_scenarios: [FSM-Routing, Access-Control, Tier-Gating]
 
 failure_modes:
-  - "DP.FM.025: Dead-End State — пользователь застрял без кнопок выхода"
-  - "DP.FM.026: Tier Leak — пользователь получил доступ к функции выше своего tier"
+  - "Dead-End State — пользователь застрял без кнопок выхода"
+  - "Tier Leak — пользователь получил доступ к функции выше своего tier"
 
 related_roles:
   - role: "R3 Консультант"
