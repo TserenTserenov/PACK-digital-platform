@@ -5,7 +5,7 @@ type: domain-entity
 status: active
 summary: "Реестр и классификация ИИ-агентов платформы: Стратег, Экстрактор, Проводник и др."
 created: 2026-02-07
-updated: 2026-02-20
+updated: 2026-02-21
 trust:
   F: 4
   G: domain
@@ -393,7 +393,7 @@ related_roles:
 | # | Роль | Suprasystem | Сценарии (Grade) | Текущие Holders | Рабочие продукты |
 |---|------|-------------|------------------|-----------------|------------------|
 | R8 | **Синхронизатор** | Экзокортекс | Scheduler Dispatch (0), Code-Scan (0), Pack Projection (0), Notify (0), Daily Report (0), Consistency Check (0), Pack README Gen (0), **Consistency Audit (2)**, **Unsatisfied Report (1)** | I2 bash (Grade 0-1), A1 Claude (Grade 2+) | Consistency Report, Projections, TG Notifications |
-| R9 | **Шаблонизатор** | Экзокортекс | Template Sync (0), Validation (0) | I3 bash (Grade 0) | Обновлённый шаблон |
+| R9 | **Шаблонизатор** | Экзокортекс | Template Sync (0), **Drift Detection (2)**, **Semantic Validation (2)**, First-Time Setup (0), User Update (0), Generativity Check (0) | I3 bash (Grade 0), A1 Claude (Grade 2) | Актуальный генеративный шаблон, Drift Report |
 | R10 | **Статистик** | Платформа DP | Сбор метрик (1), **Analytics Report (2)** | I6 bash (Grade 1), A1 Claude (Grade 2) | Метрики, /analytics |
 | R11 | **Наладчик** | Платформа DP | L1 Unstick (1), L3 Restart (0), **L2 Auto-fix (2)**, **L4 Escalate (3)** | I7 bash/bot (Grade 0-1), A1 Claude (Grade 2-3) | Fix PRs, Restarts, GitHub Issues |
 | R12 | **Оценщик** | Платформа DP | Bloom Eval (2), WP Validation (1-2), Fixation (1) | I8 bot code (Grade 1), A1 Claude (Grade 2) | Оценки, валидации, заметки |
