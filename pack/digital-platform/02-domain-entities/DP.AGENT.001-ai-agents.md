@@ -68,6 +68,7 @@ related:
 | I6 | Статистик | Инструмент | 1 | DS-ai-systems |
 | I7 | Наладчик | Инструмент | 2 | DS-ai-systems |
 | I8 | Оценщик | Инструмент | 2 | DS-ai-systems |
+| I9 | Публикатор (bot scheduler) | Инструмент | 1 | DS-ai-systems |
 
 ### 3.2. Каталог ролей платформы
 
@@ -339,50 +340,75 @@ related_roles:
 name: "Триажёр техдолга"
 type: agential
 suprasystem: "Платформа DP"
-context: "Приоритизация техдолга из трёх intake: unsatisfied-questions, fleeting-notes, captures"
+context: "Двухуровневый триаж: auto-classify (Grade 1) + review (Grade 3)"
 
 obligations:
-  - "Читать все три intake при открытии сессии техдолга"
-  - "Категоризировать замечания: L(atency), C(orrectness), U(sability), I(nfra)"
-  - "Оценивать бюджет каждого замечания"
-  - "Предлагать: что берём, что отложить, что отклонить"
+  - "Auto-triage: классифицировать каждый helpful=false / ✏️ comment в реальном времени"
+  - "Review: при открытии сессии техдолга проверить предклассифицированный backlog"
+  - "Категоризировать: L(atency), C(orrectness), U(sability), K(nowledge)"
+  - "Оценивать severity: low/medium/high/critical"
+  - "Кластеризовать: группировать похожие проблемы (onboarding, content, ...)"
+  - "Алертить: severity >= high ИЛИ user_comment → TG alert в реальном времени"
   - "Обновлять WP-debt backlog (приоритизированный список)"
 
 expectations:
   - from: "R6 Кодировщик"
     expects: "Backlog приоритизирован, задачи конкретны"
   - from: "R14 Заказчик"
-    expects: "Критичное — сначала, некритичное — не копится"
+    expects: "Критичное — алерт сразу, некритичное — не копится"
   - from: "R8 Синхронизатор"
-    expects: "Intake пополнены (code-scan, unsatisfied-report)"
+    expects: "Weekly report (unsatisfied-questions.md) из feedback_triage DB"
 
 methods:
-  - name: "Issue Funnel"
-    description: "3 intake → triage → categorize (LCUI) → estimate → prioritize"
+  - name: "Auto-Triage (Grade 1)"
+    description: "helpful=false → Haiku classify → feedback_triage DB → TG alert if high"
+  - name: "Issue Funnel Review (Grade 3)"
+    description: "feedback_triage DB + fleeting-notes + captures → review → prioritize → backlog"
   - name: "Impact Assessment"
     description: "Сколько пользователей затронуто × severity × effort"
 
 work_products:
+  - product: "feedback_triage DB record"
+    recipient: "R7 Review, R8 Синхронизатор (отчёт)"
+    trigger: "Каждый helpful=false или ✏️ comment"
+  - product: "TG alert"
+    recipient: "R14 Заказчик"
+    trigger: "severity >= high ИЛИ user_comment"
   - product: "Приоритизированный backlog (WP-debt)"
     recipient: "R6 Кодировщик, R14 Заказчик"
     trigger: "Открытие сессии техдолга"
-  - product: "Triage Report"
-    recipient: "R14 Заказчик"
-    trigger: "Новые замечания в intake"
+
+scenarios:
+  - name: "Auto-Triage"
+    trigger: "helpful=false callback OR user_comment saved"
+    min_agency_grade: 1
+    method: "Auto-Triage (Grade 1)"
+    inputs: [qa_history record]
+    work_product: "feedback_triage DB record + TG alert"
+  - name: "Triage-Session"
+    trigger: "Открытие сессии техдолга (WP-7)"
+    min_agency_grade: 3
+    method: "Issue Funnel Review (Grade 3)"
+    inputs: [feedback_triage DB, fleeting-notes.md, captures.md]
+    work_product: "Приоритизированный backlog"
 
 current_holders:
+  - holder: "Bot process (core/feedback_triage.py, Haiku)"
+    grade: 1
+    covers_scenarios: [Auto-Triage]
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
     covers_scenarios: [Triage-Session]
 
 failure_modes:
-  - "Backlog Bloat — замечания копятся без triage"
+  - "Backlog Bloat — замечания копятся без review (mitigated by auto-triage + alerts)"
+  - "Alert Fatigue — слишком много high-severity алертов (monitor, tune threshold)"
 
 related_roles:
   - role: "R6 Кодировщик"
     interaction: "Триажёр приоритизирует → Кодировщик реализует"
   - role: "R8 Синхронизатор"
-    interaction: "Синхронизатор наполняет intake (code-scan, unsatisfied)"
+    interaction: "Синхронизатор генерирует weekly report из feedback_triage DB"
   - role: "R11 Наладчик"
     interaction: "L4 escalations → попадают в triage"
 ```
@@ -398,8 +424,9 @@ related_roles:
 | R11 | **Наладчик** | Платформа DP | L1 Unstick (1), L3 Restart (0), **L2 Auto-fix (2)**, **L4 Escalate (3)** | I7 bash/bot (Grade 0-1), A1 Claude (Grade 2-3) | Fix PRs, Restarts, GitHub Issues |
 | R12 | **Оценщик** | Платформа DP | Bloom Eval (2), WP Validation (1-2), Fixation (1) | I8 bot code (Grade 1), A1 Claude (Grade 2) | Оценки, валидации, заметки |
 | R13 | **Проводник** | Платформа DP | FSM Routing (1), Access Control (0) | I1 Bot (Grade 1) | Маршрутизация, gating |
+| R21 | **Публикатор** | Экосистема | Daily Scan (1), Scheduled Publish (0), Manual Publish (1), Comment Check (0) | I1 Bot + I9 (Grade 1) | Опубликованные посты, расписание, уведомления |
 
-> **R8-R12** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator)
+> **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
 
 <details>
 <summary><strong>R13 Проводник</strong> — полное описание (DP.D.033)</summary>
@@ -462,6 +489,111 @@ related_roles:
 ```
 </details>
 
+<details>
+<summary><strong>R21 Публикатор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Публикатор"
+type: functional
+suprasystem: "Экосистема"
+context: "Автономная публикация готовых постов на внешние платформы по расписанию и по команде"
+
+obligations:
+  - "Сканировать индекс знаний на посты с status=ready и target=club"
+  - "Составлять расписание публикаций (каденция: Пн/Ср/Пт 10:00, настраиваемо)"
+  - "Публиковать посты по расписанию через Discourse API"
+  - "Публиковать конкретный пост по команде пользователя — вне расписания"
+  - "Перестраивать график после ручной публикации и согласовывать с пользователем"
+  - "Уведомлять пользователя о каждой публикации (TG + ссылка)"
+  - "Запрашивать новые посты, когда в очереди < 2"
+  - "Отслеживать комментарии к опубликованным постам (polling)"
+  - "Обновлять frontmatter поста (status→published) после публикации"
+
+expectations:
+  - from: "R4 Автор"
+    expects: "Посты в индексе знаний со status: ready и target: club"
+  - from: "R14 Заказчик"
+    expects: "Публикация по расписанию без ручного вмешательства; уведомления; запрос новых постов при истощении очереди"
+  - from: "R1 Стратег"
+    expects: "Контент-план определяет порядок и приоритет публикаций"
+
+methods:
+  - name: "Index Scan"
+    description: "GitHub API → DS-Knowledge-Index/docs/ → frontmatter filter (status=ready, target=club) → сравнение с published_posts"
+  - name: "Auto-Schedule"
+    description: "Новые ready-посты → распределение по ближайшим свободным слотам (FIFO по дате создания)"
+  - name: "Schedule Rebuild"
+    description: "При ручной публикации: опубликовать указанный пост → сдвинуть остальные → показать новый график → ждать подтверждения"
+  - name: "Queue Watch"
+    description: "После каждой публикации: pending < 2 → TG-уведомление с подсказкой draft-постов для R4 Автора"
+  - name: "Comment Polling"
+    description: "Каждые 15 мин: get_topic → сравнить posts_count → уведомить при изменении"
+
+work_products:
+  - product: "Опубликованный пост (Discourse topic)"
+    recipient: "systemsworld.club → R14 Заказчик (TG notification + ссылка)"
+    trigger: "schedule_time <= NOW() или команда пользователя"
+  - product: "Расписание публикаций"
+    recipient: "R14 Заказчик (/club schedule)"
+    trigger: "Новый ready-пост обнаружен или ручная команда"
+  - product: "Запрос новых постов"
+    recipient: "R14 Заказчик → R4 Автор"
+    trigger: "Очередь < 2 постов"
+  - product: "Уведомление о комментарии"
+    recipient: "R14 Заказчик (TG)"
+    trigger: "posts_count изменился"
+
+scenarios:
+  - name: "Daily Scan + Auto-Schedule"
+    trigger: "Scheduler (daily 06:00)"
+    min_agency_grade: 1
+    method: "Index Scan + Auto-Schedule"
+    inputs: [github_api_contents, published_posts_db]
+    work_product: "Расписание публикаций + TG-уведомление о новых постах в графике"
+  - name: "Scheduled Publish"
+    trigger: "Scheduler (*/5 min, schedule_time <= NOW())"
+    min_agency_grade: 0
+    method: "Discourse API create_topic"
+    inputs: [scheduled_publications]
+    work_product: "Опубликованный пост + обновлённый frontmatter"
+  - name: "Manual Publish"
+    trigger: "Пользователь: /club publish «Title»"
+    min_agency_grade: 1
+    method: "Schedule Rebuild"
+    inputs: [user_command, scheduled_publications]
+    work_product: "Опубликованный пост + пересмотренный график (с согласованием)"
+  - name: "Comment Check"
+    trigger: "Scheduler (*/15 min)"
+    min_agency_grade: 0
+    method: "Comment Polling"
+    inputs: [published_posts]
+    work_product: "TG-уведомление о новом комментарии + ссылка"
+
+current_holders:
+  - holder: "I1 Бот (scheduler + handlers/discourse.py)"
+    grade: 1
+    covers_scenarios: [Scheduled-Publish, Manual-Publish, Comment-Check]
+  - holder: "I9 Публикатор (DS-ai-systems/publisher/)"
+    grade: 1
+    covers_scenarios: [Daily-Scan, Auto-Schedule]
+
+failure_modes:
+  - "Queue Starvation — очередь пуста, публикация прекращается без уведомления"
+  - "Ghost Publish — пост опубликован, но frontmatter не обновлён (status drift)"
+  - "Schedule Desync — расписание не соответствует реальным публикациям"
+
+related_roles:
+  - role: "R4 Автор"
+    interaction: "Автор пишет пост (status: ready, target: club) → Публикатор подхватывает и публикует"
+  - role: "R1 Стратег"
+    interaction: "Стратег определяет content plan → приоритет публикаций"
+  - role: "R8 Синхронизатор"
+    interaction: "Синхронизатор может вызывать Daily Scan по расписанию (scheduler dispatch)"
+  - role: "R14 Заказчик"
+    interaction: "Заказчик получает уведомления, даёт команды на публикацию, согласует перестроенный график"
+```
+</details>
+
 #### Роли Пользователя (A2) — 7 ролей
 
 | # | Роль | Контекст |
@@ -476,7 +608,7 @@ related_roles:
 
 > **Ключевое:** Стратег (R1) и Экстрактор (R2) не могут работать одновременно (один Claude Code process). Консультант (R3) работает через отдельный Claude API в боте — может параллельно.
 
-**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 8 инструментов (I1-I8), 20 ролей (7 агентских + 6 функциональных + 7 пользовательских), ~35 сценариев. Репо: DS-ai-systems (монорепо, 7 систем).
+**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 9 инструментов (I1-I9), 21 роль (7 агентских + 7 функциональных + 7 пользовательских), ~39 сценариев. Репо: DS-ai-systems (монорепо, 8 систем).
 
 ## 4. IPO-паттерн ИИ-системы
 

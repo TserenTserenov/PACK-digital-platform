@@ -487,24 +487,34 @@ Telegram Update → Middleware → Router → Dispatcher → SM.handle()
 **Примеры эпизодических:** Stars (#9), Feed pre-gen (#37), миграция DB (#27), Railway→EU (#38).
 **Гигиена:** Done-пункты удаляются из context file, не накапливаются. Каждую неделю в WeekPlan — конкретный scope.
 
-#### Issue Funnel (Воронка замечаний)
+#### Issue Funnel (Воронка замечаний) — v2 DB-native
 
-Три автоматизированных intake → triage при открытии сессии техдолга → WP-7 backlog.
+Двухуровневый триаж: auto-classify в реальном времени + review при сессии.
 
 ```
-unsatisfied-questions.md ──┐
-  (бот: 👍/🔍/✏️,          │
-   unsatisfied-report)      │
-                            ├──→ Triage (Open WP-7) ──→ WP-7 backlog
-fleeting-notes.md ──────────┤      1. Читай 3 intake
-  (TG: ".баг ...",          │      2. Категоризуй (L/C/U/I)
-   Note-Review)             │      3. Оцени бюджет
-                            │      4. Предложи приоритет
-captures.md ────────────────┘      5. Одобренные → backlog
-  (code-scan: TODO/FIXME)
+helpful=false / ✏️ comment
+        │
+        ▼
+core/feedback_triage.py (Bot, Haiku)
+        │
+        ├─→ 1. LLM classify → category (L/C/U/K) + severity + cluster
+        ├─→ 2. INSERT feedback_triage (DB)
+        ├─→ 3. IF severity>=high OR ✏️ → TG alert СРАЗУ
+        │
+        ▼
+unsatisfied-report.sh (daily)
+        │
+        ▼
+unsatisfied-questions.md = REPORT (не inbox)
+  структура: ✏️ замечания → 🔴 urgent → 📊 кластеры → 📈 статистика
+
+                            ┌──→ Review (Open WP-7) ──→ WP-7 backlog
+feedback_triage DB ─────────┤      1. Читай structured report
+fleeting-notes.md ──────────┤      2. Review предклассифицированного
+captures.md ────────────────┘      3. Бюджет + приоритет
 ```
 
-**Процесс:** бот PROCESSES.md § 6 (Issue Triage).
+**Процесс:** бот PROCESSES.md § 6 (Issue Triage, двухуровневый).
 
 ## 9. Реализация (Downstream)
 
