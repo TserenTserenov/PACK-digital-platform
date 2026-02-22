@@ -500,7 +500,7 @@ context: "Автономная публикация готовых постов 
 
 obligations:
   - "Сканировать индекс знаний на посты с status=ready и target=club"
-  - "Составлять расписание публикаций (каденция: Пн/Ср/Пт 10:00, настраиваемо)"
+  - "Составлять расписание публикаций (каденция: ежедневно 10:00, настраиваемо через PUBLISHER_DAYS)"
   - "Публиковать посты по расписанию через Discourse API"
   - "Публиковать конкретный пост по команде пользователя — вне расписания"
   - "Перестраивать график после ручной публикации и согласовывать с пользователем"
@@ -545,13 +545,13 @@ work_products:
 
 scenarios:
   - name: "Daily Scan + Auto-Schedule"
-    trigger: "Scheduler (daily 06:00)"
+    trigger: "Scheduler (daily 03:00 MSK)"
     min_agency_grade: 1
     method: "Index Scan + Auto-Schedule"
     inputs: [github_api_contents, published_posts_db]
     work_product: "Расписание публикаций + TG-уведомление о новых постах в графике"
   - name: "Scheduled Publish"
-    trigger: "Scheduler (*/5 min, schedule_time <= NOW())"
+    trigger: "Scheduler (*/30 min, schedule_time <= NOW())"
     min_agency_grade: 0
     method: "Discourse API create_topic"
     inputs: [scheduled_publications]
