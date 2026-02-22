@@ -610,6 +610,29 @@ related_roles:
 
 **Статистика:** 2 агента (A1 Claude, A2 Пользователь), 9 инструментов (I1-I9), 21 роль (7 агентских + 7 функциональных + 7 пользовательских), ~39 сценариев. Репо: DS-ai-systems (монорепо, 8 систем).
 
+### 3.3. Cross-Pack Role Index
+
+> Каждый Pack владеет своими ролями (DDD: роль = часть Bounded Context). Этот индекс — единая точка входа для навигации по всем ролям экосистемы.
+
+| Pack | Коды | Кол-во | Тип | Файл |
+|------|------|--------|-----|------|
+| **DP** (Digital Platform) | R1–R21 | 21 | Platform | [§3.2 этого файла](#32-каталог-ролей-платформы) |
+| **EDU** (Education) | EDU.R.001–007 | 7 | Domain-agnostic | [PACK-education/02A-roles.md](../../../../PACK-education/pack/education/02-domain-entities/02A-roles.md) |
+| **PD** (Personal Dev) | PD.R.001–004 | 4 | Domain-specific | [PACK-personal/02A-roles.md](../../../../PACK-personal/pack/personal-development/02-domain-entities/02A-roles.md) |
+| **MIM** (Мастерская) | MIM.R.001–003 | 3 | Domain-specific | [PACK-MIM/MIM.R.*](../../../../PACK-MIM/pack/mim/02-domain-entities/) |
+
+**Классификация (3 уровня):**
+
+```
+Level 0: Platform (R1-R21)           ← в шаблоне экзокортекса, нужны всем
+Level 1: Domain-agnostic (EDU.R.*)   ← универсальные, для любого предмета
+Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному домену
+```
+
+**В шаблоне экзокортекса:** только Level 0 (Platform). Pack-роли доступны по ссылкам при установке соответствующего Pack.
+
+**Итого:** 35 ролей (21 DP + 7 EDU + 4 PD + 3 MIM).
+
 ## 4. IPO-паттерн ИИ-системы
 
 Каждая ИИ-система описывается через Вход-Обработка-Выход (см. [DP.ARCH.001](DP.ARCH.001-platform-architecture.md) § 5):
