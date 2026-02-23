@@ -69,6 +69,7 @@ related:
 | I7 | Наладчик | Инструмент | 2 | DS-ai-systems |
 | I8 | Оценщик | Инструмент | 2 | DS-ai-systems |
 | I9 | Публикатор (bot scheduler) | Инструмент | 1 | DS-ai-systems |
+| I10 | WakaTime (SaaS + VS Code ext) | Инструмент | 0 | — (wakatime.com) |
 
 ### 3.2. Каталог ролей платформы
 
