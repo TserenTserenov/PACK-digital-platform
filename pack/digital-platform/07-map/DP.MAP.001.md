@@ -25,6 +25,7 @@ generated: true
 | Distinctions (D) | 8 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 7 |
+| IWE (IWE) | 1 |
 | Methods (M) | 7 |
 | Maps (MAP) | 2 |
 | NAV (NAV) | 1 |
@@ -32,7 +33,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 2 |
-| **Total** | **60** |
+| **Total** | **61** |
 
 ## Distinctions
 
@@ -152,6 +153,12 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.EXOCORTEX.001 | Модульный экзокортекс | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
+
+### IWE
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.IWE.001 | Intelligent Working Environment (IWE) | IWE — персональная интегрированная среда для интеллектуальной работы: экзокортекс + ИИ-агенты + инструменты + рабочее пространство + методология. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 
 ### NAV
 

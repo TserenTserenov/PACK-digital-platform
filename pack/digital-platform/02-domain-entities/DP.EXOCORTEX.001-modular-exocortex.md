@@ -13,13 +13,16 @@ trust:
 epistemic_stage: emerging
 related:
   uses: [DP.ARCH.001, DP.ARCH.002, DP.NAV.001]
+  componentOf: [DP.IWE.001]
 ---
 
 # Модульный экзокортекс
 
 ## 1. Определение
 
-**Модульный экзокортекс** — точка подключения пользователя к платформе: конфигурация его взаимодействия с ИИ-системами через модульный CLAUDE.md и структурированную Memory.
+**Модульный экзокортекс** — подсистема памяти и инструкций внутри IWE ([DP.IWE.001](DP.IWE.001-intelligent-working-environment.md)): конфигурация взаимодействия пользователя с ИИ-системами через модульный CLAUDE.md и структурированную Memory.
+
+> **Экзокортекс — компонент IWE, не синоним.** Экзокортекс = память + инструкции. IWE = экзокортекс + агенты + инструменты + методология + рабочее пространство + ЦД. Подробнее: [DP.IWE.001 §2.1](DP.IWE.001-intelligent-working-environment.md).
 
 > Platform-space ≠ User-space (DP.D.011). Экзокортекс состоит из общих модулей (platform-space) и персональных данных (user-space).
 
@@ -374,3 +377,4 @@ exocortex/
 - [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — Claude Code и Стратег как владельцы протоколов
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — Memory содержит ссылки (уровень 4 навигации)
 - [DP.AISYS.013 Знание-Экстрактор](DP.AISYS.013-knowledge-extractor.md) — capture-to-pack как примитив экстрактора
+- [DP.IWE.001 Intelligent Working Environment](DP.IWE.001-intelligent-working-environment.md) — экзокортекс как компонент IWE
