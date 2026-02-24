@@ -5,7 +5,7 @@ type: domain-entity
 status: active
 summary: "Реестр и классификация ИИ-систем платформы: роли (Стратег, Экстрактор, Проводник и др.) и исполнители (Claude, бот, скрипты)"
 created: 2026-02-07
-updated: 2026-02-21
+updated: 2026-02-24
 trust:
   F: 4
   G: domain
@@ -46,6 +46,58 @@ related:
 
 Одна и та же ИИ-система может работать в разных режимах и менять вид в зависимости от сценария (Стратег: и агент, и ассистент).
 
+### 2.1. Agent Customization Pipeline (модель по контурам)
+
+> **Различение DP.D.037:** Кастомизация агента = harness engineering (DP.D.025), НЕ fine-tuning LLM. Каждый контур добавляет слои обвязки (harness), не меняя базовую модель.
+
+```
+Base LLM (Anthropic Claude / OpenAI GPT / etc.)
+    │
+    ├── L2: Platform Agent
+    │   + API config (temperature, max_tokens, tools)
+    │   + Domain system prompt (knowledge-mcp access)
+    │   + Platform constraints (latency budget, safety, billing)
+    │   Governance: M2 (Разработчик платформы)
+    │
+    ├── L3: Template Agent
+    │   + standard/CLAUDE.md (методология: FPF, протоколы, различения)
+    │   + standard/memory/*.md (справочные файлы)
+    │   + Описания ролей (DP.D.033 templates)
+    │   + Сценарные скрипты (strategist.sh, extractor.sh)
+    │   Governance: M3 (Разработчик шаблона)
+    │
+    └── L4: Personal Agent
+        + personal/CLAUDE.md (личная методология, уроки)
+        + personal/memory/*.md (личные паттерны)
+        + Цифровой двойник (digital-twin-mcp)
+        + Личные Pack-репо + DS-strategy
+        Governance: M4 (Пользователь IWE)
+```
+
+**Agent-as-System.** ИИ-агент — система (FPF A.1) с тремя аспектами:
+
+| Аспект | Что | Пример | Кто меняет |
+|--------|-----|--------|-----------|
+| **Конструкция** | Base LLM (веса модели) | Claude Opus / Haiku / GPT-4o | Провайдер (Anthropic, OpenAI) |
+| **Конфигурация** | Harness (промпты + инструменты + данные + ограничения) | CLAUDE.md, memory/, prompts/, scripts/ | Разработчик (M2/M3) и пользователь (M4) |
+| **Состояние** | Текущий контекст сессии | Conversation history, загруженные файлы | Меняется в процессе работы |
+
+**Принципы:**
+
+| Принцип | Описание |
+|---------|----------|
+| **Harness, not weights** | Каждый контур добавляет harness, не меняет модель (DP.D.025, DP.D.037) |
+| **Contour inheritance** | L4 наследует от L3, L3 от L2. Personal дополняет Standard (DP.ARCH.002) |
+| **Governance separation** | Каждый контур имеет своего владельца — мета-роли M2/M3/M4 (DP.D.034) |
+| **Composable layers** | Промпты и инструменты композируются, не заменяются. Standard + Personal = полный контекст |
+
+**Что отдаётся пользователю IWE:**
+1. **Описания ролей** (DP.D.033) — пользователь может дополнять obligations, methods, expectations
+2. **Шаблон агента** (L3 Template) — пользователь fork'ает и кастомизирует на L4
+3. **Инструменты** — скрипты, MCP-серверы, конфиги — привязаны к назначению (DP.D.036)
+
+Роли и агенты — отдельные сущности. Пользователь может кастомизировать **агента** (L4 harness) и **описание роли** — независимо друг от друга.
+
 ## 3. Каталог ролей и исполнителей
 
 > **Основание:** FPF A.2 (U.RoleAssignment) — роль описывается независимо от исполнителя. FPF A.13 (AgentialRole) — агентские роли требуют Grade 2+. Шаблон описания роли: DP.D.033.
@@ -77,15 +129,17 @@ related:
 
 #### Агентские роли (Grade 2+)
 
-| # | Роль | Suprasystem | Сценарии | Текущий Holder | Рабочие продукты |
-|---|------|-------------|----------|----------------|------------------|
-| R1 | **Стратег** | Экзокортекс | Day-plan, Session-prep, Note-review, Week-review, Interactive | A1 Claude (CLI headless / CLI) | WeekPlan, DayPlan, Review |
-| R2 | **Экстрактор** | Экзокортекс | Session-close, On-demand, Inbox-check, Ontology-sync | A1 Claude (CLI headless / CLI) | Pack-сущности, Extraction Report |
-| R3 | **Консультант** | Платформа DP | Q&A, ДЗ-чек, Генерация контента | A1 Claude via I1 (Claude API) | Ответы, оценки, контент |
-| R4 | **Автор** | Экосистема | Написание постов, Подготовка презентаций | A1 Claude (CLI) | Посты, слайды |
-| R5 | **Архитектор** | Платформа DP | АрхГейт, Архитектурные решения | A1 Claude (CLI) | ADR, оценки ЭМОГСС |
-| R6 | **Кодировщик** | Платформа DP | Реализация кода, Рефакторинг | A1 Claude (CLI) | Код, коммиты |
-| R7 | **Триажёр техдолга** | Платформа DP | Triage session (Issue Funnel) | A1 Claude (CLI) | Приоритизированный backlog |
+> Исполнители (кто играет роль) — см. [Таблица РА §3.5](#35-таблица-ра-роли--исполнители--инструменты).
+
+| # | Роль | Suprasystem | Сервисы (описания методов) | Вход | Выход (РП) |
+|---|------|-------------|---------------------------|------|------------|
+| R1 | **Стратег** | Экзокортекс | Day-plan, Session-prep, Note-review, Week-review, Interactive | WeekPlan, inbox, коммиты, MAPSTRATEGIC | WeekPlan, DayPlan, WeekReport |
+| R2 | **Экстрактор** | Экзокортекс | Knowledge Extraction, Inbox Check, Ontology Sync | captures.md, сессионные артефакты, Pack | Pack-сущности, Extraction Report |
+| R3 | **Консультант** | Платформа DP | Q&A, DZ-Check, Content Pre-Gen, Feed Delivery | Вопрос ученика, knowledge-mcp, DT | Ответы, оценки, контент |
+| R4 | **Автор** | Экосистема | Post-Writing, Presentation, Description | Content plan, knowledge-mcp | Посты (md), презентации (Marp) |
+| R5 | **Архитектор** | Платформа DP | ArchGate, BC-Mapping, ADR, SOTA-Update | Арх. предложение, Pack, SOTA | ADR, оценки ЭМОГСС, BC-маппинг |
+| R6 | **Кодировщик** | Платформа DP | Implementation, Refactoring, Bug-Fix | Архитектура (R5), backlog (R7) | Код (коммиты), captures |
+| R7 | **Триажёр техдолга** | Платформа DP | Auto-Triage, Triage-Session | feedback_triage DB, inbox | Приоритизированный backlog, алерты |
 
 > **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
 
@@ -138,6 +192,7 @@ current_holders:
   - holder: "A1 Claude Haiku (via I1 Bot, Claude API)"
     grade: 3
     covers_scenarios: [Q&A, DZ-Check, Content-Generation]
+    instruments: [Claude API (Haiku), knowledge-mcp, guides-mcp, digital-twin-mcp, TG Bot API (messages + keyboards)]
 
 failure_modes:
   - "Hallucination — ответ не основан на Pack/knowledge-mcp"
@@ -199,6 +254,7 @@ current_holders:
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
     covers_scenarios: [Post-Writing, Presentation, Description]
+    instruments: [Claude Code CLI, knowledge-mcp, DS-Knowledge-Index repo, Marp CLI]
 
 failure_modes:
   - "Voice Drift — стиль не соответствует голосу автора"
@@ -260,6 +316,7 @@ current_holders:
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
     covers_scenarios: [ArchGate, BC-Mapping, ADR, SOTA-Update]
+    instruments: [Claude Code CLI, CLAUDE.md + memory/sota-reference.md, knowledge-mcp, Pack repos (read)]
 
 failure_modes:
   - "Weak Architecture — решение с оценкой ≤7 принято без обоснования"
@@ -319,6 +376,7 @@ current_holders:
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
     covers_scenarios: [Implementation, Refactoring, Bug-Fix]
+    instruments: [Claude Code CLI (git, bash, file ops), repo CLAUDE.md, knowledge-mcp]
 
 failure_modes:
   - "Over-Engineering — добавлены фичи, не запрошенные заказчиком"
@@ -397,9 +455,11 @@ current_holders:
   - holder: "Bot process (core/feedback_triage.py, Haiku)"
     grade: 1
     covers_scenarios: [Auto-Triage]
+    instruments: [feedback_triage.py, Claude Haiku API, Neon DB (feedback_triage table), TG Bot API (alert)]
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
     covers_scenarios: [Triage-Session]
+    instruments: [Claude Code CLI, feedback_triage DB (read), inbox files (fleeting-notes, captures), GitHub API]
 
 failure_modes:
   - "Backlog Bloat — замечания копятся без review (mitigated by auto-triage + alerts)"
@@ -417,15 +477,17 @@ related_roles:
 
 #### Функциональные роли (Grade 0+, со смешанными сценариями)
 
-| # | Роль | Suprasystem | Сценарии (Grade) | Текущие Holders | Рабочие продукты |
-|---|------|-------------|------------------|-----------------|------------------|
-| R8 | **Синхронизатор** | Экзокортекс | Scheduler Dispatch (0), Code-Scan (0), Pack Projection (0), Notify (0), Daily Report (0), Consistency Check (0), Pack README Gen (0), **Consistency Audit (2)**, **Unsatisfied Report (1)** | I2 bash (Grade 0-1), A1 Claude (Grade 2+) | Consistency Report, Projections, TG Notifications |
-| R9 | **Шаблонизатор** | Экзокортекс | Template Sync (0), **Drift Detection (2)**, **Semantic Validation (2)**, First-Time Setup (0), User Update (0), Generativity Check (0) | I3 bash (Grade 0), A1 Claude (Grade 2) | Актуальный генеративный шаблон, Drift Report |
-| R10 | **Статистик** | Платформа DP | Сбор метрик (1), **Analytics Report (2)** | I6 bash (Grade 1), A1 Claude (Grade 2) | Метрики, /analytics |
-| R11 | **Наладчик** | Платформа DP | L1 Unstick (1), L3 Restart (0), **L2 Auto-fix (2)**, **L4 Escalate (3)** | I7 bash/bot (Grade 0-1), A1 Claude (Grade 2-3) | Fix PRs, Restarts, GitHub Issues |
-| R12 | **Оценщик** | Платформа DP | Bloom Eval (2), WP Validation (1-2), Fixation (1) | I8 bot code (Grade 1), A1 Claude (Grade 2) | Оценки, валидации, заметки |
-| R13 | **Проводник** | Платформа DP | FSM Routing (1), Access Control (0) | I1 Bot (Grade 1) | Маршрутизация, gating |
-| R21 | **Публикатор** | Экосистема | Daily Scan (1), Scheduled Publish (0), Manual Publish (1), Comment Check (0) | I1 Bot + I9 (Grade 1) | Опубликованные посты, расписание, уведомления |
+> Исполнители (кто играет роль) — см. [Таблица РА §3.5](#35-таблица-ра-роли--исполнители--инструменты).
+
+| # | Роль | Suprasystem | Сервисы (описания методов) | Вход | Выход (РП) |
+|---|------|-------------|---------------------------|------|------------|
+| R8 | **Синхронизатор** | Экзокортекс | Scheduler Dispatch, Code-Scan, Pack Projection, Notify, Consistency Check, Unsatisfied Report | Время + config, git repos, Pack frontmatter | Projections, TG Notifications, Consistency Report |
+| R9 | **Шаблонизатор** | Экзокортекс | Template Sync, Drift Detection, Semantic Validation, First-Time Setup | Platform files (CLAUDE.md, prompts, memory/) | Актуальный шаблон, Drift Report |
+| R10 | **Статистик** | Платформа DP | Metrics Collection, Analytics Report, Time Tracking | qa_history, user_profiles, WakaTime API | Агрегированные метрики, /analytics |
+| R11 | **Наладчик** | Платформа DP | L1 Unstick, L2 Auto-fix, L3 Restart, L4 Escalate | FSM timeout, error_logs, health check | FSM reset, Fix PRs, GitHub Issues |
+| R12 | **Оценщик** | Платформа DP | Bloom Eval, WP Validation, Fixation | Ответ ученика + эталон, Pack entity draft | Bloom-оценка, валидация по SPF |
+| R13 | **Проводник** | Платформа DP | FSM Routing, Tier Gating, Progressive Disclosure | Запрос пользователя, user_profile.tier | FSM Transition, Access Control Decision |
+| R21 | **Публикатор** | Экосистема | Daily Scan, Scheduled Publish, Manual Publish, Comment Check | DS-Knowledge-Index (status=ready), scheduled_publications | Опубликованные посты, расписание, уведомления |
 
 > **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
 
@@ -473,6 +535,7 @@ current_holders:
   - holder: "I1 Бот (aiogram FSM, middleware)"
     grade: 1
     covers_scenarios: [FSM-Routing, Access-Control, Tier-Gating]
+    instruments: [aiogram FSM, middleware (tier_gate, auth), TG Bot API (keyboards, inline buttons), Neon DB (user_profiles)]
 
 failure_modes:
   - "Dead-End State — пользователь застрял без кнопок выхода"
@@ -574,9 +637,11 @@ current_holders:
   - holder: "I1 Бот (scheduler + handlers/discourse.py)"
     grade: 1
     covers_scenarios: [Scheduled-Publish, Manual-Publish, Comment-Check]
+    instruments: [handlers/discourse.py, Discourse API, Neon DB (published_posts, scheduled_publications), TG Bot API]
   - holder: "I9 Публикатор (DS-ai-systems/publisher/)"
     grade: 1
     covers_scenarios: [Daily-Scan, Auto-Schedule]
+    instruments: [publisher/scripts/*, GitHub API (contents), Neon DB (published_posts)]
 
 failure_modes:
   - "Queue Starvation — очередь пуста, публикация прекращается без уведомления"
@@ -649,6 +714,41 @@ Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному до
 
 **Итого:** 35 ролей (21 DP + 7 EDU + 4 PD + 3 MIM).
 
+### 3.5. Таблица РА (Роли × Исполнители × Инструменты)
+
+> **Назначение:** Сводная таблица: какой исполнитель играет какую роль, с каким Grade, какими инструментами и в каких сценариях.
+> Это проекция (viewOf) данных из `current_holders` описаний ролей (§3.2). Source-of-truth: описания ролей.
+> Таблицы ролей (§3.2) описывают ЧТО делает роль (без исполнителя). Эта таблица описывает КТО играет роль и ЧЕМ (DP.D.036).
+
+| Исполнитель | Роль | Grade | Инструменты | Сценарии |
+|-------------|------|-------|-------------|----------|
+| **A1 Claude (CLI headless)** | R1 Стратег | 3 | strategist.sh, prompts/*.md, MCP (knowledge, guides, DT) | Day-plan, Session-prep, Note-review, Week-review |
+| **A1 Claude (CLI interactive)** | R1 Стратег | 3 | Claude Code CLI (CLAUDE.md + memory/), MCP | Evening-review, Check-plan, Update-priorities, Add-WP |
+| **A1 Claude (CLI headless)** | R2 Экстрактор | 3 | extractor.sh, prompts/*.md, MCP (knowledge) | Knowledge Extraction, Inbox Check |
+| **A1 Claude (CLI interactive)** | R2 Экстрактор | 3 | Claude Code CLI, MCP, Pack repos | Ontology Sync, On-demand |
+| **A1 Claude Haiku (via I1 Bot)** | R3 Консультант | 3 | Claude API (Haiku), knowledge-mcp, guides-mcp, DT-mcp, TG Bot API | Q&A, DZ-Check, Content-Generation |
+| **A1 Claude (CLI interactive)** | R4 Автор | 3 | Claude Code CLI, knowledge-mcp, DS-Knowledge-Index, Marp CLI | Post-Writing, Presentation, Description |
+| **A1 Claude (CLI interactive)** | R5 Архитектор | 3 | Claude Code CLI, CLAUDE.md + memory/sota-reference.md, knowledge-mcp | ArchGate, BC-Mapping, ADR, SOTA-Update |
+| **A1 Claude (CLI interactive)** | R6 Кодировщик | 3 | Claude Code CLI (git, bash, file ops), repo CLAUDE.md, knowledge-mcp | Implementation, Refactoring, Bug-Fix |
+| **Bot (Haiku)** | R7 Триажёр | 1 | feedback_triage.py, Claude Haiku API, Neon DB, TG Bot API | Auto-Triage |
+| **A1 Claude (CLI interactive)** | R7 Триажёр | 3 | Claude Code CLI, feedback_triage DB, inbox files, GitHub API | Triage-Session |
+| **I2 Синхронизатор (bash)** | R8 Синхронизатор | 0-1 | scheduler.sh, code-scan.sh, pack-project.sh, notify.sh | Scheduler Dispatch, Code Scan, Pack Projection, Notify |
+| **A1 Claude** | R8 Синхронизатор | 2 | Claude Code CLI, Pack repos, downstream repos | Consistency Audit |
+| **I3 Шаблонизатор (bash)** | R9 Шаблонизатор | 0 | template-sync.sh, validate-template.sh | Template Sync, Validation |
+| **A1 Claude** | R9 Шаблонизатор | 2 | Claude Code CLI, FMT-exocortex-template/ | Drift Detection, Semantic Validation |
+| **I6 Статистик (bash)** | R10 Статистик | 1 | pulse.sh, Neon DB (SQL queries) | Metrics Collection |
+| **I10 WakaTime** | R10 Статистик | 0 | VS Code extension, WakaTime SaaS API | Time Tracking |
+| **A1 Claude** | R10 Статистик | 2 | Claude Code CLI, метрики | Analytics Report |
+| **I7 Наладчик (bash/bot)** | R11 Наладчик | 0-1 | health-check.sh, restart scripts, bot code | L1 Unstick, L3 Restart |
+| **A1 Claude** | R11 Наладчик | 2-3 | Claude Code CLI, error_logs, GitHub API | L2 Auto-fix, L4 Escalate |
+| **I8 Оценщик (bot code)** | R12 Оценщик | 1 | evaluator.py (bot) | Fixation |
+| **A1 Claude** | R12 Оценщик | 2 | Claude Code CLI, Pack, SPF | Bloom Eval, WP Validation |
+| **I1 Бот** | R13 Проводник | 1 | aiogram FSM, middleware, TG Bot API, Neon DB (user_profiles) | FSM-Routing, Access-Control, Tier-Gating |
+| **I1 Бот + I9** | R21 Публикатор | 1 | handlers/discourse.py, Discourse API, GitHub API, Neon DB, TG Bot API | All scenarios |
+| **A2 Пользователь** | R14-R20 | 4 | TG, Claude Code CLI, VS Code, бумага | Все пользовательские сценарии |
+
+**Статистика РА:** 2 агента (A1 Claude, A2 Пользователь) × 21 роль → ~24 уникальных назначения, 10 инструментов (I1-I10).
+
 ## 4. IPO-паттерн ИИ-системы
 
 Каждая ИИ-система описывается через Вход-Обработка-Выход (см. [DP.ARCH.001](DP.ARCH.001-platform-architecture.md) § 5):
@@ -714,7 +814,7 @@ expectations: [{from, expects}]
 methods: [{name, description}]
 work_products: [{product, recipient, trigger}]
 scenarios: [{name, trigger, min_agency_grade, method, inputs, work_product}]
-current_holders: [{holder, grade, covers_scenarios}]
+current_holders: [{holder, grade, covers_scenarios, instruments}]  # instruments per DP.D.036
 failure_modes: [...]
 related_roles: [{role, interaction}]
 ```
