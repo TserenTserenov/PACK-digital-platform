@@ -122,7 +122,7 @@ related:
 |------|-------------|
 | `hard-distinctions.md` | Жёсткие различения (19 пар) |
 | `fpf-reference.md` | Навигация по FPF, терминология, принципы |
-| `repo-type-rules.md` | Правила Pack/Downstream/Framework/Format/Foundation |
+| `repo-type-rules.md` | Правила Base/Pack/DS |
 | `checklists.md` | Чеклисты перед ответом/изменением/созданием |
 | `sota-reference.md` | SOTA-практики (18 шт.: Platform + Pack Architecture) |
 | `wp-gate-lesson.md` | Урок о WP Gate (мета-знание) |
