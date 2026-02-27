@@ -601,7 +601,7 @@ T1: нет активной подписки (free)
 
 ## 14. Связанные документы
 
-- [DP.ARCH.001 Архитектура платформы](DP.ARCH.001-platform-architecture.md) — слои, характеристики ЭМОГСС, отчуждаемость
+- [DP.ARCH.001 Архитектура платформы](DP.ARCH.001-platform-architecture.md) — слои, характеристики ЭМОГССБ, принципы 2-го уровня, отчуждаемость
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — Standard/Personal файлы, слои инструкций
 - [DP.AISYS.014 AIST Bot](DP.AISYS.014-aist-bot.md) — реализация T1-T3 через бота, консультация "?"
 - [DP.M.003 Context Engineering](../03-methods/DP.M.003-context-engineering.md) — метод формирования контекста по тиру

@@ -71,7 +71,7 @@ tags: [intervention, measurement, feedback-loop, method, world-model, probing]
 | **Unsatisfied-questions** | Ответ бота пользователю | Пользователь нажал «не помогло» | Запись в intake → triage → fix | Непрерывно |
 | **Code-scan** | Написание кода | Поиск TODO/FIXME | Запись в captures.md | При коммите |
 | **Knowledge Audit** (KE) | Использование Pack-сущности | Проверка актуальности | Обновление или архивация | 2-3ч / по запросу |
-| **ArchGate** (M.005) | Архитектурное решение | Оценка по ЭМОГСС | Блокировка или одобрение | При решении |
+| **ArchGate** (M.005) | Архитектурное решение | Оценка по ЭМОГССБ | Блокировка или одобрение | При решении |
 | **Session Close** | Сессия работы | Extraction Report | Pack + MEMORY.md + WeekPlan | При закрытии |
 
 ## 5. Правила применения
