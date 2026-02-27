@@ -317,6 +317,7 @@ DP.D.021 (Вайб-моделирование ≠ Профессионально
 
 ## 10. Связанные документы
 
+- [DP.IWE.002](DP.IWE.002-iwe-template-and-setup.md) — **практическое**: установка, пререквизиты, ОРЗ, роли, FAQ, безопасность
 - [DP.EXOCORTEX.001](DP.EXOCORTEX.001-modular-exocortex.md) — описания и инструкции IWE (Вид 2: Описания)
 - [DP.ARCH.002](DP.ARCH.002-service-tiers.md) — тиры T1-T5: конфигурация IWE по уровням
 - [DP.CONCEPT.001](DP.CONCEPT.001-platform-concept.md) — концепция платформы: «Aisystant даёт каждому IWE»
