@@ -25,7 +25,7 @@ generated: true
 | Distinctions (D) | 9 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 7 |
-| IWE (IWE) | 1 |
+| IWE (IWE) | 2 |
 | Methods (M) | 7 |
 | Maps (MAP) | 2 |
 | NAV (NAV) | 1 |
@@ -33,7 +33,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 14 |
-| **Total** | **75** |
+| **Total** | **76** |
 
 ## Distinctions
 
@@ -173,6 +173,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.IWE.001 | Intelligent Working Environment (IWE) | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 4 архитектурных вида (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), артефакты (U.Work). Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
+| DP.IWE.002 | IWE Template & Setup | Практическое знание о шаблоне IWE: пререквизиты, установка, ежедневная работа (ОРЗ), роли, обновление, безопасность, FAQ. Source-of-truth для бота и MCP по вопросам «как установить IWE». | draft |
 
 ### NAV
 
