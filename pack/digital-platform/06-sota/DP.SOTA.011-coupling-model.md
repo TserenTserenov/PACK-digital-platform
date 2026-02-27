@@ -55,7 +55,7 @@ tags: [coupling, khononov, architecture, integration, knowledge, distance, volat
 | Boundary Statements | Определяют knowledge coupling — что видно снаружи |
 | typed `related:` | Описывают distance coupling — как далеко связанные сущности |
 | Pack (source-of-truth) vs Downstream | Volatility: Pack стабилен, Downstream — проекция (может меняться) |
-| 6 характеристик (ЭМОГСС) | Coupling model = инструмент оценки эволюционируемости |
+| 7 характеристик (ЭМОГССБ) | Coupling model = инструмент оценки эволюционируемости |
 
 ## 6. Правила применения
 
