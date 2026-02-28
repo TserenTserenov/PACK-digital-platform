@@ -215,19 +215,19 @@ CLAUDE.md состоит из **модулей**. Каждый модуль:
 
 ## 7. Развёртывание экзокортекса
 
-Экзокортекс развёртывается через два связанных репозитория:
+Экзокортекс развёртывается из одного репозитория:
 
 | Репо | Тип | Назначение |
 |------|-----|------------|
-| [FMT-exocortex-template](https://github.com/TserenTserenov/FMT-exocortex-template) | Format | Шаблон: CLAUDE.md + memory/ + LEARNING-PATH.md + ONTOLOGY.md + strategist-agent/ + my-strategy/ |
-| [DS-ai-systems/setup](https://github.com/TserenTserenov/DS-ai-systems) | Downstream/instrument | Агент развёртывания: fork шаблона, подстановка переменных, установка launchd |
+| [FMT-exocortex-template](https://github.com/TserenTserenov/FMT-exocortex-template) | Format | Шаблон + установщик: CLAUDE.md + memory/ + setup.sh + strategist-agent/ + seed/ |
+
+> **ADR-001 (2026-02-28):** setup.sh встроен в шаблон. Ранее жил в DS-ai-systems/setup — пользователи не могли запустить после форка (генеративность = 0). Авторские инструменты (template-sync.sh) остаются в DS-ai-systems/setup/.
 
 **Процесс:**
 ```
 FMT-exocortex-template (Format)
-        ↓ fork
-DS-ai-systems/setup (bash setup.sh или Claude Code prompt)
-        ↓ configure
+        ↓ gh repo fork --clone
+        ↓ bash setup.sh (из корня шаблона)
 Персональный экзокортекс: CLAUDE.md + Memory + Стратег + DS-strategy
 ```
 
