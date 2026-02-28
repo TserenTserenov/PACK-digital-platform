@@ -74,22 +74,22 @@ related:
 
 ```
 1. mkdir -p ~/Github && cd ~/Github
-2. gh repo clone aisystant/DS-ai-systems -- --depth 1
-3. cd DS-ai-systems/setup && bash setup.sh
+2. gh repo fork TserenTserenov/FMT-exocortex-template --clone --remote
+3. cd FMT-exocortex-template && bash setup.sh
 ```
 
-Установщик (`setup.sh`) выполняет 8 шагов:
+> **ADR-001 (2026-02-28):** `setup.sh` встроен в шаблон. Ранее жил в DS-ai-systems/setup — пользователи не могли запустить после форка (генеративность = 0). Теперь fork = работающая система.
+
+Установщик (`setup.sh`) выполняет 6 шагов:
 
 | # | Шаг | Что создаётся |
 |---|-----|---------------|
-| 1 | Форк шаблона FMT-exocortex-template | Ваша копия на GitHub |
-| 2 | Подстановка переменных (имя, пути, часовой пояс) | Персонализированные файлы |
-| 3 | Установка CLAUDE.md | `~/Github/CLAUDE.md` |
-| 4 | Установка memory/ | `~/.claude/projects/*/memory/` |
-| 5 | Настройка разрешений и MCP | `.claude/settings.local.json` |
-| 6 | Установка Стратега (launchd/cron) | Автозапуск утренних планов |
-| 7 | Создание DS-strategy | Приватный репо на GitHub |
-| 8 | Проверка MCP-подключения | Связь с базой знаний платформы |
+| 1 | Подстановка переменных (имя, пути, часовой пояс) | Персонализированные файлы |
+| 2 | Установка CLAUDE.md | `~/Github/CLAUDE.md` |
+| 3 | Установка memory/ | `~/.claude/projects/*/memory/` |
+| 4 | Настройка разрешений и MCP | `.claude/settings.local.json` |
+| 5 | Установка Стратега (launchd/cron) | Автозапуск утренних планов |
+| 6 | Создание DS-strategy | Приватный репо на GitHub |
 
 ### 3.2. Результат установки
 
