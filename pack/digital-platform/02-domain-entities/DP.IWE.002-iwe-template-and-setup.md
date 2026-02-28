@@ -182,7 +182,92 @@ MCP (Model Context Protocol) — протокол, через который Cla
 
 MCP подключается автоматически через `.claude/settings.local.json`. Проверка: откройте Claude Code → попросите «Найди документы про принципы» — Claude должен использовать `knowledge-mcp search`.
 
-> **Свой MCP-сервер:** Если у вас >100 документов — форкните [knowledge-mcp](https://github.com/aisystant/knowledge-mcp) (open source), укажите свои источники, разверните на Cloudflare Workers (бесплатный тир).
+### 7.1. Работа со своим Pack
+
+После установки IWE вы подключены к **платформенной** базе знаний (knowledge-mcp). Но ваш собственный Pack — это **ваши** файлы на диске. Как Claude Code работает с ними?
+
+#### Различение: платформенные знания ≠ ваши знания
+
+| Источник | Где | Как Claude находит | MCP нужен? |
+|----------|-----|-------------------|-----------|
+| Платформенные Pack (aisystant) | Сервер платформы | knowledge-mcp `search` | Да (уже подключён) |
+| Ваш Pack | `~/Github/PACK-{domain}/` | Glob / Grep / Read (напрямую с диска) | Зависит от объёма |
+
+#### Три режима работы с Pack
+
+| Режим | Объём Pack | Что делать | Усилия |
+|-------|-----------|-----------|--------|
+| **Прямой доступ** | <50 файлов | Указать путь в CLAUDE.md + navigation.md | 10 мин |
+| **Индексированный** | 50–100 файлов | + manifest с Entity Index ([SPF.SPEC.003](https://github.com/TserenTserenov/SPF/blob/main/spec/SPF.SPEC.003-pack-scalability.md)) | 30 мин |
+| **MCP-сервер** | >100 файлов | Форкнуть [knowledge-mcp](https://github.com/aisystant/knowledge-mcp), указать свои источники | 1–2 часа |
+
+#### Режим 1: Прямой доступ (рекомендуется для старта)
+
+Claude Code **умеет читать любые файлы на вашем компьютере**. MCP для этого не нужен. Достаточно сообщить Claude, где лежит ваш Pack.
+
+**Шаг 1.** Добавьте в `~/Github/CLAUDE.md` секцию:
+
+```markdown
+## Мой Pack
+- Домен: [название вашей области]
+- Путь: ~/Github/PACK-{domain}/
+- Структура: pack/{domain}/00-pack-manifest.md (оглавление)
+```
+
+**Шаг 2.** Добавьте в `memory/navigation.md` маппинг:
+
+```markdown
+| Вопрос про... | Смотри в |
+|--------------|---------|
+| [ваш домен] | ~/Github/PACK-{domain}/pack/{domain}/ |
+```
+
+**Результат:** Claude Code при вопросах про ваш домен будет искать по нужным файлам через Glob и Grep. Для Pack из 10–40 файлов этого достаточно.
+
+#### Режим 2: Индексированный доступ
+
+Когда файлов >50, Claude тратит много шагов на поиск нужного. Решение — **manifest с Entity Index** (оглавление всех сущностей с однострочным summary).
+
+**Шаг 1.** Убедитесь, что `00-pack-manifest.md` содержит Entity Index:
+
+```markdown
+## Entity Index
+| ID | Name | Kind | Summary | Status |
+|----|------|------|---------|--------|
+| MY.D.001 | ... | D | Одно предложение | active |
+| MY.M.001 | ... | M | Одно предложение | active |
+```
+
+**Шаг 2.** Claude сначала читает manifest → по summary находит нужную сущность → загружает конкретный файл.
+
+> Подробнее о 3-слойной загрузке Pack: [SPF.SPEC.003](https://github.com/TserenTserenov/SPF/blob/main/spec/SPF.SPEC.003-pack-scalability.md).
+
+#### Режим 3: Свой MCP-сервер
+
+При >100 файлах ручной поиск неэффективен. Семантический поиск (MCP) находит нужное за один запрос.
+
+1. Форкните [knowledge-mcp](https://github.com/aisystant/knowledge-mcp) (open source)
+2. В конфигурации укажите путь к вашим Pack-репо как источник
+3. Разверните на Cloudflare Workers (бесплатный тир) или локально
+4. Добавьте в `.claude/settings.local.json`:
+
+```json
+{
+  "mcpServers": {
+    "my-knowledge": {
+      "url": "https://your-worker.workers.dev/sse"
+    }
+  }
+}
+```
+
+#### Когда переходить на следующий режим
+
+| Сигнал | Что делать |
+|--------|-----------|
+| Claude часто «не находит» нужный файл в Pack | Проверьте navigation.md → обновите маппинг |
+| Claude делает >3 шагов поиска перед ответом | Добавьте Entity Index в manifest (режим 2) |
+| Pack >100 файлов или >2 Pack-репо | Поднимите свой MCP-сервер (режим 3) |
 
 ## 8. Telegram-бот @aist_me_bot
 
@@ -267,7 +352,10 @@ bash update.sh --check  # проверить без применения
 Нет. Шаблон — готовая конфигурация. Установка через setup.sh. Работа — через Claude Code на естественном языке.
 
 ### Что такое Pack?
-Pack — предметная база знаний (source-of-truth для домена). Создаётся позже, когда накопите captures. Первый шаг — работа с `captures.md` через Экстрактор.
+Pack — предметная база знаний (source-of-truth для домена). Создаётся позже, когда накопите captures. Первый шаг — работа с `captures.md` через Экстрактор. Как подключить свой Pack к Claude Code — см. §7.1.
+
+### Нужен ли MCP для моего Pack?
+Не обязательно. При <50 файлах Claude Code читает Pack напрямую с диска — достаточно указать путь в CLAUDE.md. MCP нужен при >100 файлах или нескольких Pack-репо. Подробнее — §7.1.
 
 ### Как проверить MCP?
 Откройте Claude Code в папке экзокортекса → попросите «Найди документы про принципы». Claude должен использовать `knowledge-mcp search` и вернуть результаты.
@@ -301,3 +389,4 @@ Pack — предметная база знаний (source-of-truth для до
 - [DP.AGENT.001](DP.AGENT.001-ai-agents.md) — полный реестр ИИ-ролей
 - [SETUP-GUIDE.md](https://github.com/aisystant/FMT-exocortex-template/blob/main/docs/SETUP-GUIDE.md) — пошаговая инструкция (downstream)
 - [LEARNING-PATH.md](https://github.com/aisystant/FMT-exocortex-template/blob/main/docs/LEARNING-PATH.md) — полный путь изучения IWE
+- [SPF.SPEC.003](https://github.com/TserenTserenov/SPF/blob/main/spec/SPF.SPEC.003-pack-scalability.md) — масштабируемость Pack: 3-слойная загрузка, MCP-сервер, Sub-Pack
