@@ -142,6 +142,8 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | R7 | **Триажёр техдолга** | Платформа DP | Auto-Triage, Triage-Session | feedback_triage DB, inbox | Приоритизированный backlog, алерты |
 
 > **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
+>
+> **Реализация в шаблоне:** Роли, поставляемые с FMT-exocortex-template, следуют формальному [контракту роли](https://github.com/TserenTserenov/FMT-exocortex-template/blob/main/roles/ROLE-CONTRACT.md) — спецификации структуры директории (`role.yaml` манифест, `install.sh`, `prompts/`). Контракт обеспечивает автодискавери и модульное добавление новых ролей.
 
 <details>
 <summary><strong>R3 Консультант</strong> — полное описание (DP.D.033)</summary>
