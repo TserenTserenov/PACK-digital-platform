@@ -241,7 +241,7 @@ The platform has 5 service tiers. Each tier includes everything from the previou
 - Notes (.text) — saving thoughts and ideas
 - Plans (/rp /plan /report) — Strategist integration
 
-**Subscription:** Telegram Stars. First 15 days free (trial). Early subscribers keep their price forever. Subscribe: /settings → Subscription.
+**Subscription:** Telegram Stars. First 30 days free (trial). Early subscribers keep their price forever. Subscribe: /settings → Subscription.
 
 **🧬 T3 — Personalization** (Digital Twin connected):
 - Personal recommendations based on goals, problems and interests
