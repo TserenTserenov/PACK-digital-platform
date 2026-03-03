@@ -32,8 +32,8 @@ generated: true
 | RUNBOOK (RUNBOOK) | 1 |
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
-| Work Products (WP) | 14 |
-| **Total** | **77** |
+| Work Products (WP) | 15 |
+| **Total** | **78** |
 
 ## Distinctions
 
@@ -79,6 +79,7 @@ generated: true
 | DP.WP.012 | Analytics Report | Аналитический отчёт бота: метрики использования, тренды, качество ответов | draft |
 | DP.WP.013 | Publication Schedule | Расписание публикаций: посты со статусом ready → запланированные даты/время публикации в клубе | draft |
 | DP.WP.014 | Validation Report | Отчёт валидации: проверка шаблона экзокортекса (S24) или Pack-сущности (S38) на соответствие стандарту | draft |
+| DP.WP.015 | WP-Registry | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 
 ## Failure Modes
 
