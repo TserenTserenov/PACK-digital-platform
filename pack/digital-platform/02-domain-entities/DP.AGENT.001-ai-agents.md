@@ -785,7 +785,7 @@ Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному до
 | ID | Система | Ориентация | Инициатива | Статус |
 |----|---------|-----------|------------|--------|
 | AISYS.007 | **Генератор инфопродуктов** (AST.002) | system | autonomous | active |
-| AISYS.008 | **ДЗ-чекер** (AST.003) | system | by-request | active |
+| AISYS.008 | **[ДЗ-чекер](DP.AISYS.008-hw-checker.md)** (AST.003) | system | by-request | active |
 | AISYS.009 | **Консультант** | human | by-request | stub |
 | AISYS.010 | **Librarian** | system | autonomous | stub |
 | AISYS.011 | **Индексатор знаний** | system | autonomous | stub |
