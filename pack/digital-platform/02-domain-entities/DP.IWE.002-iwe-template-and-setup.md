@@ -73,7 +73,7 @@ related:
 ### 3.1. Процесс установки
 
 ```
-1. mkdir -p ~/Github && cd ~/Github
+1. mkdir -p ~/IWE && cd ~/IWE
 2. gh repo fork TserenTserenov/FMT-exocortex-template --clone --remote
 3. cd FMT-exocortex-template && bash setup.sh
 ```
@@ -86,7 +86,7 @@ related:
 |---|-----|---------------|
 | 1 | Подстановка переменных (имя, пути, часовой пояс) | Персонализированные файлы |
 | 1b | Переименование репо (по умолчанию → DS-exocortex) | Переименованный репо + GitHub |
-| 2 | Установка CLAUDE.md | `~/Github/CLAUDE.md` |
+| 2 | Установка CLAUDE.md | `~/IWE/CLAUDE.md` |
 | 3 | Установка memory/ | `~/.claude/projects/*/memory/` |
 | 4 | Настройка разрешений и MCP | `.claude/settings.local.json` |
 | 5 | Установка Стратега (launchd/cron) | Автозапуск утренних планов |
@@ -139,7 +139,7 @@ related:
 | Вечер (23:00) | Разбор заметок из Telegram | Классификация заметок |
 | Вс вечер | Week Review — итоги недели | WeekReport |
 
-Ручной запуск: `bash ~/Github/FMT-exocortex-template/roles/strategist/scripts/strategist.sh day-plan`
+Ручной запуск: `bash ~/IWE/FMT-exocortex-template/roles/strategist/scripts/strategist.sh day-plan`
 
 ### 5.2. Экстрактор (R2)
 
@@ -152,13 +152,13 @@ related:
 | inbox-check | Каждые 3 часа (автоматически) |
 | knowledge-audit | Аудит полноты Pack |
 
-Установка: `bash ~/Github/FMT-exocortex-template/roles/extractor/install.sh`
+Установка: `bash ~/IWE/FMT-exocortex-template/roles/extractor/install.sh`
 
 ### 5.3. Синхронизатор (R8)
 
 Центральный диспетчер (bash, не ИИ). Управляет расписанием всех ролей, отправляет уведомления в Telegram.
 
-Установка: `bash ~/Github/FMT-exocortex-template/roles/synchronizer/install.sh`
+Установка: `bash ~/IWE/FMT-exocortex-template/roles/synchronizer/install.sh`
 
 > **Рекомендация:** Экстрактор и Синхронизатор ставьте после освоения базового цикла со Стратегом (1-2 недели).
 
@@ -192,7 +192,7 @@ MCP подключается автоматически через `.claude/sett
 | Источник | Где | Как Claude находит | MCP нужен? |
 |----------|-----|-------------------|-----------|
 | Платформенные Pack (aisystant) | Сервер платформы | knowledge-mcp `search` | Да (уже подключён) |
-| Ваш Pack | `~/Github/PACK-{domain}/` | Glob / Grep / Read (напрямую с диска) | Зависит от объёма |
+| Ваш Pack | `~/IWE/PACK-{domain}/` | Glob / Grep / Read (напрямую с диска) | Зависит от объёма |
 
 #### Три режима работы с Pack
 
@@ -206,12 +206,12 @@ MCP подключается автоматически через `.claude/sett
 
 Claude Code **умеет читать любые файлы на вашем компьютере**. MCP для этого не нужен. Достаточно сообщить Claude, где лежит ваш Pack.
 
-**Шаг 1.** Добавьте в `~/Github/CLAUDE.md` секцию:
+**Шаг 1.** Добавьте в `~/IWE/CLAUDE.md` секцию:
 
 ```markdown
 ## Мой Pack
 - Домен: [название вашей области]
-- Путь: ~/Github/PACK-{domain}/
+- Путь: ~/IWE/PACK-{domain}/
 - Структура: pack/{domain}/00-pack-manifest.md (оглавление)
 ```
 
@@ -220,7 +220,7 @@ Claude Code **умеет читать любые файлы на вашем ко
 ```markdown
 | Вопрос про... | Смотри в |
 |--------------|---------|
-| [ваш домен] | ~/Github/PACK-{domain}/pack/{domain}/ |
+| [ваш домен] | ~/IWE/PACK-{domain}/pack/{domain}/ |
 ```
 
 **Результат:** Claude Code при вопросах про ваш домен будет искать по нужным файлам через Glob и Grep. Для Pack из 10–40 файлов этого достаточно.
@@ -289,7 +289,7 @@ Claude Code **умеет читать любые файлы на вашем ко
 **Одна команда:**
 
 ```bash
-cd ~/Github/FMT-exocortex-template
+cd ~/IWE/FMT-exocortex-template
 bash update.sh
 ```
 
@@ -298,7 +298,7 @@ bash update.sh
 | Шаг | Что | Результат |
 |-----|-----|-----------|
 | 1. Fetch + merge | Подтягивает изменения из upstream-шаблона | Файлы форка обновлены |
-| 2. CLAUDE.md | Копирует в `~/Github/CLAUDE.md` | Правила и протоколы актуальны |
+| 2. CLAUDE.md | Копирует в `~/IWE/CLAUDE.md` | Правила и протоколы актуальны |
 | 3. memory/*.md | Копирует в `~/.claude/projects/.../memory/` (**кроме MEMORY.md**) | Протоколы обновлены, личные данные сохранены |
 | 4. MCP-конфиг | Мержит `settings.local.json`: серверы из upstream + пользовательские permissions | MCP-серверы актуальны |
 | 5. Роли | Переустанавливает роли (Стратег, Экстрактор и др.), если их файлы изменились | Агенты обновлены |
@@ -394,7 +394,7 @@ Pack — предметная база знаний (source-of-truth для до
 | Claude Code не запускается | Проверьте подписку Anthropic и `claude --version` |
 | Стратег не формирует план | `launchctl list \| grep strategist` (macOS). Если нет — `bash roles/strategist/install.sh` |
 | MEMORY.md не загружается | Проверьте путь: `~/.claude/projects/-Users-<username>-Github/memory/MEMORY.md` |
-| DS-strategy не создан | `mkdir -p ~/Github/DS-strategy/{current,inbox,docs,archive} && cd ~/Github/DS-strategy && git init` |
+| DS-strategy не создан | `mkdir -p ~/IWE/DS-strategy/{current,inbox,docs,archive} && cd ~/IWE/DS-strategy && git init` |
 | Заметки не приходят из Telegram | Проверьте подписку в @aist_me_bot. Формат: `.Моя заметка` |
 | MCP не работает | Проверьте `.claude/settings.local.json` — должен содержать `mcpServers`. Если нет — `bash update.sh` |
 

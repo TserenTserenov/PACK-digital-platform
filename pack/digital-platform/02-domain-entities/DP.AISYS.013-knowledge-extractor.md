@@ -129,7 +129,7 @@ related:
     └───────────┘   └───────────┘   └───────────┘
 ```
 
-**Claude root** (`~/Github`) — вызывает KE при Close и On-Demand из любого контекста.
+**Claude root** (`~/IWE`) — вызывает KE при Close и On-Demand из любого контекста.
 **Claude repo** (`<repo>/`) — вызывает KE при Close и On-Demand из контекста репо.
 **launchd** — периодический вызов Inbox-Check и Knowledge Audit.
 **Событие** — git hook после коммита в Pack запускает Cross-Repo Sync / Ontology Sync.

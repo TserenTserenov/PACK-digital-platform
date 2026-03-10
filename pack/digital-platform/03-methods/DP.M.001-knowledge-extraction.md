@@ -76,7 +76,7 @@ related:
 | Метод | `<pack>/03-methods/` | IPO + шаги |
 | Work Product | `<pack>/04-work-products/` | Frontmatter + структура |
 | Failure Mode | `<pack>/05-failure-modes/` | Паттерн + антипаттерн + тест |
-| Правило (глобальное) | `~/Github/CLAUDE.md` | 1-3 строки |
+| Правило (глобальное) | `~/IWE/CLAUDE.md` | 1-3 строки |
 | Правило (локальное) | `<repo>/CLAUDE.md` | 1-3 строки |
 | Правило (урок) | `memory/<topic>.md` | Свободный формат |
 
