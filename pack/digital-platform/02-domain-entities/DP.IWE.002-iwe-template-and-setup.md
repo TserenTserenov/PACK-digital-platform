@@ -419,7 +419,7 @@ Pack — предметная база знаний (source-of-truth для до
 
 ## 14. Связанные документы
 
-- [DP.IWE.001](DP.IWE.001-intelligent-working-environment.md) — что такое IWE, зачем, архитектура (4 вида), тиры, контуры
+- [DP.IWE.001](DP.IWE.001-intelligent-working-environment.md) — что такое IWE, зачем, архитектура (5 видов: системы, описания, роли, методы, рабочие продукты), тиры, контуры
 - [DP.EXOCORTEX.001](DP.EXOCORTEX.001-modular-exocortex.md) — архитектура экзокортекса: 3 слоя, модульность, template-sync
 - [DP.ARCH.002](DP.ARCH.002-service-tiers.md) — тиры T1-T5: что доступно на каждом уровне
 - [DP.AGENT.001](DP.AGENT.001-ai-agents.md) — полный реестр ИИ-ролей
