@@ -34,18 +34,18 @@ created: 2026-02-07
 ### Шаг 1: Анализ прошлой недели
 
 1. Загрузить план прошлой недели
-2. **КРИТИЧЕСКИ ВАЖНО:** Загрузить коммиты за неделю из **ВСЕХ** репозиториев в `~/Github/`
+2. **КРИТИЧЕСКИ ВАЖНО:** Загрузить коммиты за неделю из **ВСЕХ** репозиториев в `~/IWE/`
 3. Сопоставить РП и коммиты
 4. Рассчитать completion rate
 
 **Команда для сбора коммитов из всех репо:**
 ```bash
-for repo in $(ls ~/Github/); do
-  if [ -d ~/Github/$repo/.git ]; then
-    commits=$(cd ~/Github/$repo && git log --oneline --since="1 week ago" 2>/dev/null | wc -l)
+for repo in $(ls ~/IWE/); do
+  if [ -d ~/IWE/$repo/.git ]; then
+    commits=$(cd ~/IWE/$repo && git log --oneline --since="1 week ago" 2>/dev/null | wc -l)
     if [ "$commits" -gt 0 ]; then
       echo "=== $repo ($commits) ==="
-      cd ~/Github/$repo && git log --oneline --since="1 week ago"
+      cd ~/IWE/$repo && git log --oneline --since="1 week ago"
     fi
   fi
 done

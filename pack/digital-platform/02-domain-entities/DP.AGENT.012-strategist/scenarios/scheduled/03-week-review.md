@@ -35,17 +35,17 @@ created: 2026-02-07
 
 1. Загрузить недельный план
 2. Загрузить все дневные планы
-3. **КРИТИЧЕСКИ ВАЖНО:** Получить коммиты за неделю из **ВСЕХ** репозиториев в `~/Github/`
+3. **КРИТИЧЕСКИ ВАЖНО:** Получить коммиты за неделю из **ВСЕХ** репозиториев в `~/IWE/`
 4. Сгруппировать коммиты по РП и репозиториям
 
 **Команда для сбора коммитов из всех репо:**
 ```bash
-for repo in $(ls ~/Github/); do
-  if [ -d ~/Github/$repo/.git ]; then
-    commits=$(cd ~/Github/$repo && git log --oneline --since="1 week ago" 2>/dev/null | wc -l)
+for repo in $(ls ~/IWE/); do
+  if [ -d ~/IWE/$repo/.git ]; then
+    commits=$(cd ~/IWE/$repo && git log --oneline --since="1 week ago" 2>/dev/null | wc -l)
     if [ "$commits" -gt 0 ]; then
       echo "=== $repo ($commits) ==="
-      cd ~/Github/$repo && git log --oneline --since="1 week ago"
+      cd ~/IWE/$repo && git log --oneline --since="1 week ago"
     fi
   fi
 done

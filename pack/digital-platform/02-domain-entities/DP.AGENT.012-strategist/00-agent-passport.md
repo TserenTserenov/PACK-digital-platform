@@ -88,10 +88,10 @@ related:
 
 | Источник | Данные |
 |----------|--------|
-| `~/Github/DS-strategy/current/` | Агрегированные планы (HUB) |
-| `~/Github/*/WORKPLAN.md` | Планы каждого репо (SPOKE) |
-| `~/Github/DS-strategy/dissatisfactions/` | Неудовлетворённости |
-| `~/Github/DS-strategy/reviews/` | История ревью |
+| `~/IWE/DS-strategy/current/` | Агрегированные планы (HUB) |
+| `~/IWE/*/WORKPLAN.md` | Планы каждого репо (SPOKE) |
+| `~/IWE/DS-strategy/dissatisfactions/` | Неудовлетворённости |
+| `~/IWE/DS-strategy/reviews/` | История ревью |
 | Git log (все репо) | Коммиты за период |
 
 ### 3.1.1. Hub-and-Spoke архитектура
@@ -106,7 +106,7 @@ related:
   repo1 repo2 repo3 ... repoN   ← WORKPLAN.md в корне каждого репо
 ```
 
-**Агрегация:** Стратег обходит все `~/Github/*/WORKPLAN.md`, собирает РП, формирует агрегированный план в `DS-strategy/current/`.
+**Агрегация:** Стратег обходит все `~/IWE/*/WORKPLAN.md`, собирает РП, формирует агрегированный план в `DS-strategy/current/`.
 
 **Обратная синхронизация:** При обновлении приоритетов Стратег обновляет соответствующие `WORKPLAN.md` в целевых репо.
 
@@ -190,7 +190,7 @@ context:
 
 ## 7. Work-Product Gate (правило РП-шлюза)
 
-> **Полное описание правила:** `~/Github/CLAUDE.md` секция 2.
+> **Полное описание правила:** `~/IWE/CLAUDE.md` секция 2.
 
 ### 7.1. Суть
 

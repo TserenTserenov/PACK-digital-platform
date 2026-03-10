@@ -34,18 +34,18 @@ created: 2026-02-07
 ### Шаг 1: Апдейт о вчера
 
 1. Загрузить план вчера (если есть)
-2. **КРИТИЧЕСКИ ВАЖНО:** Загрузить коммиты за вчера из **ВСЕХ** репозиториев в `~/Github/`
+2. **КРИТИЧЕСКИ ВАЖНО:** Загрузить коммиты за вчера из **ВСЕХ** репозиториев в `~/IWE/`
 3. Сопоставить запланированные РП и фактические коммиты
 4. Рассчитать статистику
 
 **Команда для сбора коммитов из всех репо:**
 ```bash
-for repo in $(ls ~/Github/); do
-  if [ -d ~/Github/$repo/.git ]; then
-    commits=$(cd ~/Github/$repo && git log --oneline --since="yesterday 00:00" --until="today 00:00" 2>/dev/null | wc -l)
+for repo in $(ls ~/IWE/); do
+  if [ -d ~/IWE/$repo/.git ]; then
+    commits=$(cd ~/IWE/$repo && git log --oneline --since="yesterday 00:00" --until="today 00:00" 2>/dev/null | wc -l)
     if [ "$commits" -gt 0 ]; then
       echo "=== $repo ($commits) ==="
-      cd ~/Github/$repo && git log --oneline --since="yesterday 00:00" --until="today 00:00"
+      cd ~/IWE/$repo && git log --oneline --since="yesterday 00:00" --until="today 00:00"
     fi
   fi
 done
