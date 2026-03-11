@@ -117,7 +117,7 @@ LMS/CRM/Клуб → Event Bus → Activity Hub → Цифровой двойн�
 
 **Стек:** Cloudflare Workers AI + Neon PostgreSQL (pgvector + pg_trgm + tsvector) + bge-m3 embeddings (1024d)
 
-**Поиск (DP.D.024):** keyword-first routing + vector fallback. Коды сущностей (`DP.AGENT.001`) → keyword path (pg_trgm ILIKE + tsvector FTS, ~5ms). Естественный язык → vector path (cosine similarity, ~300ms). Keyword miss → автофолбэк на vector.
+**Поиск (DP.D.024):** keyword-first routing + vector fallback. Коды сущностей (`DP.ROLE.001`) → keyword path (pg_trgm ILIKE + tsvector FTS, ~5ms). Естественный язык → vector path (cosine similarity, ~300ms). Keyword miss → автофолбэк на vector.
 
 **Tools:**
 
@@ -232,4 +232,4 @@ VS Code (heartbeats) → WakaTime Extension → wakatime.com API
 ## 9. Связанные документы
 
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md)
-- [DP.AGENT.001 ИИ-агенты](DP.AGENT.001-ai-agents.md)
+- [DP.ROLE.001 ИИ-агенты](DP.ROLE.001-platform-roles.md)

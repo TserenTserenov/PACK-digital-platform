@@ -14,7 +14,7 @@ orientation: system
 initiative: by-request
 interface: api
 related:
-  uses: [DP.AGENT.001]
+  uses: [DP.ROLE.001]
   part_of: [DP.AISYS.014]
 ---
 

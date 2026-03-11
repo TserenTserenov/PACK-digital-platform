@@ -12,7 +12,7 @@ trust:
 epistemic_stage: emerging
 related:
   refines: [DP.IWE.001]
-  uses: [DP.EXOCORTEX.001, DP.ARCH.002, DP.AGENT.001]
+  uses: [DP.EXOCORTEX.001, DP.ARCH.002, DP.ROLE.001]
 ---
 
 # IWE Template & Setup
@@ -126,7 +126,7 @@ related:
 
 ## 5. Три роли в шаблоне
 
-> Полный реестр ролей: [DP.AGENT.001](DP.AGENT.001-ai-agents.md). Здесь — только роли из шаблона.
+> Полный реестр ролей: [DP.ROLE.001](DP.ROLE.001-platform-roles.md). Здесь — только роли из шаблона.
 
 ### 5.1. Стратег (R1)
 
@@ -422,7 +422,7 @@ Pack — предметная база знаний (source-of-truth для до
 - [DP.IWE.001](DP.IWE.001-intelligent-working-environment.md) — что такое IWE, зачем, архитектура (5 видов: системы, описания, роли, методы, рабочие продукты), тиры, контуры
 - [DP.EXOCORTEX.001](DP.EXOCORTEX.001-modular-exocortex.md) — архитектура экзокортекса: 3 слоя, модульность, template-sync
 - [DP.ARCH.002](DP.ARCH.002-service-tiers.md) — тиры T1-T5: что доступно на каждом уровне
-- [DP.AGENT.001](DP.AGENT.001-ai-agents.md) — полный реестр ИИ-ролей
+- [DP.ROLE.001](DP.ROLE.001-platform-roles.md) — полный реестр ИИ-ролей
 - [SETUP-GUIDE.md](https://github.com/aisystant/FMT-exocortex-template/blob/main/docs/SETUP-GUIDE.md) — пошаговая инструкция (downstream)
 - [LEARNING-PATH.md](https://github.com/aisystant/FMT-exocortex-template/blob/main/docs/LEARNING-PATH.md) — полный путь изучения IWE
 - [SPF.SPEC.003](https://github.com/TserenTserenov/SPF/blob/main/spec/SPF.SPEC.003-pack-scalability.md) — масштабируемость Pack: 3-слойная загрузка, MCP-сервер, Sub-Pack

@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.012.SCENARIOS
+id: DP.ROLE.012.SCENARIOS
 type: scenarios-index
 status: draft
 summary: "Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных"
@@ -119,5 +119,5 @@ created: 2026-02-07
 
 ## Связанные документы
 
-- [Паспорт агента](../00-agent-passport.md)
+- [Паспорт агента](../00-role-passport.md)
 - [Шаблоны](../templates/)

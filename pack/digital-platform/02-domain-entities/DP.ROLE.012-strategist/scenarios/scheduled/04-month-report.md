@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.012.SC.04
+id: DP.ROLE.012.SC.04
 type: scenario
 trigger: scheduled
 schedule: "last day of month"

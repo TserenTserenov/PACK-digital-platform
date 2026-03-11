@@ -308,7 +308,7 @@ LMS/Клуб → Activity Hub → Proof-of-Impact → Token Economy
 
 ## 9. Взаимодействие ИИ-систем (слой 3)
 
-> Перенесено из DP.AGENT.001 — диаграмма взаимодействия систем слоя 3 принадлежит архитектуре, не классификации.
+> Перенесено из DP.ROLE.001 — диаграмма взаимодействия систем слоя 3 принадлежит архитектуре, не классификации.
 
 ```
 Проводник (human, dialogue)
@@ -331,7 +331,7 @@ LMS/Клуб → Activity Hub → Proof-of-Impact → Token Economy
 ## 10. Связанные документы
 
 - [DP.CONCEPT.001 Концепция платформы](DP.CONCEPT.001-platform-concept.md)
-- [DP.AGENT.001 ИИ-системы платформы](DP.AGENT.001-ai-agents.md)
+- [DP.ROLE.001 ИИ-системы платформы](DP.ROLE.001-platform-roles.md)
 - [DP.SYS.001 Детерминированные системы](DP.SYS.001-deterministic-systems.md)
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md)
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md)

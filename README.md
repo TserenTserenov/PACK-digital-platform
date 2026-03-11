@@ -37,7 +37,7 @@
 
 **ИИ-агент** и **ИИ-ассистент** — это **виды** ИИ-систем (DP.D.009), а не разные слои. Вид определяется тремя признаками: ориентация (человек/система), инициатива (по запросу/автономно), интерфейс (диалог/API).
 
-Реестр: 16 ИИ-систем (Стратег, Проводник, Знание-Экстрактор, ДЗ-чекер и др.) — см. [DP.AGENT.001](pack/digital-platform/02-domain-entities/DP.AGENT.001-ai-agents.md).
+Реестр: 16 ИИ-систем (Стратег, Проводник, Знание-Экстрактор, ДЗ-чекер и др.) — см. [DP.ROLE.001](pack/digital-platform/02-domain-entities/DP.ROLE.001-platform-roles.md).
 
 ### Универсальный паттерн: Вход-Обработка-Выход (IPO)
 
@@ -85,8 +85,8 @@ PACK-digital-platform/
         ├── 02-domain-entities/        # Сущности домена
         │   ├── DP.ARCH.001            #   Архитектура (3 слоя, 7 характеристик ЭМОГССБ, 20 принципов 2-го уровня)
         │   ├── DP.ARCH.002            #   Тиры обслуживания (T1–T5)
-        │   ├── DP.AGENT.001           #   ИИ-системы (реестр 16 систем)
-        │   ├── DP.AGENT.012-strategist/  # Паспорт Стратега + 8 сценариев
+        │   ├── DP.ROLE.001           #   ИИ-системы (реестр 16 систем)
+        │   ├── DP.ROLE.012-strategist/  # Паспорт Стратега + 8 сценариев
         │   ├── DP.AISYS.013           #   Знание-Экстрактор
         │   ├── DP.AISYS.014           #   Бот AIST
         │   ├── DP.NAV.001             #   Навигация знаний
@@ -94,7 +94,7 @@ PACK-digital-platform/
         │   ├── DP.CONCEPT.001         #   Концепция платформы
         │   ├── DP.SYS.001             #   Детерминированные системы
         │   ├── DP.RUNBOOK.001         #   Каталог ошибок бота (L1–L4)
-        │   └── DP.ASSIST.001          #   (superseded → DP.AGENT.001)
+        │   └── DP.ASSIST.001          #   (superseded → DP.ROLE.001)
         ├── 03-methods/                # Методы (7)
         │   ├── DP.M.001               #   Экстракция знаний
         │   ├── DP.M.002               #   Стратегическое DDD
@@ -151,7 +151,7 @@ PACK-digital-platform/
 | 3 | **AIST Bot** (AISYS.014) | ИИ-ассистент | DS-aist-bot/ | Telegram (пользователь / сервер) |
 | 4 | **Синхронизатор** (SYS.016) | Скрипт | DS-ai-systems/synchronizer/ | launchd: каждые 2 мин + boot |
 
-Полные реестры: [DP.AGENT.001](pack/digital-platform/02-domain-entities/DP.AGENT.001-ai-agents.md) (ИИ-системы), [DP.SYS.001](pack/digital-platform/02-domain-entities/DP.SYS.001-deterministic-systems.md) (детерминированные).
+Полные реестры: [DP.ROLE.001](pack/digital-platform/02-domain-entities/DP.ROLE.001-platform-roles.md) (ИИ-системы), [DP.SYS.001](pack/digital-platform/02-domain-entities/DP.SYS.001-deterministic-systems.md) (детерминированные).
 
 ## Downstream (что строится на основе этого Pack'а)
 

@@ -13,7 +13,7 @@ epistemic_stage: emerging
 related:
   - id: DP.AISYS.014
     type: extends
-  - id: DP.AGENT.001
+  - id: DP.ROLE.001
     type: uses
 ---
 
@@ -210,4 +210,4 @@ pending_fixes table → TG message [✅ Применить] [❌ Отклони�
 ## 7. Связанные документы
 
 - [DP.AISYS.014 Aist Bot](DP.AISYS.014-aist-bot.md) — паспорт бота
-- [DP.AGENT.001 ИИ-агенты](DP.AGENT.001-ai-agents.md) — I7 Наладчик
+- [DP.ROLE.001 ИИ-агенты](DP.ROLE.001-platform-roles.md) — I7 Наладчик
