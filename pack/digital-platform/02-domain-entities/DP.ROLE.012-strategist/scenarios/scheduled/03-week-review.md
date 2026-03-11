@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.012.SC.03
+id: DP.ROLE.012.SC.03
 type: scenario
 trigger: scheduled
 schedule: "22:00 Sunday"

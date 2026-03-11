@@ -135,7 +135,7 @@ related:
 | Open (WP Gate + Ритуал) | **Claude Code** (сессия) | CLAUDE.md |
 | Work (Capture-to-Pack) | **Claude Code** (сессия) | CLAUDE.md |
 | Close | **Claude Code** (сессия) | CLAUDE.md |
-| Day-Close | **Стратег** (launchd) | Pack (DP.AGENT.012) |
+| Day-Close | **Стратег** (launchd) | Pack (DP.ROLE.012) |
 | Обновление Memory | **Claude Code** (Close) + **Стратег** (weekly) | CLAUDE.md + Pack |
 | Backup экзокортекса | **Claude Code** (Close) + **Стратег** (Day-Close) | CLAUDE.md + Pack |
 | Notify (уведомления) | **Синхронизатор** (SYS.016) | DS-ai-systems/synchronizer |
@@ -374,7 +374,7 @@ exocortex/
 
 - [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md) — T1–T5: конфигурация среды по тирам, Standard/Personal разделение
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — отчуждаемость как принцип
-- [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — Claude Code и Стратег как владельцы протоколов
+- [DP.ROLE.001 ИИ-системы](DP.ROLE.001-platform-roles.md) — Claude Code и Стратег как владельцы протоколов
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — Memory содержит ссылки (уровень 4 навигации)
 - [DP.AISYS.013 Знание-Экстрактор](DP.AISYS.013-knowledge-extractor.md) — capture-to-pack как примитив экстрактора
 - [DP.IWE.001 Intelligent Working Environment](DP.IWE.001-intelligent-working-environment.md) — экзокортекс как компонент IWE

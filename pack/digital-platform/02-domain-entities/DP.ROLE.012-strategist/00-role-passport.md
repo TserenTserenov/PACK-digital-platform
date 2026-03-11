@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.012
+id: DP.ROLE.012
 type: role-description
 status: draft
 summary: "Роль Стратег (R1) преобразует намерения в структурированные планы рабочих продуктов на месяц, неделю и день с отслеживанием выполнения"
@@ -10,7 +10,7 @@ trust:
   R: 0.5
 epistemic_stage: emerging
 related:
-  component_of: [DP.AGENT.001]
+  component_of: [DP.ROLE.001]
   uses: [DP.EXOCORTEX.001]
 ---
 
@@ -256,5 +256,5 @@ context:
 
 - [Индекс сценариев](scenarios/00-scenarios-index.md)
 - [Шаблоны](templates/)
-- [DP.AGENT.001 Реестр агентов](../DP.AGENT.001-ai-agents.md)
+- [DP.ROLE.001 Реестр агентов](../DP.ROLE.001-platform-roles.md)
 - [DS-strategy (HUB)](https://github.com/TserenTserenov/DS-strategy) — личный стратегический репозиторий

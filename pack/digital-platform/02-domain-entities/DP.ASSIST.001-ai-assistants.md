@@ -3,8 +3,8 @@ id: DP.ASSIST.001
 name: ИИ-ассистенты (superseded)
 type: domain-entity
 status: superseded
-summary: "Объединены с DP.AGENT.001 — различие агент/ассистент сохранено как характеристика"
-superseded_by: DP.AGENT.001
+summary: "Объединены с DP.ROLE.001 — различие агент/ассистент сохранено как характеристика"
+superseded_by: DP.ROLE.001
 created: 2026-02-07
 updated: 2026-02-10
 migrated_from: DS-ecosystem-development/B2.2.Architecture/3.2.4
@@ -14,12 +14,12 @@ trust:
   R: 0.7
 epistemic_stage: formed
 related:
-  superseded_by: [DP.AGENT.001]
+  superseded_by: [DP.ROLE.001]
 ---
 
 # ИИ-ассистенты платформы (superseded)
 
-> **Этот файл заменён.** ИИ-ассистенты теперь классифицируются как вид ИИ-системы с признаком `orientation: human`. См. [DP.AGENT.001 ИИ-системы платформы](DP.AGENT.001-ai-agents.md).
+> **Этот файл заменён.** ИИ-ассистенты теперь классифицируются как вид ИИ-системы с признаком `orientation: human`. См. [DP.ROLE.001 ИИ-системы платформы](DP.ROLE.001-platform-roles.md).
 >
 > Различение: ИИ-агент ≠ ИИ-ассистент (DP.D.009) — это виды ИИ-систем, а не разные архитектурные слои.
 
@@ -218,6 +218,6 @@ Webhook → Validate → HTTP(Context) → Build Prompt → LLM → Format → R
 ## 8. Связанные документы
 
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md)
-- [DP.AGENT.001 ИИ-агенты](DP.AGENT.001-ai-agents.md)
+- [DP.ROLE.001 ИИ-агенты](DP.ROLE.001-platform-roles.md)
 - [DP.SYS.001 Детерминированные системы](DP.SYS.001-deterministic-systems.md)
 

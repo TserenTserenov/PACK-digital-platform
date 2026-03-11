@@ -300,7 +300,7 @@ KE записал в Pack → selective-reindex.sh <source> [<source>...] → in
 ## 10. Связанные документы
 
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — слой 3, IPO-паттерн
-- [DP.AGENT.001 ИИ-системы](DP.AGENT.001-ai-agents.md) — реестр, паспорт
+- [DP.ROLE.001 ИИ-системы](DP.ROLE.001-platform-roles.md) — реестр, паспорт
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — capture-to-pack как примитив
 - [DP.M.001 Метод экстракции знаний](../03-methods/DP.M.001-knowledge-extraction.md)
 - [DP.WP.001 Отчёт экстракции](../04-work-products/DP.WP.001-extraction-report.md)

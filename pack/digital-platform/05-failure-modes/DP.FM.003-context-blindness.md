@@ -13,7 +13,7 @@ trust:
 epistemic_stage: formed
 related:
   extends: [DP.D.021]
-  applies_to: [DP.AGENT.001, DP.AISYS.014]
+  applies_to: [DP.ROLE.001, DP.AISYS.014]
   see_also: [DP.D.006, DP.FM.001]
 tags: [vibe-coding, context, ai-agent, failure-mode]
 ---

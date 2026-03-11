@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.001
+id: DP.ROLE.001
 name: ИИ-системы
 type: domain-entity
 status: active
@@ -11,7 +11,7 @@ trust:
   G: domain
   R: 0.7
 epistemic_stage: formed
-note: "Retitled from 'ИИ-агенты' to 'ИИ-системы'. ID preserved for backward compatibility."
+note: "Retitled from 'ИИ-агенты' to 'ИИ-системы'. ID migrated from DP.AGENT.001 → DP.ROLE.001 (WP-63)."
 related:
   supersedes: [DP.ASSIST.001]
   uses: [DP.ARCH.001, DP.D.033]
@@ -767,7 +767,7 @@ Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному до
 
 | ID | Система | Ориентация | Инициатива | Статус |
 |----|---------|-----------|------------|--------|
-| AISYS.012 | **[Стратег](DP.AGENT.012-strategist/)** | both | both | draft |
+| AISYS.012 | **[Стратег](DP.ROLE.012-strategist/)** | both | both | draft |
 
 ### 4.2. Группа: Обучение и развитие
 

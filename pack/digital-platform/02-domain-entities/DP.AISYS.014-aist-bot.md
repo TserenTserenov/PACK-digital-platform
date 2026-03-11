@@ -15,7 +15,7 @@ initiative: both
 interface: dialogue
 updated: 2026-02-18
 related:
-  uses: [DP.ARCH.001, DP.ARCH.002, DP.AGENT.001, DP.NAV.001, DP.M.004, DP.RUNBOOK.001]
+  uses: [DP.ARCH.001, DP.ARCH.002, DP.ROLE.001, DP.NAV.001, DP.M.004, DP.RUNBOOK.001]
   integrates: [DP.AISYS.012, DP.AISYS.013]
 ---
 
@@ -525,8 +525,8 @@ captures.md ────────────────┘      3. Бюдж
 ## 10. Связанные документы
 
 - [DP.ARCH.001 Архитектура платформы](DP.ARCH.001-platform-architecture.md) — бот = Слой 1 (Interface)
-- [DP.AGENT.001 ИИ-агенты](DP.AGENT.001-ai-agents.md) — классификация, реестр
-- [DP.AISYS.012 Стратег](DP.AGENT.012-strategist/00-agent-passport.md) — интеграция /rp, /plan, /report
+- [DP.ROLE.001 ИИ-агенты](DP.ROLE.001-platform-roles.md) — классификация, реестр
+- [DP.AISYS.012 Стратег](DP.ROLE.012-strategist/00-role-passport.md) — интеграция /rp, /plan, /report
 - [DP.AISYS.013 Знание-Экстрактор](DP.AISYS.013-knowledge-extractor.md) — заметки → inbox → Pack
 - [DP.CONCEPT.001 Концепция платформы](DP.CONCEPT.001-platform-concept.md) — общая концепция
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — MCP-поиск

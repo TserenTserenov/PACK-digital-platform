@@ -12,8 +12,8 @@ trust:
   R: 0.7
 related:
   integrates_with: [DP.SOTA.001, DP.SOTA.002, DP.SOTA.005]
-  operationalized_by: [DP.AISYS.013, DP.AGENT.012]
-  enables: [DP.AGENT.001]
+  operationalized_by: [DP.AISYS.013, DP.ROLE.012]
+  enables: [DP.ROLE.001]
 tags: [agentic, multi-agent, orchestration, anthropic, claude-code, development]
 ---
 
@@ -45,7 +45,7 @@ tags: [agentic, multi-agent, orchestration, anthropic, claude-code, development]
 | Агент | Bounded Context | Роль |
 |-------|----------------|------|
 | Claude Code | Сессия работы (Open→Work→Close) | Оркестратор, исполнитель |
-| Стратег (DP.AGENT.012) | Планирование (day/week/month) | Governance, расписание |
+| Стратег (DP.ROLE.012) | Планирование (day/week/month) | Governance, расписание |
 | Экстрактор (DP.AISYS.013) | Знания (detect→classify→formalize) | Knowledge engineering |
 | Синхронизатор | Проекция (Pack→Downstream) | Автоматизация |
 | Бот (DP.AISYS.014) | Интерфейс пользователя | Surface |

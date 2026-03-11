@@ -1,5 +1,5 @@
 ---
-id: DP.AGENT.012.SC.05
+id: DP.ROLE.012.SC.05
 type: scenario
 trigger: on-demand
 status: draft
