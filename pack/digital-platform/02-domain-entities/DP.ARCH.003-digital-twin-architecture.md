@@ -2,10 +2,10 @@
 id: DP.ARCH.003
 name: Архитектура цифрового двойника (3-слойная)
 type: domain-entity
-status: draft
+status: approved
 summary: "3-слойная архитектура ЦД: Events (неизменяемый лог всех действий) → State (проекции — вычисляемый профиль) → Views (генерируемые представления). Event Sourcing + CQRS. Каждое действие пользователя = событие. Из одного потока — N независимых проекций"
 created: 2026-02-24
-updated: 2026-02-24
+updated: 2026-03-11
 trust:
   F: 4
   G: domain
