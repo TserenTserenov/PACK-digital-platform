@@ -21,6 +21,8 @@ related:
 
 # AIST Bot (@aist_me_bot)
 
+> **Implementation Note.** Бот как тонкий клиент, сервисный реестр, 5-слойная архитектура, UX-принципы, FAQ — домен. Конкретная реализация (aiogram 3.x, FSM state names, Claude model routing Haiku/Sonnet, MCP server names) — текущая реализация. Детали: [C2.IT-Platform / System-Implementations](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/).
+
 ## 1. Определение
 
 **AIST Bot** — ИИ-система (Telegram-бот), которая является основной точкой входа пользователя в экосистему. Тонкий клиент с сервисным реестром: подключает обучение, планирование, заметки, консультант, биллинг и цифровой двойник через единый интерфейс.

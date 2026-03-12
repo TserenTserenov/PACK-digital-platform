@@ -19,6 +19,8 @@ related:
 
 # Three-Axis Access Control Model (Трёхосевая модель доступов)
 
+> **Implementation Note.** Трёхосевая модель (Entitlement × Role × Scope) и позиции — домен. Конкретная реализация (ORY Kratos/Keto, JWT claims, Neon tables) — в [C2.IT-Platform / Identity-and-Access](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Identity-and-Access/).
+
 ## 1. Различение
 
 | Подход | Что делает | Проблема |
@@ -112,7 +114,9 @@ Permission = Entitlement ∩ Role ∩ Scope
 | Scope | Петя в группе A, Иван привязан к группе A? | ✅ Данные доступны |
 | **Итог** | 3 из 3 ✅ | **Разрешено** |
 
-## 4. Связь с ORY
+## 4. Связь с ORY (implementation)
+
+> **⚠️ Реализационная секция.** Стек ORY Kratos/Keto — текущая реализация. При смене identity provider эта секция обновляется, домен (§§1-3, 6-7) — нет.
 
 Платформа уже использует ORY Network (ADR-006). Трёхосевая модель реализуется через стек ORY:
 
@@ -243,7 +247,9 @@ Position = Role + Entitlement + Default Scope + параметры
 
 Позиция — это **шаблон первоначального назначения**, не неразрывная связка. Три оси остаются независимыми после назначения.
 
-### 7.5. Реализация
+### 7.5. Реализация (implementation)
+
+> **⚠️ Реализационная секция.** Таблицы и компоненты — текущая реализация. Детали: [C2.IT-Platform / Identity-and-Access](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Identity-and-Access/).
 
 | Компонент | Где | Как |
 |-----------|-----|-----|

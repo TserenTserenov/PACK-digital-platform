@@ -19,6 +19,8 @@ related:
 
 # ИИ-системы платформы
 
+> **Implementation Note.** Определения ролей, классификация, obligations, expectations, methods — домен. Конкретные исполнители (§3.1: Claude, bash scripts, репо) и `current_holders` в описаниях ролей — текущая реализация. Детали: [C2.IT-Platform / System-Implementations](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/).
+
 ## 1. Определение
 
 **ИИ-система** — компонент платформы (слой 3), использующий LLM для выполнения функций: принятие решений, генерация, диалог, анализ.
@@ -106,7 +108,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 >
 > **Нотация FPF:** Holder#Role:Context@Window
 
-### 3.1. Реестр исполнителей
+### 3.1. Реестр исполнителей (implementation)
 
 | ID | Исполнитель | Категория | Grade | Репо |
 |----|------------|-----------|-------|------|

@@ -19,6 +19,8 @@ tags: [digital-twin, event-sourcing, cqrs, learner-model, knowledge-tracing]
 
 # Архитектура цифрового двойника (3-слойная)
 
+> **Implementation Note.** Event Sourcing паттерн (Events → State → Views), типы событий, проекции (BKT, HLR, engagement) — домен. Конкретные схемы Neon (5 schemas), RLS, pgbouncer, Python snapshot code — текущая реализация. Детали: [C2.IT-Platform / Data-Stores](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Data-Stores/).
+
 ## 1. Назначение
 
 Документ описывает архитектуру **цифрового двойника созидателя** — вычислительной модели, которая отражает текущее состояние пользователя и обновляется из каждого его действия на платформе.

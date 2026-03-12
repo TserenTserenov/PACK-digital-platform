@@ -20,6 +20,8 @@ related:
 
 # ДЗ-чекер (HW Checker)
 
+> **Implementation Note.** §§1-3 (определение, классификация, IPO) — домен. §§4-6 (n8n, Claude Haiku, SurrealDB, OpenAI, guides-mcp) — текущая реализация. Детали: [C2.IT-Platform / System-Implementations](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/).
+
 ## 1. Определение
 
 **ДЗ-чекер** — ИИ-система, которая автоматически проверяет ответы учеников на домашние задания, сравнивая их с нормативами из руководств через семантический поиск.
@@ -68,7 +70,7 @@ related:
 | `issues` | LMS Aisystant | `[{criterion, issue, suggestion}]` |
 | `comment` | LMS Aisystant | HTML-formatted для отображения ученику |
 
-## 4. Архитектура развёртывания
+## 4. Архитектура развёртывания (implementation)
 
 | Компонент | Технология | Владелец |
 |-----------|-----------|----------|
@@ -78,7 +80,7 @@ related:
 | Vector store | SurrealDB | DS-MCP |
 | Embeddings | OpenAI text-embedding-3-small | OpenAI |
 
-## 5. Зависимости
+## 5. Зависимости (implementation)
 
 - **guides-mcp** (`https://guides-mcp.aisystant.workers.dev/mcp`) — MCP-сервер для доступа к руководствам. Исходники: `DS-MCP/guides-mcp/`.
 - **SurrealDB** — хранилище чанков руководств с векторными эмбеддингами.

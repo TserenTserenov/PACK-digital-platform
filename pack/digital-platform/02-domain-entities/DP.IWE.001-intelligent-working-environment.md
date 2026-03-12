@@ -18,6 +18,8 @@ related:
 
 # Intelligent Working Environment (IWE)
 
+> **Implementation Note.** Конкретные инструменты (Claude Code, Telegram-бот, MCP-серверы, Neon DB) упоминаются как текущая реализация IWE. Доменная модель (5 видов, контуры, тиры, harness) не зависит от вендора. Детали реализации: [C2.IT-Platform](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/).
+
 ## 1. Определение
 
 **IWE** (Intelligent Working Environment / Интеллектуальная рабочая среда) — персональная интегрированная среда, в которой человек думает, планирует, создаёт и развивается при поддержке ИИ-систем, методологии и накопленных знаний.

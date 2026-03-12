@@ -18,6 +18,8 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 
 # Data Policy — политика данных IWE
 
+> **Implementation Note.** Упомянутые вендоры (Anthropic, GitHub, WakaTime, Neon) — текущая реализация. Доменные принципы (тирование, GDPR, согласие, удаление) не зависят от вендора. Детали реализации: [C2.IT-Platform](../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/).
+
 ## 1. Назначение
 
 Единый документ о данных пользователя на платформе IWE. Отвечает на вопросы:
