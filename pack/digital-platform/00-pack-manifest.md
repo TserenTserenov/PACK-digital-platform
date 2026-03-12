@@ -83,9 +83,9 @@
 | DP.D.027 | Content Budget Model (3 оси) | D | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | D | Данные пользователя растут с тиром платформы: T0 без Ory (telegram_id) → T1 с Ory (UUID) → T2 минимальная персонализация (профиль + история) → T3 цифровой двойник (ИИ знает контекст) → T4 личный контекст + ИИ-агенты (со-мыслитель). Ортогональные оси: TM (наставник), TA (администратор), TD (разработчик) | active |
 | DP.D.029 | Language Model ≠ World Model | D | LLM = пассивные знания о мире из текстов (кабинетный учёный). World Model = активная модель, обновляемая из взаимодействия с реальностью (инженер). Критерий: замыкает ли система цикл действие-измерение-обновление | active |
-| DP.D.030 | Топология деплоя платформы | D | Railway (бот) + CF Workers (MCP) + Neon (DB + pgvector) + GitHub (код + шаблон). Позже Railway → Kubernetes. Каждый сервис — в своей экологической нише (compute vs edge vs serverless DB vs VCS) | active |
-| DP.D.031 | MCP Access Model: публичный vs приватный | D | knowledge-mcp (Pack + онтология) — публичный для всех (один инстанс, общие знания). digital-twin-mcp — приватный (фильтрация по user_id, персональные данные). Критерий: знания ≠ данные пользователя | active |
-| DP.D.032 | Единый Circuit Breaker для внешних зависимостей | D | Один паттерн circuit breaker для всех внешних зависимостей (Claude API, MCP, Neon). Цель: предотвратить циклические запросы, которые списывают деньги. Не per-client — единый middleware | active |
+| DP.D.030 | Топология деплоя платформы | D | Реализационное решение. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
+| DP.D.031 | MCP Access Model: публичный vs приватный | D | Реализационное решение. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
+| DP.D.032 | Единый Circuit Breaker для внешних зависимостей | D | Реализационное решение. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.D.033 | Role-Centric Architecture (Ролецентричная архитектура) | D | Роль описывается независимо от исполнителя. Исполнитель выбирается и подготавливается отдельно. Роль = маска, которую надевает система (сама — если агент, или по воле другого агента — если инструмент). Одно имя (например, 'Синхронизатор') может обозначать и роль, и систему-исполнителя — это разные ракурсы, не тождество. | active |
 | DP.D.034 | Three-Axis Access Control Model (Трёхосевая модель доступов) | D | Доступ на платформе определяется тремя ортогональными осями: Entitlement (тир — что доступно по подписке), Role (роль — что можно делать), Scope (область видимости — над чем). Permission = Entitlement × Role × Scope. Устраняет необходимость в подролях (Администратор-1, Администратор-2) — это одна роль с разным scope. | active |
 | DP.D.035 | Data Policy — политика данных IWE | D | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.003 | active |
@@ -120,7 +120,7 @@
 | DP.ROLE.012.SC.07 | 03 Update Priorities | ROLE | Изменение приоритетов на уровне дня/недели/месяца: определение типа изменения, каскадные эффекты, diff и коммит | draft |
 | DP.ROLE.012.SC.08 | 04 Add Workproduct | ROLE | Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план | draft |
 | DP.ROLE.012.SCENARIOS | 00 Scenarios Index | ROLE | Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных | draft |
-| DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Каталог типичных ошибок Aist Bot с классификацией по уровням (L1-L4), автоматическими действиями и ручными fix'ами | draft |
+| DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
@@ -134,7 +134,7 @@
 | DP.SOTA.011 | Coupling Model (Khononov 2024) | SOTA | Многомерная модель связанности: knowledge coupling, distance coupling, volatility coupling — 4 уровня интеграции | active |
 | DP.SOTA.012 | Multi-Representation Knowledge Architecture | SOTA | Model/View эволюционировал в multi-representation: vector + graph + hierarchical index, отделённые от surface (бот, курс, API) | active |
 | DP.SOTA.013 | World Models | SOTA | Переход от LLM (модели знаний о мире) к World Models (модели мира): замыкание цикла действие-измерение-обновление, три линии исследований, архитектурные импликации для AI-агентов | active |
-| DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем платформы: MCP-серверы, базы данных, сервисы | active |
+| DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
 | DP.WP.002 | Ubiquitous Language | WP | Единый язык домена: глоссарий терминов, прорастающий во все артефакты — код, UI, документацию, тикеты, планы | draft |
 | DP.WP.003 | DayPlan | WP | Ежедневный план работы: приоритеты, бюджеты, carry-over с предыдущего дня | draft |
