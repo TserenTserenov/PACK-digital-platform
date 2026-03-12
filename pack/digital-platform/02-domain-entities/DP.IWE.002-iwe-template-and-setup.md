@@ -17,6 +17,8 @@ related:
 
 # IWE Template & Setup
 
+> **Implementation Note.** §1 (концепция шаблона) — домен. §§2-12 (пререквизиты, установка, CLI, tech stack, pricing, bash scripts, MCP server names, security tools) — почти целиком текущая реализация. Этот файл подлежит глубокому рефакторингу: доменная часть (что такое IWE-шаблон, зачем он нужен) → остаётся в Pack. Конкретная установка → [C2.IT-Platform](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/).
+
 ## 1. Что такое шаблон IWE
 
 **Шаблон IWE** ([FMT-exocortex-template](https://github.com/aisystant/FMT-exocortex-template)) — готовая конфигурация интеллектуальной рабочей среды. Форкаете → запускаете setup.sh → работаете. Не нужно программировать.

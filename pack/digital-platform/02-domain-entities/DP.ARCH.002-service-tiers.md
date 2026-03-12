@@ -18,6 +18,8 @@ related:
 
 # Тиры платформы
 
+> **Implementation Note.** 4-осевая модель тиров (T0-T4 + TM/TA/TD), 5 измерений, прогрессия — домен. Конкретные сервисы (WakaTime, system-school.ru), UI-реализация (aiogram FSM, ReplyKeyboard), trial-механика — текущая реализация. Детали: [C2.IT-Platform](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/).
+
 ## 1. Определение
 
 **Тир** — конфигурация платформы, определяющая 5 измерений пользовательского опыта:

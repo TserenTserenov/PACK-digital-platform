@@ -2,38 +2,17 @@
 id: DP.D.031
 name: "MCP Access Model: публичный vs приватный"
 type: distinction
-status: active
-summary: "knowledge-mcp (Pack + онтология) — публичный для всех (один инстанс, общие знания). digital-twin-mcp — приватный (фильтрация по user_id, персональные данные). Критерий: знания ≠ данные пользователя"
+status: moved
+summary: "Реализационное решение. Перенесено в DS-ecosystem-development → C2.IT-Platform"
 created: 2026-02-19
 edition: "2026-02"
-source: "Решение Архитектора 19 фев 2026"
-trust:
-  F: 4
-  G: domain
-  R: 0.8
-related:
-  extends: [DP.ARCH.002, DP.D.024]
-  uses: [DP.EXOCORTEX.001]
+moved_to: "DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Identity-and-Access/DP.D.031-mcp-access-model.md"
+moved_date: 2026-03-12
+moved_reason: "HD #29: Neon RLS/schemas, MCP instance config → implementation (DS)"
 ---
 
-# MCP Access Model: публичный vs приватный
+# DP.D.031 — Перенесено
 
-## 1. Различение
-
-| MCP-сервер | Тип доступа | Что хранит | Кто использует |
-|------------|------------|------------|----------------|
-| **knowledge-mcp** | **Публичный** (один для всех) | Pack-сущности, онтология, 5400+ docs | Все: бот, Claude Code, внешние клиенты |
-| **guides-mcp** | **Публичный** (один для всех) | Руководства Aisystant (~40 гайдов) | Все: бот, Claude Code |
-| **digital-twin-mcp** | **Приватный** (фильтрация по user_id) | Цифровой двойник, персональные данные | Только авторизованный пользователь |
-| *(возможно)* strategy-mcp | **Приватный** (per-user) | Личная стратегия (DS-my-strategy) | Только владелец |
-
-## 2. Критерий разделения
-
-> **Знания ≠ данные пользователя.**
+> **Реализационное решение.** Тест HD #29: Neon RLS, схемы, конфигурация MCP-инстансов → vendor-specific.
 >
-> - Pack, онтология, руководства — общие знания домена. Не содержат PII. Публичны по определению.
-> - Цифровой двойник, стратегия, заметки — персональные данные. Требуют изоляции.
-
-## 3. Открытый вопрос: изоляция
-
-> **Не решено:** как защитить данные одного пользователя от другого в digital-twin-mcp при multi-tenant? Варианты: RLS в Neon, отдельные schemas, отдельные DB. Требуется отдельное решение.
+> Полное содержимое: [C2.IT-Platform / Identity-and-Access](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Identity-and-Access/DP.D.031-mcp-access-model.md)
