@@ -372,7 +372,7 @@ exocortex/
 
 ## 12. Связанные документы
 
-- [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md) — T1–T5: конфигурация среды по тирам, Standard/Personal разделение
+- [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md) — 4-осевая модель тиров: T0-T4 + TM/TA/TD, Standard/Personal разделение
 - [DP.ARCH.001 Архитектура](DP.ARCH.001-platform-architecture.md) — отчуждаемость как принцип
 - [DP.ROLE.001 ИИ-системы](DP.ROLE.001-platform-roles.md) — Claude Code и Стратег как владельцы протоколов
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — Memory содержит ссылки (уровень 4 навигации)

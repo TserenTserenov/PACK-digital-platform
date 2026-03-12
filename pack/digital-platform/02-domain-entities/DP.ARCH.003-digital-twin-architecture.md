@@ -3,7 +3,7 @@ id: DP.ARCH.003
 name: Архитектура цифрового двойника (3-слойная)
 type: domain-entity
 status: approved
-summary: "3-слойная архитектура ЦД: Events (неизменяемый лог всех действий) → State (проекции — вычисляемый профиль) → Views (генерируемые представления). Event Sourcing + CQRS. Каждое действие пользователя = событие. Из одного потока — N независимых проекций"
+summary: "3-слойная архитектура ЦД: Events → State → Views. Event Sourcing + CQRS. 5 schemas Neon (public, development, finance, connections, operations). Безопасность: RLS + 5 ролей PostgreSQL. Эволюция: 5 начальных проекций → CHR-Space (30+ измерений)"
 created: 2026-02-24
 updated: 2026-03-11
 trust:
@@ -24,8 +24,6 @@ tags: [digital-twin, event-sourcing, cqrs, learner-model, knowledge-tracing]
 Документ описывает архитектуру **цифрового двойника созидателя** — вычислительной модели, которая отражает текущее состояние пользователя и обновляется из каждого его действия на платформе.
 
 **Ключевой принцип: ни одно действие пользователя не проходит мимо.** Каждое взаимодействие (ответ на тест, чат с ИИ, выполнение ДЗ, рефлексия, марафон) записывается как событие и влияет на профиль.
-
-**Для согласования с архитектором.**
 
 ---
 
@@ -543,5 +541,192 @@ State update: P(known ZP.3) = 0.19 → 0.35
 
 ---
 
-*Статус: draft. Для согласования с архитектором.*
-*Создано: 2026-02-24*
+## 13. Хранилище: 5 schemas Neon
+
+**Принцип: ЦД = ВСЯ база данных целиком**, а не отдельная schema. Каждая schema отвечает за свой домен, но вместе они составляют полный ЦД созидателя.
+
+```
+database (ОДНА)
+│
+├── schema: public                      [Идентичность пользователя]
+│   └── users                           ← Канонический профиль (id, telegram_id, email,
+│                                          lms_id, ory_id, name, language, current_tier)
+│
+├── schema: development                 [Развитие: события + проекции]
+│   ├── user_events                     ← Events (append-only, PARTITIONED BY RANGE)
+│   ├── skill_mastery                   ← State projection (BKT)
+│   ├── memory_decay                    ← State projection (HLR)
+│   ├── engagement                      ← State projection (агрегаты)
+│   ├── misconceptions                  ← State projection (LLM)
+│   └── qualifications                  ← State projection (threshold rules)
+│
+├── schema: finance                     [Финансы, токены, роялти]
+│   ├── token_transactions / balances   ← Лог + баланс токенов
+│   ├── subscriptions / payments        ← Подписки и платежи
+│   ├── royalty_rules / distributions   ← Роялти авторам
+│   └── referral_rewards                ← Реферальные бонусы
+│
+├── schema: connections                 [Подключения к внешним системам]
+│   ├── oauth_tokens                    ← pgcrypto encrypted
+│   ├── api_keys                        ← pgcrypto encrypted
+│   └── external_accounts               ← Discourse, LMS
+│
+└── schema: operations                  [Служебное: FSM, кэш, мониторинг]
+    ├── fsm_states, content_cache       ← Эфемерное (можно дропнуть)
+    ├── marathon_content, feed_*        ← Контент доставки
+    └── error_logs, request_traces      ← Мониторинг
+```
+
+### 13.1 Критерии разделения на schemas
+
+| # | Критерий | Вопрос | Если «нет» |
+|---|----------|--------|-----------|
+| 1 | **Один домен** | Все таблицы отвечают на один вопрос? | Разнести по разным schemas |
+| 2 | **Независимый жизненный цикл** | Данные меняются по своему ритму? | Могут жить вместе |
+| 3 | **Независимый доступ** | Разные сервисы/роли обращаются? | Могут жить вместе |
+| 4 | **Тест канала** | Если убрать один канал (бот, web), домен останется? | Это домен, а не канал |
+
+### 13.2 Bounded contexts
+
+| Schema | Домен | Вопрос | Можно дропнуть? |
+|--------|-------|--------|----------------|
+| `public` | Идентичность | «Кто этот пользователь?» | Нет |
+| `development` | Развитие | «Что делал, что знает и куда движется?» | Нет |
+| `finance` | Финансы | «Сколько заплатил, заработал, на балансе?» | Нет |
+| `connections` | Подключения | «Как подключены GitHub, LMS, WakaTime?» | Нет (секреты) |
+| `operations` | Служебное | «FSM, кэш, логи?» | Да |
+
+### 13.3 Отвергнутые варианты
+
+| Кандидат | Решение | Причина |
+|----------|---------|---------|
+| `schema: bot` | Не нужна | Бот — канал, не домен. Не проходит тест канала |
+| `schema: gamification` | Не нужна | Токены — finance, стадии — development.qualifications |
+| `schema: learning` | Не нужна | Обучение — процесс, результаты = development |
+| `schema: digital_twin` | Не нужна | ЦД = ВСЯ база, не одна schema |
+
+### 13.4 Принцип именования
+
+Все имена — **существительные-домены**: что содержит schema (development, finance, connections, operations). Не: кто использует (bot), не: процесс (billing), не: прилагательное (operational).
+
+### 13.5 Потоки данных
+
+```
+┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
+│   Бот    │  │   LMS    │  │   Клуб   │  │ Web App  │
+└────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘
+     │             │             │              │
+     ▼             ▼             ▼              ▼
+┌──────────────────────────────────────────────────────┐
+│  development.user_events (append-only)                │
+│  = Activity Hub (единая точка записи)                 │
+│  Бот: log_event() напрямую                            │
+│  LMS/Клуб: HTTP webhook → API → INSERT               │
+│  Web App: прямой INSERT                               │
+└──────────────────┬───────────────────────────────────┘
+                   │ on_event() / cron rebuild
+      ┌────────────┼────────────┐
+      ▼            ▼            ▼
+┌──────────┐ ┌──────────┐ ┌──────────┐
+│  skill   │ │ engage-  │ │ qualifi- │       ┌──────────────┐
+│ mastery  │ │  ment    │ │ cations  │       │   finance.*  │
+└──────────┘ └──────────┘ └──────────┘       │  (отдельный  │
+      │            │            │            │   BC)        │
+      └────────────┼────────────┘            └──────┬───────┘
+                   ▼                                │
+         ┌─────────────────┐                        │
+         │  Views (на лету) │    tokens_earned ──────┘
+         │  Рекомендации    │    payment_completed
+         │  Open Learner    │
+         │  Model           │
+         └────────┬────────┘
+                  ▼
+         Event: recommendation_shown
+         (цикл замыкается)
+```
+
+**Activity Hub — не отдельный сервис.** `log_event()` + HTTP endpoint. Каждый новый источник = новый producer в ту же таблицу.
+
+**Связь Events → Finance:** события `tokens_earned`, `payment_completed` пишутся и в `development.user_events` (ЦД-аналитика), и в `finance.*` (финучёт). Два bounded context смотрят на одно действие с разных сторон.
+
+---
+
+## 14. Безопасность
+
+### 14.1 Row-Level Security (RLS)
+
+RLS на всех таблицах с `user_id`. Политика: пользователь видит только свои данные.
+
+```
+user_isolation: user_id = current_setting('app.current_user_id')
+```
+
+### 14.2 Роли PostgreSQL (5 ролей)
+
+| Роль | Доступ | Ограничения |
+|------|--------|-------------|
+| `bot_service` | development (INSERT events, SELECT/UPDATE проекции), finance (SELECT/INSERT/UPDATE) | Полный доступ к Events + проекциям + finance |
+| `mcp_user` | development (INSERT events декларативные, SELECT проекции) | RLS ограничивает до user_id текущего пользователя |
+| `web_app` | development (INSERT events, SELECT проекции), finance (SELECT/INSERT) | Чтение + запись Events + finance |
+| `analyst` | development (SELECT engagement, qualifications), finance (SELECT balances) | Только агрегаты, без PII (нет доступа к user_events, payments) |
+| `financier` | finance (SELECT all) | Finance полный, остальное — нет |
+
+### 14.3 Шифрование секретов
+
+`connections.*` — pgcrypto (`pgp_sym_encrypt`). OAuth-токены и API-ключи зашифрованы at rest. Минимальный доступ — только сервис аутентификации.
+
+---
+
+## 15. Масштабирование и retention
+
+| Метрика | Текущее | При 1K users | При 10K users |
+|---------|---------|-------------|---------------|
+| Events/месяц | ~1K | ~100K | ~1M |
+| Размер user_events | <1MB | ~50MB | ~500MB |
+| Размер проекций | <1MB | ~5MB | ~50MB |
+| Neon tier | Free (512MB) | Free/Launch | Launch ($19/мес) |
+
+**Retention policy:**
+- Events < 2 лет → горячее хранилище (активные партиции)
+- Events > 2 лет → архив (старые партиции detach → cold storage)
+- Проекции → всегда актуальные (пересчёт из Events)
+
+**Оптимизация rebuild (Фаза 3+):** При >10K событий на пользователя — snapshot-таблица `projection_snapshots` (JSONB snapshot + last_event_id). Rebuild = загрузить snapshot + replay после last_event_id. Триггер: rebuild > 1 сек.
+
+**Параметры методов в БД (Фаза 3+):** При >30 карточек методов или per-skill BKT параметрах — таблица `indicator_registry` (indicator_id, computation_method, parameters JSONB, confidence_type, version). Триггер: потребность в per-skill настройке.
+
+---
+
+## 16. Эволюция проекций → CHR-Space
+
+Начальные 5 проекций покрывают базовые потребности. Модель характеристик созидателя описывает **30+ измерений** (CHR-Space). Подобно тому как характеристики автомобиля (скорость, экономичность, безопасность) описывают его профиль, характеристики человека (агентность, обучаемость, стрессоустойчивость, калибр) описывают профиль созидателя.
+
+### 16.1 Примеры будущих проекций
+
+| Проекция | Из каких событий | Метод |
+|----------|-----------------|-------|
+| `agency` (агентность) | goal_set, self_assessed, task_completed | Composite score |
+| `stress_resilience` (стрессоустойчивость) | engagement при нагрузке, recovery patterns | Time-series analysis |
+| `techno_integration` (техноинтеграция) | WakaTime, экзокортекс usage, tool adoption | Aggregate + decay |
+| `social_impact` (социальное влияние) | comment_created, question_answered, referral | Network analysis |
+| `creativity` (креативность) | guide_published, methodology_contributed | Output + novelty score |
+| `learning_velocity` (скорость обучения) | test_answered (accuracy over time per skill) | Regression slope |
+
+Каждая новая проекция = новая таблица + replay событий. Архитектура Event Sourcing это позволяет: лог неизменяем, проекции создаются ретроспективно.
+
+### 16.2 Исследовательская лаборатория (Фаза 4+)
+
+«Лаборатория характеристик» — среда для работы с накопленными событиями:
+
+1. **Экспериментировать** с новыми проекциями (replay на копии данных)
+2. **Выявлять корреляции** между характеристиками (матрица корреляций)
+3. **Обнаруживать синергии** (агентность + интеллект + калибр → лидерский потенциал)
+4. **Строить персональную траекторию** (gap-анализ: Target(role) − Current(state))
+5. **Валидировать методы** вычисления характеристик (A/B-тестирование формул)
+
+**Триггер:** >1K пользователей с >6 мес историей событий.
+
+---
+
+*Статус: approved. Согласовано с архитектором.*
+*Создано: 2026-02-24. Обновлено: 2026-03-11.*

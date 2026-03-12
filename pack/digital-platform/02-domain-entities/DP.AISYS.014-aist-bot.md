@@ -179,21 +179,23 @@ related:
 
 > Когда пользователь спрашивает о своём «уровне», «статусе», «доступе», «тарифе», «подписке», «возможностях», «что доступно», «как расти», «что бесплатно», «сколько стоит» — он спрашивает об этой модели.
 
-Платформа имеет 5 уровней обслуживания (тиров). Каждый следующий включает всё из предыдущего. T1-T4 доступны пользователям, T5 — владельцу платформы.
+Платформа имеет 5 основных тиров учащегося (T0-T4) и 3 ортогональные оси: TM (наставники), TA (администраторы), TD (разработчики). Каждый следующий T-тир включает всё из предыдущего. T5-T9 зарезервированы.
 
-**🟢 T1 — Старт** (бесплатно, навсегда):
-- Марафон 14 дней (/learn) — структурированная программа обучения
+**🟢 T0/T1 — Старт** (бесплатно + trial 30 дней):
+- **Trial 30 дней:** все функции бота бесплатно (лента, консультации, заметки, планы)
+- Марафон 14 дней (/learn) — бесплатно навсегда (даже после trial)
 - Тест систематичности (/test) — определяет состояние и адаптирует контент
 - Прогресс (/progress) — статистика обучения
 - Профиль (/profile) и Настройки (/settings)
+- После trial без подписки: марафон, тест, прогресс — бесплатно. Лента, консультации, заметки, планы — заблокированы
 
-**📘 T2 — Изучение** (подписка Telegram Stars):
+**📘 T2 — Изучение** (подписка БР):
 - Лента (/feed) — персональные ежедневные дайджесты по выбранным темам
 - Консультант (?вопрос) — ответы на основе базы знаний с расширенным контекстом
 - Заметки (.текст) — сохранение мыслей и идей
 - Планы (/rp /plan /report) — интеграция со Стратегом
 
-**Подписка:** Telegram Stars. Первые 15 дней — бесплатно (пробный период). Ранние подписчики сохраняют цену навсегда. Оформить: /settings → Подписка.
+**Подписка:** «Бесконечное развитие» (БР) на system-school.ru — единственная подписка. TG Stars — опциональные донаты, не подписка. Trial 30 дней от /start даёт попробовать все функции бесплатно.
 
 **🧬 T3 — Персонализация** (подключён Цифровой двойник):
 - Персональные рекомендации на основе целей, проблем и интересов
@@ -210,9 +212,10 @@ related:
 - Личная база знаний (Pack)
 - GitHub-интеграция (/settings → Подключения)
 
-**⚙️ T5 — Администрирование** (владелец платформы):
-- Управление всеми системами, агентами и инфраструктурой
-- Полный доступ к аналитике, конфигурации и деплою
+**Ортогональные оси** (назначаются владельцем):
+- **TA1-TA4** — администраторы: управление потоками и финансами
+- **TM1-TM3** — наставники: проверка ДЗ и обратная связь
+- **TD1** — разработчик: исходный код, деплой, управление standard/
 
 **Цифровой двойник:** персональное хранилище целей, проблем, интересов и самооценки. Позволяет боту давать индивидуальные рекомендации.
 
@@ -227,21 +230,23 @@ related:
 
 When a user asks about their "level", "status", "access", "plan", "subscription", "capabilities", "what's available", "how to grow", "what's free", "how much" — they are asking about this model.
 
-The platform has 5 service tiers. Each tier includes everything from the previous one. T1-T4 are available to users, T5 is for the platform owner.
+The platform has 5 learner tiers (T0-T4) and 3 orthogonal axes: TM (mentors), TA (admins), TD (developers). Each T-tier includes everything from the previous one. T5-T9 are reserved.
 
-**🟢 T1 — Start** (free, forever):
-- 14-day Marathon (/learn) — structured learning program
+**🟢 T0/T1 — Start** (free + 30-day trial):
+- **30-day trial:** all bot features free (feed, consultations, notes, plans)
+- 14-day Marathon (/learn) — free forever (even after trial)
 - Systematicity Test (/test) — identifies state and adapts content
 - Progress (/progress) — learning statistics
 - Profile (/profile) and Settings (/settings)
+- After trial without subscription: marathon, test, progress — free. Feed, consultations, notes, plans — locked
 
-**📘 T2 — Learning** (Telegram Stars subscription):
+**📘 T2 — Learning** (БР subscription):
 - Feed (/feed) — personal daily digests on chosen topics
 - Consultant (?question) — knowledge-base answers with extended context
 - Notes (.text) — saving thoughts and ideas
 - Plans (/rp /plan /report) — Strategist integration
 
-**Subscription:** Telegram Stars. First 30 days free (trial). Early subscribers keep their price forever. Subscribe: /settings → Subscription.
+**Subscription:** «Бесконечное развитие» (БР) on system-school.ru — the only subscription. TG Stars are optional donations, not a subscription. 30-day trial from /start lets you try all features for free.
 
 **🧬 T3 — Personalization** (Digital Twin connected):
 - Personal recommendations based on goals, problems and interests
@@ -258,9 +263,10 @@ How to reach T3:
 - Personal knowledge base (Pack)
 - GitHub integration (/settings → Connections)
 
-**⚙️ T5 — Administration** (platform owner):
-- Full management of all systems, agents, and infrastructure
-- Complete access to analytics, configuration, and deployment
+**Orthogonal axes** (assigned by owner):
+- **TA1-TA4** — admins: stream management and finances
+- **TM1-TM3** — mentors: homework review and feedback
+- **TD1** — developer: source code, deploy, standard/ management
 
 **Digital Twin:** personal storage for goals, problems, interests, and self-assessment. Enables the bot to give individual recommendations.
 
@@ -300,8 +306,8 @@ View your data and current level: /mydata.
 
 ### 4.4. Слой 4: Доступ + Биллинг
 
-> Тиры платформы (T1–T5) определяют конфигурацию среды: какие знания, данные, роль ИИ, действия и рабочее пространство доступны. Подробнее: [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md).
-> Бот реализует T1 (Старт) и T2 (Изучение), частично T3 (Персонализация). T4–T5 работают через Claude Code.
+> Тиры платформы (T0–T4 + TM + TA + TD) определяют конфигурацию среды: какие знания, данные, роль ИИ, действия и рабочее пространство доступны. Подробнее: [DP.ARCH.002 Тиры платформы](DP.ARCH.002-service-tiers.md).
+> Бот реализует T0 (без Ory), T1 (Старт) и T2 (Изучение), частично T3 (Персонализация). T4 и TD1 работают через Claude Code.
 
 Биллинг — **слой доступа**, не домен в меню.
 
