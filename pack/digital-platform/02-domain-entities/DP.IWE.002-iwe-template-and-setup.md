@@ -36,81 +36,15 @@ related:
 
 > **Шаблон (L3) ≠ Ваш экземпляр (L4).** Шаблон обновляется через `update.sh` — ваши данные не затираются. Подробнее о контурах: [DP.IWE.001 §4](DP.IWE.001-intelligent-working-environment.md).
 
-## 2. Пререквизиты
+## 2. Пререквизиты и установка
 
-### 2.1. Обязательное
+> **Implementation Note.** Конкретные инструменты (Git, Node.js, Claude Code CLI), цены ($20/мес Claude Pro), команды установки (setup.sh), шаги, варианты входа → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
 
-| Что | Зачем | Как получить |
-|-----|-------|-------------|
-| macOS, Linux или Windows (WSL) | Среда выполнения | WSL: [инструкция Microsoft](https://learn.microsoft.com/ru-ru/windows/wsl/install) |
-| Git | Версионирование знаний и кода | macOS: `xcode-select --install`, Linux: `apt install git` |
-| GitHub аккаунт + GitHub CLI (`gh`) | Хранение репозиториев, форк шаблона | [github.com/signup](https://github.com/signup), `brew install gh` |
-| Node.js v18+ и npm | Установка Claude Code CLI | `brew install node` |
-| Claude Code CLI | ИИ-агент в терминале | `npm install -g @anthropic-ai/claude-code` |
-| Подписка Anthropic | Доступ к Claude | **Claude Pro** ($20/мес) — старт. **Claude Max** (~$100/мес) — без лимитов |
-
-### 2.2. Опциональное
-
-| Что | Зачем | Когда подключать |
-|-----|-------|-----------------|
-| VS Code | Единое окно: редактор + терминал + Claude Code | Сразу (рекомендуется) |
-| Telegram (@aist_me_bot) | Заметки, план, тесты с телефона | После установки |
-| WakaTime | Автотрекинг рабочего времени | Когда освоите базовый цикл |
-
-### 2.3. Стоимость
-
-| Компонент | Стоимость | Обязательно? |
-|-----------|----------|-------------|
-| Claude Pro | $20/мес | Да (для старта) |
-| Claude Max | ~$100/мес | Нет (при упоре в лимиты) |
-| GitHub | Бесплатно (Free plan) | Да |
-| VS Code | Бесплатно | Нет |
-| WakaTime | Бесплатно (Free plan) | Нет |
-| Бот @aist_me_bot | Бесплатно (базовый) | Нет |
-
-## 3. Установка
-
-**Время:** 30–60 минут (зависит от опыта с терминалом).
-
-### 3.1. Процесс установки
-
-```
-1. mkdir -p ~/IWE && cd ~/IWE
-2. gh repo fork TserenTserenov/FMT-exocortex-template --clone --remote
-3. cd FMT-exocortex-template && bash setup.sh
-```
-
-> **ADR-001 (2026-02-28):** `setup.sh` встроен в шаблон. Ранее жил в DS-ai-systems/setup — пользователи не могли запустить после форка (генеративность = 0). Теперь fork = работающая система.
-
-Установщик (`setup.sh`) выполняет 6 шагов (+1 опциональный):
-
-| # | Шаг | Что создаётся |
-|---|-----|---------------|
-| 1 | Подстановка переменных (имя, пути, часовой пояс) | Персонализированные файлы |
-| 1b | Переименование репо (по умолчанию → DS-exocortex) | Переименованный репо + GitHub |
-| 2 | Установка CLAUDE.md | `~/IWE/CLAUDE.md` |
-| 3 | Установка memory/ | `~/.claude/projects/*/memory/` |
-| 4 | Настройка разрешений и MCP | `.claude/settings.local.json` |
-| 5 | Установка Стратега (launchd/cron) | Автозапуск утренних планов |
-| 6 | Создание DS-strategy | Приватный репо на GitHub |
-
-### 3.2. Результат установки
-
-После установки у вас есть:
-- **Claude Code** с экзокортексом — знает ваши цели, задачи, методологию
-- **Стратег** — каждое утро формирует план дня
-- **DS-strategy** — приватный стратегический хаб
-- **MCP-подключение** — Claude ищет по 5 400+ документам платформы
-
-### 3.3. Варианты входа
-
-| Ступень | Что получаете | Усилия |
-|---------|-------------|--------|
-| **Минимум** | CLAUDE.md + memory/ + протоколы | 1 вечер |
-| + Стратег | Автопланирование дня и недели | setup.sh |
-| + Бот | Заметки, вопросы, тесты с телефона | 5 мин |
-| + Знания | Pack — формализация домена | Постепенно |
-| + Автоматизация | Экстрактор, Синхронизатор, WakaTime | Для продвинутых |
+**Доменные требования:**
+- Среда: macOS, Linux или Windows (WSL)
+- Версионирование знаний через Git
+- Агентный ИИ-ассистент (читает/пишет файлы, выполняет команды, сохраняет контекст)
+- Результат установки: экзокортекс + Стратег + стратегический хаб + MCP-подключение
 
 ## 4. Ежедневная работа: протокол ОРЗ
 
@@ -288,76 +222,21 @@ Claude Code **умеет читать любые файлы на вашем ко
 
 ## 9. Обновление IWE
 
-**Одна команда:**
+> **Implementation Note.** update.sh (5 шагов), режимы (--check, --dry-run), TG-оповещения — текущая реализация → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
 
-```bash
-cd ~/IWE/FMT-exocortex-template
-bash update.sh
-```
-
-**Что делает update.sh (5 шагов автоматически):**
-
-| Шаг | Что | Результат |
-|-----|-----|-----------|
-| 1. Fetch + merge | Подтягивает изменения из upstream-шаблона | Файлы форка обновлены |
-| 2. CLAUDE.md | Копирует в `~/IWE/CLAUDE.md` | Правила и протоколы актуальны |
-| 3. memory/*.md | Копирует в `~/.claude/projects/.../memory/` (**кроме MEMORY.md**) | Протоколы обновлены, личные данные сохранены |
-| 4. MCP-конфиг | Мержит `settings.local.json`: серверы из upstream + пользовательские permissions | MCP-серверы актуальны |
-| 5. Роли | Переустанавливает роли (Стратег, Экстрактор и др.), если их файлы изменились | Агенты обновлены |
-
-После всех шагов скрипт автоматически пушит merge-коммит.
-
-**Что НЕ затрагивается (user-space):**
-
-| Не трогается | Почему |
-|-------------|--------|
-| MEMORY.md | Твои задачи и статусы |
-| DS-strategy/ | Твои планы, inbox, стратегия |
-| Pack-репозитории | Твои доменные знания |
-| Личные настройки | Твои правила в `<repo>/CLAUDE.md` |
-
-**Дополнительные режимы:**
-
-```bash
-bash update.sh --check    # показать, есть ли обновления (без применения)
-bash update.sh --dry-run  # показать, какие файлы изменятся (без применения)
-```
-
-> **Ключевое:** обновления затрагивают только platform-space (шаблон, протоколы, агенты). Твои данные, планы и знания принадлежат тебе и никогда не перезаписываются.
-
-**Накопительная модель:** Изменения в шаблоне накапливаются. Одна команда `bash update.sh` применяет всё за период (git merge). CHANGELOG.md показывает историю. Обновляться можно в любом ритме — раз в день, неделю или месяц.
-
-**Telegram-оповещения:** Каждое утро в 7:28 бот @aist_me_bot отправляет дайджест изменений за последние 24ч (если они были). Оповещение информирует — решение обновляться всегда за пользователем.
-
-**Три способа обновить:**
-1. Терминал: `bash update.sh`
-2. AI CLI: скажи своему ИИ *«обнови мой экзокортекс»*
-3. Проверить без применения: `bash update.sh --check`
+**Доменные принципы:**
+- Обновления затрагивают только platform-space (шаблон, протоколы, агенты)
+- User-space (MEMORY.md, DS-strategy, Pack, личные настройки) НЕ затрагивается
+- Накопительная модель: изменения копятся, одна команда применяет всё
 
 ## 10. Безопасность и приватность
 
-### 10.1. Что остаётся локально
+> **Implementation Note.** Конкретные сервисы (Anthropic API, WakaTime, GitHub), рекомендации (FileVault, SIP) → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
 
-| Компонент | Где | Отправляется? |
-|-----------|-----|--------------|
-| CLAUDE.md, memory/ | Локальные файлы | Нет (только в контекст Claude) |
-| DS-strategy | Приватный репо GitHub | Только GitHub (private) |
-| Launch agents | Локальные скрипты | Нет |
-
-### 10.2. Что отправляется на внешние серверы
-
-| Компонент | Куда | Какие данные |
-|-----------|------|-------------|
-| Claude Code | Anthropic API (США) | Промпты, файлы из контекста |
-| WakaTime (опц.) | wakatime.com (США) | Метаданные: проекты, файлы, время. НЕ содержимое |
-| MCP knowledge-mcp | Сервер платформы | Поисковые запросы |
-| GitHub | github.com (США) | Содержимое репозиториев |
-
-### 10.3. Рекомендации
-
-- Firewall включён, FileVault включён, SIP не отключать
-- API-ключи — в `.env` (gitignored), не в коде
-- Self-hosted альтернативы: WakaTime → [Wakapi](https://github.com/muety/wakapi), GitHub → [Gitea](https://gitea.io/)
+**Доменные принципы:**
+- CLAUDE.md, memory/ — только локально (в контекст Claude)
+- DS-strategy — приватный репо
+- API-ключи — не в коде
 
 ## 11. Частые вопросы (FAQ)
 
@@ -400,24 +279,13 @@ Pack — предметная база знаний (source-of-truth для до
 
 ## 12. Устранение проблем
 
-| Проблема | Решение |
-|----------|---------|
-| Claude Code не запускается | Проверьте подписку Anthropic и `claude --version` |
-| Стратег не формирует план | `launchctl list \| grep strategist` (macOS). Если нет — `bash roles/strategist/install.sh` |
-| MEMORY.md не загружается | Проверьте путь: `~/.claude/projects/-Users-<username>-Github/memory/MEMORY.md` |
-| DS-strategy не создан | `mkdir -p ~/IWE/DS-strategy/{current,inbox,docs,archive} && cd ~/IWE/DS-strategy && git init` |
-| Заметки не приходят из Telegram | Проверьте подписку в @aist_me_bot. Формат: `.Моя заметка` |
-| MCP не работает | Проверьте `.claude/settings.local.json` — должен содержать `mcpServers`. Если нет — `bash update.sh` |
+> **Implementation Note.** Конкретные команды диагностики → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
 
-## 13. Первая неделя: чек-лист
+## 13. Первая неделя
 
-| День | Действие |
-|------|---------|
-| Пн | Форкнуть шаблон IWE, запустить setup.sh |
-| Вт | Заполнить MEMORY.md (цели, задачи, уроки) |
-| Ср | Первая сессия ОРЗ: Open → одна задача → Close |
-| Чт | Подключить бота @aist_me_bot → `/plan` |
-| Вс | Первый Week Review: «Что получилось? Что менять?» |
+> **Implementation Note.** Конкретный чек-лист по дням → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
+
+**Доменный принцип:** Первая неделя: установка → заполнение памяти → первая сессия ОРЗ → подключение бота → Week Review.
 
 ## 14. Связанные документы
 
