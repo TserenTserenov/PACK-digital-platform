@@ -377,4 +377,4 @@ exocortex/
 - [DP.ROLE.001 ИИ-системы](DP.ROLE.001-platform-roles.md) — Claude Code и Стратег как владельцы протоколов
 - [DP.NAV.001 Навигация знаний](DP.NAV.001-knowledge-navigation.md) — Memory содержит ссылки (уровень 4 навигации)
 - [DP.AISYS.013 Знание-Экстрактор](DP.AISYS.013-knowledge-extractor.md) — capture-to-pack как примитив экстрактора
-- [DP.IWE.001 Intelligent Working Environment](DP.IWE.001-intelligent-working-environment.md) — экзокортекс как компонент IWE
+- [DP.IWE.001 Intellectual Work Environment](DP.IWE.001-intelligent-working-environment.md) — экзокортекс как компонент IWE

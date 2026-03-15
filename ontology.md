@@ -163,7 +163,7 @@
 | IPO | Вход-Обработка-Выход | Input-Processing-Output | SPF |
 | DP | Цифровая платформа | Digital Platform | Pack |
 | ЦД | Цифровой двойник | Digital Twin | Pack |
-| IWE | Интеллектуальная рабочая среда | Intelligent Working Environment | Pack |
+| IWE | Интеллектуальная рабочая среда | Intellectual Work Environment | Pack |
 | MCP | Протокол контекста модели | Model Context Protocol | Pack |
 | ОРЗ | Открытие-Работа-Закрытие | Open-Work-Close | Pack |
 | РП | Рабочий продукт (экземпляр) | Work Product (instance) | Pack |
