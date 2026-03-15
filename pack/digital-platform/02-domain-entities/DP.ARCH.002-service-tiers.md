@@ -131,7 +131,7 @@ related:
 
 ### T4: Созидание (IWE)
 
-> IWE = Intelligence Work Environment (бот + экзокортекс + ЦД + Git)
+> IWE = Intellectual Work Environment (бот + экзокортекс + ЦД + Git)
 > Пользователь создаёт: собственные знания, стратегии, базы, рабочие продукты.
 
 | Измерение | Что добавляется к T3 |

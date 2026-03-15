@@ -1,6 +1,6 @@
 ---
 id: DP.IWE.001
-name: Intelligent Working Environment (IWE)
+name: Intellectual Work Environment (IWE)
 type: domain-entity
 status: draft
 summary: "IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности."
@@ -16,13 +16,13 @@ related:
   distinguishes: [DP.D.025, DP.D.034]
 ---
 
-# Intelligent Working Environment (IWE)
+# Intellectual Work Environment (IWE)
 
 > **Implementation Note.** Конкретные инструменты (Claude Code, Telegram-бот, MCP-серверы, Neon DB) упоминаются как текущая реализация IWE. Доменная модель (5 видов, контуры, тиры, harness) не зависит от вендора. Детали реализации: [C2.IT-Platform](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/).
 
 ## 1. Определение
 
-**IWE** (Intelligent Working Environment / Интеллектуальная рабочая среда) — персональная интегрированная среда, в которой человек думает, планирует, создаёт и развивается при поддержке ИИ-систем, методологии и накопленных знаний.
+**IWE** (Intellectual Work Environment / Интеллектуальная рабочая среда) — персональная интегрированная среда, в которой человек думает, планирует, создаёт и развивается при поддержке ИИ-систем, методологии и накопленных знаний.
 
 > **Ключевое:** IWE — не инструмент, а **среда**. Инструмент решает задачу. Среда формирует способ работы.
 
@@ -275,7 +275,7 @@ IWE как harness может работать двумя способами:
 
 **Критерий:** после взаимодействия с IWE пользователь стал компетентнее, а не только получил результат.
 
-## 6. Почему «Intelligent Working Environment»
+## 6. Почему «Intellectual Work Environment»
 
 ### 6.1. Почему «Intelligent»
 
