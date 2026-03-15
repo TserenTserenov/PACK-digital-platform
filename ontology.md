@@ -62,6 +62,14 @@
 | **Файл контекста РП** | WP Context File | Накопленный контекст многосессионного РП: что сделано, что обнаружено, что дальше. Производится Close-протоколом, потребляется Open-протоколом | U.Work + U.Episteme | DP.EXOCORTEX.001, DP.D.014 |
 | **Среда (IWE)** | Environment (IWE) | Персональная интегрированная система для интеллектуальной работы. Объединяет модули Платформы и собственные инструменты пользователя. Син.: IWE (Intellect Work Environment, Integrated Working Environment). Аналог IDE (Integrated Development Environment) для разработчика — но для развития интеллекта, а не написания кода | U.System | DP.CONCEPT.002, DP.D.016, DP.D.017 |
 | **Harness (упряжь)** | Harness | Обвязка, определяющая качество работы агента/человека: контекст + ограничения + валидация + обратная связь. IWE — harness для интеллектуальной работы, аналогично harness OpenAI для ИИ-кодирования | U.System + U.Method | DP.D.025, DP.SOTA.002 |
+| **АрхГейт (ЭМОГССБ)** | ArchGate | Блокирующая оценка архитектурного решения по 7 характеристикам. Порог ≥8. Без прохождения решение не принимается | U.Method | DP.M.005 |
+| **WP Gate** | WP Gate | Блокирующая проверка наличия рабочего продукта в плане перед началом работы. Предотвращает незапланированную работу | U.Method | DP.EXOCORTEX.001 |
+| **IntegrationGate** | Integration Gate | Блокирующая проверка перед разработкой/интеграцией: тип, контур (L2-L4), роли, продукты, процессы | U.Method | DP.ARCH.001 |
+| **Capture-to-Pack** | Capture-to-Pack | Рубежная проверка на каждом этапе работы: есть ли знание для записи в Pack. Отличается от Knowledge Extraction (DP.D.016) | U.Method | DP.M.001, DP.D.016 |
+| **DayPlan** | DayPlan | Ежедневный план работы: приоритеты, бюджеты, carry-over. Артефакт Day Open, handoff Стратег→Человек | U.WorkPlan | DP.WP.003 |
+| **WeekPlan** | WeekPlan | Еженедельный план: РП, бюджеты, фокус, сверка со стратегией. Артефакт стратегирования | U.WorkPlan | DP.WP.004 |
+| **ОРЗ-фрактал** | ORZ Fractal | Фрактальный паттерн работы: Открытие → Работа → Закрытие. Применяется на двух масштабах: День и Сессия | U.Method | DP.M.003 |
+| **Творческий конвейер** | Creative Pipeline | 4-стадийный процесс: заметка → черновик → заготовка → пост. Ключевой инвариант: TTL на каждой стадии, ничего не накапливается | U.Method + U.Flow | DP.M.003 |
 
 ---
 
@@ -171,6 +179,19 @@
 | ИИ | Искусственный интеллект | Artificial Intelligence | Pack |
 | ИТ | Информационные технологии | Information Technology | Pack |
 | ЭМОГССБ | Эволюционируемость, Масштабируемость, Обучаемость, Генеративность, Скорость, Современность, Безопасность | Evolvability, Scalability, Learnability, Generativity, Speed, Modernity, Security | Pack |
+| DS | Downstream-репозиторий | Downstream Repository | Pack |
+| FMT | Формат (шаблон репозитория) | Format (Repository Template) | Pack |
+| ZP | Нулевые принципы | Zero Principles | Base |
+| DDD | Предметно-ориентированное проектирование | Domain-Driven Design | FPF |
+| SOTA | Современное состояние практик | State Of The Art | SPF |
+| HD | Жёсткое различение | Hard Distinction | Pack |
+| SOP | Стандартная операционная процедура | Standard Operating Procedure | FPF |
+| API | Программный интерфейс | Application Programming Interface | общее |
+| CLI | Интерфейс командной строки | Command-Line Interface | общее |
+| TG | Telegram | Telegram | общее |
+| S2R | Формат «Системы-к-ролям» | Systems-to-Roles | SPF |
+| PII | Персональные данные | Personally Identifiable Information | общее |
+| TTL | Срок жизни артефакта | Time To Live | Pack |
 
 ---
 
