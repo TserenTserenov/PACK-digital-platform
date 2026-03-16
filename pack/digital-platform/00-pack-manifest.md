@@ -64,6 +64,7 @@
 | Рабочие продукты | 14 | DP.WP.001–014 (отчёт экстракции, UL, DayPlan, WeekPlan, WeekReport, Fleeting Notes, Consistency Report, Code Scan Report, Unsatisfied Questions Report, CQRS Projection, Triage Backlog, Analytics Report, Publication Schedule, Validation Report) |
 | Failure modes | 2 | DP.FM.001 (информация как знание), DP.FM.002 (смешение слоёв) |
 | Карта | 1 | DP.MAP.001 (навигационная карта) |
+| Обещания | 5 | DP.SC.001–005 (обещания потребителям) |
 
 > Полная карта: [07-map/DP.MAP.001.md](07-map/DP.MAP.001.md)
 
@@ -121,6 +122,11 @@
 | DP.ROLE.012.SC.08 | 04 Add Workproduct | ROLE | Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план | draft |
 | DP.ROLE.012.SCENARIOS | 00 Scenarios Index | ROLE | Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
+| DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
+| DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
+| DP.SC.003 | Обучение и развитие | SC | Пользователь получает персонализированное обучение: вопросы, проверку ДЗ, ленту знаний, марафоны | draft |
+| DP.SC.004 | Фиксация и экстракция знаний | SC | Знания фиксируются в момент обнаружения и превращаются в формализованные Pack-сущности | draft |
+| DP.SC.005 | Публикация контента | SC | Контент автора публикуется в клубе по расписанию с автоматическим отслеживанием реакций | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
