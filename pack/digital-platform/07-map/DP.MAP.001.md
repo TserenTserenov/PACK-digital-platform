@@ -160,7 +160,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
-| DP.IWE.002 | IWE Template & Setup | Практическое знание о шаблоне IWE: пререквизиты, установка, ежедневная работа (ОРЗ), роли, обновление, безопасность, FAQ. Source-of-truth для бота и MCP по вопросам «как установить IWE». | draft |
+| DP.IWE.002 | IWE Template & Setup | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 
 ### NAV
 
