@@ -327,6 +327,9 @@ Pack — предметная база знаний (source-of-truth для до
 ### Как проверить MCP?
 Откройте Claude Code в папке экзокортекса → попросите «Найди документы про принципы». Claude должен использовать `knowledge-mcp search` и вернуть результаты.
 
+### Клонирование попало в ~ вместо ~/IWE
+Команды установки нужно выполнять **в одном терминале** последовательно. Если между `cd ~/IWE` и `gh repo fork ...` вы открыли новый терминал — он начинает из домашней директории (`~`), и clone уходит не туда. Решение: удалите папку из `~` и повторите все команды из одного блока, начиная с `cd ~/IWE`.
+
 ## 12. Устранение проблем
 
 > **Implementation Note.** Конкретные команды диагностики → [C2.IT-Platform / System-Implementations / DP.IWE.002-template-setup-implementation.md](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/DP.IWE.002-template-setup-implementation.md).
