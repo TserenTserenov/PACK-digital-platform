@@ -101,6 +101,8 @@ related:
 | S41 | **Strategy Session** | [R17 Стратег-интерактив](../02-domain-entities/DP.ROLE.001-platform-roles.md#роли-пользователя-a2--7-ролей) | Вопрос / неудовлетворённость | Решение, обновлённый план | R1 Стратег | R17 + A1 Claude (CLI) | 👤 по запросу | — |
 | S42 | **Morning Check** | [R14 Заказчик](../02-domain-entities/DP.ROLE.001-platform-roles.md#роли-пользователя-a2--7-ролей) | Логи, артефакты за ночь | Статус ночных сервисов | R14 Заказчик | R14 + A1 Claude (CLI) | 👤 ежедн утро | — |
 | S43 | **Time Tracking** | [R10 Статистик](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Активность в VS Code (файлы, проекты, языки, ветки) | Дашборд + API метрик (время по проектам/языкам/файлам) | R1 Стратег (week review), R14 Заказчик | I10 WakaTime (SaaS + VS Code extension) | ⏰ непрерывно (фоновый) | [wakatime.com](https://wakatime.com) |
+| S44 | **Calendar View** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Google Calendar events (primary) | Таблица событий дня + свободные слоты (в DayPlan) | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 Day Open (шаг 4c) | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
+| S45 | **Create Calendar Event** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Описание события от пользователя | Google Calendar event | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 по запросу | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
 
 ---
 
@@ -108,10 +110,10 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 43 |
+| Всего сервисов | 45 |
 | По расписанию (⏰) | 23 |
 | По событию (⚡) | 9 |
-| По запросу (👤) | 11 |
+| По запросу (👤) | 13 |
 | Уникальных ролей | 12 |
 | Уникальных инструментов | 10 (I1-I10) |
 | Систем | 9 |
