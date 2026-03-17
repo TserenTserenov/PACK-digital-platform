@@ -108,7 +108,7 @@ related:
 
 ## Маппинг сервисов на обещания (SC)
 
-> Какое обещание потребителю реализует каждый сервис. Сервисы без SC — инфраструктурные (не адресованы конечному потребителю напрямую).
+> Какое обещание потребителю реализует каждый сервис. Один сервис может участвовать в нескольких SC (разные грани ценности).
 
 | SC | Обещание | Сервисы |
 |----|----------|---------|
@@ -117,7 +117,16 @@ related:
 | [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
 | [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28 |
-| — | Инфраструктурные (без SC) | S17, S18, S19, S20, S21, S23, S24, S29, S30, S31, S32, S33, S34, S35, S36, S38, S43 |
+| [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24 |
+| [SC.007](../08-use-cases/DP.SC.007-triage-and-techdebt.md) | Триаж и техдолг | S29, S30 |
+| [SC.008](../08-use-cases/DP.SC.008-self-healing.md) | Самовосстановление | S31, S32, S33, S34 |
+| [SC.009](../08-use-cases/DP.SC.009-analytics-and-metrics.md) | Аналитика и метрики | S35, S36, S38, S43 |
+| [SC.010](../08-use-cases/DP.SC.010-work-rhythm.md) | Рабочий ритм (ОРЗ) | S01, S02, S03, S04, S05, S42, S44, S09 |
+| [SC.011](../08-use-cases/DP.SC.011-strategizing.md) | Стратегирование | S02, S03, S05, S06, S07, S08, S41 |
+| [SC.012](../08-use-cases/DP.SC.012-onboarding.md) | Онбординг | S12, S23, S24 |
+| [SC.013](../08-use-cases/DP.SC.013-work-session.md) | Рабочая сессия с Claude Code | S06, S09, S10, S40 |
+| [SC.014](../08-use-cases/DP.SC.014-pack-formalization.md) | Формализация знаний (Pack) | S09, S11, S38 |
+| [SC.015](../08-use-cases/DP.SC.015-system-development.md) | Развитие системы (DS) | S06, S20, S24, S30 |
 
 ---
 

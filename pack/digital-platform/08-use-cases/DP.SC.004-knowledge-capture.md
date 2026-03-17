@@ -3,6 +3,7 @@ id: DP.SC.004
 name: Фиксация и экстракция знаний
 type: sc
 status: draft
+layer: L4-Personal
 summary: "Знания фиксируются в момент обнаружения и превращаются в формализованные Pack-сущности"
 consumer: R14 Заказчик, R2 Экстрактор (L4 Personal → L2 Platform)
 created: 2026-03-16
