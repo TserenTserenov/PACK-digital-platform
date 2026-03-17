@@ -3,6 +3,7 @@ id: DP.SC.001
 name: Планирование дня
 type: sc
 status: draft
+layer: L4-Personal
 summary: "Пользователь получает ясный план работы на день к началу рабочего дня"
 consumer: R14 Заказчик (L4 Personal)
 created: 2026-03-16

@@ -3,6 +3,7 @@ id: DP.SC.005
 name: Публикация контента
 type: sc
 status: draft
+layer: L4-Personal
 summary: "Контент автора публикуется в клубе по расписанию с автоматическим отслеживанием реакций"
 consumer: R14 Заказчик, R21 Публикатор (L4 Personal → L1 Ecosystem)
 created: 2026-03-16

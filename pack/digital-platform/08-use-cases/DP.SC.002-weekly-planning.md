@@ -3,6 +3,7 @@ id: DP.SC.002
 name: Планирование и ревью недели
 type: sc
 status: draft
+layer: L4-Personal
 summary: "Пользователь получает план недели на основе стратегии и итоги прошедшей недели"
 consumer: R14 Заказчик (L4 Personal)
 created: 2026-03-16
