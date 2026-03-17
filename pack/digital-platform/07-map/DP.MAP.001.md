@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 3 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 10 |
+| Distinctions (D) | 11 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 7 |
 | IWE (IWE) | 2 |
@@ -34,7 +34,7 @@ generated: true
 | SoTA Annotations (SOTA) | 13 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **84** |
+| **Total** | **85** |
 
 ## Distinctions
 
@@ -50,6 +50,7 @@ generated: true
 | DP.D.033 | Role-Centric Architecture (Ролецентричная архитектура) | Роль описывается независимо от исполнителя. Исполнитель выбирается и подготавливается отдельно. Роль = маска, которую надевает система (сама — если агент, или по воле другого агента — если инструмент). Одно имя (например, 'Синхронизатор') может обозначать и роль, и систему-исполнителя — это разные ракурсы, не тождество. | active |
 | DP.D.034 | Three-Axis Access Control Model (Трёхосевая модель доступов) | Доступ на платформе определяется тремя ортогональными осями: Entitlement (тир — что доступно по подписке), Role (роль — что можно делать), Scope (область видимости — над чем). Permission = Entitlement × Role × Scope. Устраняет необходимость в подролях (Администратор-1, Администратор-2) — это одна роль с разным scope. | active |
 | DP.D.035 | Data Policy — политика данных IWE | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.003 | active |
+| DP.D.036 | BYOB Knowledge Architecture | Различение BYOB (Bring Your Own Backend) vs Managed: данные пользователя хранятся на его ресурсах, платформа даёт код и L2-знания. Связано с MCP Hub (ADR-018 v2) и контурами L2/L4. | draft |
 
 ## Methods
 
