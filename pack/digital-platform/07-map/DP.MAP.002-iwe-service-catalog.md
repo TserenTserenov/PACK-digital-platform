@@ -105,6 +105,7 @@ related:
 | S45 | **Create Calendar Event** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Описание события от пользователя | Google Calendar event | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 по запросу | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
 | S46 | **Content Adaptation** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Согласованная club-версия поста | Адаптации для соцсетей (facebook, linkedin, telegram, tenchat, x, youtube) | R14 Заказчик | A1 Claude (CLI) | 👤 после согласования club | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 | S47 | **Multi-Channel Publish** | [R21 Публикатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Адаптация с status=ready + target={channel} | Пост в соцсети + frontmatter update (status→published) | Внешняя аудитория, R14 Заказчик | I? Publisher script → API каналов | 👤 `/publish {channel}` / ⏰ расписание | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
+| S60 | **HW-Discussion** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Замечание проверки + норматив + вопрос ученика | Разъяснение по замечанию (TG message) | R16 Ученик | A1 Haiku → I1 Bot | ⚡ вопрос по замечанию | — |
 
 ---
 
@@ -132,6 +133,7 @@ related:
 | [SC.016](../08-use-cases/DP.SC.016-collective-work-products.md) | Коллективное управление РП | S01, S02, S08 |
 | [SC.017](../08-use-cases/DP.SC.017-adaptive-daily-assignment.md) | Адаптивное задание на день | — (новые сервисы TBD) |
 | [SC.018](../08-use-cases/DP.SC.018-tier-upgrade-t3-t4.md) | Переход T3 → T4 | — (новые сервисы TBD) |
+| [SC.117](../08-use-cases/DP.SC.117-async-homework-review.md) | Асинхронная проверка и обсуждение ДЗ | S13, S37, S60 |
 
 ---
 
@@ -139,7 +141,7 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 46 |
+| Всего сервисов | 47 |
 | По расписанию (⏰) | 23 |
 | По событию (⚡) | 9 |
 | По запросу (👤) | 14 |

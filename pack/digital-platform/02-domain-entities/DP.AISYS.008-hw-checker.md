@@ -16,6 +16,7 @@ interface: api
 related:
   uses: [DP.ROLE.001]
   part_of: [DP.AISYS.014]
+  realizes: [DP.SC.003, DP.SC.117]
 ---
 
 # ДЗ-чекер (HW Checker)
