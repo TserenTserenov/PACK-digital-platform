@@ -104,6 +104,7 @@ related:
 | S44 | **Calendar View** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Google Calendar events (primary) | Таблица событий дня + свободные слоты (в DayPlan) | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 Day Open (шаг 4c) | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
 | S45 | **Create Calendar Event** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Описание события от пользователя | Google Calendar event | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 по запросу | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
 | S46 | **Content Adaptation** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Согласованная club-версия поста | Адаптации для соцсетей (facebook, linkedin, telegram, tenchat, x, youtube) | R14 Заказчик | A1 Claude (CLI) | 👤 после согласования club | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
+| S47 | **Multi-Channel Publish** | [R21 Публикатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Адаптация с status=ready + target={channel} | Пост в соцсети + frontmatter update (status→published) | Внешняя аудитория, R14 Заказчик | I? Publisher script → API каналов | 👤 `/publish {channel}` / ⏰ расписание | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 
 ---
 
@@ -117,7 +118,7 @@ related:
 | [SC.002](../08-use-cases/DP.SC.002-weekly-planning.md) | Планирование и ревью недели | S02, S03, S05, S06, S07, S08, S41 |
 | [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
-| [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46 |
+| [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46, S47 |
 | [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24 |
 | [SC.007](../08-use-cases/DP.SC.007-triage-and-techdebt.md) | Триаж и техдолг | S29, S30 |
 | [SC.008](../08-use-cases/DP.SC.008-self-healing.md) | Самовосстановление | S31, S32, S33, S34 |
@@ -128,6 +129,9 @@ related:
 | [SC.013](../08-use-cases/DP.SC.013-work-session.md) | Рабочая сессия с Claude Code | S06, S09, S10, S40 |
 | [SC.014](../08-use-cases/DP.SC.014-pack-formalization.md) | Формализация знаний (Pack) | S09, S11, S38 |
 | [SC.015](../08-use-cases/DP.SC.015-system-development.md) | Развитие системы (DS) | S06, S20, S24, S30 |
+| [SC.016](../08-use-cases/DP.SC.016-collective-work-products.md) | Коллективное управление РП | S01, S02, S08 |
+| [SC.017](../08-use-cases/DP.SC.017-adaptive-daily-assignment.md) | Адаптивное задание на день | — (новые сервисы TBD) |
+| [SC.018](../08-use-cases/DP.SC.018-tier-upgrade-t3-t4.md) | Переход T3 → T4 | — (новые сервисы TBD) |
 
 ---
 
@@ -135,10 +139,10 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 45 |
+| Всего сервисов | 46 |
 | По расписанию (⏰) | 23 |
 | По событию (⚡) | 9 |
-| По запросу (👤) | 13 |
+| По запросу (👤) | 14 |
 | Уникальных ролей | 12 |
 | Уникальных инструментов | 10 (I1-I10) |
 | Систем | 9 |
