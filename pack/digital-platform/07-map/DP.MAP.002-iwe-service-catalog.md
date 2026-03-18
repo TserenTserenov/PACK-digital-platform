@@ -103,6 +103,7 @@ related:
 | S43 | **Time Tracking** | [R10 Статистик](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Активность в VS Code (файлы, проекты, языки, ветки) | Дашборд + API метрик (время по проектам/языкам/файлам) | R1 Стратег (week review), R14 Заказчик | I10 WakaTime (SaaS + VS Code extension) | ⏰ непрерывно (фоновый) | [wakatime.com](https://wakatime.com) |
 | S44 | **Calendar View** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Google Calendar events (primary) | Таблица событий дня + свободные слоты (в DayPlan) | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 Day Open (шаг 4c) | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
 | S45 | **Create Calendar Event** | [R1 Стратег](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Описание события от пользователя | Google Calendar event | R14 Заказчик | A1 Claude (CLI) → I11 Google Calendar MCP | 👤 по запросу | [protocol-open.md §4c](../../../../../memory/protocol-open.md) |
+| S46 | **Content Adaptation** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Согласованная club-версия поста | Адаптации для соцсетей (facebook, linkedin, telegram, tenchat, x, youtube) | R14 Заказчик | A1 Claude (CLI) | 👤 после согласования club | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 
 ---
 
@@ -116,7 +117,7 @@ related:
 | [SC.002](../08-use-cases/DP.SC.002-weekly-planning.md) | Планирование и ревью недели | S02, S03, S05, S06, S07, S08, S41 |
 | [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
-| [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28 |
+| [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46 |
 | [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24 |
 | [SC.007](../08-use-cases/DP.SC.007-triage-and-techdebt.md) | Триаж и техдолг | S29, S30 |
 | [SC.008](../08-use-cases/DP.SC.008-self-healing.md) | Самовосстановление | S31, S32, S33, S34 |
