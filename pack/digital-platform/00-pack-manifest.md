@@ -157,6 +157,7 @@
 | DP.SC.114 | CRM и работа с участниками | SC | Воронка, удержание, отток — управление на основе данных с проактивной работой с at-risk участниками | draft |
 | DP.SC.115 | Маркетинг и привлечение | SC | Привлечение участников через открытые руководства, рефералы, промо-коды и конверсионные триггеры в боте | draft |
 | DP.SC.116 | Уведомления и nudges | SC | Правильное сообщение в правильный момент — ЦД-инсайты, дедлайны, streaks, milestones, конверсия | draft |
+| DP.SC.117 | Асинхронная проверка и обсуждение ДЗ | SC | Ответы на ДЗ сохраняются в ЦД, проверяются пакетно, результаты персистентны и доступны для обсуждения | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
