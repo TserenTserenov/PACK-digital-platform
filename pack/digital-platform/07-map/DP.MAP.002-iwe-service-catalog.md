@@ -106,6 +106,7 @@ related:
 | S46 | **Content Adaptation** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Согласованная club-версия поста | Адаптации для соцсетей (facebook, linkedin, telegram, tenchat, x, youtube) | R14 Заказчик | A1 Claude (CLI) | 👤 после согласования club | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 | S47 | **Multi-Channel Publish** | [R21 Публикатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Адаптация с status=ready + target={channel} | Пост в соцсети + frontmatter update (status→published) | Внешняя аудитория, R14 Заказчик | I? Publisher script → API каналов | 👤 `/publish {channel}` / ⏰ расписание | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 | S48 | **Practicum Messages Upload** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | markdown-файлы сообщений (ss/ms-messages.md) | Шаблон сообщений в LMS Aisystant | R16 Ученик (через LMS) | I2 bash → [upload-to-lms.py](../../../../DS-ecosystem-development/A.Systems-Builder/A2.Systems-Builder/A2.3.Operations/Practicum-Messages/upload-to-lms.py) | 👤 по запросу | [README](../../../../DS-ecosystem-development/A.Systems-Builder/A2.Systems-Builder/A2.3.Operations/Practicum-Messages/README.md) |
+| S49 | **Downstream Sync** | [R8 Синхронизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Changed Pack repos (git diff / коммиты за 24ч) | Синхронизированные downstream (reindex + projection + template) | R5 Архитектор, I4 knowledge-mcp | I2 bash → [update.sh](../../../../DS-IT-systems/DS-ai-systems/synchronizer/scripts/update.sh) | ⏰ ежедн 00:05 / 👤 Day Close | [PROCESSES](../../../../DS-IT-systems/DS-ai-systems/synchronizer/PROCESSES.md) |
 | S60 | **HW-Discussion** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Замечание проверки + норматив + вопрос ученика | Разъяснение по замечанию (TG message) | R16 Ученик | A1 Haiku → I1 Bot | ⚡ вопрос по замечанию | — |
 
 ---
@@ -121,7 +122,7 @@ related:
 | [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37, S48 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
 | [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46, S47 |
-| [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24 |
+| [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24, S49 |
 | [SC.007](../08-use-cases/DP.SC.007-triage-and-techdebt.md) | Триаж и техдолг | S29, S30 |
 | [SC.008](../08-use-cases/DP.SC.008-self-healing.md) | Самовосстановление | S31, S32, S33, S34 |
 | [SC.009](../08-use-cases/DP.SC.009-analytics-and-metrics.md) | Аналитика и метрики | S35, S36, S38, S43 |
@@ -142,8 +143,8 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 48 |
-| По расписанию (⏰) | 23 |
+| Всего сервисов | 49 |
+| По расписанию (⏰) | 24 |
 | По событию (⚡) | 9 |
 | По запросу (👤) | 15 |
 | Уникальных ролей | 12 |
