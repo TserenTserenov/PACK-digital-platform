@@ -107,6 +107,7 @@ related:
 | S47 | **Multi-Channel Publish** | [R21 Публикатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Адаптация с status=ready + target={channel} | Пост в соцсети + frontmatter update (status→published) | Внешняя аудитория, R14 Заказчик | I? Publisher script → API каналов | 👤 `/publish {channel}` / ⏰ расписание | [PROCESSES](../../../../DS-Knowledge-Index-Tseren/PROCESSES.md) |
 | S48 | **Practicum Messages Upload** | [R4 Автор](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | markdown-файлы сообщений (ss/ms-messages.md) | Шаблон сообщений в LMS Aisystant | R16 Ученик (через LMS) | I2 bash → [upload-to-lms.py](../../../../DS-ecosystem-development/A.Systems-Builder/A2.Systems-Builder/A2.3.Operations/Practicum-Messages/upload-to-lms.py) | 👤 по запросу | [README](../../../../DS-ecosystem-development/A.Systems-Builder/A2.Systems-Builder/A2.3.Operations/Practicum-Messages/README.md) |
 | S49 | **Downstream Sync** | [R8 Синхронизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Changed Pack repos (git diff / коммиты за 24ч) | Синхронизированные downstream (reindex + projection + template) | R5 Архитектор, I4 knowledge-mcp | I2 bash → [update.sh](../../../../DS-IT-systems/DS-ai-systems/synchronizer/scripts/update.sh) | ⏰ ежедн 00:05 / 👤 Day Close | [PROCESSES](../../../../DS-IT-systems/DS-ai-systems/synchronizer/PROCESSES.md) |
+| S50 | **Template Update** | [R9 Шаблонизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | update-manifest.json (GitHub) + локальные файлы | Обновлённые платформенные файлы (CLAUDE.md, memory/, roles/, skills/) | R14 Заказчик | I2 bash → [update.sh](../../../../FMT-exocortex-template/update.sh) | 👤 `bash update.sh` | [PROCESSES](../../../../DS-IT-systems/DS-ai-systems/setup/PROCESSES.md) |
 | S60 | **HW-Discussion** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Замечание проверки + норматив + вопрос ученика | Разъяснение по замечанию (TG message) | R16 Ученик | A1 Haiku → I1 Bot | ⚡ вопрос по замечанию | — |
 
 ---
@@ -122,13 +123,14 @@ related:
 | [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37, S48 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
 | [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46, S47 |
-| [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24, S49 |
+| [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24, S49, S50 |
 | [SC.007](../08-use-cases/DP.SC.007-triage-and-techdebt.md) | Триаж и техдолг | S29, S30 |
 | [SC.008](../08-use-cases/DP.SC.008-self-healing.md) | Самовосстановление | S31, S32, S33, S34 |
 | [SC.009](../08-use-cases/DP.SC.009-analytics-and-metrics.md) | Аналитика и метрики | S35, S36, S38, S43 |
 | [SC.010](../08-use-cases/DP.SC.010-work-rhythm.md) | Рабочий ритм (ОРЗ) | S01, S02, S03, S04, S05, S42, S44, S09 |
 | [SC.011](../08-use-cases/DP.SC.011-strategizing.md) | Стратегирование | S02, S03, S05, S06, S07, S08, S41 |
 | [SC.012](../08-use-cases/DP.SC.012-onboarding.md) | Онбординг | S12, S23, S24 |
+| [SC.019](../08-use-cases/DP.SC.019-template-update.md) | Обновление экзокортекса | S50 |
 | [SC.013](../08-use-cases/DP.SC.013-work-session.md) | Рабочая сессия с Claude Code | S06, S09, S10, S40 |
 | [SC.014](../08-use-cases/DP.SC.014-pack-formalization.md) | Формализация знаний (Pack) | S09, S11, S38 |
 | [SC.015](../08-use-cases/DP.SC.015-system-development.md) | Развитие системы (DS) | S06, S20, S24, S30 |
@@ -143,7 +145,7 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 49 |
+| Всего сервисов | 50 |
 | По расписанию (⏰) | 24 |
 | По событию (⚡) | 9 |
 | По запросу (👤) | 15 |
