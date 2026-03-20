@@ -82,8 +82,8 @@ NixOS на Hetzner (dedicated/VPS) → декларативная конфигу
 
 | Сервис | Название | Роль | Вход | Выход | Триггер |
 |--------|----------|------|------|-------|---------|
-| S45 | Cloud Scheduler | R8 Синхронизатор | Расписание + конфиг | Запуск задач | ⏰ cron (GitHub Actions / VPS) |
-| S46 | IWE Telegram Gateway | R8 Синхронизатор | Команда пользователя | Ответ (план, статус, заметка) | ⚡ Telegram-команда |
+| S61 | Cloud Scheduler | R8 Синхронизатор | Расписание + конфиг | Запуск задач | ⏰ cron (GitHub Actions / VPS) |
+| S62 | IWE Telegram Gateway | R8 Синхронизатор | Команда пользователя | Ответ (план, статус, заметка) | ⚡ Telegram-команда |
 
 ## Пользовательский путь
 
@@ -91,7 +91,7 @@ NixOS на Hetzner (dedicated/VPS) → декларативная конфигу
 
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
-| 1 | Fork FMT-exocortex-template → настроить GitHub Secrets (ANTHROPIC_API_KEY — опционально) | Пользователь | — |
+| 1 | Создать репо из шаблона FMT-exocortex-template (Use this template) → `bash setup/optional/setup-cloud-scheduler.sh` | Пользователь | — |
 | 2 | GitHub Actions cron запускает bash-скрипты по расписанию (reindex, sync, backup) | S45 Cloud Scheduler | GitHub Actions |
 | 3 | Утром пользователь включает Mac, делает `git pull` — получает результаты ночной работы | Пользователь | — |
 | 4 | (Продвинутый) `deploy.sh` на VPS — разворачивает полный cloud runtime с Claude Agent SDK | Пользователь | — |
