@@ -49,18 +49,21 @@ GitHub Actions (cron) → bash-скрипты (без LLM)
 
 Не требует Claude API. Обычные bash-скрипты в GitHub Actions по расписанию.
 
-### Продвинутый (opt-in, требует Claude API key)
+### Продвинутый (opt-in, выделенный сервер)
 
 ```
-VPS (Hetzner/Fly.io) → Claude Agent SDK
-  ├── strategist morning — генерация DayPlan (Claude API)
-  ├── note-review — ревью заметок (Claude API)
-  ├── week-review — итоги недели (Claude API)
+NixOS на Hetzner (dedicated/VPS) → декларативная конфигурация
+  ├── configuration.nix — весь сервер описан в git
+  ├── ZFS — сжатие данных на лету (текст в 2-3x меньше)
+  ├── Шифрование — из коробки
+  ├── Автоматический rollback при ошибке деплоя
+  ├── cron → bash-скрипты (reindex, sync, backup)
+  ├── Claude Agent SDK → strategist, note-review, week-review
   ├── Telegram Gateway — /plan, /note, /status
-  └── ~$5/мес (VPS) + ~$30-90/мес (Claude API, Haiku)
+  └── ~€30-50/мес (Hetzner dedicated auction) + ~$30-90/мес (Claude API Haiku)
 ```
 
-Требует Claude API key. Claude Agent SDK с полным tool loop.
+Конфигурация в git → шаблонизируемость. Правишь `configuration.nix` → деплоишь → работает или откатывается на предыдущую версию.
 
 ### Разделение задач (что требует LLM, а что нет)
 
