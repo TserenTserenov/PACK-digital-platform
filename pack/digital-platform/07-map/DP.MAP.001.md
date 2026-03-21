@@ -21,9 +21,9 @@ generated: true
 | ARCH (ARCH) | 3 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 11 |
+| Distinctions (D) | 12 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 7 |
+| Failure Modes (FM) | 8 |
 | IWE (IWE) | 2 |
 | Methods (M) | 7 |
 | Maps (MAP) | 2 |
@@ -31,10 +31,10 @@ generated: true
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 38 |
-| SoTA Annotations (SOTA) | 13 |
+| SoTA Annotations (SOTA) | 14 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **118** |
+| **Total** | **121** |
 
 ## Distinctions
 
@@ -51,6 +51,7 @@ generated: true
 | DP.D.034 | Three-Axis Access Control Model (Трёхосевая модель доступов) | Доступ на платформе определяется тремя ортогональными осями: Entitlement (тир — что доступно по подписке), Role (роль — что можно делать), Scope (область видимости — над чем). Permission = Entitlement × Role × Scope. Устраняет необходимость в подролях (Администратор-1, Администратор-2) — это одна роль с разным scope. | active |
 | DP.D.035 | Data Policy — политика данных IWE | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.003 | active |
 | DP.D.036 | BYOB Knowledge Architecture | Различение BYOB (Bring Your Own Backend) vs Managed: данные пользователя хранятся на его ресурсах, платформа даёт код и L2-знания. Связано с MCP Hub (ADR-018 v2) и контурами L2/L4. | draft |
+| DP.D.037 | Рабочий продукт как инструмент связи | РП — не красиво оформленные данные, а инструмент, показывающий связь между элементами и работающий на достижение миссии | active |
 
 ## Methods
 
@@ -95,6 +96,7 @@ generated: true
 | DP.FM.005 | Дрейф модель–реальность (Model-Reality Drift) | AI-агент без петли измерения деградирует в самосогласованный текст: внутренняя непротиворечивость растёт, но близость к реальности падает. Двойной дрейф: мир меняется + цели агента дрейфуют | draft |
 | DP.FM.006 | Когнитивный долг как следствие агентного ИИ | Агентный ИИ производит код быстрее, чем разработчики успевают строить теорию системы. Техдолг — в коде, когнитивный долг — в головах. Программа — это теория в головах, код — лишь проекция | draft |
 | DP.FM.007 | Дрейф представлений (View Drift) | View-файлы (README, CLAUDE.md, REGISTRY, посты) рассинхронизируются с model-файлами (Pack-сущности, код, файловая система). Причина: отсутствие автоматической валидации claims в view-файлах при изменении model. | draft |
+| DP.FM.008 | Auto-Promote Without Confirmation | Автоматический промоут черновика без подтверждения пользователя — нарушение human-in-the-loop gate | active |
 
 ## SoTA Annotations
 
@@ -113,6 +115,7 @@ generated: true
 | DP.SOTA.011 | Coupling Model (Khononov 2024) | Многомерная модель связанности: knowledge coupling, distance coupling, volatility coupling — 4 уровня интеграции | active |
 | DP.SOTA.012 | Multi-Representation Knowledge Architecture | Model/View эволюционировал в multi-representation: vector + graph + hierarchical index, отделённые от surface (бот, курс, API) | active |
 | DP.SOTA.013 | World Models | Переход от LLM (модели знаний о мире) к World Models (модели мира): замыкание цикла действие-измерение-обновление, три линии исследований, архитектурные импликации для AI-агентов | active |
+| DP.SOTA.014 | MCP как де-факто стандарт 2026 | Model Context Protocol — универсальный стандарт подключения AI-агентов к enterprise-инструментам. 97M+ скачиваний SDK, 75+ коннекторов | active |
 
 ## Maps
 
