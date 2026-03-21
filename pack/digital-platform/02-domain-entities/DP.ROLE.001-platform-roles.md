@@ -235,6 +235,16 @@ expectations:
   - from: "R15 Валидатор"
     expects: "Пост готов к публикации после review"
 
+style_reference:
+  name: "PostNauka-style"
+  source: "postnauka.org"
+  characteristics:
+    - tone: "Популярно-научный, доступный, серьёзный без развлекательности"
+    - structure: "Карточный формат, короткие блоки для экранного чтения"
+    - paragraphs: "Короткие (2-4 предложения), фрагментарные"
+    - devices: "Примеры, аналогии, визуальная организация. Без излишней эмоциональности"
+    - voice: "Экспертный, но понятный широкой аудитории"
+
 methods:
   - name: "Topic Research"
     description: "knowledge-mcp + Pack → сбор материала для поста"
