@@ -5,7 +5,7 @@ type: domain-entity
 status: active
 summary: "Реестр и классификация ИИ-систем платформы: роли (Стратег, Экстрактор, Проводник и др.) и исполнители (Claude, бот, скрипты)"
 created: 2026-02-07
-updated: 2026-02-24
+updated: 2026-03-21
 trust:
   F: 4
   G: domain
@@ -142,6 +142,8 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | R5 | **Архитектор** | Платформа DP | ArchGate, BC-Mapping, ADR, SOTA-Update | Арх. предложение, Pack, SOTA | ADR, оценки ЭМОГССБ, BC-маппинг |
 | R6 | **Кодировщик** | Платформа DP | Implementation, Refactoring, Bug-Fix | Архитектура (R5), backlog (R7) | Код (коммиты), captures |
 | R7 | **Триажёр техдолга** | Платформа DP | Auto-Triage, Triage-Session | feedback_triage DB, inbox | Приоритизированный backlog, алерты |
+| R22 | **Оркестратор** | Система персонального развития | Orchestration Dispatch, Rhythm Adaptation | ЦД (состояние, engagement), config | Решение о составе цикла на день |
+| R27 | **Портной** | Система персонального развития | Portion Assembly | Программа, ЦД (профиль, история, стиль), ячейки | Персональная дневная порция |
 
 > **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
 >
@@ -489,6 +491,131 @@ related_roles:
 ```
 </details>
 
+<details>
+<summary><strong>R22 Оркестратор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Оркестратор"
+type: agential
+suprasystem: "Система персонального развития"
+context: "Управление циклом персонального развития: решает ЧТО и КОГДА запускать"
+
+obligations:
+  - "Решать, нужна ли диагностика сегодня (по давности, событиям)"
+  - "Решать, вызывать ли Навигатора (провал мотивации, смена этапа)"
+  - "Запрашивать у Портного порцию на день"
+  - "Адаптировать ритм под пользователя (частота, объём)"
+  - "Отслеживать прогресс и эскалировать при стагнации"
+
+expectations:
+  - from: "R16 Ученик"
+    expects: "Ритм обучения комфортный, не перегружает"
+  - from: "R27 Портной"
+    expects: "Своевременный запрос на сборку порции с актуальным контекстом"
+  - from: "R14 Заказчик"
+    expects: "Автономная работа без ручного вмешательства"
+
+methods:
+  - name: "Orchestration Dispatch"
+    description: "Анализ состояния ЦД → решение о составе цикла → делегирование ролям"
+  - name: "Rhythm Adaptation"
+    description: "Корректировка частоты и объёма на основе engagement metrics"
+
+work_products:
+  - product: "Решение о составе цикла на день"
+    recipient: "R27 Портной, EDU.R.003 Навигатор, EDU.R.006 Диагност"
+    trigger: "Утренний цикл / событие (потеря активности)"
+
+current_holders:
+  - holder: "TBD (Ф3 MVP)"
+    grade: 2
+    covers_scenarios: [Orchestration-Dispatch, Rhythm-Adaptation]
+    instruments: [TBD]
+
+failure_modes:
+  - "Over-Push — слишком частые/объёмные порции → пользователь отваливается"
+  - "Stagnation Blindness — не замечает потерю вовлечённости"
+
+related_roles:
+  - role: "R27 Портной"
+    interaction: "Оркестратор запрашивает → Портной собирает порцию"
+  - role: "R8 Синхронизатор"
+    interaction: "R8 = cron (запускает по расписанию). Оркестратор = решает ЧТО запускать"
+  - role: "EDU.R.003 Навигатор"
+    interaction: "Оркестратор вызывает Навигатора при провале мотивации или смене этапа"
+  - role: "EDU.R.006 Диагност"
+    interaction: "Оркестратор вызывает Диагноста при необходимости диагностики"
+
+distinction: "R8 Синхронизатор = cron (запускает по расписанию). Оркестратор = решает ЧТО запускать (принимает решения на основе состояния ЦД)."
+grade: 2+
+```
+</details>
+
+<details>
+<summary><strong>R27 Портной</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Портной (Tailor)"
+type: agential
+suprasystem: "Система персонального развития"
+context: "Сборка персональной дневной порции из готовых ячеек"
+
+obligations:
+  - "Собирать дневную порцию материалов под конкретного пользователя"
+  - "Учитывать программу, методику, профиль, историю, стиль, контекст дня"
+  - "Адаптировать глубину погружения (Bloom) под текущий уровень"
+  - "Подбирать формат подачи (примеры, задачи, теория) под стиль ученика"
+
+expectations:
+  - from: "R16 Ученик"
+    expects: "Порция соответствует уровню: не слишком простая, не слишком сложная"
+  - from: "R22 Оркестратор"
+    expects: "Порция собрана по запросу, в срок, с учётом всех входов"
+  - from: "R12 Оценщик"
+    expects: "Результаты прохождения учтены в следующей порции"
+
+inputs:
+  1_program: "DS-principles-curriculum/programs/ — какие модули, порядок"
+  2_methodology: "PACK-education — как подавать (scaffolding, PBL и т.д.)"
+  3_profile: "ЦД L3 (3_11_diagnostic_profile) — уровень по осям"
+  4_history: "ЦД L2 (2_10_learning_history) — что пройдено, результат"
+  5_day_context: "ЦД L1 (1_4) — время, бюджет, формат"
+  6_content: "DS-principles-curriculum/cells/ — доступные ячейки"
+  7_style: "ЦД L1 (1_3.21_Стиль_обучения) — предпочтения"
+  8_feedback: "ЦД L2 (2_3) — история ошибок от Оценщика"
+
+methods:
+  - name: "Portion Assembly"
+    description: "8 входов → выбор ячеек × глубина × формат → персональная дневная порция"
+
+work_products:
+  - product: "Персональная дневная порция (набор материалов × глубина × формат)"
+    recipient: "R8 Синхронизатор → I1 Бот → R16 Ученик"
+    trigger: "R22 Оркестратор запросил порцию"
+
+current_holders:
+  - holder: "TBD (Ф1 MVP)"
+    grade: 2
+    covers_scenarios: [Portion-Assembly]
+    instruments: [TBD]
+
+failure_modes:
+  - "Level Mismatch — глубина не соответствует уровню ученика"
+  - "Content Gap — запрошена ячейка, которой нет в curriculum"
+
+related_roles:
+  - role: "R22 Оркестратор"
+    interaction: "Оркестратор запрашивает → Портной собирает"
+  - role: "R12 Оценщик"
+    interaction: "Оценщик оценивает результат прохождения → Портной учитывает в следующей порции"
+  - role: "R8 Синхронизатор"
+    interaction: "Синхронизатор доставляет порцию по расписанию"
+
+distinction: "Портной ≠ Автор (контент уже есть). Портной ≠ Методист (методика в Pack). Портной = компонует готовое под конкретного человека."
+grade: 2+
+```
+</details>
+
 #### Функциональные роли (Grade 0+, со смешанными сценариями)
 
 > Исполнители (кто играет роль) — см. [Таблица РА §3.5](#35-таблица-ра-роли--исполнители--инструменты).
@@ -704,7 +831,7 @@ related_roles:
 
 > **Ключевое:** Стратег (R1) и Экстрактор (R2) не могут работать одновременно (один Claude Code process). Консультант (R3) работает через отдельный Claude API в боте — может параллельно.
 
-**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 9 инструментов (I1-I9), 21 роль (7 агентских + 7 функциональных + 7 пользовательских), ~39 сценариев. Репо: DS-ai-systems (монорепо, 8 систем).
+**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 9 инструментов (I1-I9), 23 роли (9 агентских + 7 функциональных + 7 пользовательских), ~41 сценарий. Репо: DS-ai-systems (монорепо, 8 систем).
 
 ### 3.3. Мета-роли владельца (Platform Contours)
 
@@ -727,7 +854,7 @@ related_roles:
 
 | Pack | Коды | Кол-во | Тип | Файл |
 |------|------|--------|-----|------|
-| **DP** (Digital Platform) | R1–R21 | 21 | Platform | [§3.2 этого файла](#32-каталог-ролей-платформы) |
+| **DP** (Digital Platform) | R1–R27 | 23 | Platform | [§3.2 этого файла](#32-каталог-ролей-платформы) |
 | **EDU** (Education) | EDU.R.001–007 | 7 | Domain-agnostic | [PACK-education/02A-roles.md](../../../../PACK-education/pack/education/02-domain-entities/02A-roles.md) |
 | **PD** (Personal Dev) | PD.R.001–004 | 4 | Domain-specific | [PACK-personal/02A-roles.md](../../../../PACK-personal/pack/personal-development/02-domain-entities/02A-roles.md) |
 | **MIM** (Мастерская) | MIM.R.001–003 | 3 | Domain-specific | [PACK-MIM/MIM.R.*](../../../../PACK-MIM/pack/mim/02-domain-entities/) |
@@ -735,14 +862,14 @@ related_roles:
 **Классификация (3 уровня):**
 
 ```
-Level 0: Platform (R1-R21)           ← в шаблоне экзокортекса, нужны всем
+Level 0: Platform (R1-R27)           ← в шаблоне экзокортекса, нужны всем
 Level 1: Domain-agnostic (EDU.R.*)   ← универсальные, для любого предмета
 Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному домену
 ```
 
 **В шаблоне экзокортекса:** только Level 0 (Platform). Pack-роли доступны по ссылкам при установке соответствующего Pack.
 
-**Итого:** 35 ролей (21 DP + 7 EDU + 4 PD + 3 MIM).
+**Итого:** 37 ролей (23 DP + 7 EDU + 4 PD + 3 MIM).
 
 ### 3.5. Таблица РА (Роли × Исполнители × Инструменты)
 
@@ -775,9 +902,11 @@ Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному до
 | **A1 Claude** | R12 Оценщик | 2 | Claude Code CLI, Pack, SPF | Bloom Eval, WP Validation |
 | **I1 Бот** | R13 Проводник | 1 | aiogram FSM, middleware, TG Bot API, Neon DB (user_profiles) | FSM-Routing, Access-Control, Tier-Gating |
 | **I1 Бот + I9** | R21 Публикатор | 1 | handlers/discourse.py, Discourse API, GitHub API, Neon DB, TG Bot API | All scenarios |
+| **TBD** | R22 Оркестратор | 2 | TBD (Ф3 MVP) | Orchestration-Dispatch, Rhythm-Adaptation |
+| **TBD** | R27 Портной | 2 | TBD (Ф1 MVP) | Portion-Assembly |
 | **A2 Пользователь** | R14-R20 | 4 | TG, Claude Code CLI, VS Code, бумага | Все пользовательские сценарии |
 
-**Статистика РА:** 2 агента (A1 Claude, A2 Пользователь) × 21 роль → ~24 уникальных назначения, 10 инструментов (I1-I10).
+**Статистика РА:** 2 агента (A1 Claude, A2 Пользователь) × 23 роли → ~26 уникальных назначений, 10 инструментов (I1-I10).
 
 ## 4. IPO-паттерн ИИ-системы
 
