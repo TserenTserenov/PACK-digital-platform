@@ -57,7 +57,7 @@ tags: [context-engineering, llm, prompt-engineering, anthropic, memory-managemen
 
 1. **При написании CLAUDE.md / memory/** — это context engineering. Каждая строка = токен в окне агента. Удалять неиспользуемое.
 2. **При создании Pack entity** — summary обязателен (≤150 символов). Это не документация, это retrieval key.
-3. **При проектировании агента** — определить: что в always-in-context (Layer 0)? что on-demand (Layer 1-2)?
+3. **При проектировании роли агента** — определить: что в always-in-context (Layer 0)? что on-demand (Layer 1-2)?
 4. **Приоритетная тройка:** всегда проверяй — Write (артефакты созданы?), Select (релевантные загружены?), Compress (лишнее убрано?).
 
 ## 6. Harness Engineering: Context Engineering в масштабе (OpenAI 2026)

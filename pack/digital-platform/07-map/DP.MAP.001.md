@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 3 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
-| Distinctions (D) | 12 |
+| Distinctions (D) | 13 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 8 |
 | IWE (IWE) | 2 |
@@ -34,7 +34,7 @@ generated: true
 | SoTA Annotations (SOTA) | 14 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **121** |
+| **Total** | **122** |
 
 ## Distinctions
 
@@ -52,6 +52,7 @@ generated: true
 | DP.D.035 | Data Policy — политика данных IWE | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.003 | active |
 | DP.D.036 | BYOB Knowledge Architecture | Различение BYOB (Bring Your Own Backend) vs Managed: данные пользователя хранятся на его ресурсах, платформа даёт код и L2-знания. Связано с MCP Hub (ADR-018 v2) и контурами L2/L4. | draft |
 | DP.D.037 | Рабочий продукт как инструмент связи | РП — не красиво оформленные данные, а инструмент, показывающий связь между элементами и работающий на достижение миссии | active |
+| DP.D.040 | Мировоззрение → Pack: аналогия художника | Художник кодирует мировоззрение в произведение. Профессионал кодирует доменное знание в Pack. Оба трансформируют внутреннее в описание | active |
 
 ## Methods
 
