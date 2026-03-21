@@ -38,7 +38,7 @@ related:
 ### 3.1. Расположение
 
 ```
-DS-my-strategy/inbox/unsatisfied-questions.md
+DS-my-strategy/current/unsatisfied-questions.md
 ```
 
 ## 4. Жизненный цикл
