@@ -375,6 +375,17 @@ Pack — предметная база знаний (source-of-truth для до
 **Как проверить MCP?**
 Откройте Claude Code в папке экзокортекса → попросите «Найди документы про принципы». Claude должен использовать `knowledge-mcp search` и вернуть результаты.
 
+### Мониторинг и Health Check
+
+**Что такое IWE Health Check?**
+Ежедневный автоматический отчёт о здоровье IWE. Запускается GitHub Actions в 04:00 MSK, отправляет сводку в Telegram. Проверяет: коммиты по всем репо за 24ч (с топ-5 активных), наличие DayPlan и WeekPlan, свежесть backup (<48ч), незакрытые Claude Code сессии, статус бота, WP-статистику (в работе / ожидают), активность за 7 дней. Итог — светофор: 🟢 всё ок / 🟡 требует внимания / 🔴 проблемы.
+
+**Как настроить Health Check?**
+Базовый уровень работает сразу из шаблона (метрики одного strategy-репо). Для расширения — добавьте GitHub Variables (Settings → Variables → Actions): `HEALTH_CHECK_REPOS` (список репо через запятую: `owner/repo, owner/repo2`) и `BOT_HEALTH_URL` (URL health endpoint бота). Telegram-уведомления — через Secrets: `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`. Все переменные опциональные.
+
+**Можно ли запустить Health Check вручную?**
+Да. GitHub → Actions → IWE Cloud Scheduler → Run workflow → task: `health-check`. Или CLI: `gh workflow run cloud-scheduler.yml --field task=health-check`.
+
 ### Кастомизация
 
 **Как сменить день стратегирования?**
