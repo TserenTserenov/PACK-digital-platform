@@ -44,7 +44,7 @@ related:
 L2 Platform (remote, наш)          L4 Personal (BYOB, пользователя)
 ├── ZP, FPF, SPF                    ├── PACK-my-domain-1/
 ├── PACK-digital-platform           ├── PACK-my-domain-2/
-├── PACK-education                  ├── DS-my-strategy/
+├── PACK-MIM                  ├── DS-my-strategy/
 ├── PACK-MIM                        └── DS-my-projects/
 ├── PACK-personal
 ├── courses, guides
