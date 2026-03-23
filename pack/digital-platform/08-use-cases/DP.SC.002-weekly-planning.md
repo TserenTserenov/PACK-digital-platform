@@ -54,6 +54,11 @@ related:
 
 **Детали реализации:** см. соответствующие описания методов в [PROCESSES.md](../../../../DS-ecosystem-development/PROCESSES.md)
 
+## Инварианты
+
+1. **Результаты месяца из Strategy.md:** WeekPlan наследует формулировки R1-R{N} из `Strategy.md § Результаты месяца` дословно. Session Prep обязан прочитать Strategy.md перед формированием WeekPlan.
+2. **Полнота:** WeekPlan содержит ВСЕ активные РП (in_progress, pending с date ≤ W{N}, dep-ready). Пропуск = расхождение.
+
 ## Связь с другими обещаниями
 
 - Порождает входные данные для **DP.SC.001** (WeekPlan → DayPlan)
