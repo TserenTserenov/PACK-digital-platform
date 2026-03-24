@@ -110,6 +110,7 @@ related:
 | S50 | **Template Update** | [R9 Шаблонизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | update-manifest.json (GitHub) + локальные файлы | Обновлённые платформенные файлы (CLAUDE.md, memory/, roles/, skills/) | R14 Заказчик | I2 bash → [update.sh](../../../../FMT-exocortex-template/update.sh) | 👤 `bash update.sh` | [PROCESSES](../../../../DS-IT-systems/DS-ai-systems/setup/PROCESSES.md) |
 | S61 | **Cloud Scheduler** | [R8 Синхронизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Расписание + конфиг (day-rhythm-config.yaml) | Запуск задач (reindex, sync, backup, strategist) | R14 Заказчик | GitHub Actions (базовый) / VPS + Claude Agent SDK (продвинутый) | ⏰ cron (11x/день) | [DP.SC.019](../08-use-cases/DP.SC.019-autonomous-cloud-runtime.md) |
 | S62 | **IWE Telegram Gateway** | [R8 Синхронизатор](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Telegram-команда (/plan, /note, /status) | Ответ (DayPlan, статус, подтверждение заметки) | R14 Заказчик | I1 Bot (Python, Railway) | ⚡ Telegram-команда | [DP.SC.019](../08-use-cases/DP.SC.019-autonomous-cloud-runtime.md) |
+| S51 | **Principles Training** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Принцип + текущая глубина + cognitive level | Задание + ИИ-оценка ответа + прогресс (depth) | R16 Ученик | A1 Sonnet → I1 Bot | 👤 `/train` | [PROCESSES](../../../../DS-IT-systems/aist_bot_newarchitecture/PROCESSES.md) |
 | S60 | **HW-Discussion** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Замечание проверки + норматив + вопрос ученика | Разъяснение по замечанию (TG message) | R16 Ученик | A1 Haiku → I1 Bot | ⚡ вопрос по замечанию | — |
 
 ---
@@ -122,7 +123,7 @@ related:
 |----|----------|---------|
 | [SC.001](../08-use-cases/DP.SC.001-daily-planning.md) | Планирование дня | S01, S42, S44, S45 |
 | [SC.002](../08-use-cases/DP.SC.002-weekly-planning.md) | Планирование и ревью недели | S02, S03, S05, S06, S07, S08, S41 |
-| [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37, S48 |
+| [SC.003](../08-use-cases/DP.SC.003-learning-and-development.md) | Обучение и развитие | S12, S13, S14, S15, S16, S37, S48, S51 |
 | [SC.004](../08-use-cases/DP.SC.004-knowledge-capture.md) | Фиксация и экстракция знаний | S04, S09, S10, S11, S22, S39, S40 |
 | [SC.005](../08-use-cases/DP.SC.005-content-publishing.md) | Публикация контента | S25, S26, S27, S28, S46, S47 |
 | [SC.006](../08-use-cases/DP.SC.006-automated-maintenance.md) | Автоматическое обслуживание | S17, S18, S19, S20, S21, S22, S23, S24, S49, S50 |
