@@ -10,7 +10,7 @@ created: 2026-03-17
 updated: 2026-03-17
 related:
   realizes: [S35, S36, S38, S43]
-  uses: [DP.WP.012]
+  uses: [DP.M.008, DP.WP.012]
 ---
 
 # [DP.SC.009] Аналитика и метрики
