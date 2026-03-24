@@ -10,7 +10,7 @@ created: 2026-03-17
 updated: 2026-03-17
 related:
   realizes: [S01, S02, S03, S04, S05, S42]
-  uses: [DP.M.003, DP.WP.003, DP.WP.004, DP.WP.005]
+  uses: [DP.M.003, DP.M.008, DP.WP.003, DP.WP.004, DP.WP.005]
 ---
 
 # [DP.SC.010] Рабочий ритм (ОРЗ)
