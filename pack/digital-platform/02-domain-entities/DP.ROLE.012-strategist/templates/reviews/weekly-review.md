@@ -4,9 +4,13 @@ week: YYYY-WXX
 period: YYYY-MM-DD / YYYY-MM-DD
 status: published
 agent: Strategist
+note: "Формат секции — вставляется в WeekPlan как «Итоги W{N}», отдельный файл НЕ создаётся"
 ---
 
 # Итоги недели [номер]: [даты]
+
+> **Использование:** Этот шаблон определяет формат секции «Итоги W{N}», которая добавляется
+> в конец файла WeekPlan (`current/weeks/YYYY-MM-DD--DD.md`). Отдельный файл WeekReport не создаётся.
 
 ## Ключевые результаты
 

@@ -40,7 +40,7 @@ created: 2026-02-07
 |---|----------|------|---------|-------|
 | 1 | Strategy Session | [01-strategy-session.md](scheduled/01-strategy-session.md) | 7:00 Пн | План недели + сдвиг месяца |
 | 2 | Day Plan | [02-day-plan.md](scheduled/02-day-plan.md) | 7:00 ежедневно | План дня + апдейт вчера |
-| 3 | Week Review | [03-week-review.md](scheduled/03-week-review.md) | 22:00 Вс | Итоги недели (для клуба) |
+| 3 | Week Review | [03-week-review.md](scheduled/03-week-review.md) | 22:00 Вс | Секция «Итоги W{N}» в WeekPlan + пост для клуба |
 | 4 | Month Report | [04-month-report.md](scheduled/04-month-report.md) | Последний день месяца | Отчёт за месяц |
 | 5 | Note-Review | [05-note-review.md](scheduled/05-note-review.md) | 23:00 ежедневно | Классификация заметок + предложения |
 
