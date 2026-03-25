@@ -135,7 +135,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 
 | # | Роль | Suprasystem | Сервисы (описания методов) | Вход | Выход (РП) |
 |---|------|-------------|---------------------------|------|------------|
-| R1 | **Стратег** | Экзокортекс | Day-plan, Session-prep, Note-review, Week-review, Interactive | WeekPlan, inbox, коммиты, MAPSTRATEGIC | WeekPlan, DayPlan, WeekReport |
+| R1 | **Стратег** | Экзокортекс | Day-plan, Session-prep, Note-review, Week-review, Interactive | WeekPlan, inbox, коммиты, MAPSTRATEGIC | WeekPlan (с секцией «Итоги W{N}»), DayPlan |
 | R2 | **Экстрактор** | Экзокортекс | Knowledge Extraction, Inbox Check, Ontology Sync | captures.md, сессионные артефакты, Pack | Pack-сущности, Extraction Report |
 | R3 | **Консультант** | Платформа DP | Q&A, DZ-Check, Content Pre-Gen, Feed Delivery | Вопрос ученика, knowledge-mcp, DT | Ответы, оценки, контент |
 | R4 | **Автор** | Экосистема | Post-Writing, Presentation, Description | Content plan, knowledge-mcp | Посты (md), презентации (Marp) |

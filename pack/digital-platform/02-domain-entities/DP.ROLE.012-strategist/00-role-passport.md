@@ -91,7 +91,7 @@ related:
 | `~/IWE/DS-strategy/current/` | Агрегированные планы (HUB) |
 | `~/IWE/*/WORKPLAN.md` | Планы каждого репо (SPOKE) |
 | `~/IWE/DS-strategy/dissatisfactions/` | Неудовлетворённости |
-| `~/IWE/DS-strategy/reviews/` | История ревью |
+| `~/IWE/DS-strategy/current/weeks/` | Итоги недель (секции в WeekPlan) |
 | Git log (все репо) | Коммиты за период |
 
 ### 3.1.1. Hub-and-Spoke архитектура
@@ -135,7 +135,7 @@ related:
 | План недели | `current/weeks/YYYY-MM-DD--DD.md` | РП на неделю + бюджет |
 | Приоритеты месяца | `current/monthly-priorities.md` | Фокусы + бюджет |
 | Ревью дня | (в плане следующего дня) | Апдейт + статистика |
-| Ревью недели | `reviews/weekly/YYYY-WXX.md` | Итоги для клуба |
+| Итоги недели | Секция «Итоги W{N}» в `current/weeks/YYYY-MM-DD--DD.md` | Итоги в WeekPlan + пост для клуба |
 | Отчёт месяца | `reviews/monthly/YYYY-MM.md` | Итоги месяца |
 
 ### 4.2. События
@@ -234,7 +234,7 @@ context:
 | `plan_completion_rate` | >70% РП завершено |
 | `budget_accuracy` | ±30% от плана |
 | `daily_plan_created` | 100% рабочих дней |
-| `weekly_review_published` | 100% недель |
+| `weekly_summary_published` | 100% недель |
 
 ## 9. Интеграции
 
