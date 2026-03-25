@@ -38,7 +38,7 @@ related:
 ### 3.1. Расположение
 
 ```
-DS-my-strategy/current/unsatisfied-questions.md
+DS-agent-workspace/scheduler/feedback-triage/YYYY-MM-DD.md
 ```
 
 ## 4. Жизненный цикл
