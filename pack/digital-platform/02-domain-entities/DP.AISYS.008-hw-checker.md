@@ -75,17 +75,16 @@ related:
 
 | Компонент | Технология | Владелец |
 |-----------|-----------|----------|
-| Workflow | n8n (hw-checker-v2) | Ильшат Габдуллин |
+| Workflow | n8n (hw-checker-v2) | Церен Церенценов |
 | LLM | Claude Haiku 4.5 (Anthropic API) | Anthropic |
 | Семантический поиск | guides-mcp (Cloudflare Worker) | DS-MCP |
-| Vector store | SurrealDB | DS-MCP |
-| Embeddings | OpenAI text-embedding-3-small | OpenAI |
+| Vector store | Neon pgvector (HNSW) | DS-MCP |
+| Embeddings | CF AI BGE-M3 (1024d, бесплатно) | Cloudflare |
 
 ## 5. Зависимости (implementation)
 
-- **guides-mcp** (`https://guides-mcp.aisystant.workers.dev/mcp`) — MCP-сервер для доступа к руководствам. Исходники: `DS-MCP/guides-mcp/`.
-- **SurrealDB** — хранилище чанков руководств с векторными эмбеддингами.
-- **OpenAI Embeddings** — генерация векторов запросов для семантического поиска.
+- **guides-mcp** (`https://guides-mcp.aisystant.workers.dev/mcp`) — MCP-сервер для доступа к руководствам. Исходники: `DS-MCP/guides-mcp/`. Backend: Neon pgvector (HNSW) + CF AI BGE-M3 (1024d). Latency <1 сек (после миграции WP-168, 2026-03-25).
+- **Anthropic API** — Claude Haiku 4.5 через n8n AI Agent.
 
 ## 6. Описание системы (DS)
 
@@ -93,4 +92,4 @@ related:
 
 ---
 
-*Создан: 2026-03-02*
+*Создан: 2026-03-02. Обновлён: 2026-03-26 (§§4-5: SurrealDB/OpenAI → Neon pgvector/CF AI BGE-M3)*
