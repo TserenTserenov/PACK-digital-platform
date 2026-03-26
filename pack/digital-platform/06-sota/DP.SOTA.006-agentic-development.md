@@ -57,7 +57,29 @@ tags: [agentic, multi-agent, orchestration, anthropic, claude-code, development]
 3. **При оркестрации** — агенты работают параллельно, не последовательно, если задачи независимы.
 4. **Не делегировать 100%** — человек остаётся в петле (human-in-the-loop) для валидации.
 
-## 6. Источники
+## 6. Production Coordination Metrics (2026)
+
+> Обогащение: Scout 26 мар 2026 (IBM Research, LangGraph, Kanerika)
+
+**Coordination challenge:** interaction count grows exponentially with agent count → coordination cost explodes.
+
+| Метрика | Значение | Источник |
+|---------|----------|---------|
+| Process hand-offs | **-45%** с intelligent routing | IBM Research |
+| Decision speed | **3x improvement** | IBM Research |
+| Multi-agent unmanageable threshold | **>5 agents** (75% систем) | LangGraph 2026 |
+| Pilot-to-production success rate | **10-15%** | Iterathon 2026 |
+
+**Mitigation strategies:**
+- Team size limits: 3-7 agents per workflow, hierarchical beyond that
+- Centralized (supervisor) vs decentralized — trade-off: clear control vs flexibility
+- Intelligent routing: different models for different complexity (cost optimization)
+
+> Подробнее: AS.SOTA.003 (governance), AS.FM.015 (communication failures)
+
+## 7. Источники
 
 - Anthropic. «2026 Agentic Coding Trends Report» (2026)
 - The New Stack. «5 Key Trends Shaping Agentic Development in 2026» (2026)
+- IBM Research. Multi-agent coordination metrics (2026)
+- Iterathon. «Agent Orchestration 2026» (2026)

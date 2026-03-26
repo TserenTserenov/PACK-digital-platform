@@ -75,7 +75,33 @@ OpenAI применили Context Engineering как один из трёх ко
 
 **Ключевой инсайт (Can Boluk, 2026):** изменение только обвязки (не модели) улучшило результаты 15 LLM на 5-14 п.п. Harness > Model. См. DP.D.025.
 
-## 7. Источники
+## 7. Production Performance (Gartner 2026)
+
+> Обновление: Scout 26 мар 2026. CE officially replaced PE as dominant paradigm.
+
+**Adoption stats (2026):**
+- 57% organizations have AI agents in production (LangChain 2025)
+- 32% cite quality as top barrier → traced to poor context management, NOT LLM capabilities
+- 65% enterprise AI failures = context drift, не token limits
+
+**Performance metrics:**
+- Response time: +50% improvement
+- Output quality: +40% higher
+- ROI: measurable, justifies AI investments
+
+**Paradigm shift marker:** Gartner defines CE as «programmatic assembly of the Context Package — data, workflows, environment — enabling AI to understand intent without manual prompts.»
+
+**5 техник CE (deepset framework, 2026):**
+
+| Техника | Описание | Реализация в IWE |
+|---------|----------|-----------------|
+| **RAG** | Embedding-based retrieval внешних знаний | Pack entities → vector DB → агенты |
+| **Context Summarization** | Сжатие длинных историй для token limits | Multi-turn dialogs → compressed view |
+| **Memory Systems** | Short-term + long-term (vector stores) | Сессия (ephemeral) + ЦД/Pack (persistent) |
+| **Tool Integration** | Форматирование tool schemas в context | Agent tool libraries, MCP servers |
+| **System Prompts & Templates** | Структурированные high-level инструкции | CLAUDE.md (platform → role → task layers) |
+
+## 8. Источники
 
 - Anthropic. «Effective Context Engineering for AI Agents» (2025)
 - Lutke T. Context Engineering definition (Shopify, 2025)
@@ -84,3 +110,6 @@ OpenAI применили Context Engineering как один из трёх ко
 - OpenAI. «Harness Engineering: Leveraging Codex in an Agent-First World» (2026-02-11)
 - Boluk C. «The Harness Problem» (2026-02-12)
 - Fowler M. «Harness Engineering» (2026)
+- Gartner. «Context Engineering for Enterprise AI Success» (2026)
+- LangChain. «State of Agent Engineering 2025» report
+- deepset. «Context Engineering: The Next Frontier Beyond Prompt Engineering» (2026)
