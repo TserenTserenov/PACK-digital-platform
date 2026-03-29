@@ -67,7 +67,27 @@ tags: [world-model, llm, embodied-intelligence, open-endedness, lecun, schmidhub
 
 Не пытаться превратить LLM в world model. Вместо этого — строить harness, который компенсирует отсутствие measurement loop.
 
-## 6. Источники
+## 6. World Models Race (Q1 2026)
+
+> Обновление: Scout 29 мар 2026. Источники: Introl, Built In.
+
+**Взрыв инвестиций (late 2025 — early 2026):**
+
+| Проект | Организация | Масштаб | Фокус |
+|--------|-------------|---------|-------|
+| **AMI Labs** | Yann LeCun (ex-Meta FAIR) | €500M | Autonomous Machine Intelligence, JEPA-архитектура |
+| **Genie 3** | Google DeepMind | — | Real-time 3D generation (24 fps), interactive environments |
+| **Marble** | World Labs (Fei-Fei Li) | — | Spatial intelligence, 3D understanding |
+
+**Ключевой тезис (consensus 2026):**
+Агенты **не могут generalize** без predictive model мира — «no model-free shortcut». Agentic reasoning paper (arxiv 2601.12538) = world models central to planning (Layer 1, AS.SOTA.006).
+
+**Связь с IWE:**
+- Будущие Hub agents: embodied reasoning через world model (не текущий приоритет)
+- DP.ARCH.003 (ЦД): Layer 3 ЦД = world model? (открытый вопрос)
+- Текущая стратегия: harness + human-in-the-loop (§5), не попытка превратить LLM в world model
+
+## 7. Источники
 
 - Ha D., Schmidhuber J. «World Models» (2018). arxiv 1803.10122
 - Hafner D. et al. «Dream to Control: Learning Behaviors by Latent Imagination» (Dreamer, 2019). arxiv 1912.01603

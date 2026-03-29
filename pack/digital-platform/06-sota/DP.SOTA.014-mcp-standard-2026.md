@@ -44,7 +44,24 @@ tags: [mcp, ai-agents, integration, standards]
 
 Пересмотреть при: (1) появлении конкурирующего протокола с >50% adoption, (2) существенном изменении спецификации MCP, несовместимом с текущей архитектурой.
 
-## 5. Связанные документы
+## 5. 2026 Roadmap Priorities (обновление: Scout 29 мар 2026)
+
+> Источники: MCP Blog 2026 Roadmap, The New Stack, Use Apify MCP 2026
+
+**4 приоритета core maintainers:**
+
+| # | Приоритет | Описание | Влияние на IWE |
+|---|-----------|----------|----------------|
+| 1 | **Transport scalability** | Stateful sessions × load balancers problem, horizontal scaling workarounds → streamable HTTP improvements | WP-187 (Ory MCP integration) |
+| 2 | **Agent communication** | Longer-running work: agents trigger multi-day tasks | WP-171 (Activity Hub multi-day orchestration) |
+| 3 | **Governance maturation** | Audit trails, SSO, gateway behavior, config portability для enterprise | R2 Архитектура — governance layer |
+| 4 | **Enterprise readiness** | 1000+ connectors, major vendors adopted | Экосистема MCP-серверов IWE |
+
+**Market:** $1.8B (2025). All major vendors adopted (OpenAI, Anthropic, Google, Amazon).
+
+**Clarification:** MCP = **open specification** with growing adoption, NOT ISO/IEC standard.
+
+## 6. Связанные документы
 
 - [DP.SOTA.002](./DP.SOTA.002-context-engineering.md) — Context Engineering (MCP реализует Select/Isolate)
 - [DP.EXOCORTEX.001](../02-domain-entities/DP.EXOCORTEX.001-modular-exocortex.md) — модульный экзокортекс

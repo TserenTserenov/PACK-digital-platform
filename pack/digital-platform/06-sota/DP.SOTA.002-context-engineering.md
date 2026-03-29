@@ -101,7 +101,24 @@ OpenAI применили Context Engineering как один из трёх ко
 | **Tool Integration** | Форматирование tool schemas в context | Agent tool libraries, MCP servers |
 | **System Prompts & Templates** | Структурированные high-level инструкции | CLAUDE.md (platform → role → task layers) |
 
-## 8. Источники
+## 8. Best Practices 2026 (обновление: Scout 29 мар 2026)
+
+> Проблема НЕ в capability (модели обрабатывают 1M+ токенов) — проблема в **providing right info, right time, right amount**.
+
+| Паттерн | Описание | Реализация в IWE |
+|---------|----------|-----------------|
+| **Sliding window + summarization** | Недавние повороты — полностью, старые — сжимаются | Conversation compression в Claude Code |
+| **Context routing** | Classify query → загружать только релевантный KB | WP Gate → Layer 0/1/2 загрузка по задаче |
+| **Tool loadout optimization** | >30 tools = confusion, нужен dynamic selection | MCP-серверы: подключать по роли, не все сразу |
+| **RAG not obsolete** | Anthropic: >100K токенов degraded reasoning | Pack entities = structured RAG через knowledge-mcp |
+
+**Challenges (2026):**
+- **Context rot:** poorly curated info degrades performance (аналог: устаревшие memory/ файлы)
+- **Mode collapse:** alignment reduces diversity (risk при слишком жёстких constraints)
+
+**Источники:** SwirlAI Newsletter (2026), LogRocket «LLM Context Problem» (2026), Comet ML «CE Best Practices» (2026)
+
+## 9. Источники
 
 - Anthropic. «Effective Context Engineering for AI Agents» (2025)
 - Lutke T. Context Engineering definition (Shopify, 2025)
