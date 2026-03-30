@@ -244,7 +244,7 @@ tags: [operating-rules, method, iwe, orz, process, governance]
 | `.claude/skills/` | Ритуалы и оценки (lazy loaded by command) |
 | `.claude/rules/` | Различения и форматирование (auto loaded) |
 | `DS-strategy/CLAUDE.md` | Стоп-лист, WP Gate details |
-| `08-use-cases/` | Обещания, реализующие правила (см. §6 Traceability) |
+| `08-service-clauses/` | Обещания, реализующие правила (см. §6 Traceability) |
 | **Этот документ** | Source-of-truth для содержания правил |
 
 ## 5. Метрики здоровья
@@ -258,7 +258,7 @@ tags: [operating-rules, method, iwe, orz, process, governance]
 
 ## 6. Traceability: правила ↔ обещания (UC)
 
-Каждое правило связано с обещаниями (08-use-cases/) одним из трёх способов:
+Каждое правило связано с обещаниями (08-service-clauses/) одним из трёх способов:
 
 | Класс | Как правило отражается в UC | Правила |
 |-------|----------------------------|---------|
@@ -288,4 +288,4 @@ tags: [operating-rules, method, iwe, orz, process, governance]
 **Синхронизация (двусторонняя):**
 - **Правило изменилось** (добавлено / удалено / переформулировано) → проверить затронутые UC по матрице → обновить шаги/инварианты в UC.
 - **UC добавлен** → проверить покрытие правил → обновить матрицу.
-- **Точка проверки:** Week Close (правило #14, SC.011 шаг 6). Механизм: `git diff` за неделю по `03-methods/` и `08-use-cases/`.
+- **Точка проверки:** Week Close (правило #14, SC.011 шаг 6). Механизм: `git diff` за неделю по `03-methods/` и `08-service-clauses/`.
