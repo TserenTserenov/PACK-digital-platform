@@ -124,6 +124,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | I8 | Оценщик | Инструмент | 2 | DS-ai-systems |
 | I9 | Публикатор (bot scheduler) | Инструмент | 1 | DS-ai-systems |
 | I10 | WakaTime (SaaS + VS Code ext) | Инструмент | 0 | — (wakatime.com) |
+| I11 | Профилировщик (Python) | Инструмент | 1 | DS-ai-systems/profiler |
 
 ### 3.2. Каталог ролей платформы
 
@@ -144,6 +145,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | R7 | **Триажёр техдолга** | Платформа DP | Auto-Triage, Triage-Session | feedback_triage DB, inbox | Приоритизированный backlog, алерты |
 | R22 | **Оркестратор** | Система персонального развития | Orchestration Dispatch, Rhythm Adaptation | ЦД (состояние, engagement), config | Решение о составе цикла на день |
 | R27 | **Портной** | Система персонального развития | Portion Assembly | Программа, ЦД (профиль, история, стиль), ячейки | Персональная дневная порция |
+| R28 | **Профилировщик** | Система персонального развития | DT Profile Calculation, DT Profile Sync | 2_collected (engagement), learning_history (BKT) | 3_derived в digital_twins (ступень, mastery, gaps, агентность) |
 
 > **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
 >
