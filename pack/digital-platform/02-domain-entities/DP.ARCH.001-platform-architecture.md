@@ -445,6 +445,15 @@ Platform-space (обогащённое знание)
 
 Модульный CLAUDE.md + Memory — конфигурация взаимодействия пользователя с ИИ-системами. Platform-space (общие модули) + user-space (персональный контекст).
 
+**Два режима подключения (Gateway-архитектура, DP.IWE.003):**
+
+| Режим | Аудитория | Точка входа |
+|---|---|---|
+| **Gateway** (массовый) | Нетехническая аудитория | Один MCP Gateway URL + OAuth (claude.ai, ChatGPT, Cursor, Telegram) |
+| **Direct CLI** (технари) | VS Code + Claude Code | `.mcp.json`, прямое подключение MCP |
+
+CLAUDE.md пользователя хранится в его git-репо и доставляется knowledge-mcp как system prompt через MCP `prompts`/`resources` endpoint — работает в любом клиенте, не только Claude Code.
+
 ### 8.3. Токены за активность
 
 ```
