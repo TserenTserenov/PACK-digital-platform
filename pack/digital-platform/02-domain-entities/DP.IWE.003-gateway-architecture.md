@@ -2,13 +2,14 @@
 id: DP.IWE.003
 name: Gateway-архитектура IWE
 type: domain-entity
-status: draft
+status: active
 created: 2026-03-31
+updated: 2026-04-01
 trust:
-  F: 2
+  F: 3
   G: domain
-  R: 0.4
-epistemic_stage: emerging
+  R: 0.7
+epistemic_stage: evidence
 related:
   uses: [DP.ARCH.001, DP.EXOCORTEX.001, DP.IWE.001, DP.IWE.002]
   enables: [DP.D.036]
@@ -76,6 +77,48 @@ personal-knowledge-mcp:
 | #11 Per-user blast radius | GitHub App token repo-scoped, RLS по user_id |
 | #13 ИИ-системы UI-agnostic | Gateway работает в любом клиенте |
 | #15 Multi-surface | Gateway = новая поверхность наряду с ботом, Web App, CLI |
+
+## 6a. Изоляция данных (multi-tenant)
+
+**Принятое решение (АрхГейт 2026-04-01):** namespace per user в pgvector (фильтр по `user_id`).
+
+| Фаза | Решение | Порог |
+|------|---------|-------|
+| **Сейчас → ~30к пользователей** | Namespace per user: фильтр `WHERE user_id = $1` + HNSW индекс на всю таблицу | 30к пользователей × ~1к векторов = 30М строк |
+| **При росте >30к** | Миграция на Qdrant: collection per user, отдельный HNSW индекс на коллекцию | ADR при достижении порога |
+
+**Обоснование:** pgvector с фильтром по `user_id` эффективен при ~30М строк. При превышении порога деградирует recall (ANN-поиск не партиционирован). Миграция на Qdrant — отдельное архитектурное решение, не требует изменения протокола MCP.
+
+**Безопасность:** `user_id` берётся из JWT-токена (Ory), не из параметра запроса. SQL-инъекция исключена на уровне ORM.
+
+## 6b. Переиндексация embeddings
+
+**Принятое решение:** webhook-триггер при push в Pack-репо пользователя.
+
+```
+Push в Pack-репо (GitHub)
+  → GitHub webhook → personal-knowledge-mcp
+  → Задача в очередь (async)
+  → Векторизация изменённых файлов
+  → Обновление embeddings в pgvector/Qdrant
+```
+
+**Гарантии:**
+- Пользователь не управляет индексом вручную
+- Задержка переиндексации: целевое ≤5 мин после push
+- Частичная переиндексация: только изменённые файлы (diff от предыдущего commit hash)
+- При сбое: retry с backoff, alert в логах платформы
+
+## 6c. Gateway latency SLA
+
+| Компонент | Целевое |
+|-----------|---------|
+| Gateway overhead (auth + routing) | ≤200ms |
+| Контекстный кэш (Pack не менялся) | ≤50ms (из кэша) |
+| Инвалидация кэша | При push в репо (тот же webhook, §6b) |
+| Полный путь вендорского AI → данные → ответ | ≤500ms (без LLM inference) |
+
+**Кэш:** TTL определяется commit hash репо. При совпадении hash — отдаём из кэша без чтения файлов.
 
 ## 8. Связанные документы
 

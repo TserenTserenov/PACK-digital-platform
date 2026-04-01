@@ -176,8 +176,11 @@ Platform-space (обогащённое знание)
 - **CLI permission whitelist** (settings.local.json): Явный allowlist команд → нет произвольного выполнения
 - **Secrets вне git:** Токены в `~/.config/`, `~/.wakatime/` — не в репозиториях
 
+**Решение (АрхГейт 2026-04-01):**
+- Multi-tenant isolation для embeddings: **namespace per user** (фильтр `WHERE user_id = $1` в pgvector). `user_id` из JWT-токена (Ory), не из параметра запроса. Порог миграции на Qdrant: ~30к пользователей. Детали: DP.IWE.003 §6a.
+- Multi-tenant isolation для ЦД (SurrealDB/Neon): RLS по `user_id` — решение сохраняется (DP.D.031 §3).
+
 **Открытые вопросы:**
-- Multi-tenant isolation в Neon (RLS vs schema vs DB) — решение не принято (DP.D.031 §3)
 - AI-специфичные угрозы: prompt injection, data poisoning — нет формальной модели угроз
 
 **Индикатор:** Экспонирует ли решение PII, секреты или персональные данные другим пользователям? Есть ли injection surface для LLM? Создаёт ли lock-in? Целевое: нет.
