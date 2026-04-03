@@ -43,16 +43,16 @@ related:
 
 | Канал | Юрисдикция | Юрлицо | Идентификатор | Комиссия | Сценарий |
 |-------|-----------|--------|---------------|----------|----------|
-| **YooKassa** | РФ | ООО | ory_id (email) | 2-3% | Подписки, курсы — основной поток |
-| **Paybox** | РФ | ООО | ory_id (email) | ~2% | Резервный провайдер РФ |
+| **YooKassa** | РФ | ИП | ory_id (email) | 2-3% | Подписки, курсы — основной поток |
+| **Paybox** | РФ | ИП | ory_id (email) | ~2% | Резервный провайдер РФ |
 | **Stripe** | Мир | Aisystant Corp (USA) | ory_id (email) | 2.9% + $0.3 | Подписки, курсы — международный |
-| **Монета/PayAnyWay** | РФ+СНГ+Мир | ООО | ory_id (email) | ~3-5% | Иностранные карты → рубли (через сайт) |
-| **Tilda + Ecwid** | РФ | ООО | email (из формы) | — | Витрина сайта events.system-school.ru |
+| **Монета/PayAnyWay** | РФ+СНГ+Мир | ИП | ory_id (email) | ~3-5% | Иностранные карты → рубли (через сайт) |
+| **Tilda + Ecwid** | РФ | ИП | email (из формы) | — | Витрина сайта events.system-school.ru |
 | **TG Stars** | Глобальный | — | telegram_id (без email) | ~30% | Семинары в боте — низкое трение |
 | **Баллы** | Внутренний | — | ory_id | 0% | Альтернативная оплата |
 | **Manual** | B2B | Любое | telegram_id или email | 0% | Вузовские группы, корпоративные |
 
-> **Два юрлица:** ООО (РФ) — YooKassa, Paybox, Монета, Tilda. Aisystant Corp (USA) — Stripe.
+> **Три получателя:** ИП (РФ) — YooKassa, Paybox, Монета, Tilda. Aisystant Corp (USA) — Stripe. Телеграм (физ.лицо) — TG Stars.
 > **Два хранилища:** Aisystant PG (каналы 1-5) + Neon (каналы 6-7, бот). Directus подключается к обоим (read-only).
 > **Детали:** `DS-ecosystem-development/0.OPS/0.9.Inbox/WP-183-unified-payments-proposal.md`
 
