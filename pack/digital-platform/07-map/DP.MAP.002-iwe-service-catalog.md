@@ -113,6 +113,9 @@ related:
 | S51 | **Principles Training** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Принцип + текущая глубина + cognitive level | Задание + ИИ-оценка ответа + прогресс (depth) | R16 Ученик | A1 Sonnet → I1 Bot | 👤 `/train` | [PROCESSES](../../../../DS-IT-systems/aist_bot_newarchitecture/PROCESSES.md) |
 | S52 | **DT Profile Calculation** | [R28 Профилировщик](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | 2_collected (engagement), learning_history (BKT) | 3_derived в digital_twins (ступень, mastery, gaps, агентность) | digital-twin-mcp, tailor-mcp, R22 Оркестратор, R27 Портной | I11 Профилировщик (Python) | ⏰ 04:30 MSK / ⚡ learning event | [system.yaml](../../../../DS-IT-systems/DS-ai-systems/profiler/system.yaml) |
 | S60 | **HW-Discussion** | [R3 Консультант](../02-domain-entities/DP.ROLE.001-platform-roles.md#агентские-роли-grade-2) | Замечание проверки + норматив + вопрос ученика | Разъяснение по замечанию (TG message) | R16 Ученик | A1 Haiku → I1 Bot | ⚡ вопрос по замечанию | — |
+| S63 | **Billing Service** | R27 Биллинг | Платёж (YooKassa/Stripe/Монета/Stars webhook) | Подтверждённая оплата + доступ | R16 Участник, R15 Бухгалтер | I1 Bot (Billing Module) + Aisystant LMS | ⚡ webhook от платёжного провайдера | handlers/showcase.py, handlers/workshop.py, [SC.112](../08-service-clauses/DP.SC.112-subscription-billing.md) |
+| S64 | **CRM Panel** | R22 CRM-менеджер | Оплаты из двух БД (Aisystant PG + Neon) | Отчёты, выгрузки, ручные оплаты | R15 Бухгалтер, R23 Маркетолог, R19 Декан, R16 Преподаватели | Directus (Railway) | 👤 запрос менеджера | WP-183, [SC.114](../08-service-clauses/DP.SC.114-crm.md) |
+| S65 | **Access Manager** | [R6 Кодировщик](../02-domain-entities/DP.ROLE.001-platform-roles.md#функциональные-роли-grade-0-со-смешанными-сценариями) | Подтверждённая оплата / подписка | Invite-ссылка в чат / одобрение заявки / кик неоплативших | R16 Участник | I1 Bot (workshop.py, showcase.py) | ⚡ оплата или ⏰ cron (маршрутка) | handlers/workshop.py, handlers/showcase.py, WP-181 |
 
 ---
 
@@ -141,6 +144,8 @@ related:
 | [SC.016](../08-service-clauses/DP.SC.016-collective-work-products.md) | Коллективное управление РП | S01, S02, S08 |
 | [SC.017](../08-service-clauses/DP.SC.017-adaptive-daily-assignment.md) | Адаптивное задание на день | — (новые сервисы TBD) |
 | [SC.018](../08-service-clauses/DP.SC.018-tier-upgrade-t3-t4.md) | Переход T3 → T4 | — (новые сервисы TBD) |
+| [SC.112](../08-service-clauses/DP.SC.112-subscription-billing.md) | Подписки и биллинг | S63, S65 |
+| [SC.114](../08-service-clauses/DP.SC.114-crm.md) | CRM | S64 |
 | [SC.117](../08-service-clauses/DP.SC.117-async-homework-review.md) | Асинхронная проверка и обсуждение ДЗ | S13, S37, S60 |
 
 ---
@@ -149,10 +154,10 @@ related:
 
 | Показатель | Значение |
 |------------|----------|
-| Всего сервисов | 50 |
+| Всего сервисов | 53 |
 | По расписанию (⏰) | 24 |
-| По событию (⚡) | 9 |
-| По запросу (👤) | 15 |
+| По событию (⚡) | 11 |
+| По запросу (👤) | 16 |
 | Уникальных ролей | 12 |
 | Уникальных инструментов | 10 (I1-I10) |
 | Систем | 9 |
