@@ -13,6 +13,7 @@ epistemic_stage: emerging
 related:
   refines: [DP.ARCH.001]
   uses: [DP.D.031, DP.D.035]
+  realized_by: [ADR-IWE-003]
 ---
 
 # BYOB Knowledge Architecture (DP.D.036)
@@ -61,17 +62,25 @@ L2 Platform (remote, наш)          L4 Personal (BYOB, пользовател�
 
 ## 4. Backend Interface
 
-Общий контракт для любого L4-хранилища:
+> **Реализационная спецификация:** [ADR-IWE-003](../../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/System-Implementations/ADR-IWE-003-gateway-backend-interface.md) — полный контракт MCP-серверов за Gateway, Knowledge Gate, pipeline подключения.
+
+Общий контракт для любого backend MCP за Gateway:
 
 ```typescript
-interface KnowledgeBackend {
-  search(query: string, embedding: number[], limit: number): Promise<SearchResult[]>
-  ingest(docs: Document[]): Promise<void>
-  listSources(): Promise<Source[]>
-}
+// Обязательный: MCP JSON-RPC (initialize, tools/list, tools/call, ping)
+// Обязательный инструмент: search(query, limit?) → SearchResult[]
+// SearchResult: { filename, source, score: [0,1], content_preview }
 ```
 
-Реализации: `NeonBackend`, `SupabaseBackend`, `SqliteBackend`.
+**Три текущие реализации:**
+
+| Backend | Контур | Хранилище | RLS |
+|---------|--------|-----------|-----|
+| knowledge-mcp | L2 Platform | Neon pgvector | Нет (публичное) |
+| personal-knowledge-mcp | L4 Personal | Neon pgvector | `WHERE user_id` (JWT) |
+| digital-twin-mcp | L2 per-user | Neon (реляционное) | `WHERE user_id` (JWT) |
+
+**Будущие реализации (BYOB):** пользователь деплоит свой MCP (Supabase pgvector, SQLite + vec0) → проходит Knowledge Gate → подключается к Gateway.
 
 ## 5. Связь с другими различениями
 
