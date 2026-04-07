@@ -24,7 +24,7 @@ generated: true
 | Distinctions (D) | 14 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 8 |
-| IWE (IWE) | 3 |
+| IWE (IWE) | 4 |
 | Methods (M) | 9 |
 | Maps (MAP) | 2 |
 | NAV (NAV) | 1 |
@@ -34,7 +34,7 @@ generated: true
 | SoTA Annotations (SOTA) | 14 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **130** |
+| **Total** | **131** |
 
 ## Distinctions
 
@@ -171,6 +171,7 @@ generated: true
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | — | active |
+| DP.IWE.004 | Интерфейсы IWE — различения клиентов | — | active |
 
 ### NAV
 
@@ -257,6 +258,7 @@ generated: true
 ## Warnings
 
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
+- Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
