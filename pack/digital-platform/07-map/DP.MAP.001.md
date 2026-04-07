@@ -17,7 +17,7 @@ generated: true
 
 | Kind | Count |
 |------|-------|
-| AISYS (AISYS) | 3 |
+| AISYS (AISYS) | 4 |
 | ARCH (ARCH) | 3 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
@@ -34,7 +34,7 @@ generated: true
 | SoTA Annotations (SOTA) | 14 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **132** |
+| **Total** | **133** |
 
 ## Distinctions
 
@@ -137,6 +137,7 @@ generated: true
 | DP.AISYS.008 | ДЗ-чекер | ИИ-система автоматической проверки домашних заданий учеников по нормативам из руководств | active |
 | DP.AISYS.013 | Знание-Экстрактор | Prompt-based ИИ-система экстракции знаний из сессий в Pack-совместимые сущности и DS docs/ через двойной routing | draft |
 | DP.AISYS.014 | AIST Bot | Telegram-бот экосистемы: тонкий клиент с сервисным реестром, ИИ-консультантом, биллингом и связью с цифровым двойником | draft |
+| DP.AISYS.015 | Анализатор проговаривания и письма | ИИ-система анализа текста/речи на предмет использования понятий, выявления мемов и обновления модели мастерства ученика | active |
 
 ### ARCH
 
