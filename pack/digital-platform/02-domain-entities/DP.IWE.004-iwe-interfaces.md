@@ -31,6 +31,8 @@ IWE-интерфейс — тонкий клиент, через который 
 | **VS Code** (Claude Code) | Claude Code CLI | Продвинутые. Полный экзокортекс |
 | **Antigravity** (Google/Gemini) | mcp_config.json | ⚠️ Ограничено: нет MCP OAuth — требует workaround |
 
+Подключение любого интерфейса через один Gateway URL: `mcp.aisystant.com/mcp`. Авторизация через Ory OAuth. Подписка «Бесконечное развитие» обязательна.
+
 ## 3. Таблица различений
 
 | Характеристика | Бот (Telegram) | Браузер (claude.ai) | Codex (OpenAI) | IDE (Cursor и др.) | VS Code (Claude Code) | Antigravity (Gemini) |
@@ -56,8 +58,6 @@ IWE-интерфейс — тонкий клиент, через который 
 
 ## 4. Режим подключения
 
-Все интерфейсы подключаются через один Gateway URL: `mcp.aisystant.com/mcp`.
-
 | Интерфейс | Как подключается к Gateway |
 |-----------|--------------------------|
 | Бот | HTTP-запросы с Bearer token (Ory) |
@@ -66,8 +66,6 @@ IWE-интерфейс — тонкий клиент, через который 
 | IDE (Cursor) | mcpServers конфиг + OAuth |
 | VS Code | .claude/settings.json + OAuth |
 | Antigravity (Gemini) | ⚠️ MCP OAuth не поддерживается (known limitation). Workaround: ручной Bearer token или прокси (Rube) |
-
-Авторизация во всех случаях через Ory (единый аккаунт system-school.ru). Подписка «Бесконечное развитие» обязательна.
 
 ## 5. Принцип: бот = точка входа
 
