@@ -237,8 +237,9 @@ GitHub, git, repo, fork, clone, commit, push, CLI, терминал, bash, npm, 
 | `github_connect` | ✅ deployed | GitHub App install flow |
 | `personal_write` / `personal_delete` | ✅ deployed | Чтение/запись/удаление через Gateway |
 | `get_instructions` | ✅ deployed | System prompt обновлён для auto-scaffold flow |
-| `github_status` / `github_disconnect` (С4) | ⚪ Ф6.5 pending | Workaround: ручная инструкция |
-| Прогрессивные триггеры (С5) | ⚪ Ф6.4 pending | AI предлагает переход |
+| `github_status` (С4) | ✅ deployed | Аккаунт, пространства, количество документов |
+| `github_disconnect` (С4) | ✅ deployed | Revoke installation + deactivate sources, данные в GitHub сохраняются |
+| Прогрессивные триггеры (С5) | ✅ deployed | Hints в get_instructions по количеству docs/sources/pack |
 | Пилотная приёмка (Ф5) | 🔄 in_progress | Набор 3-5 пользователей |
 
 ## Связь с другими обещаниями
