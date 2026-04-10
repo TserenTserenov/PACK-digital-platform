@@ -31,11 +31,11 @@ generated: true
 | NAV (NAV) | 1 |
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 43 |
+| SC (SC) | 44 |
 | SoTA Annotations (SOTA) | 14 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **135** |
+| **Total** | **136** |
 
 ## Distinctions
 
@@ -239,6 +239,7 @@ generated: true
 | DP.SC.021 | Mcp Knowledge Access | — | draft |
 | DP.SC.022 | Personal Knowledge Indexing | — | draft |
 | DP.SC.023 | Mcp Extensibility | — | draft |
+| DP.SC.024 | Iwe Maintenance | — | draft |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
 | DP.SC.103 | Работа над целевыми системами | Участник применяет методологию FPF к реальным проектам — от учёбы к созиданию | draft |
@@ -274,6 +275,7 @@ generated: true
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
 - Missing `summary`: DP.SC.023 (DP.SC.023-mcp-extensibility.md)
+- Missing `summary`: DP.SC.024 (DP.SC.024-iwe-maintenance.md)
 
 ---
 
