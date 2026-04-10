@@ -3,10 +3,11 @@ id: DP.FM.009
 name: Protocol Hardcoded Script Path
 category: method-failure
 severity: major
-status: active
+status: resolved
 summary: "Протокол ОРЗ хардкодит абсолютный путь к скрипту — ломается при любом перемещении скрипта. Симптом: exit 127 (no such file or directory)."
 created: 2026-04-10
 last_updated: 2026-04-10
+resolved_by: WP-219
 related:
   applies_to: [DP.M.008, DP.IWE.002]
   prevents: []
@@ -76,9 +77,27 @@ tags: [protocol, orz, infrastructure, maintenance, exit-127]
 
 ### Стратегические (root cause)
 
-1. **Lookup-слой для путей.** Ввести env-переменную `IWE_SCRIPTS=~/IWE/FMT-exocortex-template/scripts` в shell profile. Протоколы ссылаются на `$IWE_SCRIPTS/day-close.sh`. Перемещение внутри `scripts/` — ломает единственное место (переменную), а не N протоколов.
-2. **Wrapper-команды.** Алиасы `iwe-day-close`, `iwe-linear-sync` в PATH. Протокол не знает о физическом расположении скрипта.
-3. **CI проверка путей.** `validate-template.sh` расширить: grep всех абсолютных путей в protocol-*.md → проверить существование. Fail при битых путях.
+**Принятое решение (WP-219, 10 апр 2026):** lookup-слой через shell env-переменные. Выбрано по ЭМОГССБ (conjunctive ≥8) из 4 вариантов — env / wrapper-команды / оба / только CI-линтер. Env прошёл порог; wrapper не прошёл по экономичности (3+ часа работы для 10 скриптов) и совместимости (Windows PATH иначе); CI-линтер не прошёл по сопровождаемости (ловит симптом, не причину).
+
+**Реализация:**
+
+1. **Lookup-слой через env-переменные.** `~/.iwe-paths` (генерируется `setup.sh`) экспортирует:
+   ```bash
+   export IWE_WORKSPACE="$HOME/IWE"           # (или значение WORKSPACE_DIR из setup.sh)
+   export IWE_TEMPLATE="$IWE_WORKSPACE/FMT-exocortex-template"
+   export IWE_SCRIPTS="$IWE_TEMPLATE/scripts"
+   export IWE_ROLES="$IWE_TEMPLATE/roles"
+   ```
+   `~/.zshenv` содержит `[ -f "$HOME/.iwe-paths" ] && source "$HOME/.iwe-paths"` — загружается во всех zsh-сессиях, включая Bash tool агента.
+
+   Протоколы и скиллы ссылаются на `"$IWE_SCRIPTS/day-close.sh"`, `"$IWE_TEMPLATE"`, `"$IWE_WORKSPACE/FPF"` — не на абсолютные пути. Перемещение скрипта внутри `scripts/` ломает одну переменную, а не N протоколов. Переустановка IWE в другую директорию — перезаписывает `~/.iwe-paths`, старые ссылки не остаются.
+
+2. **CI проверка хардкодов.** `validate-template.sh` проверка №6: grep по `memory/protocol-*.md` и `.claude/skills/**/SKILL.md` — любая ссылка `FMT-exocortex-template/scripts` или `FMT-exocortex-template/roles/*/scripts` без `$IWE_` префикса → FAIL. Запускается автоматически при `template-sync.sh` и вручную.
+
+3. **Отклонённые варианты (для истории):**
+   - **Wrapper-команды** (`iwe-day-close` в PATH): лучше читаемость, но 3h+ работы, Windows PATH иначе, каждый скрипт = новый wrapper — не прошёл Экономичность.
+   - **Только CI-линтер** (без env-абстракции): нулевая миграция, но не устраняет корневую причину — протоколы всё равно хрупкие к рефакторингу. Не прошёл Сопровождаемость.
+   - **Комбинация env + wrapper:** двойная работа и двойной источник правды. Не прошёл Сопровождаемость.
 
 ## Типовые примеры
 
@@ -108,6 +127,7 @@ tags: [protocol, orz, infrastructure, maintenance, exit-127]
 ## История
 
 - **2026-04-10:** Создан после инцидента exit 127 при запуске day-close.sh из Day Close 9 апр. Источник: независимая верификация субагента показала нарушение DP.KR.001 §5.2 (failure mode = доменное знание → Pack, не только memory/).
+- **2026-04-10 (вечер):** WP-219 реализовал решение — lookup-слой `$IWE_SCRIPTS/$IWE_ROLES/$IWE_TEMPLATE/$IWE_WORKSPACE` через `~/.iwe-paths` + `~/.zshenv`. `setup.sh` шаг `[4d]` генерирует `~/.iwe-paths` при установке. `validate-template.sh` проверка №6 блокирует регрессии. АрхГейт ЭМОГССБ conjunctive ≥8 провели 4 варианта, env-вариант единственный прошёл порог.
 
 ---
 
