@@ -125,6 +125,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | I9 | Публикатор (bot scheduler) | Инструмент | 1 | DS-ai-systems |
 | I10 | WakaTime (SaaS + VS Code ext) | Инструмент | 0 | — (wakatime.com) |
 | I11 | Профилировщик (Python) | Инструмент | 1 | DS-ai-systems/profiler |
+| I12 | Capture-bus (shell hooks) | Инструмент | 1 | ~/IWE/.claude/ (harness-local) |
 
 ### 3.2. Каталог ролей платформы
 
@@ -631,6 +632,7 @@ grade: 2+
 | R12 | **Оценщик** | Платформа DP | Bloom Eval, WP Validation, Fixation | Ответ ученика + эталон, Pack entity draft | Bloom-оценка, валидация по SPF |
 | R13 | **Проводник** | Платформа DP | FSM Routing, Tier Gating, Progressive Disclosure | Запрос пользователя, user_profile.tier | FSM Transition, Access Control Decision |
 | R21 | **Публикатор** | Экосистема | Daily Scan, Scheduled Publish, Manual Publish, Comment Check | DS-Knowledge-Index (status=ready), scheduled_publications | Опубликованные посты, расписание, уведомления |
+| R29 | **Детектор** | Экзокортекс (L4 harness) | Capture Dispatch, Pattern Detection, Incident Emission | Harness JSON (tool_name, file_path, cwd, hook_event), DP.FM.010 каталог | Event JSON в incident-log целевого репо (OwnerIntegrity), capture_log.jsonl |
 
 > **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
 
@@ -803,6 +805,109 @@ related_roles:
 ```
 </details>
 
+<details>
+<summary><strong>R29 Детектор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Детектор"
+type: functional
+suprasystem: "Экзокортекс (L4 harness, claude code)"
+context: "Автоматическая фиксация паттернов провала агента в момент совершения, через capture-шину (~/IWE/.claude/). Source-of-truth контракта: DP.SC.025. Каталог паттернов: DP.FM.010"
+
+obligations:
+  - "Наблюдать tool-вызовы агента через harness hooks (PostToolUse, Stop)"
+  - "Сопоставлять наблюдение с одним паттерном из каталога DP.FM.010"
+  - "Эмитить event JSON при совпадении, пустой stdout иначе"
+  - "Никогда не блокировать основной поток работы агента (exit 0 всегда)"
+  - "Не иметь side-effects — только вычисление stdin→stdout"
+  - "Соблюдать latency-бюджет ≤150ms на детектор"
+  - "Следовать принципу OwnerIntegrity: target_repo определяется детерминированно, без fallback"
+  - "Стартовать в пассивном режиме (capture-only), промотироваться в блокирующий гейт только через 2 недели обкатки + fire rate > 0 + FP rate < 10%"
+
+expectations:
+  - from: "R5 Архитектор"
+    expects: "Дизайн нового детектора через IntegrationGate: обещание → сценарии → эта роль → реализация"
+  - from: "R6 Кодировщик"
+    expects: "Реализация по контракту (stdin JSON → stdout JSON или пусто, exit 0)"
+  - from: "R1 Стратег"
+    expects: "Incident-log в целевых репо как вход для R-вопросника Week Close (SC.024.3)"
+  - from: "R14 Заказчик"
+    expects: "Шина не блокирует работу агента, не пишет false positive > 10%"
+
+methods:
+  - name: "Capture Dispatch"
+    description: "capture-bus.sh: читает config/capture-detectors.sh, фильтрует enabled детекторы по triggers и cost_class, вызывает каждый с одинаковым stdin, передаёт stdout в writer"
+  - name: "Pattern Detection"
+    description: "detector_<pattern>.sh: парсит tool_name/file_path/cwd из stdin, проверяет паттерн (regex, allowlist, структурный признак), эмитит event JSON при совпадении"
+  - name: "Incident Emission"
+    description: "capture_writer.sh: резолвит target_repo (file_path → git root → hint → cwd), маршрутизирует по event_type (agent_incident → C2.3.Operations/Incidents/ в governance, docs/incidents/ в instrument), пишет append-only markdown + лог в capture_log.jsonl"
+
+work_products:
+  - product: "Event JSON (stdout детектора)"
+    recipient: "capture_writer.sh"
+    trigger: "Паттерн обнаружен на harness-событии"
+  - product: "Запись в incident-log-YYYY-MM.md"
+    recipient: "Целевой репо (где произошёл инцидент) — OwnerIntegrity"
+    trigger: "Writer успешно резолвил target_repo"
+  - product: "Запись в capture_log.jsonl"
+    recipient: "~/IWE/.claude/logs/ (операционный лог шины)"
+    trigger: "Каждое dispatcher-событие (fired/skip/detector_error/writer_reject)"
+
+scenarios:
+  - name: "Capture P3 structure_without_map"
+    trigger: "PostToolUse(Write) для .md файла в корне репо"
+    min_agency_grade: 0
+    method: "Pattern Detection + Incident Emission"
+    inputs: [harness_json, DP_FM_010_catalog, DP_KR_001_routing_map]
+    work_product: "Запись в incident-log целевого репо с pattern: P3_structure_without_map"
+  - name: "Passive observation of new detector"
+    trigger: "Новый детектор зарегистрирован в config с action: warn"
+    min_agency_grade: 0
+    method: "Capture Dispatch без блокировки"
+    inputs: [harness_json, config/capture-detectors.sh]
+    work_product: "Записи в capture_log (fire rate), incident-log (содержимое для ручного ревью FP)"
+  - name: "Aggregation input for R-questionnaire"
+    trigger: "Week Close (SC.024.3) — Стратег читает incident-log"
+    min_agency_grade: 0
+    method: "Incident Emission (за прошедший период)"
+    inputs: [incident-log за неделю]
+    work_product: "Входные данные для решения о новом правиле / различении / детекторе"
+
+current_holders:
+  - holder: "I12 Capture-bus (shell, ~/IWE/.claude/)"
+    grade: 1
+    covers_scenarios: [Capture-P3, Passive-Observation, Aggregation-Input]
+    instruments:
+      - "~/IWE/.claude/hooks/capture-bus.sh (dispatcher)"
+      - "~/IWE/.claude/lib/capture_writer.sh (writer)"
+      - "~/IWE/.claude/lib/resolve_target_repo.sh (OwnerIntegrity-резолвер)"
+      - "~/IWE/.claude/lib/log_formatter.sh"
+      - "~/IWE/.claude/detectors/detector_incident.sh (первый production-детектор)"
+      - "~/IWE/.claude/config/capture-detectors.sh (реестр)"
+      - "settings.json hooks (PostToolUse: Edit|Write|MultiEdit, Stop)"
+
+failure_modes:
+  - "Dispatcher не зарегистрирован — capture_log пустой, паттерны не ловятся молча"
+  - "Детектор падает — status: detector_error в capture_log, другие детекторы продолжают"
+  - "Target repo не резолвится — writer_reject, событие теряется (по инварианту — лучше потерять, чем дублировать)"
+  - "False positive rate > 10% — шина становится шумом, доверие теряется, R-вопросник перестаёт использовать incident-log"
+  - "Latency > 150ms — блокирует промоцию, требует оптимизации или отключения"
+  - "P10 skip IntegrationGate — новый детектор реализован без обещания и сценариев (мета-паттерн, WP-217 Ф8.1-8.3)"
+
+related_roles:
+  - role: "R5 Архитектор"
+    interaction: "Архитектор проектирует новый детектор через IntegrationGate, Детектор реализует контракт"
+  - role: "R6 Кодировщик"
+    interaction: "Кодировщик пишет shell-скрипты по контракту, Детектор их исполняет в runtime"
+  - role: "R1 Стратег"
+    interaction: "Детектор пишет incident-log → Стратег читает на Week Close → решения об эволюции правил"
+  - role: "R23 Верификатор"
+    interaction: "Разные масштабы: R29 — авто-детекция правилом в момент события. R23 — проверка артефакта по эталону с загрузкой контекста. Не пересекаются: если паттерн выразим как правило — R29, если требует LLM-рассуждения — R23"
+  - role: "R24 Аудитор"
+    interaction: "R24 находит накопившийся drift (coverage gaps). R29 ловит факт провала на лету. Взаимодополняющие"
+```
+</details>
+
 #### Роли верификации (PACK-verification, VR)
 
 > **Source-of-truth:** PACK-verification. Трансдоменные роли — применимы к артефактам всех Pack'ов и DS.
@@ -833,7 +938,7 @@ related_roles:
 
 > **Ключевое:** Стратег (R1) и Экстрактор (R2) не могут работать одновременно (один Claude Code process). Консультант (R3) работает через отдельный Claude API в боте — может параллельно.
 
-**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 9 инструментов (I1-I9), 23 роли (9 агентских + 7 функциональных + 7 пользовательских), ~41 сценарий. Репо: DS-ai-systems (монорепо, 8 систем).
+**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 12 инструментов (I1-I12), 24 роли (9 агентских + 8 функциональных + 7 пользовательских), ~44 сценария. Репо: DS-ai-systems (монорепо, 8 систем), ~/IWE/.claude/ (harness-local для R29 Детектор).
 
 ### 3.3. Мета-роли владельца (Platform Contours)
 
