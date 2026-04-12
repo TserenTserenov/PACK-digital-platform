@@ -633,6 +633,7 @@ grade: 2+
 | R13 | **Проводник** | Платформа DP | FSM Routing, Tier Gating, Progressive Disclosure | Запрос пользователя, user_profile.tier | FSM Transition, Access Control Decision |
 | R21 | **Публикатор** | Экосистема | Daily Scan, Scheduled Publish, Manual Publish, Comment Check | DS-Knowledge-Index (status=ready), scheduled_publications | Опубликованные посты, расписание, уведомления |
 | R29 | **Детектор** | Экзокортекс (L4 harness) | Capture Dispatch, Pattern Detection, Incident Emission | Harness JSON (tool_name, file_path, cwd, hook_event), DP.FM.010 каталог | Event JSON в incident-log целевого репо (OwnerIntegrity), capture_log.jsonl |
+| R30 | **Контекст-менеджер** | Экзокортекс (L4 Personal) | Repo Context Loading, Mandatory-Load Resolution, Context Scope Guard | Путь файла → репо, `<repo>/CLAUDE.md`, блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» | Загруженный репо-контекст (правила + указанные файлы), или сигнал P3 при нарушении |
 
 > **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
 
@@ -908,6 +909,92 @@ related_roles:
 ```
 </details>
 
+<details>
+<summary><strong>R30 Контекст-менеджер</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Контекст-менеджер"
+type: functional
+suprasystem: "Экзокортекс (L4 Personal, Claude Code)"
+context: "Ленивая загрузка репо-контекста при первом касании репозитория. Source-of-truth контракта: DP.SC.027. Принцип: lazy context loading (Fowler 2025, boliv 2025) — репо-CLAUDE.md загружается только при касании репо, не заранее. Аналог: Cursor .cursor/rules/ semantic scoping."
+
+obligations:
+  - "При первом содержательном действии с файлами репо — прочитать <repo>/CLAUDE.md до ответа"
+  - "Если в CLAUDE.md обнаружен блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» — загрузить указанные файлы до ответа"
+  - "Применять fallback chain (DS → Pack → Base) при отсутствии ответа в репо-CLAUDE.md"
+  - "Не загружать все репо-CLAUDE.md заранее (lazy, не eager) — context pollution prevention"
+  - "Держать репо-CLAUDE.md ≤50 строк (только домен-специфика, без дублирования корневых правил)"
+  - "Размещать блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в начале репо-CLAUDE.md (attention decay protection)"
+  - "При нарушении гейта (P3) — немедленно прочитать CLAUDE.md + скорректировать ответ при необходимости"
+
+expectations:
+  - from: "R6 Кодировщик"
+    expects: "Корректный контекст репо до первого ответа о размещении файла или структуре"
+  - from: "R1 Стратег"
+    expects: "Блоки «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в критических репо (DS-ecosystem-development, Pack-*)"
+  - from: "R14 Заказчик"
+    expects: "Ответы без инцидентов неверного размещения (P3)"
+  - from: "R29 Детектор"
+    expects: "Фиксация нарушения гейта как P3 в incident-log при обнаружении"
+
+methods:
+  - name: "Repo Context Loading"
+    description: "При первом действии с файлом в репо: определить корень репо по пути → Read <repo>/CLAUDE.md → выполнить блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» если присутствует → продолжить работу с загруженным контекстом"
+  - name: "Mandatory-Load Resolution"
+    description: "Парсить блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в CLAUDE.md → Read каждого указанного файла → вернуть загруженный контекст. Если файл не найден — предупредить, не блокировать."
+  - name: "Context Scope Guard"
+    description: "Гарантировать что правила данного репо не применяются к другим репо в той же сессии. Репо-контекст = скоуп конкретного репо. Нет глобального накопления всех репо-правил."
+
+work_products:
+  - product: "Загруженный репо-контекст"
+    recipient: "Текущая роль (R6, R2, R5 и др.) как входные данные для работы в репо"
+    trigger: "Первое содержательное действие с файлами репо"
+  - product: "Список незакрытых репо (без блока «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ»)"
+    recipient: "R1 Стратег — на Week Close (SC.024) для решения о добавлении блоков"
+    trigger: "Week Close R-вопросник"
+
+scenarios:
+  - name: "S1: Загрузка контекста сложного репо"
+    trigger: "Read/Edit файла в DS-ecosystem-development"
+    method: "Repo Context Loading + Mandatory-Load Resolution"
+    inputs: [file_path, DS-ecosystem-development/CLAUDE.md, 01-kernels-model.md, 02-document-families.md, 07-naming.md]
+    work_product: "Загруженный контекст матрицы 3×3 + правила размещения → корректный ответ без инцидента P3"
+  - name: "S2: Репо без CLAUDE.md"
+    trigger: "Read/Edit файла в репо без CLAUDE.md"
+    method: "Repo Context Loading (fallback)"
+    inputs: [file_path, корневой CLAUDE.md (уже загружен)]
+    work_product: "Работа продолжена без блокировки; предложение создать CLAUDE.md при обнаружении домен-специфики"
+  - name: "S3: Самокоррекция при нарушении"
+    trigger: "R29 Детектор зафиксировал P3 (ответ о репо без загрузки CLAUDE.md)"
+    method: "Немедленный Repo Context Loading"
+    inputs: [incident-log запись P3, <repo>/CLAUDE.md]
+    work_product: "Скорректированный ответ + incident-log запись в целевом репо"
+
+current_holders:
+  - holder: "A1 Claude Code (декларативно, через инструкцию в корневом CLAUDE.md)"
+    grade: 1
+    covers_scenarios: [S1, S2]
+    note: "Нет автоматического enforcement. Гейт работает через инструкцию агенту. Нарушения → R29 Детектор (P3)."
+
+failure_modes:
+  - "Агент не прочитал CLAUDE.md репо — P3 (игнорирование контекста). Фиксируется capture-шиной."
+  - "Блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в конце файла — attention decay, файлы могут быть пропущены"
+  - "Репо-CLAUDE.md > 50 строк с дублированием корневых правил — context pollution, противоречия"
+  - "Все репо-CLAUDE.md загружены одновременно — context overload (>100 правил), деградация без предупреждения"
+  - "Нет блока «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в критическом репо — агент не знает что загружать on-demand"
+
+related_roles:
+  - role: "R6 Кодировщик"
+    interaction: "Кодировщик исполняет работу, Контекст-менеджер обеспечивает правильные правила репо до начала"
+  - role: "R29 Детектор"
+    interaction: "Детектор фиксирует нарушение гейта (P3), Контекст-менеджер самокорректируется при обнаружении"
+  - role: "R1 Стратег"
+    interaction: "Стратег решает какие репо требуют блока «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» на Week Close"
+  - role: "R5 Архитектор"
+    interaction: "Архитектор проектирует структуру репо-CLAUDE.md (≤50 строк, начало файла, lazy принцип)"
+```
+</details>
+
 #### Роли верификации (PACK-verification, VR)
 
 > **Source-of-truth:** PACK-verification. Трансдоменные роли — применимы к артефактам всех Pack'ов и DS.
@@ -938,7 +1025,7 @@ related_roles:
 
 > **Ключевое:** Стратег (R1) и Экстрактор (R2) не могут работать одновременно (один Claude Code process). Консультант (R3) работает через отдельный Claude API в боте — может параллельно.
 
-**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 12 инструментов (I1-I12), 24 роли (9 агентских + 8 функциональных + 7 пользовательских), ~44 сценария. Репо: DS-ai-systems (монорепо, 8 систем), ~/IWE/.claude/ (harness-local для R29 Детектор).
+**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 12 инструментов (I1-I12), 25 ролей (10 агентских + 8 функциональных + 7 пользовательских), ~47 сценариев. Репо: DS-ai-systems (монорепо, 8 систем), ~/IWE/.claude/ (harness-local для R29 Детектор). R30 Контекст-менеджер — декларативная роль (нет отдельного инструмента, реализована через инструкцию в корневом CLAUDE.md + capture-шина R29 для нарушений).
 
 ### 3.3. Мета-роли владельца (Platform Contours)
 
