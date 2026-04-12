@@ -32,10 +32,10 @@ generated: true
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 47 |
-| SoTA Annotations (SOTA) | 14 |
+| SoTA Annotations (SOTA) | 15 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **141** |
+| **Total** | **142** |
 
 ## Distinctions
 
@@ -124,6 +124,7 @@ generated: true
 | DP.SOTA.012 | Multi-Representation Knowledge Architecture | Model/View эволюционировал в multi-representation: vector + graph + hierarchical index, отделённые от surface (бот, курс, API) | active |
 | DP.SOTA.013 | World Models | Переход от LLM (модели знаний о мире) к World Models (модели мира): замыкание цикла действие-измерение-обновление, три линии исследований, архитектурные импликации для AI-агентов | active |
 | DP.SOTA.014 | MCP как де-факто стандарт 2026 | Model Context Protocol — универсальный стандарт подключения AI-агентов к enterprise-инструментам. 97M+ скачиваний SDK, 75+ коннекторов | active |
+| DP.SOTA.015 | AI/LLM System Observability (3+1 Framework) | SOTA-модель observability для AI/LLM: 3-сигнальная телеметрия (Traces/Metrics/Logs) + AI-специфичный слой Evaluations. «4-слойная AI observability» как именованный стандарт не существует. | draft |
 
 ## Maps
 

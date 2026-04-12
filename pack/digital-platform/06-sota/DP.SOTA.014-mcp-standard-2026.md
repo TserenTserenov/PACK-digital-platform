@@ -61,7 +61,27 @@ tags: [mcp, ai-agents, integration, standards]
 
 **Clarification:** MCP = **open specification** with growing adoption, NOT ISO/IEC standard.
 
-## 6. Связанные документы
+## 6. Официальный Roadmap 2026 (обновление: Scout 12 апр 2026)
+
+> Источник: https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/
+
+**Приоритет 1: Transport scalability**
+Streamable HTTP → stateless multi-instance операция. Устраняет конфликты с load balancers при горизонтальном масштабировании MCP серверов. Критично для production Gateway deployments.
+
+**Приоритет 2: Enterprise readiness**
+Audit trails, SSO auth, gateway behavior, configuration portability.
+
+**Приоритет 3: Agent communication semantics**
+Task retry semantics, expiry policies для long-running agent tasks.
+
+**Adoption (апрель 2026):** OpenAI, Microsoft, Google, Amazon — все приняли MCP.
+Lead Maintainer: Den Delimarsky. Core: Clare Liguori добавлена.
+
+**Импликация для IWE:**
+- Stateless transport снимает current limitation Gateway MCP при scaling (WP-187)
+- Enterprise auth = foundation для платного доступа через MCP (R9 Knowledge Gateway)
+
+## 7. Связанные документы
 
 - [DP.SOTA.002](./DP.SOTA.002-context-engineering.md) — Context Engineering (MCP реализует Select/Isolate)
 - [DP.EXOCORTEX.001](../02-domain-entities/DP.EXOCORTEX.001-modular-exocortex.md) — модульный экзокортекс

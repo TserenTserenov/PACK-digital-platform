@@ -49,8 +49,34 @@ tags: [digital-twin, knowledge-graph, personal-ai, pkm, fused-knowledge-base]
 3. **Проекция, не копирование:** downstream показывает view двойника, не дублирует Pack.
 4. **При проектировании DDT** — определить: что в platform-space (общее для всех), что в user-space (персональное)?
 
-## 5. Источники
+## 5. 4-Stage DT AI Framework (обновление: Scout 12 апр 2026)
+
+> Источник: arxiv.org/abs/2601.01321 — «Digital Twin AI: Opportunities and Challenges from LLMs to World Models»
+
+### Lifecycle фреймворк интеграции AI в Digital Twins
+
+| Стадия | Описание | AI-роль |
+|--------|----------|---------|
+| **Modeling** | Создание модели системы | Классические методы |
+| **Mirroring** | Синхронизация состояния | ML, sensor fusion |
+| **Intervening** | Рекомендации, оптимизация | LLM as advisor |
+| **Autonomous Management** | Саморегулирующийся ЦД | Agents + foundation models |
+
+Последняя стадия: ЦД становится «proactive and self-improving cognitive system».
+
+**Три критических challenge для Autonomous Management:**
+1. Scalability — управление сложностью при росте
+2. Explainability — интерпретируемость решений агентов
+3. Trustworthiness — верификация автономных действий ЦД
+
+11 прикладных доменов (от промышленности до персональных систем).
+
+**Импликация для IWE:**
+WP-218 находится на стадии Mirroring→Intervening (3_derived, calculator engine). Autonomous Management = горизонт R6/R10. Три challenges соответствуют WP-212 (trustworthiness), WP-217 (explainability через capture), WP-218 (scalability через profiler).
+
+## 6. Источники
 
 - World Scientific. «Knowledge-Enhanced Digital Twin Systems» (2026)
 - Personal.ai. «AI Digital Twins: Future of PKM» (2025)
 - Lenovo Qira. «Fused Knowledge Base» (CES 2026)
+- arxiv.org/abs/2601.01321 — «Digital Twin AI: Opportunities and Challenges from LLMs to World Models» (2026) — основа §5 (4-Stage DT AI Framework)
