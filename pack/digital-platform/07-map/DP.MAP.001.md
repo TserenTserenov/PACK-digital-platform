@@ -23,7 +23,7 @@ generated: true
 | CONCEPT (CONCEPT) | 1 |
 | Distinctions (D) | 14 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 11 |
+| Failure Modes (FM) | 12 |
 | IWE (IWE) | 4 |
 | KR (KR) | 1 |
 | Methods (M) | 9 |
@@ -35,7 +35,7 @@ generated: true
 | SoTA Annotations (SOTA) | 15 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **142** |
+| **Total** | **143** |
 
 ## Distinctions
 
@@ -105,6 +105,7 @@ generated: true
 | DP.FM.009 | Protocol Hardcoded Script Path | Протокол ОРЗ хардкодит абсолютный путь к скрипту — ломается при любом перемещении скрипта. Симптом: exit 127 (no such file or directory). | resolved |
 | DP.FM.010 | Agent Failure Patterns Catalog | Каталог повторяющихся паттернов провалов Claude-агента в рамках IWE. Корень дерева защит: паттерн → правило → детектор → Capture. Плоская нумерация P1-PN, постепенное развёртывание в отдельные DP.FM.XXX по мере обкатки | draft |
 | DP.FM.011 | Not Capturing Patterns | Агент реагирует на провал записью нового правила в feedback_*.md, не обобщая его в паттерн. Правила множатся без роста compliance. Мета-корень дерева провалов: без защиты от P1 деградируют все остальные детекторы | draft |
+| DP.FM.012 | Lexical Deduplication (Lossful Ontology Merge) | ИИ-агент при запросе 'убери дубли' выполняет лексическую нормализацию (совпадение слов/имён) вместо онтологической унификации (совпадение сущностей). Результат: семантически разные концепты сливаются в один, различения теряются без следа. | active |
 
 ## SoTA Annotations
 
