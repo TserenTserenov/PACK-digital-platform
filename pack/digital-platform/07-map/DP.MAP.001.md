@@ -22,6 +22,7 @@ generated: true
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 1 |
 | Distinctions (D) | 14 |
+| ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 12 |
 | IWE (IWE) | 4 |
@@ -35,7 +36,7 @@ generated: true
 | SoTA Annotations (SOTA) | 15 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **143** |
+| **Total** | **144** |
 
 ## Distinctions
 
@@ -164,6 +165,12 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.CONCEPT.001 | Концепция платформы | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
+
+### ECON
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ECON.001 | Points Engine — движок начисления баллов | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121). Реализация: база platform, схема points. | draft |
 
 ### EXOCORTEX
 
