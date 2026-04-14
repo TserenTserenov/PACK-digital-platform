@@ -136,15 +136,71 @@ Neon Project: aisystant
 <summary><b>4. Архитектура Neon и связи с системами</b></summary>
 
 **Структура раздела:**
-- **4.1** — поток идентичности (Ory → Gateway → platform-core)
-- **4.2** — реестр всех систем (таблица)
-- **4.3** — поток событий → ЦД → персональное руководство
+- **4.1** — полная карта: все 7 баз + внешние системы (главная схема)
+- **4.2** — поток идентичности (Ory → Gateway → platform-core)
+- **4.3** — реестр всех систем (таблица)
+- **4.4** — поток событий → ЦД → персональное руководство
 
 Все стрелки — API / события / cron, не FK.
 
 ---
 
-### 4.1 Поток идентичности и доступа
+### 4.1 Полная карта взаимодействий
+
+```mermaid
+graph TB
+    subgraph EXT [Внешние системы]
+        Ory([Ory Kratos])
+        Keto([Ory Keto])
+        LMS([LMS Aisystant])
+        Club([Discourse Club])
+        WakaTime([WakaTime])
+        Stripe([Stripe / YooKassa / TG Stars])
+        Langfuse([Langfuse])
+        GW([gateway-mcp])
+        Directus([Directus CRM])
+    end
+
+    subgraph NEON [Neon]
+        PC[(#1 platform-core)]
+        DT[(#2 digital-twin)]
+        KN[(#3 knowledge)]
+        AH[(#4 activity-hub)]
+        PR[(#5 payment-registry)]
+        AB[(#6 aist-bot)]
+        MB[(#7 metabase)]
+    end
+
+    Ory -->|"identity sync"| PC
+    Keto -->|"RBAC check"| PC
+    GW -->|"check subscription"| PC
+    PR -->|"subscription-sync"| PC
+
+    LMS -->|"raw events"| AH
+    Club -->|"raw events"| AH
+    WakaTime -->|"raw events"| AH
+    AB -->|"raw events"| AH
+    AH -->|"LEARNING_HISTORY"| DT
+    AH -->|"chat_id → ory_id"| PC
+    LMS -->|"степень DEG (ручная)"| DT
+
+    KN -->|"mastery концептов"| DT
+    AB -->|"чтение профиля"| DT
+    AB -->|"проверка прав"| PC
+
+    Stripe -->|"платежи"| PR
+    Directus -->|"ручные правки"| PR
+    PR -. "финансы (RLS)" .-> MB
+    AH -. "события (без PII)" .-> MB
+
+    Langfuse -. "AI traces (own store)" .-> Langfuse
+```
+
+> Сплошная стрелка = запись. Пунктир = только чтение. Langfuse — внешний, данные в Neon не хранит.
+
+---
+
+### 4.2 Поток идентичности и доступа
 
 ```mermaid
 graph LR
@@ -168,7 +224,7 @@ graph LR
 
 ---
 
-### 4.2 Реестр всех систем
+### 4.3 Реестр всех систем
 
 > **Легенда статусов:** ✅ — работает (наша инфраструктура) · ✅ внешний — работает (сторонний сервис, данные в Neon не хранит) · 🟡 — в разработке · 🔲 — запланировано
 
@@ -204,7 +260,7 @@ graph LR
 
 ---
 
-### 4.3 Поток данных: события → ЦД → персональное руководство
+### 4.4 Поток данных: события → ЦД → персональное руководство
 
 ```mermaid
 graph TD
