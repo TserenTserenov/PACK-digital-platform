@@ -4,7 +4,7 @@ name: Архитектура данных Neon (Database-per-Service)
 type: domain-entity
 status: active
 valid_from: 2026-04-14
-summary: "7 баз данных в Neon по принципу database-per-service. ERD предметной области по базам. Принята на встрече ИТ 14 апр 2026."
+summary: "7 баз данных в Neon по принципу database-per-service. ERD предметной области по базам + общая диаграмма межбазовых связей. Принята на встрече ИТ 14 апр 2026."
 related:
   - DP.SOTA.016   # Database-per-Service SOTA
   - DP.ARCH.003   # Digital Twin Architecture
@@ -36,7 +36,10 @@ supersedes: "WP-232 решение об одной базе platform"
 Events — кандидат на ClickHouse/TimescaleDB при масштабировании. Именно поэтому отдельная база.
 
 **П6. Платежи — максимальная изоляция**
-`finance_payments` без FK наружу. Другие сервисы проверяют подписку через `subscription_grants` в `platform-core`, не через прямой доступ к базе платежей.
+`finance_payments` без FK наружу. Другие сервисы проверяют подписку через `subscription_grants` в `platform-core` (gateway), не через прямой доступ к базе платежей.
+
+**П7. `SUBSCRIPTION_GRANTS` живёт в `platform-core` осознанно**
+Gateway-паттерн: `payment-registry` синхронизирует гранты подписок в `platform-core` через `subscription-sync` cron. Другие сервисы читают авторизацию только из `platform-core` — единая точка проверки прав.
 
 ## Карта баз данных
 
@@ -46,7 +49,7 @@ Neon Project: aisystant
 ├── DB: platform-core      ← USER_IDENTITIES + SUBSCRIPTION_GRANTS
 │                             + GITHUB_CONNECTIONS + GOOGLE_CALENDAR_CONNECTIONS
 │                             + ORY_TOKENS + DT_TOKENS + BACKEND_REGISTRY
-│                             + directus.* (схема Directus CMS, ~15 таблиц)
+│                             + directus.* (схема Directus CMS ~15 таблиц)
 │
 ├── DB: digital-twin       ← DIGITAL_TWINS + POINT_TRANSACTIONS
 │                             + LEARNER_CONCEPT_MASTERY
@@ -56,6 +59,7 @@ Neon Project: aisystant
 │                             + GITHUB_INSTALLATIONS + USER_SOURCES
 │
 ├── DB: activity-hub       ← RAW_EVENTS (partitioned) + USER_EVENTS
+│                             + LEARNING_HISTORY (Gold layer)
 │                             + USER_INTEGRATIONS + IDENTITY_MAP
 │                             + SYNC_LOG + QUARANTINED_EVENTS
 │                             ⚠ кандидат на замену ClickHouse/TimescaleDB
@@ -65,29 +69,87 @@ Neon Project: aisystant
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
 ├── DB: aist-bot           ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
-│                             + BOT_SUBSCRIPTIONS + LEARNING_HISTORY
-│                             + SEMINARS + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
-│                             + COMMUNITY_MEMBERS + SERVICE_USAGE + USER_ACCESS
-│                             + FEEDBACK_TRIAGE
+│                             + BOT_SUBSCRIPTIONS + SEMINARS + SEMINAR_PAYMENTS
+│                             + WORKSHOP_PAYMENTS + COMMUNITY_MEMBERS
+│                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
 │
 └── DB: metabase           ← служебные таблицы Metabase (~171 таблица)
                               dashboards, questions, users, collections…
-                              читает payment-registry.finance_payments (read-only conn)
+                              читает payment-registry (read-only conn)
                               ⚠ НЕ хранит прикладные данные платформы
 
 Вне Neon:
   Ory Kratos (отдельный сервис) ← идентичность, source of truth по ory_id
 ```
 
+## Пояснение: USER_INTEGRATIONS vs GITHUB_CONNECTIONS
+
+Обе таблицы хранят GitHub OAuth-токен одного и того же пользователя — это намеренный **dual-write**.
+
+| | GITHUB_CONNECTIONS (platform-core) | USER_INTEGRATIONS (activity-hub) |
+|---|---|---|
+| **Кто пишет** | Бот (OAuth callback) | activity-hub (sync из github_connections) |
+| **Назначение** | Конфигурация публикации: target_repo, notes_path, strategy_repo, branches | Server-side сбор данных: WakaTime sync, IWE Adapter |
+| **Дополнительные поля** | knowledge_repo, strategy_repo, default_branch | scope, metadata (generic) |
+| **Потребитель** | Бот-издатель (публикация заметок) | activity-hub collectors |
+
+`GOOGLE_CALENDAR_CONNECTIONS` — только в `platform-core` (бот), дублирования нет.
+`WAKATIME` — только в `USER_INTEGRATIONS` (activity-hub collector), в боте нет.
+
+---
+
+## Общая диаграмма: связи между базами
+
+Показывает потоки данных и API-зависимости между базами. Все стрелки — API-вызовы или cron-синхронизация, не FK.
+
+```mermaid
+graph TD
+    OryKratos([Ory Kratos\nexternal])
+
+    subgraph Neon
+        PC[(platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nOAuth connections)]
+        DT[(digital-twin\nDIGITAL_TWINS\nPOINT_TRANSACTIONS\nLEARNER_MASTERY)]
+        KN[(knowledge\nDOCUMENTS\nCONCEPTS\nCONCEPT_GRAPH)]
+        AH[(activity-hub\nRAW_EVENTS\nUSER_EVENTS\nLEARNING_HISTORY)]
+        PR[(payment-registry\nFINANCE_PAYMENTS\nSYNC_STATES)]
+        AB[(aist-bot\nUSER_STATE\nQA_HISTORY\nBOT_SUBSCRIPTIONS)]
+        MB[(metabase\n~171 служебных таблиц)]
+    end
+
+    OryKratos -->|"OAuth identity\n(source of truth)"| PC
+
+    PC -->|"check subscription\n(API)"| AB
+    PC -->|"check subscription\n(API)"| DT
+    PC -->|"check subscription\n(API)"| KN
+    PC -->|"user identity\n(API)"| AH
+
+    PR -->|"subscription-sync cron\n→ SUBSCRIPTION_GRANTS"| PC
+
+    AB -->|"write DT via\ndt-mcp API"| DT
+    AB -->|"send events\n(collector)"| AH
+    AB -->|"GitHub dual-write\n→ USER_INTEGRATIONS"| AH
+
+    KN -->|"concept_id ref\n(API)"| DT
+
+    AH -->|"transform pipeline\nRAW→USER_EVENTS"| AH
+    AH -->|"learning events\n→ LEARNING_HISTORY\n(Gold layer)"| AH
+
+    MB -->|"read finance data\n(read-only conn)"| PR
+    MB -->|"read events\n(read-only conn)"| AH
+```
+
+---
+
 ## ERD по базам данных
 
-> Связи между базами — пунктир с подписью `(API)`: ссылка только по id, без FK constraint.
+> Связи между базами помечены `(API)` с указанием целевой базы.
 
 ---
 
 ### DB: platform-core
 
 Ядро платформы: идентичность, подписки, OAuth-соединения, реестр персональных MCP.
+**Gateway-паттерн:** все сервисы проверяют права только здесь, не идут напрямую в payment-registry.
 
 ```mermaid
 erDiagram
@@ -108,6 +170,7 @@ erDiagram
         timestamptz valid_from
         timestamptz valid_until
         timestamptz revoked_at
+        text        note            "синхронизируется из payment-registry cron"
     }
 
     GITHUB_CONNECTIONS {
@@ -119,7 +182,9 @@ erDiagram
         text        refresh_token
         text        knowledge_repo
         text        strategy_repo
+        text        default_branch
         timestamptz connected_at
+        text        note            "dual-write: токен также в activity-hub.USER_INTEGRATIONS"
     }
 
     GOOGLE_CALENDAR_CONNECTIONS {
@@ -129,6 +194,7 @@ erDiagram
         text        access_token
         text        refresh_token
         text        calendar_id
+        text        email
         timestamptz connected_at
     }
 
@@ -222,8 +288,8 @@ erDiagram
         text        source_type     "platform|personal|github"
         vector      embedding       "1024-dim HNSW"
         tsvector    search_vector
-        uuid        user_id         "NULL=platform, set=personal"
-        bigint      parent_id       FK  "self-ref: parent→chunks"
+        uuid        user_id         "NULL=platform, set=personal (API→platform-core)"
+        bigint      parent_id       FK
         timestamptz created_at
     }
 
@@ -292,7 +358,8 @@ erDiagram
 
 ### DB: activity-hub
 
-Medallion-архитектура событий: Landing (raw) → Silver (user_events). Кандидат на замену ClickHouse/TimescaleDB при росте объёма.
+Medallion-архитектура: Landing (raw) → Silver (user_events) → Gold (learning_history).
+Кандидат на замену ClickHouse/TimescaleDB при росте объёма событий.
 
 ```mermaid
 erDiagram
@@ -313,6 +380,20 @@ erDiagram
         uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
         jsonb       payload
         timestamptz occurred_at
+    }
+
+    LEARNING_HISTORY {
+        bigserial   id              PK
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
+        bigint      event_id        FK
+        text        element_id
+        text        element_type    "meme|practice|cell"
+        int         area            "1-5"
+        float       score
+        bool        passed
+        int         schema_version  "1=legacy, 2=current"
+        timestamptz created_at
+        text        note            "Gold layer: материализация learning_* событий из USER_EVENTS"
     }
 
     IDENTITY_MAP {
@@ -336,6 +417,7 @@ erDiagram
         text        status          "success|partial|failed"
         int         events_fetched
         int         events_written
+        int         events_quarantined
         timestamptz started_at
         timestamptz finished_at
     }
@@ -350,9 +432,11 @@ erDiagram
         text        scope
         jsonb       metadata
         timestamptz connected_at
+        text        note            "GitHub: dual-write из platform-core.GITHUB_CONNECTIONS"
     }
 
-    RAW_EVENTS ||--o{ USER_EVENTS : "transform (silver layer)"
+    RAW_EVENTS ||--o{ USER_EVENTS : "transform → silver"
+    USER_EVENTS ||--o{ LEARNING_HISTORY : "materialize → gold"
     RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid → quarantine"
     USER_INTEGRATIONS }o--|| IDENTITY_MAP : "resolves user"
 ```
@@ -361,7 +445,8 @@ erDiagram
 
 ### DB: payment-registry
 
-Реестр всех платежей. Максимальная изоляция — другие сервисы не имеют прямого доступа к базе.
+Реестр всех платежей. Максимальная изоляция: другие сервисы не имеют прямого доступа к базе.
+Синхронизирует `SUBSCRIPTION_GRANTS` в `platform-core` через cron `subscription-sync`.
 
 ```mermaid
 erDiagram
@@ -390,6 +475,7 @@ erDiagram
         int         id              PK  "singleton id=1"
         bigint      last_subscription_id
         timestamptz last_sync_at
+        text        note            "tracks sync boundary → platform-core.SUBSCRIPTION_GRANTS"
     }
 
     IMPORT_STAGING_PAYMENT {
@@ -400,7 +486,7 @@ erDiagram
         text        payment_system
         decimal     amount
         bool        success
-        text        note            "⚙ landing zone для incremental sync"
+        text        note            "⚙ landing zone для incremental sync из Aisystant"
     }
 
     IMPORT_STAGING_CHARGEOFF {
@@ -419,7 +505,7 @@ erDiagram
 
 ### DB: aist-bot
 
-Только бот. Telegram-first: основной ключ — `chat_id` (Telegram). Не содержит платформенных данных.
+Только бот. Telegram-first: основной ключ — `chat_id`. Не содержит платформенных данных.
 
 ```mermaid
 erDiagram
@@ -461,20 +547,6 @@ erDiagram
         timestamptz expires_at
     }
 
-    LEARNING_HISTORY {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      event_id        UK  "ref→activity-hub.USER_EVENTS (API)"
-        text        element_id
-        text        element_type    "meme|practice|cell"
-        int         area            "1-5"
-        float       score
-        bool        passed
-        int         schema_version  "1=legacy, 2=current"
-        timestamptz created_at
-    }
-
     SEMINARS {
         serial      id              PK
         text        title
@@ -497,7 +569,7 @@ erDiagram
     WORKSHOP_PAYMENTS {
         bigserial   id              PK
         bigint      telegram_id
-        text        aisystant_id    "optional cross-ref"
+        text        aisystant_id    "ref→Aisystant LMS user (external, API)"
         decimal     amount
         text        status          "pending|success"
         text        source          "bot|web"
@@ -540,7 +612,6 @@ erDiagram
     USER_STATE ||--o{ QA_HISTORY : "conversation"
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
-    USER_STATE ||--o{ LEARNING_HISTORY : "learning progress"
     SEMINARS ||--o{ SEMINAR_PAYMENTS : "paid by"
 ```
 
@@ -548,7 +619,8 @@ erDiagram
 
 ### DB: metabase
 
-Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы. Читает `payment-registry` через отдельный read-only connection.
+Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
+Читает `payment-registry` и `activity-hub` через отдельные read-only connections.
 
 ```mermaid
 erDiagram
@@ -594,13 +666,13 @@ erDiagram
 
 | База | Writers | Readers |
 |------|---------|---------|
-| platform-core | Ory callback, OAuth flows, gateway-mcp | gateway-mcp (авторизация каждого запроса), все сервисы через API |
-| digital-twin | dt-mcp, profiler cron, бот (через DT-MCP API) | dt-mcp, бот `/twin`, knowledge-mcp |
-| knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp рекомендации |
-| activity-hub | collectors (lms/bot/club/iwe), transform-worker | transform-worker, Metabase analytics |
-| payment-registry | incremental-sync.sh cron, Directus API | Metabase (RO), subscription-sync → platform-core |
+| platform-core | Ory callback, OAuth flows, `subscription-sync` cron (из payment-registry) | gateway-mcp (авторизация каждого запроса), все сервисы через API |
+| digital-twin | dt-mcp, profiler cron, бот (через DT-MCP API) | dt-mcp, бот `/twin`, knowledge-mcp (рекомендации) |
+| knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp |
+| activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот (dual-write GitHub токена) | transform-worker, Metabase (RO) |
+| payment-registry | `incremental-sync.sh` cron, Directus API | Metabase (RO), `subscription-sync` cron |
 | aist-bot | только бот | только бот |
-| metabase | Metabase internal (~171 служебных таблиц) | Metabase UI; читает payment-registry RO |
+| metabase | Metabase internal | Metabase UI |
 
 ## Статус
 
