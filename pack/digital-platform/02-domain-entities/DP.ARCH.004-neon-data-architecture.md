@@ -4,7 +4,7 @@ name: Архитектура данных Neon (Database-per-Service)
 type: domain-entity
 status: active
 valid_from: 2026-04-14
-summary: "6 баз данных в Neon по принципу database-per-service. ERD предметной области. Принята на встрече ИТ 14 апр 2026."
+summary: "7 баз данных в Neon по принципу database-per-service. ERD предметной области по базам. Принята на встрече ИТ 14 апр 2026."
 related:
   - DP.SOTA.016   # Database-per-Service SOTA
   - DP.ARCH.003   # Digital Twin Architecture
@@ -15,6 +15,8 @@ supersedes: "WP-232 решение об одной базе platform"
 ---
 
 # DP.ARCH.004 — Архитектура данных Neon
+
+> **Это целевая архитектура.** Текущее физическое состояние — одна база `platform` (WP-232). Разделение на отдельные базы — следующий РП.
 
 ## Принципы (решены 14 апр 2026)
 
@@ -34,7 +36,7 @@ supersedes: "WP-232 решение об одной базе platform"
 Events — кандидат на ClickHouse/TimescaleDB при масштабировании. Именно поэтому отдельная база.
 
 **П6. Платежи — максимальная изоляция**
-`finance_payments` без FK наружу. Бот проверяет подписку через `subscription_grants` в `platform-core`, не через прямой доступ к базе платежей.
+`finance_payments` без FK наружу. Другие сервисы проверяют подписку через `subscription_grants` в `platform-core`, не через прямой доступ к базе платежей.
 
 ## Карта баз данных
 
@@ -54,15 +56,19 @@ Neon Project: aisystant
 │                             + GITHUB_INSTALLATIONS + USER_SOURCES
 │
 ├── DB: activity-hub       ← RAW_EVENTS (partitioned) + USER_EVENTS
-│                             + IDENTITY_MAP + SYNC_LOG + QUARANTINED_EVENTS
-│                             (⚠ кандидат на замену ClickHouse/TimescaleDB)
+│                             + USER_INTEGRATIONS + IDENTITY_MAP
+│                             + SYNC_LOG + QUARANTINED_EVENTS
+│                             ⚠ кандидат на замену ClickHouse/TimescaleDB
 │
 ├── DB: payment-registry   ← FINANCE_PAYMENTS + PAYMENTS_SYNC_STATE
 │                             + SUBSCRIPTION_GRANTS_SYNC_STATE
+│                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
 ├── DB: aist-bot           ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
-│                             + BOT_SUBSCRIPTIONS + SEMINARS + SEMINAR_PAYMENTS
+│                             + BOT_SUBSCRIPTIONS + LEARNING_HISTORY
+│                             + SEMINARS + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
 │                             + COMMUNITY_MEMBERS + SERVICE_USAGE + USER_ACCESS
+│                             + FEEDBACK_TRIAGE
 │
 └── DB: metabase           ← служебные таблицы Metabase (~171 таблица)
                               dashboards, questions, users, collections…
@@ -73,16 +79,18 @@ Neon Project: aisystant
   Ory Kratos (отдельный сервис) ← идентичность, source of truth по ory_id
 ```
 
-## ERD предметной области
+## ERD по базам данных
 
-> Жирные линии — FK внутри базы. Пунктир — API-ссылки (только id, без FK).
+> Связи между базами — пунктир с подписью `(API)`: ссылка только по id, без FK constraint.
+
+---
+
+### DB: platform-core
+
+Ядро платформы: идентичность, подписки, OAuth-соединения, реестр персональных MCP.
 
 ```mermaid
 erDiagram
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: platform-core                           ║
-    %% ╚══════════════════════════════════════════════╝
-
     USER_IDENTITIES {
         uuid        ory_id          PK  "source: Ory Kratos"
         bigint      telegram_id     UK
@@ -101,8 +109,6 @@ erDiagram
         timestamptz valid_until
         timestamptz revoked_at
     }
-
-    USER_IDENTITIES ||--o{ SUBSCRIPTION_GRANTS : "has"
 
     GITHUB_CONNECTIONS {
         serial      id              PK
@@ -148,34 +154,31 @@ erDiagram
         uuid        ory_id          "→ USER_IDENTITIES"
         text        backend_url
         text        tool_prefix
-        text        status          "pending|active|failed"
-    }
-
-    BACKEND_REGISTRY {
-        serial      id              PK
-        uuid        ory_id          "ref→USER_IDENTITIES (API)"
-        text        backend_url
-        text        tool_prefix
         text        name
         text        status          "pending_validation|active|failed"
         text        knowledge_gate_result "pending|passed|partial|failed"
         timestamptz created_at
     }
 
+    USER_IDENTITIES ||--o{ SUBSCRIPTION_GRANTS : "has"
     USER_IDENTITIES ||--o{ GITHUB_CONNECTIONS : "connects GitHub"
     USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
     USER_IDENTITIES ||--o{ ORY_TOKENS : "SSO session"
     USER_IDENTITIES ||--o{ DT_TOKENS : "DT access"
     USER_IDENTITIES ||--o{ BACKEND_REGISTRY : "personal MCPs"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: digital-twin                            ║
-    %% ║  Writers: dt-mcp, profiler, бот через API   ║
-    %% ╚══════════════════════════════════════════════╝
+---
 
+### DB: digital-twin
+
+Цифровой двойник пользователя. Writers: dt-mcp, profiler cron, бот (только через DT-MCP API).
+
+```mermaid
+erDiagram
     DIGITAL_TWINS {
         uuid        id              PK
-        uuid        ory_id          UK  "ref→USER_IDENTITIES (API)"
+        uuid        ory_id          UK  "ref→platform-core.USER_IDENTITIES (API)"
         jsonb       layer_1         "Базовые параметры"
         jsonb       layer_2         "Вовлечённость"
         jsonb       layer_3         "Производные: agency, longevity…"
@@ -184,7 +187,7 @@ erDiagram
 
     POINT_TRANSACTIONS {
         bigserial   id              PK
-        uuid        ory_id          "ref→USER_IDENTITIES (API)"
+        uuid        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
         text        rule_code
         int         points_delta
         text        source          "bot|lms|hub|manual"
@@ -193,20 +196,25 @@ erDiagram
 
     LEARNER_CONCEPT_MASTERY {
         bigserial   id              PK
-        uuid        ory_id          "ref→USER_IDENTITIES (API)"
-        bigint      concept_id      "ref→CONCEPTS (API)"
+        uuid        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
+        bigint      concept_id      "ref→knowledge.CONCEPTS (API)"
         float       mastery         "0.0–1.0 Bayesian"
         int         attempts
         timestamptz last_assessed_at
     }
 
-    DIGITAL_TWINS ||--o{ POINT_TRANSACTIONS : "accumulates"
+    DIGITAL_TWINS ||--o{ POINT_TRANSACTIONS : "accumulates points"
     DIGITAL_TWINS ||--o{ LEARNER_CONCEPT_MASTERY : "qualification progress"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: knowledge                               ║
-    %% ╚══════════════════════════════════════════════╝
+---
 
+### DB: knowledge
+
+Документы платформы и пользователей, граф концептов, источники для индексации.
+
+```mermaid
+erDiagram
     DOCUMENTS {
         bigserial   id              PK
         text        filename
@@ -219,8 +227,6 @@ erDiagram
         timestamptz created_at
     }
 
-    DOCUMENTS ||--o{ DOCUMENTS : "parent→chunks"
-
     RETRIEVAL_FEEDBACK {
         bigserial   id              PK
         bigint      document_id     FK
@@ -228,8 +234,6 @@ erDiagram
         bool        helpfulness
         timestamptz created_at
     }
-
-    DOCUMENTS ||--o{ RETRIEVAL_FEEDBACK : "feedback"
 
     CONCEPTS {
         bigserial   id              PK
@@ -242,8 +246,6 @@ erDiagram
         text        status          "active|deprecated|draft"
     }
 
-    DOCUMENTS ||--o{ CONCEPTS : "sourced from"
-
     CONCEPT_EDGES {
         bigserial   id              PK
         bigint      from_concept_id FK
@@ -251,9 +253,6 @@ erDiagram
         text        edge_type       "prerequisite|related|part_of|contradicts"
         float       weight
     }
-
-    CONCEPTS ||--o{ CONCEPT_EDGES : "from"
-    CONCEPTS ||--o{ CONCEPT_EDGES : "to"
 
     CONCEPT_MISCONCEPTIONS {
         bigserial   id              PK
@@ -263,11 +262,9 @@ erDiagram
         text        correct_version
     }
 
-    CONCEPTS ||--o{ CONCEPT_MISCONCEPTIONS : "has"
-
     GITHUB_INSTALLATIONS {
         serial      id              PK
-        uuid        user_id         "ref→USER_IDENTITIES (API)"
+        uuid        user_id         "ref→platform-core.USER_IDENTITIES (API)"
         bigint      github_user_id
         text        installation_id UK
         jsonb       repos
@@ -276,20 +273,29 @@ erDiagram
 
     USER_SOURCES {
         serial      id              PK
-        uuid        user_id         "ref→USER_IDENTITIES (API)"
+        uuid        user_id         "ref→platform-core.USER_IDENTITIES (API)"
         text        source
         text        github_repo
         bool        active
     }
 
+    DOCUMENTS ||--o{ DOCUMENTS : "parent→chunks"
+    DOCUMENTS ||--o{ RETRIEVAL_FEEDBACK : "feedback"
+    DOCUMENTS ||--o{ CONCEPTS : "sourced from"
+    CONCEPTS ||--o{ CONCEPT_EDGES : "from"
+    CONCEPTS ||--o{ CONCEPT_EDGES : "to"
+    CONCEPTS ||--o{ CONCEPT_MISCONCEPTIONS : "has"
     GITHUB_INSTALLATIONS ||--o{ USER_SOURCES : "enables sources"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: activity-hub                            ║
-    %% ║  Medallion: Landing → Silver                 ║
-    %% ║  Кандидат на замену ClickHouse при росте     ║
-    %% ╚══════════════════════════════════════════════╝
+---
 
+### DB: activity-hub
+
+Medallion-архитектура событий: Landing (raw) → Silver (user_events). Кандидат на замену ClickHouse/TimescaleDB при росте объёма.
+
+```mermaid
+erDiagram
     RAW_EVENTS {
         bigserial   id              PK
         text        source          "lms|bot|club|iwe"
@@ -304,18 +310,16 @@ erDiagram
         text        source
         text        external_id     UK
         text        event_type
-        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
         jsonb       payload
         timestamptz occurred_at
     }
-
-    RAW_EVENTS ||--o{ USER_EVENTS : "transform (silver)"
 
     IDENTITY_MAP {
         bigserial   id              PK
         text        source
         text        external_id
-        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
     }
 
     QUARANTINED_EVENTS {
@@ -338,7 +342,7 @@ erDiagram
 
     USER_INTEGRATIONS {
         serial      id              PK
-        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
         text        service         "github|wakatime|google_calendar"
         text        access_token
         text        refresh_token
@@ -348,18 +352,23 @@ erDiagram
         timestamptz connected_at
     }
 
-    RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid→quarantine"
+    RAW_EVENTS ||--o{ USER_EVENTS : "transform (silver layer)"
+    RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid → quarantine"
     USER_INTEGRATIONS }o--|| IDENTITY_MAP : "resolves user"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: payment-registry                        ║
-    %% ║  Изолирован. Другие сервисы — только API.    ║
-    %% ╚══════════════════════════════════════════════╝
+---
 
+### DB: payment-registry
+
+Реестр всех платежей. Максимальная изоляция — другие сервисы не имеют прямого доступа к базе.
+
+```mermaid
+erDiagram
     FINANCE_PAYMENTS {
         bigserial   id              PK
-        text        ory_id          "ref→USER_IDENTITIES (API)"
-        bigint      telegram_id     "ref→USER_IDENTITIES (API)"
+        text        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
+        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
         bigint      suser_id        "Aisystant legacy ID"
         text        purpose         "BALANCE|SUBSCRIPTION|DONATION|INTERNSHIP|WORKSHOP"
         decimal     amount
@@ -374,6 +383,7 @@ erDiagram
         int         id              PK  "singleton id=1"
         bigint      last_payment_id
         timestamptz last_sync_at
+        text        last_sync_status
     }
 
     SUBSCRIPTION_GRANTS_SYNC_STATE {
@@ -390,25 +400,29 @@ erDiagram
         text        payment_system
         decimal     amount
         bool        success
-        text        note            "⚙ operational: landing zone for incremental sync"
+        text        note            "⚙ landing zone для incremental sync"
     }
 
     IMPORT_STAGING_CHARGEOFF {
         bigint      id
         bigint      suser_id
         decimal     amount
-        bigint      payment_id      "links to finance_payments"
-        text        note            "⚙ operational: landing zone for incremental sync"
+        bigint      payment_id      "→ FINANCE_PAYMENTS"
+        text        note            "⚙ landing zone для incremental sync"
     }
 
     IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
     IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: aist-bot                                ║
-    %% ║  ТОЛЬКО бот. Telegram-first (chat_id).       ║
-    %% ╚══════════════════════════════════════════════╝
+---
 
+### DB: aist-bot
+
+Только бот. Telegram-first: основной ключ — `chat_id` (Telegram). Не содержит платформенных данных.
+
+```mermaid
+erDiagram
     USER_STATE {
         bigint      chat_id         PK  "Telegram chat_id"
         text        current_state   "FSM state"
@@ -420,7 +434,7 @@ erDiagram
 
     QA_HISTORY {
         bigserial   id              PK
-        bigint      chat_id         "ref→USER_STATE"
+        bigint      chat_id         FK
         text        question
         text        answer
         bool        helpful
@@ -447,6 +461,20 @@ erDiagram
         timestamptz expires_at
     }
 
+    LEARNING_HISTORY {
+        bigserial   id              PK
+        bigint      user_id         "Telegram ID"
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
+        bigint      event_id        UK  "ref→activity-hub.USER_EVENTS (API)"
+        text        element_id
+        text        element_type    "meme|practice|cell"
+        int         area            "1-5"
+        float       score
+        bool        passed
+        int         schema_version  "1=legacy, 2=current"
+        timestamptz created_at
+    }
+
     SEMINARS {
         serial      id              PK
         text        title
@@ -463,6 +491,16 @@ erDiagram
         decimal     amount
         text        currency        "RUB|STARS"
         text        status
+        timestamptz paid_at
+    }
+
+    WORKSHOP_PAYMENTS {
+        bigserial   id              PK
+        bigint      telegram_id
+        text        aisystant_id    "optional cross-ref"
+        decimal     amount
+        text        status          "pending|success"
+        text        source          "bot|web"
         timestamptz paid_at
     }
 
@@ -490,30 +528,6 @@ erDiagram
         timestamptz expires_at
     }
 
-    WORKSHOP_PAYMENTS {
-        bigserial   id              PK
-        bigint      telegram_id
-        text        aisystant_id    "optional cross-ref"
-        decimal     amount
-        text        status          "pending|success"
-        text        source          "bot|web"
-        timestamptz paid_at
-    }
-
-    LEARNING_HISTORY {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
-        bigint      event_id        UK  "ref→USER_EVENTS (activity-hub, API)"
-        text        element_id
-        text        element_type    "meme|practice|cell"
-        int         area            "1-5"
-        float       score
-        bool        passed
-        int         schema_version  "1=legacy, 2=current"
-        timestamptz created_at
-    }
-
     FEEDBACK_TRIAGE {
         bigserial   id              PK
         bigint      chat_id
@@ -528,19 +542,28 @@ erDiagram
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
     USER_STATE ||--o{ LEARNING_HISTORY : "learning progress"
     SEMINARS ||--o{ SEMINAR_PAYMENTS : "paid by"
+```
 
-    %% ╔══════════════════════════════════════════════╗
-    %% ║  DB: metabase  (в Neon, отдельная база)      ║
-    %% ║  Служебные таблицы Metabase BI.              ║
-    %% ║  НЕ хранит прикладные данные платформы.      ║
-    %% ║  Читает payment-registry через DB connection.║
-    %% ╚══════════════════════════════════════════════╝
+---
 
-    METABASE_DASHBOARDS {
+### DB: metabase
+
+Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы. Читает `payment-registry` через отдельный read-only connection.
+
+```mermaid
+erDiagram
+    METABASE_COLLECTIONS {
         int     id          PK
         text    name
+        text    color
+        int     parent_id   FK
+    }
+
+    METABASE_DASHBOARDS {
+        int     id              PK
+        text    name
         text    description
-        int     collection_id
+        int     collection_id   FK
     }
 
     METABASE_CARDS {
@@ -556,29 +579,31 @@ erDiagram
         text    email       UK
         text    first_name
         text    last_name
+        bool    is_superuser
         bool    is_active
     }
 
+    METABASE_COLLECTIONS ||--o{ METABASE_COLLECTIONS : "parent→child"
+    METABASE_COLLECTIONS ||--o{ METABASE_DASHBOARDS : "contains"
     METABASE_DASHBOARDS ||--o{ METABASE_CARDS : "contains"
 ```
+
+---
 
 ## Кто читает / кто пишет
 
 | База | Writers | Readers |
 |------|---------|---------|
-| platform-core | Ory callback, OAuth flows, gateway-mcp | Все сервисы (через API), gateway-mcp (авторизация) |
+| platform-core | Ory callback, OAuth flows, gateway-mcp | gateway-mcp (авторизация каждого запроса), все сервисы через API |
 | digital-twin | dt-mcp, profiler cron, бот (через DT-MCP API) | dt-mcp, бот `/twin`, knowledge-mcp |
 | knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp рекомендации |
 | activity-hub | collectors (lms/bot/club/iwe), transform-worker | transform-worker, Metabase analytics |
-| payment-registry | incremental-sync.sh cron, Directus API | Metabase (RO), subscription-sync→platform-core |
+| payment-registry | incremental-sync.sh cron, Directus API | Metabase (RO), subscription-sync → platform-core |
 | aist-bot | только бот | только бот |
 | metabase | Metabase internal (~171 служебных таблиц) | Metabase UI; читает payment-registry RO |
 
-## Статус миграции
+## Статус
 
-> **Текущее состояние (14 апр 2026):** все таблицы физически живут в одной базе `platform` (результат WP-232).
-> **Целевое состояние:** 6 отдельных баз по принципу database-per-service.
-> **Решение принято:** встреча ИТ 8, 14 апр 2026.
-> **Следующий шаг:** создать РП на миграцию `platform` → 6 баз (оценка ~20-40h).
-
-Причина предыдущего решения (одна база): операционная простота на ранней стадии. Причина пересмотра: архитектор указал на риск монолита — скрытые FK между сервисами, невозможность замены типа БД для activity-hub, единый blast radius при взломе.
+> **Целевая архитектура.** Текущее состояние (14 апр 2026): все таблицы в одной базе `platform` (WP-232).
+> Разделение на 7 баз — следующий РП (~20-40h).
+> Решение принято: встреча ИТ 8, 14 апр 2026.
