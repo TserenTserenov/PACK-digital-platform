@@ -136,70 +136,16 @@ Neon Project: aisystant
 <summary><b>4. Архитектура Neon и связи с системами</b></summary>
 
 **Структура раздела:**
-- **4.1** — центральная схема: 7 баз Neon + все внешние системы и направления потоков
-- **4.2** — связи между базами данных (межбазовый граф)
-- **4.3** — поток идентичности (детальная схема: Ory → Gateway → platform-core)
-- **4.4** — реестр всех систем (таблица)
-- **4.5** — поток событий → ЦД → персональное руководство
+- **4.1** — связи между базами данных (межбазовый граф)
+- **4.2** — поток идентичности (Ory → Gateway → platform-core)
+- **4.3** — реестр всех систем (таблица)
+- **4.4** — поток событий → ЦД → персональное руководство
 
 Все стрелки — API / события / cron, не FK.
 
 ---
 
-### 4.1 Neon: 7 баз данных и связи с системами
-
-```
-                        ┌─────────────────────────────────────┐
-                        │           Neon Project               │
-                        │                                      │
-  Ory Kratos ──────────→│ #1 platform-core                     │
-  Ory Keto ────────────→│   USER_IDENTITIES, SUBSCRIPTION_     │←─── subscription-sync cron
-  OAuth callbacks ─────→│   GRANTS, TIER_EVENTS, GITHUB_       │         (из #5)
-  gateway-mcp (R/W) ───→│   CONNECTIONS, USER_INTEGRATIONS,    │
-                        │   BACKEND_REGISTRY                   │
-                        │                                      │
-  digital-twin-mcp ────→│ #2 digital-twin                      │
-  Профайлер R28 ───────→│   DIGITAL_TWINS, POINT_TRANSACTIONS, │
-  LMS (степень DEG) ───→│   LEARNER_CONCEPT_MASTERY            │
-                        │                                      │
-  knowledge-mcp ───────→│ #3 knowledge                         │
-  GitHub App webhook ──→│   DOCUMENTS, CONCEPTS, CONCEPT_EDGES,│
-  personal-knowledge   →│   GITHUB_INSTALLATIONS, USER_SOURCES │
-                        │                                      │
-  LMS ─────────────────→│ #4 activity-hub                      │
-  Club ────────────────→│   RAW_EVENTS (Bronze, партиц.)       │
-  AIST Bot ────────────→│   USER_EVENTS (Silver)               │
-  WakaTime ────────────→│   LEARNING_HISTORY (Gold)            │
-  IWE/exocortex ───────→│   IDENTITY_MAP, SYNC_LOG             │
-                        │                                      │
-  YooKassa/Stripe ─────→│ #5 payment-registry                  │───→ subscription-sync cron
-  TG Stars ────────────→│   FINANCE_PAYMENTS (+AUDIT_LOG)      │         (→ #1)
-  incremental-sync cron→│   SEMINAR_PAYMENTS                   │
-  Aisystant LMS ────────│   SUBSCRIPTION_GRANTS_SYNC_STATE     │
-                        │                                      │
-  AIST Bot (только бот)→│ #6 aist-bot                          │
-                        │   USER_STATE, ORY_TOKENS, DT_TOKENS  │
-                        │   QA_HISTORY, FEEDBACK_TRIAGE        │
-                        │                                      │
-  Metabase internal ───→│ #7 metabase                          │
-                        │   ~171 служебная таблица             │
-                        └─────────────────────────────────────┘
-                                        │
-             Читает из Neon (RO):       │
-             Metabase ──────────────────┤→ #5 payment-registry (metabase_reader + RLS)
-                                        └→ #4 activity-hub (read-only)
-
-             Вне Neon (не хранят данные в Neon):
-             Ory Keto   — own store (RBAC)
-             Langfuse   — own store (AI traces)
-             Railway    — инфра-уровень
-             CF Workers — stateless (gateway-mcp, knowledge-mcp)
-             Web App    — клиент без серверного state
-```
-
----
-
-### 4.2 Связи между базами данных
+### 4.1 Связи между базами данных
 
 Как 7 баз обращаются друг к другу через API (FK между базами запрещены — П2).
 
@@ -227,7 +173,7 @@ graph LR
 
 ---
 
-### 4.3 Поток идентичности и доступа
+### 4.2 Поток идентичности и доступа
 
 ```mermaid
 graph LR
@@ -251,7 +197,7 @@ graph LR
 
 ---
 
-### 4.4 Реестр всех систем
+### 4.3 Реестр всех систем
 
 > **Легенда статусов:** ✅ — работает (наша инфраструктура) · ✅ внешний — работает (сторонний сервис, данные в Neon не хранит) · 🟡 — в разработке · 🔲 — запланировано
 
@@ -287,7 +233,7 @@ graph LR
 
 ---
 
-### 4.5 Поток данных: события → ЦД → персональное руководство
+### 4.4 Поток данных: события → ЦД → персональное руководство
 
 ```mermaid
 graph TD
@@ -299,13 +245,14 @@ graph TD
     AH[(#4 activity-hub)]
 
     AH -->|LEARNING_HISTORY| Profiler([Профайлер R28])
-    LMS -->|степень DEG| DT
     Profiler -->|IND.3.4 ступени ролей| DT[(#2 digital-twin)]
 
     DT -->|профиль + ступени| Tailor([Портной])
     DT -->|ступени + степень| Navigator([Навигатор])
     DT -->|контекст| Bot
 ```
+
+> Степень DEG (квалификация) назначается вручную методсоветом МИМ и импортируется в DT отдельно — не через поток событий. Поэтому стрелка LMS → DT здесь не показана.
 
 </details>
 
@@ -1067,6 +1014,8 @@ erDiagram
 **Проблема:** `checkSubscription()` в `gateway-mcp/src/index.ts` делает SELECT в Neon на каждый запрос. Подтверждено в коде. При 10k пользователей = тысячи DB-запросов в минуту.
 
 **Решение:** Cloudflare KV с TTL 5 мин. In-memory Map не подходит (Workers stateless, разные isolates → cache miss 80%+). При отзыве подписки — явная инвалидация `kv.delete(key)`.
+
+**Отклонённая альтернатива: подписка в JWT.** Предложение — положить `subscription: active` в JWT и убрать SELECT совсем. Отклонено по двум причинам: (1) JWT выдаёт Ory Kratos, который не знает о биллинге — добавление бизнес-данных нарушает разделение ответственности (Ory = идентичность, не биллинг); (2) при отзыве подписки JWT остаётся валидным до истечения TTL — задержка такая же как у KV cache, но без возможности явной инвалидации. KV cache даёт тот же TTL 5 мин с возможностью немедленного отзыва через `kv.delete(key)`.
 
 **Трудозатраты:** ~12h. Приоритет: высокий.
 
