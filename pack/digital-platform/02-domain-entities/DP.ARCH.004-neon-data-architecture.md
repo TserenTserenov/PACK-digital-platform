@@ -133,140 +133,130 @@ Neon Project: aisystant
 ---
 
 <details open>
-<summary><b>4. Общая диаграмма связей</b></summary>
+<summary><b>4. Диаграммы связей</b></summary>
 
-Все стрелки — API-вызовы, события или cron-синхронизация. Не FK.
-Системы сгруппированы по слоям: данные (Neon), сервисы, клиенты, внешние.
+Три схемы по фокусу. Все стрелки — API / события / cron, не FK.
+
+---
+
+### 4.1 Карта систем (уровень платформы)
+
+Кто что использует. Без деталей потоков.
+
+```
+Клиенты              Сервисный слой           Neon (данные)
+─────────────────    ──────────────────────   ──────────────────────
+Web App (Vue)    ─┐
+AIST Bot         ─┤─→ gateway-mcp        ──→ #1 platform-core
+IWE / Claude Code─┤    (CF Worker,            (идентичность, тиры,
+Claude / ChatGPT ─┘    auth + fan-out)         подписки)
+                          │
+                    ┌─────┴──────────┐
+                    ↓                ↓
+              knowledge-mcp    digital-twin-mcp ──→ #2 digital-twin
+              personal-        (ЦД, ступени,        (ЦД, роли, степень)
+              knowledge-mcp    степень)
+                    │
+                    ↓
+               #3 knowledge
+              (документы, граф)
+
+Профайлер R28 ────────────────────────────→ #2 digital-twin
+(ежедневный расчёт IND.3.*)               (пишет ступени ролей)
+
+Навигатор, Портной ───────────────────────→ #2 digital-twin
+(персональное руководство)                (читают профиль)
+
+LMS + Club + WakaTime + Bot ──────────────→ #4 activity-hub
+(коллекторы событий)                      (RAW→USER→LEARNING)
+
+Stripe / YooKassa / TG Stars ─────────────→ #5 payment-registry
+Bot (платежи)                              (транзакции, audit log)
+
+Directus (CRM-интерфейс) ─────────────────→ #5 payment-registry
+(просмотр и ручное управление платежами)
+
+Metabase (BI) ────────────────────────────→ #5 payment-registry
+                                           → #4 activity-hub
+                                           (только чтение, RLS)
+```
+
+---
+
+### 4.2 Поток идентичности и доступа
+
+```mermaid
+graph LR
+    User([Пользователь])
+    Ory([Ory Kratos\nидентичность])
+    Keto([Ory Keto\nRBAC])
+    GW([gateway-mcp])
+    PC[(#1 platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nTIER_EVENTS)]
+
+    User -->|"логин / OAuth"| Ory
+    Ory  -->|"JWT токен"| User
+    User -->|"запрос + JWT"| GW
+    GW   -->|"verify JWT"| Ory
+    GW   -->|"check permissions"| Keto
+    GW   -->|"check subscription"| PC
+    PC   -->|"tier + grants"| GW
+```
+
+---
+
+### 4.3 Поток данных: события → ЦД → персональное руководство
 
 ```mermaid
 graph TD
+    LMS([LMS]) -->|raw events| AH
+    Club([Club]) -->|raw events| AH
+    Bot([AIST Bot]) -->|raw events| AH
+    WakaTime([WakaTime]) -->|raw events| AH
 
-    %% ── Клиенты ──────────────────────────────────────────────
-    WebApp([Web App\nVue/Nuxt\nRF + World])
-    Bot([AIST Bot\n@aist_me\nTelegram])
-    IWE([IWE / Claude Code\nMCP клиент])
-    ExtAI([Claude / ChatGPT\nвнешние MCP клиенты])
+    AH[(#4 activity-hub\nBronze → Silver → Gold)]
 
-    %% ── Внешние сервисы ──────────────────────────────────────
-    OryKratos([Ory Kratos\nидентичность])
-    OryKeto([Ory Keto\nRBAC / разрешения])
-    LMS([LMS Aisystant\nJava legacy])
-    Club([Discourse Club\nсообщество])
-    WakaTime([WakaTime\nколлектор])
-    Langfuse([Langfuse\nAI observability])
-    Railway([Railway\nхостинг])
+    AH -->|LEARNING_HISTORY| Profiler([Профайлер R28])
+    LMS -->|степень DEG| DT
+    Profiler -->|IND.3.4 ступени ролей\nIND.3.1 agency| DT[(#2 digital-twin)]
 
-    %% ── Слой сервисов (CF Workers / Railway) ─────────────────
-    GW([gateway-mcp\nCF Worker\nauth + fan-out])
-    KNMCP([knowledge-mcp\nCF Worker])
-    DTMCP([digital-twin-mcp\nCF Worker])
-    PKMCP([personal-knowledge-mcp\nCF Worker])
-    Tailor([Портной / Tailor\nперсональное руководство])
-    Navigator([Навигатор\nтраектория развития])
-    Profiler([Профайлер R28\nступени + ЦД])
-    HWChecker([ДЗ-чекер\nпроверка заданий])
-    NotifSvc([Nudge / Уведомления])
-    Billing([Billing Service\nподписки + гейтинг])
-    PayGW([Payment Gateway\nStripe / YooKassa / Stars])
-    Metabase([Metabase\nBI дашборды])
-
-    %% ── Neon: 7 баз данных ───────────────────────────────────
-    subgraph Neon ["Neon (целевая: 7 баз, сейчас: 1 база platform)"]
-        PC[(#1 platform-core\nUSER_IDENTITIES + tier\nSUBSCRIPTION_GRANTS\nTIER_EVENTS)]
-        DT[(#2 digital-twin\nDIGITAL_TWINS\nROLE_STAGES IND.3.4\nDEGREE IND.3.8)]
-        KN[(#3 knowledge\nDOCUMENTS + vectors\nCONCEPTS graph)]
-        AH[(#4 activity-hub\nRAW→USER→LEARNING\nIDENTITY_MAP)]
-        PR[(#5 payment-registry\nFINANCE_PAYMENTS\nAUDIT_LOG)]
-        AB[(#6 aist-bot\nUSER_STATE\nORY/DT_TOKENS)]
-        MB[(#7 metabase\n~171 таблиц)]
-    end
-
-    %% ── Идентичность ─────────────────────────────────────────
-    OryKratos -->|"OAuth / SSO"| GW
-    OryKratos -->|"identity source of truth"| PC
-    OryKeto   -->|"RBAC checks"| GW
-
-    %% ── Gateway fan-out ──────────────────────────────────────
-    GW -->|"check subscription → PC"| PC
-    GW -->|"fan-out"| KNMCP
-    GW -->|"fan-out"| DTMCP
-    GW -->|"fan-out"| PKMCP
-    GW -->|"fan-out"| Tailor
-    GW -->|"fan-out"| Navigator
-
-    %% ── Клиенты → Gateway ────────────────────────────────────
-    WebApp -->|"MCP запросы"| GW
-    IWE    -->|"MCP запросы"| GW
-    ExtAI  -->|"MCP запросы"| GW
-    Bot    -->|"MCP запросы"| GW
-
-    %% ── MCP сервисы ↔ Neon ───────────────────────────────────
-    KNMCP  -->|"read/write"| KN
-    DTMCP  -->|"read/write"| DT
-    PKMCP  -->|"read personal docs"| KN
-
-    %% ── ЦД и профайлер ───────────────────────────────────────
-    Profiler -->|"пишет IND.3.* ежедневно"| DT
-    AH       -->|"LEARNING_HISTORY → mastery"| Profiler
-    LMS      -->|"степень DEG → IND.3.8"| DT
-
-    %% ── Навигатор и Портной читают ЦД ───────────────────────
-    Tailor    -->|"читает профиль"| DT
-    Navigator -->|"читает ступени + степень"| DT
-
-    %% ── Бот ──────────────────────────────────────────────────
-    Bot -->|"FSM state + tokens"| AB
-    Bot -->|"write DT via dt-mcp"| DT
-    Bot -->|"collector events"| AH
-    Bot -->|"payments API"| PR
-
-    %% ── Коллекторы событий ───────────────────────────────────
-    LMS      -->|"raw events"| AH
-    Club     -->|"raw events"| AH
-    WakaTime -->|"raw events"| AH
-    AH       -->|"Bronze→Silver→Gold pipeline"| AH
-
-    %% ── Подписки / биллинг ───────────────────────────────────
-    Billing -->|"subscription-sync cron"| PC
-    PayGW   -->|"транзакции"| PR
-    PR      -->|"subscription-sync → GRANTS"| PC
-
-    %% ── ДЗ-чекер ─────────────────────────────────────────────
-    HWChecker -->|"assessment events"| AH
-    HWChecker -->|"misconceptions"| DT
-    Bot       -->|"отправляет задания"| HWChecker
-    LMS       -->|"отправляет задания"| HWChecker
-    WebApp    -->|"отправляет задания"| HWChecker
-
-    %% ── Уведомления ──────────────────────────────────────────
-    NotifSvc -->|"читает ЦД + события"| DT
-    NotifSvc -->|"nudge events"| AH
-    NotifSvc -->|"push → бот"| Bot
-
-    %% ── Аналитика ────────────────────────────────────────────
-    Metabase -->|"read finance (RLS)"| PR
-    Metabase -->|"read events (RO)"| AH
-    Langfuse -->|"AI traces"| GW
-
-    %% ── Инфра ────────────────────────────────────────────────
-    Railway -->|"хостит"| Bot
-    Railway -->|"хостит"| Profiler
-    Railway -->|"хостит"| Billing
+    DT -->|профиль + ступени| Tailor([Портной\nперсональное руководство])
+    DT -->|ступени + степень| Navigator([Навигатор\nтраектория])
+    DT -->|контекст| Bot
 ```
 
-### Что не попало в диаграмму (в разработке)
+---
 
-| Система | Статус | Связь с Neon |
-|---------|--------|-------------|
-| **CRM** | ❌ Запланирован | Читает platform-core; пишет события в activity-hub |
-| **Epistemic Graph (ESG)** | ❌ Запланирован | Расширение #3 knowledge — граф концептов и путей |
-| **Composer MCP (FSM)** | 🟡 Частично | Сценарии пишут состояния в aist-bot или отдельная таблица |
-| **Team Service** | ❌ Запланирован | Командная работа; события в activity-hub |
-| **Seminar/Webinar Service** | 🟡 Частично | Данные в payment-registry (SEMINAR_PAYMENTS) |
-| **AI Training Pipeline** | ❌ Запланирован | Читает events из activity-hub для fine-tuning |
-| **Publisher (Club pipeline)** | 🟡 Частично | Git → Club, в Neon не пишет |
-| **Proof-of-Impact (баллы)** | 🟡 Частично | POINT_TRANSACTIONS в #2 digital-twin |
-| **Event Bus / Dispatcher** | ❌ Запланирован | Оркестрация platform_outbox; заменит прямые cron |
+### 4.4 Реестр всех систем
+
+| Система | Статус | Читает из Neon | Пишет в Neon |
+|---------|--------|---------------|-------------|
+| Web App | ✅ | DT, KN (через GW) | events → AH |
+| AIST Bot | ✅ | PC, DT, AB | AB, AH, PR, DT |
+| IWE / Claude Code | ✅ | KN, DT (через GW) | KN |
+| gateway-mcp | ✅ | PC (subscription) | — |
+| knowledge-mcp | ✅ | KN | KN |
+| digital-twin-mcp | ✅ | DT | DT |
+| personal-knowledge-mcp | ✅ | KN | KN |
+| Профайлер R28 | ✅ | AH | DT (IND.3.*) |
+| Навигатор | ✅ | DT | — |
+| Портной | ✅ | DT | — |
+| ДЗ-чекер | ✅ | — | AH, DT |
+| Directus (CRM UI) | ✅ | PR | PR (ручные правки) |
+| Metabase (BI) | ✅ | PR, AH (RO) | — |
+| Ory Kratos | ✅ внешний | PC (sync) | PC (identity) |
+| Ory Keto | ✅ внешний | — | — (own store) |
+| LMS Aisystant | ✅ внешний | — | AH, DT (DEG) |
+| Discourse Club | ✅ внешний | — | AH |
+| WakaTime | ✅ внешний | — | AH |
+| Stripe / YooKassa / TG Stars | ✅ внешний | — | PR |
+| Langfuse | ✅ внешний | — | — (own store) |
+| Nudge / Уведомления | 🟡 в разработке | DT, AH | AH |
+| Composer MCP (FSM) | 🟡 в разработке | AB | AB |
+| Epistemic Graph | 🔲 запланирован | KN | KN |
+| CRM (сервис, не только UI) | 🔲 запланирован | PC, PR | AH |
+| Event Bus / Dispatcher | 🔲 запланирован | AH | AH |
+| AI Training Pipeline | 🔲 запланирован | AH, KN | — |
+| Team Service | 🔲 запланирован | PC | AH |
 
 </details>
 
