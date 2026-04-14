@@ -29,17 +29,21 @@ supersedes: "WP-232 решение об одной базе platform"
 **П3. Схема = namespace для роли-администратора**
 Внутри базы схемы разграничивают доступ ролей (финансист видит `finance.*`). Не для изоляции сервисов.
 
-**П4. `ory_id` — глобальный ключ**
-Каждая база хранит `ory_id` как обычную колонку без FK. Ory Kratos — source of truth идентичности. `user_identities` хранит только то, чего Ory не знает: `telegram_id`, `lms_id`, `region`.
+**П4. `ory_id` — глобальный ключ для платформ-сервисов**
+Каждая платформ-база (digital-twin, knowledge, payment-registry) хранит `ory_id` как обычную колонку без FK. Ory Kratos — source of truth идентичности. `user_identities` хранит только то, чего Ory не знает: `telegram_id`, `lms_id`, `region`.
+Бот использует `telegram chat_id` как локальный ключ — пользователи бота до OAuth не имеют `ory_id`. Разрешение `chat_id → ory_id` происходит в `activity-hub.IDENTITY_MAP` после OAuth callback (WP-187).
 
 **П5. Activity Hub — проектировать под замену**
-Events — кандидат на ClickHouse/TimescaleDB при масштабировании. Именно поэтому отдельная база.
+Events — кандидат на ClickHouse/TimescaleDB при масштабировании. Именно поэтому отдельная база. OAuth-конфигурация пользователей (`USER_INTEGRATIONS`) хранится в `platform-core`, а не в activity-hub — чтобы не потерять её при замене движка.
 
-**П6. Платежи — максимальная изоляция**
-`finance_payments` без FK наружу. Другие сервисы проверяют подписку через `subscription_grants` в `platform-core` (gateway), не через прямой доступ к базе платежей.
+**П6. Платежи — изолированный реестр**
+`payment-registry` — единственная база с финансовыми транзакциями. Другие сервисы не имеют прямого доступа к ней (кроме Metabase через read-only роль с RLS, см. П7). Все платежи платформы (YooKassa, Stripe, Telegram Stars, семинары, воркшопы) хранятся здесь.
 
-**П7. `SUBSCRIPTION_GRANTS` живёт в `platform-core` осознанно**
-Gateway-паттерн: `payment-registry` синхронизирует гранты подписок в `platform-core` через `subscription-sync` cron. Другие сервисы читают авторизацию только из `platform-core` — единая точка проверки прав.
+**П7. `SUBSCRIPTION_GRANTS` в `platform-core` — gateway-паттерн**
+`payment-registry` поддерживает `SUBSCRIPTION_GRANTS` актуальными через `subscription-sync` cron. Другие сервисы проверяют права только через `platform-core` — единая точка авторизации. Это **push-based sync**: payment-registry пишет в ядро, не наоборот.
+Metabase читает `payment-registry` через отдельного read-only пользователя Postgres с Row-Level Security (видит агрегаты: суммы, статусы — не реквизиты). RLS-политики → WP-212 Ф9.
+
+---
 
 ## Карта баз данных
 
@@ -48,7 +52,8 @@ Neon Project: aisystant
 │
 ├── DB: platform-core      ← USER_IDENTITIES + SUBSCRIPTION_GRANTS
 │                             + GITHUB_CONNECTIONS + GOOGLE_CALENDAR_CONNECTIONS
-│                             + ORY_TOKENS + DT_TOKENS + BACKEND_REGISTRY
+│                             + USER_INTEGRATIONS (OAuth-конфиг для коллекторов)
+│                             + BACKEND_REGISTRY
 │                             + directus.* (схема Directus CMS ~15 таблиц)
 │
 ├── DB: digital-twin       ← DIGITAL_TWINS + POINT_TRANSACTIONS
@@ -60,41 +65,67 @@ Neon Project: aisystant
 │
 ├── DB: activity-hub       ← RAW_EVENTS (partitioned) + USER_EVENTS
 │                             + LEARNING_HISTORY (Gold layer)
-│                             + USER_INTEGRATIONS + IDENTITY_MAP
-│                             + SYNC_LOG + QUARANTINED_EVENTS
+│                             + IDENTITY_MAP + SYNC_LOG + QUARANTINED_EVENTS
 │                             ⚠ кандидат на замену ClickHouse/TimescaleDB
 │
-├── DB: payment-registry   ← FINANCE_PAYMENTS + PAYMENTS_SYNC_STATE
-│                             + SUBSCRIPTION_GRANTS_SYNC_STATE
+├── DB: payment-registry   ← FINANCE_PAYMENTS + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
+│                             + PAYMENTS_SYNC_STATE + SUBSCRIPTION_GRANTS_SYNC_STATE
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
 ├── DB: aist-bot           ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
-│                             + BOT_SUBSCRIPTIONS + SEMINARS + SEMINAR_PAYMENTS
-│                             + WORKSHOP_PAYMENTS + COMMUNITY_MEMBERS
+│                             + BOT_SUBSCRIPTIONS + SEMINARS + COMMUNITY_MEMBERS
 │                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
+│                             + ORY_TOKENS + DT_TOKENS (персистентность бот-сессий)
 │
 └── DB: metabase           ← служебные таблицы Metabase (~171 таблица)
                               dashboards, questions, users, collections…
-                              читает payment-registry (read-only conn)
+                              читает payment-registry и activity-hub (read-only + RLS)
                               ⚠ НЕ хранит прикладные данные платформы
 
 Вне Neon:
   Ory Kratos (отдельный сервис) ← идентичность, source of truth по ory_id
 ```
 
+---
+
 ## Пояснение: USER_INTEGRATIONS vs GITHUB_CONNECTIONS
 
-Обе таблицы хранят GitHub OAuth-токен одного и того же пользователя — это намеренный **dual-write**.
+Обе таблицы хранят GitHub OAuth-токен одного пользователя — это намеренный **dual-write**.
 
-| | GITHUB_CONNECTIONS (platform-core) | USER_INTEGRATIONS (activity-hub) |
+| | GITHUB_CONNECTIONS (platform-core) | USER_INTEGRATIONS (platform-core) |
 |---|---|---|
-| **Кто пишет** | Бот (OAuth callback) | activity-hub (sync из github_connections) |
-| **Назначение** | Конфигурация публикации: target_repo, notes_path, strategy_repo, branches | Server-side сбор данных: WakaTime sync, IWE Adapter |
-| **Дополнительные поля** | knowledge_repo, strategy_repo, default_branch | scope, metadata (generic) |
+| **Назначение** | Конфигурация публикации: target_repo, notes_path, strategy_repo, branches | OAuth-конфиг для коллекторов: WakaTime sync, IWE Adapter |
+| **Дополнительные поля** | knowledge_repo, strategy_repo, default_branch | service, scope, metadata (generic) |
 | **Потребитель** | Бот-издатель (публикация заметок) | activity-hub collectors |
 
-`GOOGLE_CALENDAR_CONNECTIONS` — только в `platform-core` (бот), дублирования нет.
-`WAKATIME` — только в `USER_INTEGRATIONS` (activity-hub collector), в боте нет.
+`GOOGLE_CALENDAR_CONNECTIONS` — только в `platform-core`, дублирования нет.
+`WAKATIME` — только в `USER_INTEGRATIONS`, в боте нет.
+
+---
+
+## Пояснение: ORY_TOKENS и DT_TOKENS в aist-bot
+
+Это **персистентность бот-сессий**, а не кеш платформы:
+- Бот переживает редеплои: токены восстанавливаются из БД при старте
+- Ключ — `chat_id` (Telegram), не `ory_id` — потому что бот работает в Telegram-контексте
+- `ory_tokens` — токены для вызова Gateway MCP (Ory OAuth, proactive refresh каждые 10 мин)
+- `dt_tokens` — токены для вызова DT API (Digital Twin OAuth callback)
+- Хранятся в aist-bot, потому что нужны только боту. Не платформ-данные.
+
+---
+
+## Пояснение: LEARNING_HISTORY vs LEARNER_CONCEPT_MASTERY
+
+Два разных предмета одного домена обучения:
+
+| | LEARNING_HISTORY (activity-hub) | LEARNER_CONCEPT_MASTERY (digital-twin) |
+|---|---|---|
+| **Что хранит** | Сырые факты: "прошёл мем X, score 0.8" | Агрегированный статус: "освоен концепт ZP.001 на 85%" |
+| **Кто пишет** | transform-worker из USER_EVENTS | dt-mcp / profiler (читает LEARNING_HISTORY через API) |
+| **Слой** | Gold (события) | Производная (state) |
+
+Поток: LEARNING_HISTORY (activity-hub) → API → profiler/dt-mcp → LEARNER_CONCEPT_MASTERY (digital-twin).
+Квалификация "Ученик" и уровни до неё — автоматически из mastery. Выше — методсовет МИМ (ручное).
 
 ---
 
@@ -105,14 +136,15 @@ Neon Project: aisystant
 ```mermaid
 graph TD
     OryKratos([Ory Kratos\nexternal])
+    Collectors([Collectors\nLMS / Club / IWE])
 
     subgraph Neon
-        PC[(platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nOAuth connections)]
+        PC[(platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nOAuth connections\nUSER_INTEGRATIONS)]
         DT[(digital-twin\nDIGITAL_TWINS\nPOINT_TRANSACTIONS\nLEARNER_MASTERY)]
         KN[(knowledge\nDOCUMENTS\nCONCEPTS\nCONCEPT_GRAPH)]
-        AH[(activity-hub\nRAW_EVENTS\nUSER_EVENTS\nLEARNING_HISTORY)]
-        PR[(payment-registry\nFINANCE_PAYMENTS\nSYNC_STATES)]
-        AB[(aist-bot\nUSER_STATE\nQA_HISTORY\nBOT_SUBSCRIPTIONS)]
+        AH[(activity-hub\nRAW_EVENTS\nUSER_EVENTS\nLEARNING_HISTORY\nIDENTITY_MAP)]
+        PR[(payment-registry\nFINANCE_PAYMENTS\nSEMINAR_PAYMENTS\nWORKSHOP_PAYMENTS)]
+        AB[(aist-bot\nUSER_STATE\nQA_HISTORY\nORY_TOKENS / DT_TOKENS)]
         MB[(metabase\n~171 служебных таблиц)]
     end
 
@@ -121,21 +153,22 @@ graph TD
     PC -->|"check subscription\n(API)"| AB
     PC -->|"check subscription\n(API)"| DT
     PC -->|"check subscription\n(API)"| KN
-    PC -->|"user identity\n(API)"| AH
 
     PR -->|"subscription-sync cron\n→ SUBSCRIPTION_GRANTS"| PC
 
     AB -->|"write DT via\ndt-mcp API"| DT
     AB -->|"send events\n(collector)"| AH
-    AB -->|"GitHub dual-write\n→ USER_INTEGRATIONS"| AH
+    AB -->|"write payments\n(seminars/workshops)"| PR
+
+    Collectors -->|"raw events\n→ RAW_EVENTS"| AH
+
+    AH -->|"transform pipeline\nRAW→USER_EVENTS→GOLD"| AH
+    AH -->|"LEARNING_HISTORY\n→ mastery (API)"| DT
 
     KN -->|"concept_id ref\n(API)"| DT
 
-    AH -->|"transform pipeline\nRAW→USER_EVENTS"| AH
-    AH -->|"learning events\n→ LEARNING_HISTORY\n(Gold layer)"| AH
-
-    MB -->|"read finance data\n(read-only conn)"| PR
-    MB -->|"read events\n(read-only conn)"| AH
+    MB -->|"read finance data\n(read-only + RLS)"| PR
+    MB -->|"read events\n(read-only)"| AH
 ```
 
 ---
@@ -170,7 +203,7 @@ erDiagram
         timestamptz valid_from
         timestamptz valid_until
         timestamptz revoked_at
-        text        note            "синхронизируется из payment-registry cron"
+        text        note            "поддерживается payment-registry subscription-sync cron"
     }
 
     GITHUB_CONNECTIONS {
@@ -184,7 +217,7 @@ erDiagram
         text        strategy_repo
         text        default_branch
         timestamptz connected_at
-        text        note            "dual-write: токен также в activity-hub.USER_INTEGRATIONS"
+        text        note            "dual-write: токен также в USER_INTEGRATIONS для коллекторов"
     }
 
     GOOGLE_CALENDAR_CONNECTIONS {
@@ -198,21 +231,17 @@ erDiagram
         timestamptz connected_at
     }
 
-    ORY_TOKENS {
+    USER_INTEGRATIONS {
         serial      id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id
+        uuid        user_uuid       "→ USER_IDENTITIES"
+        text        service         "github|wakatime|google_calendar"
         text        access_token
         text        refresh_token
-        timestamptz expires_at
-    }
-
-    DT_TOKENS {
-        serial      id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id
-        text        token_value
-        timestamptz expires_at
+        timestamptz token_expires_at
+        text        scope
+        jsonb       metadata
+        timestamptz connected_at
+        text        note            "source of truth для activity-hub collectors; GitHub: dual-write из GITHUB_CONNECTIONS"
     }
 
     BACKEND_REGISTRY {
@@ -229,8 +258,7 @@ erDiagram
     USER_IDENTITIES ||--o{ SUBSCRIPTION_GRANTS : "has"
     USER_IDENTITIES ||--o{ GITHUB_CONNECTIONS : "connects GitHub"
     USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
-    USER_IDENTITIES ||--o{ ORY_TOKENS : "SSO session"
-    USER_IDENTITIES ||--o{ DT_TOKENS : "DT access"
+    USER_IDENTITIES ||--o{ USER_INTEGRATIONS : "service integrations"
     USER_IDENTITIES ||--o{ BACKEND_REGISTRY : "personal MCPs"
 ```
 
@@ -267,6 +295,7 @@ erDiagram
         float       mastery         "0.0–1.0 Bayesian"
         int         attempts
         timestamptz last_assessed_at
+        text        note            "пишет profiler/dt-mcp после чтения activity-hub.LEARNING_HISTORY (API)"
     }
 
     DIGITAL_TWINS ||--o{ POINT_TRANSACTIONS : "accumulates points"
@@ -288,7 +317,7 @@ erDiagram
         text        source_type     "platform|personal|github"
         vector      embedding       "1024-dim HNSW"
         tsvector    search_vector
-        uuid        user_id         "NULL=platform, set=personal (API→platform-core)"
+        uuid        user_id         "NULL=platform, set=personal (ref→platform-core API)"
         bigint      parent_id       FK
         timestamptz created_at
     }
@@ -370,6 +399,7 @@ erDiagram
         jsonb       payload         "сырой, без трансформаций"
         timestamptz fetched_at
         text        transform_status "pending|done|failed|skipped"
+        text        note            "партиционирована по (source, fetched_at)"
     }
 
     USER_EVENTS {
@@ -393,14 +423,14 @@ erDiagram
         bool        passed
         int         schema_version  "1=legacy, 2=current"
         timestamptz created_at
-        text        note            "Gold layer: материализация learning_* событий из USER_EVENTS"
+        text        note            "Gold layer: материализация learning_* событий из USER_EVENTS. Читается profiler → LEARNER_CONCEPT_MASTERY в digital-twin"
     }
 
     IDENTITY_MAP {
         bigserial   id              PK
         text        source
         text        external_id
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
+        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API); NULL до OAuth (WP-187 backfill hook)"
     }
 
     QUARANTINED_EVENTS {
@@ -422,31 +452,19 @@ erDiagram
         timestamptz finished_at
     }
 
-    USER_INTEGRATIONS {
-        serial      id              PK
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
-        text        service         "github|wakatime|google_calendar"
-        text        access_token
-        text        refresh_token
-        timestamptz token_expires_at
-        text        scope
-        jsonb       metadata
-        timestamptz connected_at
-        text        note            "GitHub: dual-write из platform-core.GITHUB_CONNECTIONS"
-    }
-
     RAW_EVENTS ||--o{ USER_EVENTS : "transform → silver"
     USER_EVENTS ||--o{ LEARNING_HISTORY : "materialize → gold"
     RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid → quarantine"
-    USER_INTEGRATIONS }o--|| IDENTITY_MAP : "resolves user"
+    IDENTITY_MAP }o--|| USER_EVENTS : "resolves user_uuid"
 ```
 
 ---
 
 ### DB: payment-registry
 
-Реестр всех платежей. Максимальная изоляция: другие сервисы не имеют прямого доступа к базе.
+Единственная база с финансовыми транзакциями. Хранит все виды платежей платформы.
 Синхронизирует `SUBSCRIPTION_GRANTS` в `platform-core` через cron `subscription-sync`.
+Metabase читает через отдельного read-only пользователя с RLS (→ WP-212 Ф9).
 
 ```mermaid
 erDiagram
@@ -464,6 +482,28 @@ erDiagram
         timestamptz archived_at
     }
 
+    SEMINAR_PAYMENTS {
+        bigserial   id              PK
+        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
+        int         seminar_id      "ref→aist-bot.SEMINARS (API)"
+        decimal     amount
+        text        currency        "RUB|STARS"
+        text        status
+        timestamptz paid_at
+        text        note            "оплата семинаров через бот; бот пишет сюда через payment API"
+    }
+
+    WORKSHOP_PAYMENTS {
+        bigserial   id              PK
+        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
+        text        aisystant_id    "ref→Aisystant LMS user (external API)"
+        decimal     amount
+        text        status          "pending|success"
+        text        source          "bot|web"
+        timestamptz paid_at
+        text        note            "оплата воркшопов; бот пишет сюда через payment API"
+    }
+
     PAYMENTS_SYNC_STATE {
         int         id              PK  "singleton id=1"
         bigint      last_payment_id
@@ -475,7 +515,7 @@ erDiagram
         int         id              PK  "singleton id=1"
         bigint      last_subscription_id
         timestamptz last_sync_at
-        text        note            "tracks sync boundary → platform-core.SUBSCRIPTION_GRANTS"
+        text        note            "watermark → platform-core.SUBSCRIPTION_GRANTS"
     }
 
     IMPORT_STAGING_PAYMENT {
@@ -486,7 +526,7 @@ erDiagram
         text        payment_system
         decimal     amount
         bool        success
-        text        note            "⚙ landing zone для incremental sync из Aisystant"
+        text        note            "landing zone для incremental sync из Aisystant"
     }
 
     IMPORT_STAGING_CHARGEOFF {
@@ -494,7 +534,7 @@ erDiagram
         bigint      suser_id
         decimal     amount
         bigint      payment_id      "→ FINANCE_PAYMENTS"
-        text        note            "⚙ landing zone для incremental sync"
+        text        note            "landing zone для incremental sync"
     }
 
     IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
@@ -505,7 +545,7 @@ erDiagram
 
 ### DB: aist-bot
 
-Только бот. Telegram-first: основной ключ — `chat_id`. Не содержит платформенных данных.
+Только бот. Telegram-first: основной ключ — `chat_id`. Не содержит платформенных данных и финансовых транзакций.
 
 ```mermaid
 erDiagram
@@ -545,6 +585,7 @@ erDiagram
         int         stars_amount
         timestamptz started_at
         timestamptz expires_at
+        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка в platform-core.SUBSCRIPTION_GRANTS"
     }
 
     SEMINARS {
@@ -554,26 +595,7 @@ erDiagram
         int         price_stars
         bigint      tg_group_id     "Telegram group"
         date        event_date
-    }
-
-    SEMINAR_PAYMENTS {
-        bigserial   id              PK
-        bigint      telegram_id
-        int         seminar_id      FK
-        decimal     amount
-        text        currency        "RUB|STARS"
-        text        status
-        timestamptz paid_at
-    }
-
-    WORKSHOP_PAYMENTS {
-        bigserial   id              PK
-        bigint      telegram_id
-        text        aisystant_id    "ref→Aisystant LMS user (external, API)"
-        decimal     amount
-        text        status          "pending|success"
-        text        source          "bot|web"
-        timestamptz paid_at
+        text        note            "каталог семинаров; оплата → payment-registry.SEMINAR_PAYMENTS"
     }
 
     COMMUNITY_MEMBERS {
@@ -605,14 +627,35 @@ erDiagram
         bigint      chat_id
         text        category
         text        status          "new|classified|resolved"
-        text        source          "bot|club|manual"
+        text        source          "bot"
         timestamptz created_at
+        text        note            "только бот-фидбек (source='bot'); кросс-канальный feedback → activity-hub"
+    }
+
+    ORY_TOKENS {
+        bigint      chat_id         PK  "Telegram chat_id"
+        text        access_token
+        text        refresh_token
+        timestamptz expires_at
+        text        ory_id
+        timestamptz updated_at
+        text        note            "персистентность Ory OAuth-сессии бота; восстанавливается при редеплое"
+    }
+
+    DT_TOKENS {
+        bigint      chat_id         PK  "Telegram chat_id"
+        text        access_token
+        text        refresh_token
+        timestamptz expires_at
+        text        dt_user_id
+        timestamptz updated_at
+        text        note            "персистентность Digital Twin OAuth-сессии бота; восстанавливается при редеплое"
     }
 
     USER_STATE ||--o{ QA_HISTORY : "conversation"
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
-    SEMINARS ||--o{ SEMINAR_PAYMENTS : "paid by"
+    SEMINARS }o--o{ COMMUNITY_MEMBERS : "members"
 ```
 
 ---
@@ -620,7 +663,7 @@ erDiagram
 ### DB: metabase
 
 Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
-Читает `payment-registry` и `activity-hub` через отдельные read-only connections.
+Читает `payment-registry` и `activity-hub` через отдельные read-only connections с RLS.
 
 ```mermaid
 erDiagram
@@ -667,12 +710,108 @@ erDiagram
 | База | Writers | Readers |
 |------|---------|---------|
 | platform-core | Ory callback, OAuth flows, `subscription-sync` cron (из payment-registry) | gateway-mcp (авторизация каждого запроса), все сервисы через API |
-| digital-twin | dt-mcp, profiler cron, бот (через DT-MCP API) | dt-mcp, бот `/twin`, knowledge-mcp (рекомендации) |
+| digital-twin | dt-mcp, profiler cron (читает activity-hub.LEARNING_HISTORY через API) | dt-mcp, бот `/twin`, knowledge-mcp (рекомендации) |
 | knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp |
-| activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот (dual-write GitHub токена) | transform-worker, Metabase (RO) |
-| payment-registry | `incremental-sync.sh` cron, Directus API | Metabase (RO), `subscription-sync` cron |
+| activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот (события) | transform-worker, profiler (LEARNING_HISTORY), Metabase (RO) |
+| payment-registry | `incremental-sync.sh` cron, бот (seminar/workshop payments через API) | Metabase (RO + RLS), `subscription-sync` cron |
 | aist-bot | только бот | только бот |
 | metabase | Metabase internal | Metabase UI |
+
+---
+
+## Справочник таблиц
+
+### platform-core
+
+| Таблица | Назначение |
+|---------|-----------|
+| USER_IDENTITIES | Маппинг идентичностей: ory_id ↔ telegram_id ↔ lms_id. Хранит только то, чего Ory не знает. Source of truth для связывания пользователей между системами. |
+| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway-паттерн: все сервисы проверяют права здесь. Поддерживается payment-registry через cron. |
+| GITHUB_CONNECTIONS | GitHub OAuth-токены и конфигурация публикации (репозитории, ветки). Потребитель — бот-издатель заметок. |
+| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth-токены для интеграции бота с календарём пользователя. |
+| USER_INTEGRATIONS | OAuth-конфигурация для activity-hub коллекторов: GitHub (WakaTime), Google Calendar. Source of truth для collectors; переживает замену движка activity-hub. |
+| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей (экзокортекс). Статус валидации и knowledge gate. |
+
+### digital-twin
+
+| Таблица | Назначение |
+|---------|-----------|
+| DIGITAL_TWINS | Цифровой двойник пользователя. 3 слоя: базовые параметры, вовлечённость, производные показатели (agency, longevity и др.). |
+| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Каждое событие — отдельная строка с rule_code и источником. |
+| LEARNER_CONCEPT_MASTERY | Агрегированная степень освоения концептов (0.0–1.0). Вычисляется profiler из LEARNING_HISTORY. Основа для автоматической квалификации "Ученик". |
+
+### knowledge
+
+| Таблица | Назначение |
+|---------|-----------|
+| DOCUMENTS | Документы платформы и персональные документы пользователей. Чанки с векторными эмбеддингами для semantic search. |
+| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов при поиске. Используется для дообучения ранжирования. |
+| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). Каждый концепт — именованная единица знания с уровнем и доменом. |
+| CONCEPT_EDGES | Рёбра графа концептов: prerequisite, related, part_of, contradicts. Основа для графовых рекомендаций. |
+| CONCEPT_MISCONCEPTIONS | Типовые ошибки и заблуждения по концептам. Используются для адаптивного обучения. |
+| GITHUB_INSTALLATIONS | GitHub App installations пользователей. Даёт боту доступ к репозиториям для индексации. |
+| USER_SOURCES | Источники индексации для каждого пользователя (GitHub репозитории, активные/неактивные). |
+
+### activity-hub
+
+| Таблица | Назначение |
+|---------|-----------|
+| RAW_EVENTS | Landing zone. Сырые события из всех источников (LMS, бот, club, IWE) без трансформаций. Партиционирована по source и fetched_at. Bronze-слой медальонной архитектуры. |
+| USER_EVENTS | Silver-слой. Нормализованные события с атрибуцией пользователя (user_uuid), дедуплицированные по external_id. |
+| LEARNING_HISTORY | Gold-слой. Материализация learning-событий: факты обучения (мемы, практики, ячейки) с оценками. Читается profiler для вычисления mastery. |
+| IDENTITY_MAP | Маппинг внешних ID (chat_id, lms_id) на ory_id для атрибуции событий. user_uuid = NULL до OAuth-связывания. |
+| SYNC_LOG | Журнал запусков коллекторов: статус, количество событий, время. Используется для мониторинга и дебага. |
+| QUARANTINED_EVENTS | Карантин для событий, не прошедших валидацию. Хранятся для ручного разбора и повторной обработки. |
+
+### payment-registry
+
+| Таблица | Назначение |
+|---------|-----------|
+| FINANCE_PAYMENTS | Основной реестр всех финансовых транзакций платформы. YooKassa, Stripe, ручные платежи. Источник данных для Metabase и subscription-sync. |
+| SEMINAR_PAYMENTS | Платежи за семинары (через бот). Отдельная таблица для отчётности по семинарскому направлению. |
+| WORKSHOP_PAYMENTS | Платежи за воркшопы (через бот или web). Содержит aisystant_id для связки с LMS. |
+| PAYMENTS_SYNC_STATE | Singleton-ватерmarк инкрементального импорта из Aisystant. Хранит last_payment_id для безопасного возобновления. |
+| SUBSCRIPTION_GRANTS_SYNC_STATE | Singleton-ватерmarк синхронизации грантов подписок в platform-core. |
+| IMPORT_STAGING_PAYMENT | Landing zone для инкрементального импорта платежей из Aisystant API. Временные данные до верификации и merge. |
+| IMPORT_STAGING_CHARGEOFF | Landing zone для списаний из Aisystant. Связывается с FINANCE_PAYMENTS по payment_id. |
+
+### aist-bot
+
+| Таблица | Назначение |
+|---------|-----------|
+| USER_STATE | FSM-состояние пользователя в боте. Текущий шаг диалога, контекст, счётчик активных дней, триал. |
+| QA_HISTORY | История вопросов и ответов пользователя в боте с флагом полезности и источниками MCP. |
+| NOTIFICATION_LOG | Журнал отправленных уведомлений с idempotency_key для защиты от дублей. |
+| BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). Не связаны с платформенной подпиской (та — в platform-core.SUBSCRIPTION_GRANTS). |
+| SEMINARS | Каталог семинаров: название, цена, дата, Telegram-группа. Оплата → payment-registry.SEMINAR_PAYMENTS. |
+| COMMUNITY_MEMBERS | Участники Telegram-сообщества: join/leave события. |
+| SERVICE_USAGE | Счётчик использования сервисов бота по пользователю. |
+| USER_ACCESS | Временные права доступа к ресурсам (выданные ботом, с expiry). |
+| FEEDBACK_TRIAGE | Фидбек пользователей из бота: категория, статус обработки. Только source='bot'. |
+| ORY_TOKENS | Ory OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. |
+| DT_TOKENS | Digital Twin OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. |
+
+### metabase
+
+| Таблица | Назначение |
+|---------|-----------|
+| METABASE_COLLECTIONS | Иерархические коллекции дашбордов и вопросов (папки в Metabase). |
+| METABASE_DASHBOARDS | Дашборды: финансы, события, активность. Читают из payment-registry и activity-hub. |
+| METABASE_CARDS | Отдельные вопросы (questions): SQL или MBQL-запросы к данным. |
+| METABASE_USERS | Пользователи Metabase (аналитики, финансисты). Не связаны с Ory-пользователями платформы. |
+
+---
+
+## Открытые вопросы
+
+| Вопрос | Владелец | Статус |
+|--------|---------|--------|
+| Retention policy всех таблиц (TTL, архивирование, GDPR right-to-be-forgotten) | WP-214 (Data Governance) + новая фаза WP-228 | pending |
+| Backup / DR: RPO, RTO, PITR по каждой базе | WP-212 Ф5 + новая фаза WP-228 | pending |
+| RLS-политики для Metabase read-only connections к payment-registry | WP-212 Ф9 | pending |
+| Partitioning strategy для USER_EVENTS, LEARNING_HISTORY, POINT_TRANSACTIONS | WP-228 Ф1 | pending |
+
+---
 
 ## Статус
 
