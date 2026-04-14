@@ -807,90 +807,146 @@ erDiagram
 
 ---
 
-## Открытые вопросы и известные проблемы
+## Архитектурные решения (принятые)
 
-> Здесь фиксируются архитектурные вопросы, которые пока не решены, и известные проблемы, требующие отдельных РП (рабочих продуктов/задач). Каждый пункт содержит варианты решения.
+> Все проблемы, выявленные при ArchGate-ревью, имеют принятые решения. Без их реализации архитектура не является целевой — это план реализации, а не wishlist.
 
-### Б-1 — Токены OAuth в plaintext (КРИТИЧЕСКИЙ)
+### Б-1 — Шифрование OAuth-токенов в aist-bot
 
-**Проблема:** `ORY_TOKENS` и `DT_TOKENS` в aist-bot хранят `access_token` и `refresh_token` как TEXT без шифрования. Проверено в коде: `db/queries/ory_tokens.py`, `db/queries/dt_tokens.py` — вставка без шифрования, библиотека `cryptography` отсутствует в `requirements.txt`. При компрометации базы aist-bot все OAuth-сессии пользователей утекают.
+**Проблема:** `ORY_TOKENS.access_token` и `DT_TOKENS.access_token` хранятся как TEXT без шифрования. Подтверждено в коде: `db/queries/ory_tokens.py`, библиотека `cryptography` отсутствует в `requirements.txt`. При компрометации базы — все OAuth-сессии пользователей утекают.
 
-**Варианты решения:**
-- A) Шифрование на уровне приложения: `cryptography` (Fernet/AES-256-GCM) + ключ из env/Vault (~20h)
-- B) Postgres column encryption: pgcrypto `encrypt()` + ключ в secrets (~10h, но сложнее ротация)
-- C) Короткие TTL + принудительный refresh: токены живут ≤1ч, при компрометации урон ограничен (~5h)
+**Принятое решение:** Python Fernet (AES-128-CBC + HMAC-SHA256) + автоматический refresh каждые 10 мин.
+- Ключ `FERNET_KEY` из env (Railway secrets), не в коде
+- При сохранении: `encrypted = Fernet(key).encrypt(token.encode())`
+- При чтении: `token = Fernet(key).decrypt(encrypted).decode()`
+- Scheduler: `updated_at < now() - 10 min` → принудительный refresh через Ory
 
-**Рекомендация:** A + C (шифруем И укорачиваем TTL). **РП:** новый WP под безопасность бота или WP-212.
-
----
-
-### М-1 — Нет кеша авторизации в gateway-mcp (ВЫСОКИЙ)
-
-**Проблема:** Проверено в коде: `gateway-mcp/src/index.ts` — `checkSubscription()` делает SELECT в Neon на каждый запрос без кеша. JWKS кешируется (хорошо), но SUBSCRIPTION_GRANTS — нет. При 10k пользователей = тысячи DB-запросов в минуту.
-
-**Варианты решения:**
-- A) In-memory cache в Cloudflare Worker с TTL 5 мин: `Map<ory_id, {granted: bool, until: timestamp}>` (~5h)
-- B) Redis (Upstash) как distributed cache: надёжнее, но +инфра (~15h)
-- C) JWT-claims: включить subscription status в Ory JWT payload, проверять offline (~20h, нужны изменения в Ory)
-
-**Рекомендация:** A (быстро и достаточно). **РП:** WP-212 или отдельный WP.
+**Трудозатраты:** ~16h. **РП:** WP-234 (новый).
 
 ---
 
-### О-1 — Нет correlation_id в activity-hub (ВЫСОКИЙ)
+### М-1 — Кеш авторизации в gateway-mcp
 
-**Проблема:** Проверено в миграциях: ни RAW_EVENTS, ни USER_EVENTS не имеют поля `correlation_id` или `trace_id`. Нельзя проследить путь конкретного события: raw → silver → gold. Дебаг в продакшне требует JOIN по `(source, external_id)`.
+**Проблема:** `checkSubscription()` в `gateway-mcp/src/index.ts` делает SELECT в Neon на каждый запрос. JWKS кешируется (хорошо), SUBSCRIPTION_GRANTS — нет. Подтверждено в коде. При 10k пользователей = тысячи DB-запросов в минуту.
 
-**Варианты решения:**
-- A) Добавить `correlation_id UUID DEFAULT gen_random_uuid()` в RAW_EVENTS, propagate в USER_EVENTS и LEARNING_HISTORY при transform (~8h миграции + код transform-worker)
-- B) Использовать `external_id + source` как суррогатный trace key (0h миграций, но неудобно)
+**Принятое решение:** Cloudflare KV с TTL 5 мин.
+- In-memory Map не подходит: Workers stateless, разные isolates → cache miss 80%+
+- `await env.AUTH_CACHE_KV.put("sub:{ory_id}", "1", {expirationTtl: 300})`
+- Cache miss → DB запрос → запись в KV → return result
+- При отзыве подписки: явная инвалидация `kv.delete(key)`
 
-**Рекомендация:** A. **РП:** WP-228 Ф1 или WP-109 Ф9.
-
----
-
-### О-2 — Нет audit trail для FINANCE_PAYMENTS (ВЫСОКИЙ)
-
-**Проблема:** Нет поля `updated_at`, нет таблицы истории изменений статуса. Нельзя ответить: "кто и когда изменил статус платежа с pending на failed?"
-
-**Варианты решения:**
-- A) Добавить `finance_payments_log` таблицу: payment_id, old_status, new_status, changed_by, changed_at (~10h)
-- B) Postgres trigger: автоматически пишет в лог при UPDATE статуса (~5h)
-- C) Event Sourcing: только INSERT, никаких UPDATE статусов (immutable log) (~40h, переработка архитектуры)
-
-**Рекомендация:** B (минимально инвазивно). **РП:** новая фаза WP-183 или WP-228.
+**Трудозатраты:** ~12h. **РП:** WP-235 (новый).
 
 ---
 
-### Б-2 — RLS для Metabase к payment-registry (СРЕДНИЙ)
+### О-1 — Correlation ID в activity-hub
 
-**Проблема:** Metabase читает FINANCE_PAYMENTS без Row-Level Security. При компрометации Metabase — все финансовые данные открыты. Делегировано в WP-212 Ф9, пока не реализовано.
+**Проблема:** RAW_EVENTS, USER_EVENTS, LEARNING_HISTORY не имеют `trace_id`. Нельзя проследить путь события bronze→silver→gold. Подтверждено в миграциях activity-hub.
 
-**Вариант решения:** Создать Postgres роль `metabase_ro` с `GRANT SELECT` только на нужные поля (amount, currency, status, charged_off_at). Без доступа к ory_id, telegram_id. Время: ~4h. **РП:** WP-212 Ф9.
+**Принятое решение:** OpenTelemetry trace_id (128-bit hex, 32 символа) — интегрируется с Langfuse (уже используется).
+- `trace_id CHAR(32)` добавляется в RAW_EVENTS при ingestion через `gen_random_uuid()`
+- Transform-worker пропагирует `trace_id` из RAW_EVENTS → USER_EVENTS → LEARNING_HISTORY
+- Индекс: `CREATE INDEX idx_raw_events_trace_id ON RAW_EVENTS(trace_id)`
 
----
-
-### Б-3 — BACKEND_REGISTRY.backend_url: SSRF риск (СРЕДНИЙ)
-
-**Проблема:** Пользователи регистрируют кастомные URL своих MCP-бэкендов. Если validation-worker вызывает URL без проверки схемы — возможен SSRF (http://169.254.169.254/ для cloud metadata, http://localhost и т.п.).
-
-**Вариант решения:** Валидация URL при записи: только `https://`, запрет RFC1918 адресов (10.x, 172.16.x, 192.168.x, 127.x, 169.254.x), allowlist доменов или wildcard. ~4h. **РП:** WP-212 или WP-189.
+**Трудозатраты:** ~20h. **РП:** WP-236 (новый).
 
 ---
 
-### М-2 — Retention policy и партиционирование (СРЕДНИЙ)
+### О-2 — Audit trail для FINANCE_PAYMENTS
 
-**Проблема:** RAW_EVENTS растёт бесконечно. Нет TTL для старых партиций. USER_EVENTS, LEARNING_HISTORY, POINT_TRANSACTIONS не имеют стратегии партиционирования. GDPR требует права на удаление данных.
+**Проблема:** Нет истории изменений статуса платежа. Нельзя ответить: "кто и когда изменил статус с pending на failed?"
 
-**Вариант решения:** Определить TTL по таблицам (RAW_EVENTS — 90д, QA_HISTORY — 180д, FINANCE_PAYMENTS — permanent), добавить партиционирование по дате для крупных таблиц, написать GDPR deletion script. **РП:** WP-214 (Data Governance) + новая фаза WP-228.
+**Принятое решение:** Postgres trigger → append-only log таблица.
+- Новая таблица: `FINANCE_PAYMENTS_AUDIT_LOG(payment_id, field_name, old_value, new_value, changed_by, changed_at)`
+- Trigger `tr_log_payment_changes` срабатывает на UPDATE FINANCE_PAYMENTS, пишет в лог автоматически
+- `changed_by` = имя сервиса ('payment-sync', 'manual-admin', 'bot')
+- Metabase читает через `v_payment_audit` view с RLS
+
+**Трудозатраты:** ~14h. **РП:** WP-237 (новый).
 
 ---
 
-### М-3 — Нет Backup / DR стратегии (СРЕДНИЙ)
+### Б-2 — RLS для Metabase к payment-registry
 
-**Проблема:** Не определены RPO (Recovery Point Objective) и RTO (Recovery Time Objective) по базам. Neon даёт PITR 7 дней по умолчанию — достаточно ли для FINANCE_PAYMENTS?
+**Проблема:** Metabase читает FINANCE_PAYMENTS без Row-Level Security. При компрометации — все финансовые данные открыты.
 
-**Вариант решения:** Определить RPO/RTO по каждой базе. FINANCE_PAYMENTS: RPO=0 (hourly snapshot в S3), RTO=1h. Digital-twin: RPO=15min (Neon PITR). Activity-hub: RPO=1h (события воспроизводимы из источников). **РП:** WP-212 Ф5.
+**Принятое решение:** Postgres роль `metabase_reader` + агрегированные views без PII.
+- `GRANT SELECT` только на views с суммами/статусами/датами — без `ory_id`, `telegram_id`
+- `REVOKE ALL ON FINANCE_PAYMENTS FROM metabase_reader`
+- RLS policy `USING (FALSE)` — если роль попытается напрямую, вернёт 0 строк
+
+**Трудозатраты:** ~8h. **РП:** WP-238 (новый).
+
+---
+
+### Б-3 — SSRF защита BACKEND_REGISTRY.backend_url
+
+**Проблема:** Пользователи регистрируют кастомные MCP-URL. Без валидации возможен SSRF (http://169.254.169.254/ и т.п.).
+
+**Принятое решение:** Валидация URL при записи в БД.
+- Только `https://` в production
+- Запрет: localhost, 127.x, 10.x, 172.16-31.x, 192.168.x, 169.254.x (cloud metadata)
+- Запрет портов: 22, 23, 25, 135, 139, 445, 3389
+- Максимум 512 символов, нормализация URL
+
+**Трудозатраты:** ~10h. **РП:** WP-239 (новый).
+
+---
+
+### М-2 — Retention policy
+
+**Проблема:** RAW_EVENTS растёт бесконечно. GDPR требует права на удаление данных пользователя.
+
+**Принятое решение:** pg_partman DROP для RAW_EVENTS + daily cron для остальных.
+
+| Таблица | TTL | Механизм |
+|---------|-----|----------|
+| RAW_EVENTS | 30 дней | pg_partman DROP partition |
+| USER_EVENTS | 90 дней | DELETE cron (01:00 UTC) |
+| LEARNING_HISTORY | Постоянно | Archive в S3 после 5 лет |
+| FINANCE_PAYMENTS | Постоянно | Annual archive (законодательство) |
+| FINANCE_PAYMENTS_AUDIT_LOG | 7 лет | Archive (compliance) |
+| QA_HISTORY | 180 дней | DELETE cron |
+| NOTIFICATION_LOG | 30 дней | DELETE cron |
+| SYNC_LOG | 30 дней | DELETE cron |
+| USER_STATE (неактивные) | 90 дней | soft-delete → archive |
+
+**Трудозатраты:** ~16h. **РП:** WP-240 (новый).
+
+---
+
+### М-3 — Backup / DR
+
+**Проблема:** Не определены RPO/RTO. Neon PITR 7 дней — недостаточно для FINANCE_PAYMENTS (compliance требует дольше).
+
+**Принятое решение:** Neon PITR (per-database) + pg_dump в S3 через unpooled endpoint.
+
+| База | RPO | RTO | Механизм |
+|------|-----|-----|----------|
+| platform-core | 1h | 15 мин | Neon PITR 7d + S3 daily |
+| payment-registry | 15 мин | 30 мин | Neon PITR **30d** (upgrade) + S3 каждые 6h |
+| digital-twin | 1h | 30 мин | Neon PITR 7d + S3 daily |
+| activity-hub | 24h | 1h | Neon PITR 7d (события воспроизводимы) |
+| knowledge | 7 дней | 2h | S3 weekly (знания в git) |
+| aist-bot | 24h | 2h | Neon PITR 7d |
+
+**Трудозатраты:** ~18h. **РП:** WP-241 (новый).
+
+---
+
+## Сводная таблица РП по архитектуре
+
+| РП | Проблема | Трудозатраты | Приоритет |
+|----|---------|--------------|-----------|
+| WP-234 | Шифрование токенов (aist-bot) | 16h | критический |
+| WP-235 | Кеш авторизации (gateway-mcp) | 12h | высокий |
+| WP-236 | Correlation ID (activity-hub) | 20h | высокий |
+| WP-237 | Audit trail платежей | 14h | высокий |
+| WP-238 | RLS Metabase | 8h | средний |
+| WP-239 | SSRF защита backend-registry | 10h | средний |
+| WP-240 | Retention policy | 16h | средний |
+| WP-241 | Backup / DR | 18h | средний |
+| | **Итого** | **114h** | |
 
 ---
 
