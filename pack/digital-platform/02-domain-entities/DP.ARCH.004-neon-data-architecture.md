@@ -71,6 +71,8 @@ OAuth-конфигурация (`USER_INTEGRATIONS`) хранится в `platfo
 **П7. `SUBSCRIPTION_GRANTS` в `platform-core` — gateway-паттерн**
 `payment-registry` синхронизирует гранты в `platform-core` через cron (push-based sync). Все сервисы проверяют права только здесь — единая точка авторизации, не дублирующая логику.
 
+**Инвариант двойной проверки:** gateway-mcp выполняет `verifyJWT` + `checkSubscription` **до** фанаута в downstream MCP (knowledge-mcp, digital-twin-mcp и др.). Если хотя бы одна проверка не прошла — gateway отвечает 401/403 немедленно, не обращаясь к downstream сервисам. Downstream сервисы не реализуют собственную проверку подписки — это исключительная ответственность gateway.
+
 </details>
 
 ---
@@ -938,6 +940,13 @@ erDiagram
 ### Кеш авторизации gateway-mcp
 
 `checkSubscription()` в gateway-mcp не обращается к Neon на каждый запрос — результат кешируется в **Cloudflare KV** с TTL 5 мин (WP-235). JWKS также кешируется in-memory в Workers isolate.
+
+Порядок проверок в gateway (до фанаута):
+1. `verifyJWT` — проверка подписи токена (JWKS, кеш in-memory)
+2. `checkSubscription` — проверка активного гранта в `SUBSCRIPTION_GRANTS` (KV кеш TTL 5 мин)
+3. Только при успехе обоих → фанаут в downstream MCP
+
+Отказ на шаге 1 или 2 → немедленный 401/403, downstream не вызывается.
 
 </details>
 
