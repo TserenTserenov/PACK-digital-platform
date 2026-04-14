@@ -151,6 +151,17 @@ erDiagram
         text        status          "pending|active|failed"
     }
 
+    BACKEND_REGISTRY {
+        serial      id              PK
+        uuid        ory_id          "ref→USER_IDENTITIES (API)"
+        text        backend_url
+        text        tool_prefix
+        text        name
+        text        status          "pending_validation|active|failed"
+        text        knowledge_gate_result "pending|passed|partial|failed"
+        timestamptz created_at
+    }
+
     USER_IDENTITIES ||--o{ GITHUB_CONNECTIONS : "connects GitHub"
     USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
     USER_IDENTITIES ||--o{ ORY_TOKENS : "SSO session"
@@ -325,7 +336,20 @@ erDiagram
         timestamptz finished_at
     }
 
+    USER_INTEGRATIONS {
+        serial      id              PK
+        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
+        text        service         "github|wakatime|google_calendar"
+        text        access_token
+        text        refresh_token
+        timestamptz token_expires_at
+        text        scope
+        jsonb       metadata
+        timestamptz connected_at
+    }
+
     RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid→quarantine"
+    USER_INTEGRATIONS }o--|| IDENTITY_MAP : "resolves user"
 
     %% ╔══════════════════════════════════════════════╗
     %% ║  DB: payment-registry                        ║
@@ -357,6 +381,28 @@ erDiagram
         bigint      last_subscription_id
         timestamptz last_sync_at
     }
+
+    IMPORT_STAGING_PAYMENT {
+        bigint      id
+        text        ext_id
+        bigint      suser_id
+        text        purpose
+        text        payment_system
+        decimal     amount
+        bool        success
+        text        note            "⚙ operational: landing zone for incremental sync"
+    }
+
+    IMPORT_STAGING_CHARGEOFF {
+        bigint      id
+        bigint      suser_id
+        decimal     amount
+        bigint      payment_id      "links to finance_payments"
+        text        note            "⚙ operational: landing zone for incremental sync"
+    }
+
+    IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
+    IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 
     %% ╔══════════════════════════════════════════════╗
     %% ║  DB: aist-bot                                ║
@@ -444,9 +490,43 @@ erDiagram
         timestamptz expires_at
     }
 
+    WORKSHOP_PAYMENTS {
+        bigserial   id              PK
+        bigint      telegram_id
+        text        aisystant_id    "optional cross-ref"
+        decimal     amount
+        text        status          "pending|success"
+        text        source          "bot|web"
+        timestamptz paid_at
+    }
+
+    LEARNING_HISTORY {
+        bigserial   id              PK
+        bigint      user_id         "Telegram ID"
+        uuid        user_uuid       "ref→USER_IDENTITIES (API)"
+        bigint      event_id        UK  "ref→USER_EVENTS (activity-hub, API)"
+        text        element_id
+        text        element_type    "meme|practice|cell"
+        int         area            "1-5"
+        float       score
+        bool        passed
+        int         schema_version  "1=legacy, 2=current"
+        timestamptz created_at
+    }
+
+    FEEDBACK_TRIAGE {
+        bigserial   id              PK
+        bigint      chat_id
+        text        category
+        text        status          "new|classified|resolved"
+        text        source          "bot|club|manual"
+        timestamptz created_at
+    }
+
     USER_STATE ||--o{ QA_HISTORY : "conversation"
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
+    USER_STATE ||--o{ LEARNING_HISTORY : "learning progress"
     SEMINARS ||--o{ SEMINAR_PAYMENTS : "paid by"
 
     %% ╔══════════════════════════════════════════════╗
