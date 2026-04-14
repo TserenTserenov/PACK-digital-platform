@@ -133,100 +133,127 @@ Neon Project: aisystant
 ---
 
 <details open>
-<summary><b>4. Диаграммы связей</b></summary>
+<summary><b>4. Архитектура Neon и связи с системами</b></summary>
 
-Три схемы по фокусу. Все стрелки — API / события / cron, не FK.
+**Структура раздела:**
+- **4.1** — центральная схема: 7 баз Neon + все внешние системы и направления потоков
+- **4.2** — связи между базами данных (межбазовый граф)
+- **4.3** — поток идентичности (детальная схема: Ory → Gateway → platform-core)
+- **4.4** — реестр всех систем (таблица)
+- **4.5** — поток событий → ЦД → персональное руководство
 
----
-
-### 4.1 Карта систем (уровень платформы)
-
-Кто что использует. Без деталей потоков.
-
-```
-Клиенты              Сервисный слой           Neon (данные)
-─────────────────    ──────────────────────   ──────────────────────
-Web App (Vue)    ─┐
-AIST Bot         ─┤─→ gateway-mcp        ──→ #1 platform-core
-IWE / Claude Code─┤    (CF Worker,            (идентичность, тиры,
-Claude / ChatGPT ─┘    auth + fan-out)         подписки)
-                          │
-                    ┌─────┴──────────┐
-                    ↓                ↓
-              knowledge-mcp    digital-twin-mcp ──→ #2 digital-twin
-              personal-        (ЦД, ступени,        (ЦД, роли, степень)
-              knowledge-mcp    степень)
-                    │
-                    ↓
-               #3 knowledge
-              (документы, граф)
-
-Профайлер R28 ────────────────────────────→ #2 digital-twin
-(ежедневный расчёт IND.3.*)               (пишет ступени ролей)
-
-Навигатор, Портной ───────────────────────→ #2 digital-twin
-(персональное руководство)                (читают профиль)
-
-LMS + Club + WakaTime + Bot ──────────────→ #4 activity-hub
-(коллекторы событий)                      (RAW→USER→LEARNING)
-
-Stripe / YooKassa / TG Stars ─────────────→ #5 payment-registry
-Bot (платежи)                              (транзакции, audit log)
-
-Directus (CRM-интерфейс) ─────────────────→ #5 payment-registry
-(просмотр и ручное управление платежами)
-
-Metabase (BI) ────────────────────────────→ #5 payment-registry
-                                           → #4 activity-hub
-                                           (только чтение, RLS)
-```
+Все стрелки — API / события / cron, не FK.
 
 ---
 
-### 4.2 Поток идентичности и доступа
+### 4.1 Neon: 7 баз данных и связи с системами
+
+```
+                        ┌─────────────────────────────────────┐
+                        │           Neon Project               │
+                        │                                      │
+  Ory Kratos ──────────→│ #1 platform-core                     │
+  Ory Keto ────────────→│   USER_IDENTITIES, SUBSCRIPTION_     │←─── subscription-sync cron
+  OAuth callbacks ─────→│   GRANTS, TIER_EVENTS, GITHUB_       │         (из #5)
+  gateway-mcp (R/W) ───→│   CONNECTIONS, USER_INTEGRATIONS,    │
+                        │   BACKEND_REGISTRY                   │
+                        │                                      │
+  digital-twin-mcp ────→│ #2 digital-twin                      │
+  Профайлер R28 ───────→│   DIGITAL_TWINS, POINT_TRANSACTIONS, │
+  LMS (степень DEG) ───→│   LEARNER_CONCEPT_MASTERY            │
+                        │                                      │
+  knowledge-mcp ───────→│ #3 knowledge                         │
+  GitHub App webhook ──→│   DOCUMENTS, CONCEPTS, CONCEPT_EDGES,│
+  personal-knowledge   →│   GITHUB_INSTALLATIONS, USER_SOURCES │
+                        │                                      │
+  LMS ─────────────────→│ #4 activity-hub                      │
+  Club ────────────────→│   RAW_EVENTS (Bronze, партиц.)       │
+  AIST Bot ────────────→│   USER_EVENTS (Silver)               │
+  WakaTime ────────────→│   LEARNING_HISTORY (Gold)            │
+  IWE/exocortex ───────→│   IDENTITY_MAP, SYNC_LOG             │
+                        │                                      │
+  YooKassa/Stripe ─────→│ #5 payment-registry                  │───→ subscription-sync cron
+  TG Stars ────────────→│   FINANCE_PAYMENTS (+AUDIT_LOG)      │         (→ #1)
+  incremental-sync cron→│   SEMINAR_PAYMENTS                   │
+  Aisystant LMS ────────│   SUBSCRIPTION_GRANTS_SYNC_STATE     │
+                        │                                      │
+  AIST Bot (только бот)→│ #6 aist-bot                          │
+                        │   USER_STATE, ORY_TOKENS, DT_TOKENS  │
+                        │   QA_HISTORY, FEEDBACK_TRIAGE        │
+                        │                                      │
+  Metabase internal ───→│ #7 metabase                          │
+                        │   ~171 служебная таблица             │
+                        └─────────────────────────────────────┘
+                                        │
+             Читает из Neon (RO):       │
+             Metabase ──────────────────┤→ #5 payment-registry (metabase_reader + RLS)
+                                        └→ #4 activity-hub (read-only)
+
+             Вне Neon (не хранят данные в Neon):
+             Ory Keto   — own store (RBAC)
+             Langfuse   — own store (AI traces)
+             Railway    — инфра-уровень
+             CF Workers — stateless (gateway-mcp, knowledge-mcp)
+             Web App    — клиент без серверного state
+```
+
+---
+
+### 4.2 Связи между базами данных
+
+Как 7 баз обращаются друг к другу через API (FK между базами запрещены — П2).
+
+```mermaid
+graph LR
+    PC[(#1 platform-core)]
+    DT[(#2 digital-twin)]
+    KN[(#3 knowledge)]
+    AH[(#4 activity-hub)]
+    PR[(#5 payment-registry)]
+    AB[(#6 aist-bot)]
+    MB[(#7 metabase)]
+
+    AH -- "ступени ролей (Профайлер)" --> DT
+    AH -- "chat_id → ory_id" --> PC
+    PR -- "subscription-sync" --> PC
+    AB -- "проверка прав" --> PC
+    AB -- "чтение профиля" --> DT
+    KN -- "mastery концептов" --> DT
+    PR -. "финансы (RLS)" .-> MB
+    AH -. "события (без PII)" .-> MB
+```
+
+> Сплошная стрелка = запись. Пунктир = чтение (RO, Metabase читает из PR и AH).
+
+---
+
+### 4.3 Поток идентичности и доступа
 
 ```mermaid
 graph LR
     User([Пользователь])
-    Ory([Ory Kratos\nидентичность])
-    Keto([Ory Keto\nRBAC])
+    Ory([Ory Kratos])
+    Keto([Ory Keto])
     GW([gateway-mcp])
-    PC[(#1 platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nTIER_EVENTS)]
+    PC[(#1 platform-core)]
+    PR[(#5 payment-registry)]
 
     User -->|"логин / OAuth"| Ory
     Ory  -->|"JWT токен"| User
+    Ory  -->|"webhook: регистрация / OAuth callback\n→ USER_IDENTITIES, GITHUB_CONNECTIONS"| PC
     User -->|"запрос + JWT"| GW
-    GW   -->|"verify JWT"| Ory
+    GW   -->|"verify JWT (JWKS cached)"| Ory
     GW   -->|"check permissions"| Keto
-    GW   -->|"check subscription"| PC
+    GW   -->|"check subscription\n(KV cache TTL 5 мин)"| PC
     PC   -->|"tier + grants"| GW
-```
-
----
-
-### 4.3 Поток данных: события → ЦД → персональное руководство
-
-```mermaid
-graph TD
-    LMS([LMS]) -->|raw events| AH
-    Club([Club]) -->|raw events| AH
-    Bot([AIST Bot]) -->|raw events| AH
-    WakaTime([WakaTime]) -->|raw events| AH
-
-    AH[(#4 activity-hub\nBronze → Silver → Gold)]
-
-    AH -->|LEARNING_HISTORY| Profiler([Профайлер R28])
-    LMS -->|степень DEG| DT
-    Profiler -->|IND.3.4 ступени ролей\nIND.3.1 agency| DT[(#2 digital-twin)]
-
-    DT -->|профиль + ступени| Tailor([Портной\nперсональное руководство])
-    DT -->|ступени + степень| Navigator([Навигатор\nтраектория])
-    DT -->|контекст| Bot
+    PR   -->|"subscription-sync cron\n→ SUBSCRIPTION_GRANTS"| PC
 ```
 
 ---
 
 ### 4.4 Реестр всех систем
+
+> **Легенда статусов:** ✅ — работает (наша инфраструктура) · ✅ внешний — работает (сторонний сервис, данные в Neon не хранит) · 🟡 — в разработке · 🔲 — запланировано
 
 | Система | Статус | Читает из Neon | Пишет в Neon |
 |---------|--------|---------------|-------------|
@@ -257,6 +284,28 @@ graph TD
 | Event Bus / Dispatcher | 🔲 запланирован | AH | AH |
 | AI Training Pipeline | 🔲 запланирован | AH, KN | — |
 | Team Service | 🔲 запланирован | PC | AH |
+
+---
+
+### 4.5 Поток данных: события → ЦД → персональное руководство
+
+```mermaid
+graph TD
+    LMS([LMS]) -->|raw events| AH
+    Club([Club]) -->|raw events| AH
+    Bot([AIST Bot]) -->|raw events| AH
+    WakaTime([WakaTime]) -->|raw events| AH
+
+    AH[(#4 activity-hub)]
+
+    AH -->|LEARNING_HISTORY| Profiler([Профайлер R28])
+    LMS -->|степень DEG| DT
+    Profiler -->|IND.3.4 ступени ролей| DT[(#2 digital-twin)]
+
+    DT -->|профиль + ступени| Tailor([Портной])
+    DT -->|ступени + степень| Navigator([Навигатор])
+    DT -->|контекст| Bot
+```
 
 </details>
 
@@ -847,13 +896,13 @@ erDiagram
 
 | База | Writers | Readers |
 |------|---------|---------|
-| #1 platform-core | Ory callback, OAuth flows, `subscription-sync` cron | gateway-mcp (авторизация каждого запроса), все сервисы через API |
-| #2 digital-twin | dt-mcp, profiler cron (из #4 activity-hub.LEARNING_HISTORY) | dt-mcp, бот `/twin`, knowledge-mcp |
-| #3 knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp |
-| #4 activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот | transform-worker, profiler, Metabase (RO) |
-| #5 payment-registry | `incremental-sync.sh` cron, бот (seminar/workshop via API) | Metabase (`metabase_reader` + RLS), `subscription-sync` cron |
-| #6 aist-bot | только бот | только бот |
-| #7 metabase | Metabase internal | Metabase UI |
+| #1 platform-core | Ory callback (identity sync), OAuth flows (GitHub/GCal connections), `subscription-sync` cron (из #5 → SUBSCRIPTION_GRANTS) | gateway-mcp (авторизация каждого запроса), Ory Keto (проверка разрешений), все MCP-сервисы через API |
+| #2 digital-twin | dt-mcp (запись по API), Профайлер R28 (ежедневный расчёт IND.3.* из #4 LEARNING_HISTORY), LMS (степень DEG вручную методсовет МИМ) | dt-mcp (чтение профиля), бот `/twin` (через dt-mcp), knowledge-mcp (контекст пользователя), Навигатор/Портной (через dt-mcp) |
+| #3 knowledge | knowledge-mcp ingest (платформенный и персональный контент), GitHub App webhook → knowledge-mcp | knowledge-mcp search, dt-mcp (контекст концептов) |
+| #4 activity-hub | collectors: LMS + Club + WakaTime + IWE/exocortex + Bot (RAW_EVENTS), transform-worker (RAW→USER→LEARNING) | transform-worker, Профайлер R28 (читает LEARNING_HISTORY для расчёта IND.3.*), Metabase (RO, без PII) |
+| #5 payment-registry | `incremental-sync.sh` cron (из Aisystant LMS), YooKassa / Stripe / TG Stars webhooks, бот (seminar/workshop записи) | Metabase (`metabase_reader` + RLS, только агрегаты), `subscription-sync` cron (читает FINANCE_PAYMENTS → пишет в #1) |
+| #6 aist-bot | только AIST Bot (FSM state, токены, история QA) | только AIST Bot; Composer MCP (читает состояние FSM) |
+| #7 metabase | Metabase internal (служебные таблицы) | Metabase UI, дашборды читают #5 и #4 напрямую (не через #7) |
 
 </details>
 
