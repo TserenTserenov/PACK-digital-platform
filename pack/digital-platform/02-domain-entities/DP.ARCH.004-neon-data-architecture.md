@@ -198,7 +198,21 @@ erDiagram
         bigint      telegram_id     UK
         bigint      lms_id
         text        region          "ru|world"
+        text        tier            "T0|T1|T2|T3|T4 — конфигурация доступа к платформе (DP.D.050)"
+        text        mentor_tier     "NULL|TM1|TM2|TM3"
+        text        admin_tier      "NULL|TA1|TA2|TA3|TA4"
+        bool        is_developer    "TD1"
         timestamptz created_at
+    }
+
+    TIER_EVENTS {
+        bigserial   id              PK
+        uuid        ory_id          "→ USER_IDENTITIES"
+        text        from_tier
+        text        to_tier
+        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
+        timestamptz created_at
+        text        note            "платформенный лог переходов тиров (DP.ARCH.002)"
     }
 
     SUBSCRIPTION_GRANTS {
@@ -270,6 +284,7 @@ erDiagram
     USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
     USER_IDENTITIES ||--o{ USER_INTEGRATIONS : "service integrations"
     USER_IDENTITIES ||--o{ BACKEND_REGISTRY : "personal MCPs"
+    USER_IDENTITIES ||--o{ TIER_EVENTS : "tier history"
 ```
 
 ---
@@ -577,14 +592,11 @@ erDiagram
         bigint      chat_id         PK  "Telegram chat_id"
         text        current_state   "FSM state"
         jsonb       data            "FSM context"
-        text        tier            "T0|T1|T2|T3|T4 — текущий тир пользователя"
-        text        mentor_tier     "NULL|TM1|TM2|TM3 — ось наставника (ортогональная)"
-        text        admin_tier      "NULL|TA1|TA2|TA3|TA4 — ось администратора"
-        bool        is_developer    "TD1 — доступ к платформенной разработке"
         bool        is_inactive     "true если нет активности >90 дней (WP-240)"
         timestamptz trial_started_at
         timestamptz last_active_date
         int         active_days_total
+        text        note            "тир — в platform-core.USER_IDENTITIES (не здесь)"
     }
 
     TIER_EVENTS {
@@ -826,6 +838,7 @@ erDiagram
 | GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth для бота. | ✅ | `public.google_calendar_connections`, WP-232 |
 | USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | ⚠️ Перенести | Сейчас в `development.user_integrations` |
 | BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | ✅ | `knowledge.backend_registry`, WP-187/189 |
+| TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный, читается всеми сервисами. | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
 
 ### #2 digital-twin
 
@@ -875,8 +888,7 @@ erDiagram
 
 | Таблица | Назначение | Статус | Источник |
 |---------|-----------|--------|----------|
-| USER_STATE | FSM-состояние + тиры (T0-T4, TM, TA, TD) + счётчик активных дней, триал. | ✅ | `development.user_state`, первая версия бота. ⚠️ Колонки tier/mentor_tier/admin_tier/is_developer нужно добавить |
-| TIER_EVENTS | История переходов тиров (T0→T1 при регистрации, T1→T2 при подписке и т.д.). 4 оси: T+TM+TA+TD. | ✅ | `development.tier_events` — существует, но только T-ось. ⚠️ Расширить на все 4 оси |
+| USER_STATE | FSM-состояние бота + счётчик активных дней, триал. ⚠️ Колонки tier/mentor_tier убрать после переноса в platform-core | ✅ | `development.user_state`, первая версия бота |
 | QA_HISTORY | История вопросов/ответов. TTL 180д. | ✅ | `public.qa_history`, WP-132 |
 | NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | ✅ | `public.notification_log`, WP-232 |
 | BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | ⚠️ Уточнить | Возможно заменена `public.subscriptions` (WP-232) |
