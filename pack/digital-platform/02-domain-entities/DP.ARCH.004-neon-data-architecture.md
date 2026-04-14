@@ -4,7 +4,7 @@ name: Архитектура данных Neon (Database-per-Service)
 type: domain-entity
 status: active
 valid_from: 2026-04-14
-summary: "7 баз данных в Neon по принципу database-per-service. ERD предметной области по базам + общая диаграмма межбазовых связей. Принята на встрече ИТ 14 апр 2026."
+summary: "7 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026."
 related:
   - DP.SOTA.016   # Database-per-Service SOTA
   - DP.ARCH.003   # Digital Twin Architecture
@@ -16,9 +16,29 @@ supersedes: "WP-232 решение об одной базе platform"
 
 # DP.ARCH.004 — Архитектура данных Neon
 
-> **Это целевая архитектура.** Текущее физическое состояние — одна база `platform` (WP-232). Разделение на отдельные базы — следующий РП.
+---
 
-## Принципы (решены 14 апр 2026)
+<details open>
+<summary><b>1. Контекст и статус</b></summary>
+
+**Тип:** целевая архитектура.
+
+**Текущее состояние (апр 2026):** все таблицы живут в одной базе `platform` (WP-232). Разделение на 7 баз — следующий РП (~20-40h).
+
+**Что зафиксировано в этом документе:**
+- Принципы разделения данных (7 инвариантных правил)
+- Карта 7 баз и их ERD
+- Все таблицы включая новые (audit log, trace_id, шифрование токенов)
+- Принятые архитектурные решения по безопасности, наблюдаемости, масштабированию
+
+**Решение принято:** встреча ИТ 8 и 14 апр 2026 (транскрипция Zoom, инициатор — архитектор Андрей).
+
+</details>
+
+---
+
+<details open>
+<summary><b>2. Принципы</b></summary>
 
 **П1. 1 сервис = 1 база** (не схема)
 Каждый сервис имеет собственную БД с собственными credentials. Другие сервисы не ходят в неё напрямую — только через API.
@@ -30,31 +50,32 @@ supersedes: "WP-232 решение об одной базе platform"
 Внутри базы схемы разграничивают доступ ролей (финансист видит `finance.*`). Не для изоляции сервисов.
 
 **П4. `ory_id` — глобальный ключ для платформ-сервисов**
-Каждая платформ-база (digital-twin, knowledge, payment-registry) хранит `ory_id` как обычную колонку без FK. Ory Kratos — source of truth идентичности. `user_identities` хранит только то, чего Ory не знает: `telegram_id`, `lms_id`, `region`.
-Бот использует `telegram chat_id` как локальный ключ — пользователи бота до OAuth не имеют `ory_id`. Разрешение `chat_id → ory_id` происходит в `activity-hub.IDENTITY_MAP` после OAuth callback (WP-187).
+Платформ-базы (digital-twin, knowledge, payment-registry) хранят `ory_id` как обычную колонку без FK. Ory Kratos — source of truth идентичности.
+Бот использует `telegram chat_id` как локальный ключ — до OAuth пользователь не имеет `ory_id`. Разрешение `chat_id → ory_id` — в `activity-hub.IDENTITY_MAP` после OAuth callback (WP-187).
 
 **П5. Activity Hub — проектировать под замену**
-Events — кандидат на ClickHouse/TimescaleDB при масштабировании. Именно поэтому отдельная база. OAuth-конфигурация пользователей (`USER_INTEGRATIONS`) хранится в `platform-core`, а не в activity-hub — чтобы не потерять её при замене движка.
+Events — кандидат на ClickHouse/TimescaleDB при масштабировании. OAuth-конфигурация (`USER_INTEGRATIONS`) хранится в `platform-core`, а не в activity-hub — чтобы не потерять при замене движка.
 
 **П6. Платежи — изолированный реестр**
-`payment-registry` — единственная база с финансовыми транзакциями. Другие сервисы не имеют прямого доступа к ней (кроме Metabase через read-only роль с RLS, см. П7). Все платежи платформы (YooKassa, Stripe, Telegram Stars, семинары, воркшопы) хранятся здесь.
+`payment-registry` — единственная база с финансовыми транзакциями (YooKassa, Stripe, Telegram Stars, семинары, воркшопы). Другие сервисы не имеют прямого доступа. Metabase читает через read-only роль `metabase_reader` с RLS (агрегаты без PII).
 
 **П7. `SUBSCRIPTION_GRANTS` в `platform-core` — gateway-паттерн**
-`payment-registry` поддерживает `SUBSCRIPTION_GRANTS` актуальными через `subscription-sync` cron. Другие сервисы проверяют права только через `platform-core` — единая точка авторизации. Это **push-based sync**: payment-registry пишет в ядро, не наоборот.
-Metabase читает `payment-registry` через отдельного read-only пользователя Postgres с Row-Level Security (видит агрегаты: суммы, статусы — не реквизиты). RLS-политики → WP-212 Ф9.
+`payment-registry` синхронизирует гранты в `platform-core` через `subscription-sync` cron (push-based sync). Все сервисы проверяют права только через `platform-core` — единая точка авторизации.
+
+</details>
 
 ---
 
-## Карта баз данных
+<details open>
+<summary><b>3. Карта баз данных</b></summary>
 
 ```
 Neon Project: aisystant
 │
 ├── DB: platform-core      ← USER_IDENTITIES + SUBSCRIPTION_GRANTS
 │                             + GITHUB_CONNECTIONS + GOOGLE_CALENDAR_CONNECTIONS
-│                             + USER_INTEGRATIONS (OAuth-конфиг для коллекторов)
-│                             + BACKEND_REGISTRY
-│                             + directus.* (схема Directus CMS ~15 таблиц)
+│                             + USER_INTEGRATIONS + BACKEND_REGISTRY
+│                             + directus.* (~15 таблиц)
 │
 ├── DB: digital-twin       ← DIGITAL_TWINS + POINT_TRANSACTIONS
 │                             + LEARNER_CONCEPT_MASTERY
@@ -64,74 +85,36 @@ Neon Project: aisystant
 │                             + GITHUB_INSTALLATIONS + USER_SOURCES
 │
 ├── DB: activity-hub       ← RAW_EVENTS (partitioned) + USER_EVENTS
-│                             + LEARNING_HISTORY (Gold layer)
+│                             + LEARNING_HISTORY (Gold)
 │                             + IDENTITY_MAP + SYNC_LOG + QUARANTINED_EVENTS
 │                             ⚠ кандидат на замену ClickHouse/TimescaleDB
 │
-├── DB: payment-registry   ← FINANCE_PAYMENTS + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
+├── DB: payment-registry   ← FINANCE_PAYMENTS + FINANCE_PAYMENTS_AUDIT_LOG
+│                             + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
 │                             + PAYMENTS_SYNC_STATE + SUBSCRIPTION_GRANTS_SYNC_STATE
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
 ├── DB: aist-bot           ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
 │                             + BOT_SUBSCRIPTIONS + SEMINARS + COMMUNITY_MEMBERS
 │                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
-│                             + ORY_TOKENS + DT_TOKENS (персистентность бот-сессий)
+│                             + ORY_TOKENS + DT_TOKENS
 │
-└── DB: metabase           ← служебные таблицы Metabase (~171 таблица)
-                              dashboards, questions, users, collections…
-                              читает payment-registry и activity-hub (read-only + RLS)
-                              ⚠ НЕ хранит прикладные данные платформы
+└── DB: metabase           ← ~171 служебная таблица Metabase
+                              читает payment-registry (metabase_reader + RLS)
+                              читает activity-hub (read-only)
 
 Вне Neon:
-  Ory Kratos (отдельный сервис) ← идентичность, source of truth по ory_id
+  Ory Kratos ← идентичность, source of truth по ory_id
 ```
 
----
-
-## Пояснение: USER_INTEGRATIONS vs GITHUB_CONNECTIONS
-
-Обе таблицы хранят GitHub OAuth-токен одного пользователя — это намеренный **dual-write**.
-
-| | GITHUB_CONNECTIONS (platform-core) | USER_INTEGRATIONS (platform-core) |
-|---|---|---|
-| **Назначение** | Конфигурация публикации: target_repo, notes_path, strategy_repo, branches | OAuth-конфиг для коллекторов: WakaTime sync, IWE Adapter |
-| **Дополнительные поля** | knowledge_repo, strategy_repo, default_branch | service, scope, metadata (generic) |
-| **Потребитель** | Бот-издатель (публикация заметок) | activity-hub collectors |
-
-`GOOGLE_CALENDAR_CONNECTIONS` — только в `platform-core`, дублирования нет.
-`WAKATIME` — только в `USER_INTEGRATIONS`, в боте нет.
+</details>
 
 ---
 
-## Пояснение: ORY_TOKENS и DT_TOKENS в aist-bot
+<details open>
+<summary><b>4. Общая диаграмма связей</b></summary>
 
-Это **персистентность бот-сессий**, а не кеш платформы:
-- Бот переживает редеплои: токены восстанавливаются из БД при старте
-- Ключ — `chat_id` (Telegram), не `ory_id` — потому что бот работает в Telegram-контексте
-- `ory_tokens` — токены для вызова Gateway MCP (Ory OAuth, proactive refresh каждые 10 мин)
-- `dt_tokens` — токены для вызова DT API (Digital Twin OAuth callback)
-- Хранятся в aist-bot, потому что нужны только боту. Не платформ-данные.
-
----
-
-## Пояснение: LEARNING_HISTORY vs LEARNER_CONCEPT_MASTERY
-
-Два разных предмета одного домена обучения:
-
-| | LEARNING_HISTORY (activity-hub) | LEARNER_CONCEPT_MASTERY (digital-twin) |
-|---|---|---|
-| **Что хранит** | Сырые факты: "прошёл мем X, score 0.8" | Агрегированный статус: "освоен концепт ZP.001 на 85%" |
-| **Кто пишет** | transform-worker из USER_EVENTS | dt-mcp / profiler (читает LEARNING_HISTORY через API) |
-| **Слой** | Gold (события) | Производная (state) |
-
-Поток: LEARNING_HISTORY (activity-hub) → API → profiler/dt-mcp → LEARNER_CONCEPT_MASTERY (digital-twin).
-Квалификация "Ученик" и уровни до неё — автоматически из mastery. Выше — методсовет МИМ (ручное).
-
----
-
-## Общая диаграмма: связи между базами
-
-Показывает потоки данных и API-зависимости между базами. Все стрелки — API-вызовы или cron-синхронизация, не FK.
+Все стрелки — API-вызовы или cron-синхронизация, не FK.
 
 ```mermaid
 graph TD
@@ -139,41 +122,44 @@ graph TD
     Collectors([Collectors\nLMS / Club / IWE])
 
     subgraph Neon
-        PC[(platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nOAuth connections\nUSER_INTEGRATIONS)]
-        DT[(digital-twin\nDIGITAL_TWINS\nPOINT_TRANSACTIONS\nLEARNER_MASTERY)]
-        KN[(knowledge\nDOCUMENTS\nCONCEPTS\nCONCEPT_GRAPH)]
-        AH[(activity-hub\nRAW_EVENTS\nUSER_EVENTS\nLEARNING_HISTORY\nIDENTITY_MAP)]
-        PR[(payment-registry\nFINANCE_PAYMENTS\nSEMINAR_PAYMENTS\nWORKSHOP_PAYMENTS)]
-        AB[(aist-bot\nUSER_STATE\nQA_HISTORY\nORY_TOKENS / DT_TOKENS)]
-        MB[(metabase\n~171 служебных таблиц)]
+        PC[(platform-core\nUSER_IDENTITIES\nSUBSCRIPTION_GRANTS\nUSER_INTEGRATIONS)]
+        DT[(digital-twin\nDIGITAL_TWINS\nLEARNER_MASTERY)]
+        KN[(knowledge\nDOCUMENTS\nCONCEPTS)]
+        AH[(activity-hub\nRAW_EVENTS\nUSER_EVENTS\nLEARNING_HISTORY)]
+        PR[(payment-registry\nFINANCE_PAYMENTS\nAUDIT_LOG)]
+        AB[(aist-bot\nUSER_STATE\nORY_TOKENS/DT_TOKENS)]
+        MB[(metabase\n~171 таблиц)]
     end
 
     OryKratos -->|"OAuth identity\n(source of truth)"| PC
 
-    PC -->|"check subscription\n(API)"| AB
-    PC -->|"check subscription\n(API)"| DT
-    PC -->|"check subscription\n(API)"| KN
+    PC -->|"check subscription (API)"| AB
+    PC -->|"check subscription (API)"| DT
+    PC -->|"check subscription (API)"| KN
 
     PR -->|"subscription-sync cron\n→ SUBSCRIPTION_GRANTS"| PC
 
-    AB -->|"write DT via\ndt-mcp API"| DT
-    AB -->|"send events\n(collector)"| AH
-    AB -->|"write payments\n(seminars/workshops)"| PR
+    AB -->|"write DT via dt-mcp API"| DT
+    AB -->|"send events (collector)"| AH
+    AB -->|"write payments (API)"| PR
 
-    Collectors -->|"raw events\n→ RAW_EVENTS"| AH
+    Collectors -->|"raw events → RAW_EVENTS"| AH
 
-    AH -->|"transform pipeline\nRAW→USER_EVENTS→GOLD"| AH
-    AH -->|"LEARNING_HISTORY\n→ mastery (API)"| DT
+    AH -->|"transform pipeline\nBronze→Silver→Gold"| AH
+    AH -->|"LEARNING_HISTORY → mastery (API)"| DT
 
-    KN -->|"concept_id ref\n(API)"| DT
+    KN -->|"concept_id ref (API)"| DT
 
-    MB -->|"read finance data\n(read-only + RLS)"| PR
-    MB -->|"read events\n(read-only)"| AH
+    MB -->|"read finance (metabase_reader + RLS)"| PR
+    MB -->|"read events (read-only)"| AH
 ```
+
+</details>
 
 ---
 
-## ERD по базам данных
+<details>
+<summary><b>5. ERD по базам данных</b></summary>
 
 > Связи между базами помечены `(API)` с указанием целевой базы.
 
@@ -182,7 +168,7 @@ graph TD
 ### DB: platform-core
 
 Ядро платформы: идентичность, подписки, OAuth-соединения, реестр персональных MCP.
-**Gateway-паттерн:** все сервисы проверяют права только здесь, не идут напрямую в payment-registry.
+Gateway-паттерн: все сервисы проверяют права только здесь.
 
 ```mermaid
 erDiagram
@@ -197,7 +183,7 @@ erDiagram
     SUBSCRIPTION_GRANTS {
         uuid        id              PK
         uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id     "→ USER_IDENTITIES"
+        bigint      telegram_id
         text        product         "br = Бесконечное развитие"
         text        source          "payment|manual|marketing|trial"
         timestamptz valid_from
@@ -211,8 +197,9 @@ erDiagram
         uuid        ory_id          "→ USER_IDENTITIES"
         bigint      telegram_id
         text        github_username
-        text        access_token
-        text        refresh_token
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
         text        knowledge_repo
         text        strategy_repo
         text        default_branch
@@ -224,8 +211,9 @@ erDiagram
         serial      id              PK
         uuid        ory_id          "→ USER_IDENTITIES"
         bigint      telegram_id
-        text        access_token
-        text        refresh_token
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
         text        calendar_id
         text        email
         timestamptz connected_at
@@ -235,8 +223,9 @@ erDiagram
         serial      id              PK
         uuid        user_uuid       "→ USER_IDENTITIES"
         text        service         "github|wakatime|google_calendar"
-        text        access_token
-        text        refresh_token
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
         timestamptz token_expires_at
         text        scope
         jsonb       metadata
@@ -247,7 +236,7 @@ erDiagram
     BACKEND_REGISTRY {
         serial      id              PK
         uuid        ory_id          "→ USER_IDENTITIES"
-        text        backend_url
+        text        backend_url     "validated: https only, no RFC1918, max 512 chars (WP-239)"
         text        tool_prefix
         text        name
         text        status          "pending_validation|active|failed"
@@ -295,7 +284,7 @@ erDiagram
         float       mastery         "0.0–1.0 Bayesian"
         int         attempts
         timestamptz last_assessed_at
-        text        note            "пишет profiler/dt-mcp после чтения activity-hub.LEARNING_HISTORY (API)"
+        text        note            "пишет profiler после чтения activity-hub.LEARNING_HISTORY (API)"
     }
 
     DIGITAL_TWINS ||--o{ POINT_TRANSACTIONS : "accumulates points"
@@ -313,11 +302,10 @@ erDiagram
     DOCUMENTS {
         bigserial   id              PK
         text        filename
-        text        source
         text        source_type     "platform|personal|github"
         vector      embedding       "1024-dim HNSW"
         tsvector    search_vector
-        uuid        user_id         "NULL=platform, set=personal (ref→platform-core API)"
+        uuid        user_id         "NULL=platform, set=personal (API→platform-core)"
         bigint      parent_id       FK
         timestamptz created_at
     }
@@ -387,23 +375,25 @@ erDiagram
 
 ### DB: activity-hub
 
-Medallion-архитектура: Landing (raw) → Silver (user_events) → Gold (learning_history).
-Кандидат на замену ClickHouse/TimescaleDB при росте объёма событий.
+Medallion-архитектура: Bronze (raw) → Silver (user_events) → Gold (learning_history).
+Кандидат на замену ClickHouse/TimescaleDB при росте объёма.
 
 ```mermaid
 erDiagram
     RAW_EVENTS {
         bigserial   id              PK
+        char        trace_id        "32-char OTel trace_id (WP-236)"
         text        source          "lms|bot|club|iwe"
         text        external_id
         jsonb       payload         "сырой, без трансформаций"
         timestamptz fetched_at
         text        transform_status "pending|done|failed|skipped"
-        text        note            "партиционирована по (source, fetched_at)"
+        text        note            "партиционирована по (source, fetched_at); TTL 30 дней (WP-240)"
     }
 
     USER_EVENTS {
         bigserial   id              PK
+        char        trace_id        "32-char, propagated из RAW_EVENTS (WP-236)"
         text        source
         text        external_id     UK
         text        event_type
@@ -414,6 +404,7 @@ erDiagram
 
     LEARNING_HISTORY {
         bigserial   id              PK
+        char        trace_id        "32-char, propagated из USER_EVENTS (WP-236)"
         uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
         bigint      event_id        FK
         text        element_id
@@ -423,14 +414,15 @@ erDiagram
         bool        passed
         int         schema_version  "1=legacy, 2=current"
         timestamptz created_at
-        text        note            "Gold layer: материализация learning_* событий из USER_EVENTS. Читается profiler → LEARNER_CONCEPT_MASTERY в digital-twin"
+        timestamptz archived_at     "NULL = активна; SET = заархивирована в S3 (WP-240)"
+        text        note            "Gold layer; читается profiler → LEARNER_CONCEPT_MASTERY"
     }
 
     IDENTITY_MAP {
         bigserial   id              PK
         text        source
         text        external_id
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API); NULL до OAuth (WP-187 backfill hook)"
+        uuid        user_uuid       "ref→platform-core (API); NULL до OAuth (WP-187)"
     }
 
     QUARANTINED_EVENTS {
@@ -462,24 +454,36 @@ erDiagram
 
 ### DB: payment-registry
 
-Единственная база с финансовыми транзакциями. Хранит все виды платежей платформы.
-Синхронизирует `SUBSCRIPTION_GRANTS` в `platform-core` через cron `subscription-sync`.
-Metabase читает через отдельного read-only пользователя с RLS (→ WP-212 Ф9).
+Единственная база с финансовыми транзакциями.
+Metabase читает через `metabase_reader` (RLS, только агрегаты без PII).
 
 ```mermaid
 erDiagram
     FINANCE_PAYMENTS {
         bigserial   id              PK
         text        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
+        bigint      telegram_id
         bigint      suser_id        "Aisystant legacy ID"
         text        purpose         "BALANCE|SUBSCRIPTION|DONATION|INTERNSHIP|WORKSHOP"
         decimal     amount
         text        currency        "RUB|USD|EUR|STARS"
         int         channel         "1=YooKassa 2=Paybox 3=Stripe 8=Manual"
         text        status
+        text        updated_by      "сервис, изменивший статус (для audit)"
         timestamptz charged_off_at
+        timestamptz updated_at
         timestamptz archived_at
+    }
+
+    FINANCE_PAYMENTS_AUDIT_LOG {
+        bigserial   id              PK
+        bigint      payment_id      FK  "→ FINANCE_PAYMENTS"
+        text        field_name      "status|amount|channel"
+        text        old_value
+        text        new_value
+        text        changed_by      "payment-sync|manual-admin|bot"
+        timestamptz changed_at
+        text        note            "append-only; Postgres trigger tr_log_payment_changes (WP-237)"
     }
 
     SEMINAR_PAYMENTS {
@@ -490,18 +494,16 @@ erDiagram
         text        currency        "RUB|STARS"
         text        status
         timestamptz paid_at
-        text        note            "оплата семинаров через бот; бот пишет сюда через payment API"
     }
 
     WORKSHOP_PAYMENTS {
         bigserial   id              PK
         bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
-        text        aisystant_id    "ref→Aisystant LMS user (external API)"
+        text        aisystant_id    "ref→Aisystant LMS (external API)"
         decimal     amount
         text        status          "pending|success"
         text        source          "bot|web"
         timestamptz paid_at
-        text        note            "оплата воркшопов; бот пишет сюда через payment API"
     }
 
     PAYMENTS_SYNC_STATE {
@@ -526,7 +528,7 @@ erDiagram
         text        payment_system
         decimal     amount
         bool        success
-        text        note            "landing zone для incremental sync из Aisystant"
+        text        note            "landing zone, incremental sync из Aisystant"
     }
 
     IMPORT_STAGING_CHARGEOFF {
@@ -534,9 +536,10 @@ erDiagram
         bigint      suser_id
         decimal     amount
         bigint      payment_id      "→ FINANCE_PAYMENTS"
-        text        note            "landing zone для incremental sync"
+        text        note            "landing zone, incremental sync"
     }
 
+    FINANCE_PAYMENTS ||--o{ FINANCE_PAYMENTS_AUDIT_LOG : "change log"
     IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
     IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 ```
@@ -553,6 +556,7 @@ erDiagram
         bigint      chat_id         PK  "Telegram chat_id"
         text        current_state   "FSM state"
         jsonb       data            "FSM context"
+        bool        is_inactive     "true если нет активности >90 дней (WP-240)"
         timestamptz trial_started_at
         timestamptz last_active_date
         int         active_days_total
@@ -566,6 +570,7 @@ erDiagram
         bool        helpful
         jsonb       mcp_sources
         timestamptz created_at
+        text        note            "TTL 180 дней (WP-240)"
     }
 
     NOTIFICATION_LOG {
@@ -575,6 +580,7 @@ erDiagram
         text        idempotency_key UK
         jsonb       payload
         timestamptz created_at
+        text        note            "TTL 30 дней (WP-240)"
     }
 
     BOT_SUBSCRIPTIONS {
@@ -585,7 +591,7 @@ erDiagram
         int         stars_amount
         timestamptz started_at
         timestamptz expires_at
-        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка в platform-core.SUBSCRIPTION_GRANTS"
+        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
     }
 
     SEMINARS {
@@ -593,9 +599,9 @@ erDiagram
         text        title
         decimal     price_rub
         int         price_stars
-        bigint      tg_group_id     "Telegram group"
+        bigint      tg_group_id
         date        event_date
-        text        note            "каталог семинаров; оплата → payment-registry.SEMINAR_PAYMENTS"
+        text        note            "каталог; оплата → payment-registry.SEMINAR_PAYMENTS"
     }
 
     COMMUNITY_MEMBERS {
@@ -629,27 +635,29 @@ erDiagram
         text        status          "new|classified|resolved"
         text        source          "bot"
         timestamptz created_at
-        text        note            "только бот-фидбек (source='bot'); кросс-канальный feedback → activity-hub"
+        text        note            "только бот-фидбек; кросс-канальный → activity-hub"
     }
 
     ORY_TOKENS {
         bigint      chat_id         PK  "Telegram chat_id"
-        text        access_token
-        text        refresh_token
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
         timestamptz expires_at
         text        ory_id
         timestamptz updated_at
-        text        note            "персистентность Ory OAuth-сессии бота; восстанавливается при редеплое"
+        text        note            "персистентность Ory OAuth-сессии бота; refresh каждые 10 мин"
     }
 
     DT_TOKENS {
         bigint      chat_id         PK  "Telegram chat_id"
-        text        access_token
-        text        refresh_token
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
         timestamptz expires_at
         text        dt_user_id
         timestamptz updated_at
-        text        note            "персистентность Digital Twin OAuth-сессии бота; восстанавливается при редеплое"
+        text        note            "персистентность DT OAuth-сессии бота; refresh каждые 10 мин"
     }
 
     USER_STATE ||--o{ QA_HISTORY : "conversation"
@@ -663,7 +671,6 @@ erDiagram
 ### DB: metabase
 
 Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
-Читает `payment-registry` и `activity-hub` через отдельные read-only connections с RLS.
 
 ```mermaid
 erDiagram
@@ -677,7 +684,6 @@ erDiagram
     METABASE_DASHBOARDS {
         int     id              PK
         text    name
-        text    description
         int     collection_id   FK
     }
 
@@ -692,8 +698,6 @@ erDiagram
     METABASE_USERS {
         int     id          PK
         text    email       UK
-        text    first_name
-        text    last_name
         bool    is_superuser
         bool    is_active
     }
@@ -703,255 +707,291 @@ erDiagram
     METABASE_DASHBOARDS ||--o{ METABASE_CARDS : "contains"
 ```
 
+</details>
+
 ---
 
-## Кто читает / кто пишет
+<details>
+<summary><b>6. Кто читает / кто пишет</b></summary>
 
 | База | Writers | Readers |
 |------|---------|---------|
-| platform-core | Ory callback, OAuth flows, `subscription-sync` cron (из payment-registry) | gateway-mcp (авторизация каждого запроса), все сервисы через API |
-| digital-twin | dt-mcp, profiler cron (читает activity-hub.LEARNING_HISTORY через API) | dt-mcp, бот `/twin`, knowledge-mcp (рекомендации) |
+| platform-core | Ory callback, OAuth flows, `subscription-sync` cron | gateway-mcp (авторизация каждого запроса), все сервисы через API |
+| digital-twin | dt-mcp, profiler cron (из activity-hub.LEARNING_HISTORY) | dt-mcp, бот `/twin`, knowledge-mcp |
 | knowledge | knowledge-mcp ingest, GitHub webhook | knowledge-mcp search, dt-mcp |
-| activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот (события) | transform-worker, profiler (LEARNING_HISTORY), Metabase (RO) |
-| payment-registry | `incremental-sync.sh` cron, бот (seminar/workshop payments через API) | Metabase (RO + RLS), `subscription-sync` cron |
+| activity-hub | collectors (lms/bot/club/iwe), transform-worker, бот | transform-worker, profiler, Metabase (RO) |
+| payment-registry | `incremental-sync.sh` cron, бот (seminar/workshop via API) | Metabase (`metabase_reader` + RLS), `subscription-sync` cron |
 | aist-bot | только бот | только бот |
 | metabase | Metabase internal | Metabase UI |
 
+</details>
+
 ---
 
-## Справочник таблиц
+<details>
+<summary><b>7. Пояснения</b></summary>
 
-> **Условные обозначения статуса:**
-> - ✅ **Существует** — таблица есть в миграциях, живёт в текущей единой базе `platform`
-> - ⚠️ **Существует / перенести** — таблица есть, но сейчас в другой базе или схеме, требует переноса при разделении
-> - 🆕 **Создать** — таблицы нет, нужно создавать с нуля
+### USER_INTEGRATIONS vs GITHUB_CONNECTIONS
+
+Обе таблицы хранят GitHub OAuth-токен одного пользователя — намеренный **dual-write**.
+
+| | GITHUB_CONNECTIONS (platform-core) | USER_INTEGRATIONS (platform-core) |
+|---|---|---|
+| **Назначение** | Конфигурация публикации: target_repo, notes_path, branches | OAuth-конфиг для коллекторов: WakaTime, IWE Adapter |
+| **Потребитель** | Бот-издатель заметок | activity-hub collectors |
+
+`WAKATIME` — только в `USER_INTEGRATIONS`. `GOOGLE_CALENDAR` — только в `GOOGLE_CALENDAR_CONNECTIONS`.
+
+---
+
+### ORY_TOKENS и DT_TOKENS в aist-bot
+
+Это **персистентность бот-сессий**, а не кеш платформы:
+- Ключ — `chat_id` (Telegram): бот работает в Telegram-контексте
+- Хранятся для переживания редеплоев бота
+- `ory_tokens` — токены для вызова Gateway MCP (Ory OAuth)
+- `dt_tokens` — токены для вызова DT API
+- Токены **зашифрованы** (Fernet, WP-234), в открытом виде в БД не хранятся
+
+---
+
+### LEARNING_HISTORY vs LEARNER_CONCEPT_MASTERY
+
+| | LEARNING_HISTORY (activity-hub) | LEARNER_CONCEPT_MASTERY (digital-twin) |
+|---|---|---|
+| **Что хранит** | Факты: "прошёл мем X, score 0.8" | Агрегат: "освоен концепт ZP.001 на 85%" |
+| **Кто пишет** | transform-worker из USER_EVENTS | profiler (читает LEARNING_HISTORY через API) |
+
+Поток: RAW_EVENTS → USER_EVENTS → LEARNING_HISTORY → profiler API → LEARNER_CONCEPT_MASTERY.
+Квалификация "Ученик" и уровни до неё — автоматически из mastery. Выше — методсовет МИМ (ручное).
+
+---
+
+### Кеш авторизации gateway-mcp
+
+`checkSubscription()` в gateway-mcp не обращается к Neon на каждый запрос — результат кешируется в **Cloudflare KV** с TTL 5 мин (WP-235). JWKS также кешируется in-memory в Workers isolate.
+
+</details>
+
+---
+
+<details>
+<summary><b>8. Справочник таблиц</b></summary>
+
+> **Статус:** ✅ Существует в `platform` (единая база, WP-232) | ⚠️ Перенести при разделении | 🆕 Создать
 
 ### platform-core
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| USER_IDENTITIES | Маппинг идентичностей: ory_id ↔ telegram_id ↔ lms_id. Хранит только то, чего Ory не знает. Source of truth для связывания пользователей. | ✅ Существует | `public.user_identities` — создана WP-232, живёт в единой `platform` |
-| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway-паттерн: все сервисы проверяют права здесь. Поддерживается payment-registry через cron. | ✅ Существует | `public.subscription_grants` — создана WP-231, данные из payment-registry |
-| GITHUB_CONNECTIONS | GitHub OAuth-токены и конфигурация публикации (репозитории, ветки). Потребитель — бот-издатель заметок. | ✅ Существует | `public.github_connections` — создана WP-187 (бот OAuth) |
-| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth-токены для интеграции бота с календарём пользователя. | ✅ Существует | `public.google_calendar_connections` — создана WP-232 |
-| USER_INTEGRATIONS | OAuth-конфигурация для activity-hub коллекторов: GitHub, WakaTime, Google Calendar. Source of truth для collectors. | ⚠️ Перенести | Сейчас в `development.user_integrations` (activity-hub схема). Переносится в platform-core при разделении баз. |
-| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей (экзокортекс). Статус валидации и knowledge gate. | ✅ Существует | `knowledge.backend_registry` — создана WP-187/WP-189 |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| USER_IDENTITIES | Маппинг ory_id ↔ telegram_id ↔ lms_id. Только то, чего Ory не знает. | ✅ | `public.user_identities`, WP-232 |
+| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway для всех сервисов. | ✅ | `public.subscription_grants`, WP-231 |
+| GITHUB_CONNECTIONS | GitHub OAuth + конфиг публикации (репо, ветки). | ✅ | `public.github_connections`, WP-187 |
+| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth для бота. | ✅ | `public.google_calendar_connections`, WP-232 |
+| USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | ⚠️ Перенести | Сейчас в `development.user_integrations` |
+| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | ✅ | `knowledge.backend_registry`, WP-187/189 |
 
 ### digital-twin
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| DIGITAL_TWINS | Цифровой двойник пользователя. 3 слоя: базовые параметры, вовлечённость, производные показатели (agency, longevity и др.). | ✅ Существует | `public.digital_twins` — мигрирована из БД `digitaltwin` в `platform` (WP-227) |
-| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Каждое событие — отдельная строка с rule_code и источником. | ✅ Существует | `points.point_transactions` — создана WP-121 |
-| LEARNER_CONCEPT_MASTERY | Агрегированная степень освоения концептов (0.0–1.0). Вычисляется profiler из LEARNING_HISTORY. Основа для автоматической квалификации "Ученик". | ✅ Существует | `concept_graph.learner_concept_mastery` — создана WP-151 (LMS qualification) |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| DIGITAL_TWINS | Цифровой двойник: 3 слоя (базовые / вовлечённость / производные). | ✅ | `public.digital_twins`, WP-227 |
+| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. | ✅ | `points.point_transactions`, WP-121 |
+| LEARNER_CONCEPT_MASTERY | Степень освоения концептов (0.0–1.0). Основа для квалификации "Ученик". | ✅ | `concept_graph.learner_concept_mastery`, WP-151 |
 
 ### knowledge
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| DOCUMENTS | Документы платформы и персональные документы пользователей. Чанки с векторными эмбеддингами для semantic search. | ✅ Существует | `knowledge.documents` — создана knowledge-mcp, pgvector 1024-dim HNSW |
-| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов при поиске. Используется для дообучения ранжирования. | ✅ Существует | `knowledge.retrieval_feedback` — создана knowledge-mcp |
-| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). Каждый концепт — именованная единица знания. | ✅ Существует | `concept_graph.concepts` — создана WP-170/knowledge-mcp |
-| CONCEPT_EDGES | Рёбра графа концептов: prerequisite, related, part_of, contradicts. | ✅ Существует | `concept_graph.concept_edges` — создана вместе с CONCEPTS |
-| CONCEPT_MISCONCEPTIONS | Типовые ошибки и заблуждения по концептам. Используются для адаптивного обучения. | ✅ Существует | `concept_graph.concept_misconceptions` — создана knowledge-mcp |
-| GITHUB_INSTALLATIONS | GitHub App installations пользователей. Даёт доступ к репозиториям для индексации. | ✅ Существует | `knowledge.github_installations` — создана WP-187 |
-| USER_SOURCES | Источники индексации для каждого пользователя (GitHub репозитории, активные/неактивные). | ✅ Существует | `knowledge.user_sources` — создана knowledge-mcp |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| DOCUMENTS | Документы + векторные эмбеддинги для semantic search. | ✅ | `knowledge.documents`, knowledge-mcp |
+| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов. | ✅ | `knowledge.retrieval_feedback`, knowledge-mcp |
+| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). | ✅ | `concept_graph.concepts`, WP-170 |
+| CONCEPT_EDGES | Рёбра графа: prerequisite, related, part_of, contradicts. | ✅ | `concept_graph.concept_edges` |
+| CONCEPT_MISCONCEPTIONS | Типовые заблуждения по концептам. | ✅ | `concept_graph.concept_misconceptions` |
+| GITHUB_INSTALLATIONS | GitHub App installations для индексации репо. | ✅ | `knowledge.github_installations`, WP-187 |
+| USER_SOURCES | Источники индексации (GitHub репо, активные/нет). | ✅ | `knowledge.user_sources`, knowledge-mcp |
 
 ### activity-hub
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| RAW_EVENTS | Landing zone. Сырые события из всех источников без трансформаций. Партиционирована по (source, fetched_at). Bronze-слой. | ✅ Существует | `development.raw_events` — создана WP-109 Ф8.1 (миграция 004_raw_events.sql) |
-| USER_EVENTS | Silver-слой. Нормализованные события с атрибуцией пользователя, дедуплицированные по external_id. | ✅ Существует | `development.user_events` — создана WP-109 (миграция 001_hub_tables.sql) |
-| LEARNING_HISTORY | Gold-слой. Факты обучения (мемы, практики, ячейки) с оценками. Читается profiler для mastery. | ⚠️ Перенести | Сейчас в `aist_bot` (миграция 007). При разделении баз переезжает в activity-hub. |
-| IDENTITY_MAP | Маппинг внешних ID (chat_id, lms_id) на ory_id для атрибуции событий. user_uuid = NULL до OAuth. | ✅ Существует | `development.identity_map` — создана WP-109 |
-| SYNC_LOG | Журнал запусков коллекторов: статус, количество событий, время. | ✅ Существует | `development.sync_log` — создана WP-109 |
-| QUARANTINED_EVENTS | Карантин для событий, не прошедших валидацию. Хранятся для ручного разбора. | ✅ Существует | `development.quarantined_events` — создана WP-109 |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| RAW_EVENTS | Bronze: сырые события, партиционированы по (source, fetched_at). TTL 30д. | ✅ | `development.raw_events`, WP-109 Ф8.1 |
+| USER_EVENTS | Silver: нормализованные события с атрибуцией пользователя. TTL 90д. | ✅ | `development.user_events`, WP-109 |
+| LEARNING_HISTORY | Gold: факты обучения. Читается profiler. Archive в S3 после 5 лет. | ⚠️ Перенести | Сейчас в aist_bot (миграция 007) |
+| IDENTITY_MAP | chat_id → ory_id; NULL до OAuth. | ✅ | `development.identity_map`, WP-109 |
+| SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | ✅ | `development.sync_log`, WP-109 |
+| QUARANTINED_EVENTS | Карантин для невалидных событий. | ✅ | `development.quarantined_events`, WP-109 |
 
 ### payment-registry
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| FINANCE_PAYMENTS | Основной реестр всех финансовых транзакций платформы (YooKassa, Stripe, ручные). | ✅ Существует | `public.finance_payments` — создана WP-183, данные импортированы из Aisystant CRM (35 879 строк) |
-| SEMINAR_PAYMENTS | Платежи за семинары через бот. | ⚠️ Перенести | Сейчас в `public.seminar_payments` (aist_bot миграция 011). Переезжает в payment-registry. |
-| WORKSHOP_PAYMENTS | Платежи за воркшопы (бот или web). Содержит aisystant_id для связки с LMS. | ⚠️ Перенести | Сейчас в `public.workshop_payments` (aist_bot миграция 009). Переезжает в payment-registry. |
-| PAYMENTS_SYNC_STATE | Singleton-ватерmarк инкрементального импорта платежей из Aisystant. | ✅ Существует | `public.finance_payments_sync_state` — создана WP-183 |
-| SUBSCRIPTION_GRANTS_SYNC_STATE | Singleton-ватерmarк синхронизации грантов подписок в platform-core. | ✅ Существует | `public.subscription_grants_sync_state` — создана WP-231 |
-| IMPORT_STAGING_PAYMENT | Landing zone для инкрементального импорта платежей из Aisystant API. | ✅ Существует | `public.import_staging_payment` — создана WP-183 (миграция 005) |
-| IMPORT_STAGING_CHARGEOFF | Landing zone для списаний из Aisystant. Связывается с FINANCE_PAYMENTS по payment_id. | ✅ Существует | `public.import_staging_chargeoff` — создана WP-183 (миграция 005) |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| FINANCE_PAYMENTS | Реестр всех транзакций (YooKassa, Stripe, ручные). Permanent. | ✅ | `public.finance_payments`, WP-183. Данные из Aisystant CRM (35 879 строк) |
+| FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | 🆕 Создать | WP-237 |
+| SEMINAR_PAYMENTS | Платежи за семинары через бот. | ⚠️ Перенести | Сейчас в aist_bot (миграция 011) |
+| WORKSHOP_PAYMENTS | Платежи за воркшопы. Содержит aisystant_id. | ⚠️ Перенести | Сейчас в aist_bot (миграция 009) |
+| PAYMENTS_SYNC_STATE | Ватерmarк импорта из Aisystant. | ✅ | `public.finance_payments_sync_state`, WP-183 |
+| SUBSCRIPTION_GRANTS_SYNC_STATE | Ватерmarк синхронизации грантов. | ✅ | WP-231 |
+| IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | ✅ | WP-183 (миграция 005) |
+| IMPORT_STAGING_CHARGEOFF | Landing zone списаний. | ✅ | WP-183 (миграция 005) |
 
 ### aist-bot
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| USER_STATE | FSM-состояние пользователя в боте. Текущий шаг диалога, контекст, счётчик активных дней, триал. | ✅ Существует | `development.user_state` — основная таблица бота, создана с первой версией |
-| QA_HISTORY | История вопросов и ответов пользователя в боте с флагом полезности и источниками MCP. | ✅ Существует | `public.qa_history` — создана WP-132 (AI консультант) |
-| NOTIFICATION_LOG | Журнал отправленных уведомлений с idempotency_key для защиты от дублей. | ✅ Существует | `public.notification_log` — создана WP-232 |
-| BOT_SUBSCRIPTIONS | Telegram Stars подписки бот-уровня. Не связаны с платформенной подпиской. | ⚠️ Устарела? | Заменена на `public.subscriptions` (WP-232). Требует уточнения: удалить или оставить для TG Stars. |
-| SEMINARS | Каталог семинаров: название, цена, дата, Telegram-группа. Оплата → payment-registry. | ✅ Существует | `public.seminars` — создана aist_bot миграция 011 |
-| COMMUNITY_MEMBERS | Участники Telegram-сообщества: join/leave события. | ✅ Существует | `public.community_members` — создана aist_bot миграция 009 |
-| SERVICE_USAGE | Счётчик использования сервисов бота по пользователю. | ✅ Существует | `public.service_usage` — создана aist_bot миграция 003 |
-| USER_ACCESS | Временные права доступа к ресурсам (выданные ботом, с expiry). | ✅ Существует | `public.user_access` — создана aist_bot миграция 002 |
-| FEEDBACK_TRIAGE | Фидбек пользователей из бота: категория, статус обработки. Только source='bot'. | ✅ Существует | `public.feedback_triage` — создана aist_bot миграция 008 |
-| ORY_TOKENS | Ory OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. | ✅ Существует | `public.ory_tokens` — создана WP-209 (бот → gateway). ⚠️ Токены в plaintext — см. открытые вопросы. |
-| DT_TOKENS | Digital Twin OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. | ✅ Существует | `public.dt_tokens` — создана WP-82 (DT интеграция бота). ⚠️ Токены в plaintext — см. открытые вопросы. |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| USER_STATE | FSM-состояние, счётчик активных дней, триал. | ✅ | `development.user_state`, первая версия бота |
+| QA_HISTORY | История вопросов/ответов. TTL 180д. | ✅ | `public.qa_history`, WP-132 |
+| NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | ✅ | `public.notification_log`, WP-232 |
+| BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | ⚠️ Уточнить | Возможно заменена `public.subscriptions` (WP-232) |
+| SEMINARS | Каталог семинаров. Оплата → payment-registry. | ✅ | aist_bot миграция 011 |
+| COMMUNITY_MEMBERS | Участники Telegram-сообщества. | ✅ | aist_bot миграция 009 |
+| SERVICE_USAGE | Счётчик использования сервисов бота. | ✅ | aist_bot миграция 003 |
+| USER_ACCESS | Временные права (выданные ботом, с expiry). | ✅ | aist_bot миграция 002 |
+| FEEDBACK_TRIAGE | Фидбек из бота (source='bot'). | ✅ | aist_bot миграция 008 |
+| ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | ✅ | `public.ory_tokens`, WP-209. ⚠️ Сейчас plaintext → WP-234 |
+| DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | ✅ | `public.dt_tokens`, WP-82. ⚠️ Сейчас plaintext → WP-234 |
 
 ### metabase
 
-| Таблица | Назначение | Статус | Источник / примечание |
-|---------|-----------|--------|----------------------|
-| METABASE_COLLECTIONS | Иерархические коллекции дашбордов (папки в Metabase). | ✅ Существует | Управляется Metabase автоматически. ~171 служебная таблица. |
-| METABASE_DASHBOARDS | Дашборды: финансы, события, активность. Читают из payment-registry и activity-hub. | ✅ Существует | Управляется Metabase. Созданы WP-183 (финансовые дашборды). |
-| METABASE_CARDS | Отдельные вопросы (questions): SQL/MBQL-запросы. | ✅ Существует | Управляется Metabase. 8 Questions + 2 dashboards (WP-183). |
-| METABASE_USERS | Пользователи Metabase (аналитики, финансисты). Не связаны с Ory-пользователями. | ✅ Существует | Управляется Metabase. |
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| METABASE_COLLECTIONS | Папки дашбордов. | ✅ | Управляется Metabase (~171 таблица) |
+| METABASE_DASHBOARDS | Дашборды (финансы, события). | ✅ | WP-183 (2 дашборда) |
+| METABASE_CARDS | Questions (8 штук). | ✅ | WP-183 |
+| METABASE_USERS | Пользователи Metabase (не Ory). | ✅ | Управляется Metabase |
+
+</details>
 
 ---
 
-## Архитектурные решения (принятые)
+<details>
+<summary><b>9. Архитектурные решения</b></summary>
 
-> Все проблемы, выявленные при ArchGate-ревью, имеют принятые решения. Без их реализации архитектура не является целевой — это план реализации, а не wishlist.
-
-### Б-1 — Шифрование OAuth-токенов в aist-bot
-
-**Проблема:** `ORY_TOKENS.access_token` и `DT_TOKENS.access_token` хранятся как TEXT без шифрования. Подтверждено в коде: `db/queries/ory_tokens.py`, библиотека `cryptography` отсутствует в `requirements.txt`. При компрометации базы — все OAuth-сессии пользователей утекают.
-
-**Принятое решение:** Python Fernet (AES-128-CBC + HMAC-SHA256) + автоматический refresh каждые 10 мин.
-- Ключ `FERNET_KEY` из env (Railway secrets), не в коде
-- При сохранении: `encrypted = Fernet(key).encrypt(token.encode())`
-- При чтении: `token = Fernet(key).decrypt(encrypted).decode()`
-- Scheduler: `updated_at < now() - 10 min` → принудительный refresh через Ory
-
-**Трудозатраты:** ~16h. **РП:** WP-234 (новый).
+> Принятые решения по проблемам, выявленным при ArchGate-ревью. Все изменения уже отражены в ERD выше (раздел 5) и справочнике таблиц (раздел 8).
 
 ---
 
-### М-1 — Кеш авторизации в gateway-mcp
+### WP-234 — Шифрование OAuth-токенов (aist-bot)
 
-**Проблема:** `checkSubscription()` в `gateway-mcp/src/index.ts` делает SELECT в Neon на каждый запрос. JWKS кешируется (хорошо), SUBSCRIPTION_GRANTS — нет. Подтверждено в коде. При 10k пользователей = тысячи DB-запросов в минуту.
+**Проблема:** `access_token` и `refresh_token` в ORY_TOKENS, DT_TOKENS, GITHUB_CONNECTIONS, USER_INTEGRATIONS хранились как TEXT. При компрометации базы — все OAuth-сессии утекают. Подтверждено в коде: `cryptography` отсутствует в `requirements.txt`.
 
-**Принятое решение:** Cloudflare KV с TTL 5 мин.
-- In-memory Map не подходит: Workers stateless, разные isolates → cache miss 80%+
-- `await env.AUTH_CACHE_KV.put("sub:{ory_id}", "1", {expirationTtl: 300})`
-- Cache miss → DB запрос → запись в KV → return result
-- При отзыве подписки: явная инвалидация `kv.delete(key)`
+**Решение:** Python Fernet (AES-128-CBC + HMAC-SHA256). Тип колонок: TEXT → BYTEA. Добавлена колонка `token_nonce TEXT`. Ключ `FERNET_KEY` из env (Railway secrets). Scheduler проверяет `updated_at < now() - 10 min` → принудительный refresh.
 
-**Трудозатраты:** ~12h. **РП:** WP-235 (новый).
+**Трудозатраты:** ~16h. Приоритет: критический.
 
 ---
 
-### О-1 — Correlation ID в activity-hub
+### WP-235 — Кеш авторизации (gateway-mcp)
 
-**Проблема:** RAW_EVENTS, USER_EVENTS, LEARNING_HISTORY не имеют `trace_id`. Нельзя проследить путь события bronze→silver→gold. Подтверждено в миграциях activity-hub.
+**Проблема:** `checkSubscription()` в `gateway-mcp/src/index.ts` делает SELECT в Neon на каждый запрос. Подтверждено в коде. При 10k пользователей = тысячи DB-запросов в минуту.
 
-**Принятое решение:** OpenTelemetry trace_id (128-bit hex, 32 символа) — интегрируется с Langfuse (уже используется).
-- `trace_id CHAR(32)` добавляется в RAW_EVENTS при ingestion через `gen_random_uuid()`
-- Transform-worker пропагирует `trace_id` из RAW_EVENTS → USER_EVENTS → LEARNING_HISTORY
-- Индекс: `CREATE INDEX idx_raw_events_trace_id ON RAW_EVENTS(trace_id)`
+**Решение:** Cloudflare KV с TTL 5 мин. In-memory Map не подходит (Workers stateless, разные isolates → cache miss 80%+). При отзыве подписки — явная инвалидация `kv.delete(key)`.
 
-**Трудозатраты:** ~20h. **РП:** WP-236 (новый).
+**Трудозатраты:** ~12h. Приоритет: высокий.
 
 ---
 
-### О-2 — Audit trail для FINANCE_PAYMENTS
+### WP-236 — Correlation ID в activity-hub
 
-**Проблема:** Нет истории изменений статуса платежа. Нельзя ответить: "кто и когда изменил статус с pending на failed?"
+**Проблема:** RAW_EVENTS, USER_EVENTS, LEARNING_HISTORY не имели `trace_id`. Нельзя проследить путь события bronze→silver→gold. Подтверждено в миграциях.
 
-**Принятое решение:** Postgres trigger → append-only log таблица.
-- Новая таблица: `FINANCE_PAYMENTS_AUDIT_LOG(payment_id, field_name, old_value, new_value, changed_by, changed_at)`
-- Trigger `tr_log_payment_changes` срабатывает на UPDATE FINANCE_PAYMENTS, пишет в лог автоматически
-- `changed_by` = имя сервиса ('payment-sync', 'manual-admin', 'bot')
-- Metabase читает через `v_payment_audit` view с RLS
+**Решение:** OpenTelemetry trace_id (CHAR(32), 128-bit hex). Генерируется при ingestion в RAW_EVENTS, propagated transform-worker в USER_EVENTS и LEARNING_HISTORY. Интегрируется с Langfuse.
 
-**Трудозатраты:** ~14h. **РП:** WP-237 (новый).
+**Трудозатраты:** ~20h. Приоритет: высокий.
 
 ---
 
-### Б-2 — RLS для Metabase к payment-registry
+### WP-237 — Audit trail для FINANCE_PAYMENTS
 
-**Проблема:** Metabase читает FINANCE_PAYMENTS без Row-Level Security. При компрометации — все финансовые данные открыты.
+**Проблема:** Нет истории изменений статуса платежа. Нельзя ответить кто и когда изменил статус.
 
-**Принятое решение:** Postgres роль `metabase_reader` + агрегированные views без PII.
-- `GRANT SELECT` только на views с суммами/статусами/датами — без `ory_id`, `telegram_id`
-- `REVOKE ALL ON FINANCE_PAYMENTS FROM metabase_reader`
-- RLS policy `USING (FALSE)` — если роль попытается напрямую, вернёт 0 строк
+**Решение:** Новая таблица `FINANCE_PAYMENTS_AUDIT_LOG` + Postgres trigger `tr_log_payment_changes`. Срабатывает на UPDATE, пишет в лог автоматически. `changed_by` = имя сервиса. Retention: 7 лет (compliance).
 
-**Трудозатраты:** ~8h. **РП:** WP-238 (новый).
+**Трудозатраты:** ~14h. Приоритет: высокий.
 
 ---
 
-### Б-3 — SSRF защита BACKEND_REGISTRY.backend_url
+### WP-238 — RLS для Metabase
 
-**Проблема:** Пользователи регистрируют кастомные MCP-URL. Без валидации возможен SSRF (http://169.254.169.254/ и т.п.).
+**Проблема:** Metabase читала FINANCE_PAYMENTS без ограничений. При компрометации — все финансовые данные открыты.
 
-**Принятое решение:** Валидация URL при записи в БД.
-- Только `https://` в production
-- Запрет: localhost, 127.x, 10.x, 172.16-31.x, 192.168.x, 169.254.x (cloud metadata)
-- Запрет портов: 22, 23, 25, 135, 139, 445, 3389
-- Максимум 512 символов, нормализация URL
+**Решение:** Роль `metabase_reader` + агрегированные views без PII. `REVOKE ALL ON FINANCE_PAYMENTS FROM metabase_reader`. RLS policy `USING (FALSE)` блокирует прямой доступ к таблице.
 
-**Трудозатраты:** ~10h. **РП:** WP-239 (новый).
+**Трудозатраты:** ~8h. Приоритет: средний.
 
 ---
 
-### М-2 — Retention policy
+### WP-239 — SSRF защита BACKEND_REGISTRY
 
-**Проблема:** RAW_EVENTS растёт бесконечно. GDPR требует права на удаление данных пользователя.
+**Проблема:** Пользователи регистрируют кастомные MCP-URL без валидации → SSRF риск.
 
-**Принятое решение:** pg_partman DROP для RAW_EVENTS + daily cron для остальных.
+**Решение:** Валидация при записи: только `https://`, запрет RFC1918 (127.x, 10.x, 172.16-31.x, 192.168.x, 169.254.x), запрет портов 22/23/25/135/139/445/3389, максимум 512 символов. Отражено в note поля `backend_url` в ERD.
+
+**Трудозатраты:** ~10h. Приоритет: средний.
+
+---
+
+### WP-240 — Retention policy
+
+**Проблема:** Таблицы растут бесконечно. GDPR требует права на удаление данных.
+
+**Решение:** pg_partman DROP для RAW_EVENTS (TTL 30д). Daily cron для остальных. Retention по таблицам:
 
 | Таблица | TTL | Механизм |
 |---------|-----|----------|
-| RAW_EVENTS | 30 дней | pg_partman DROP partition |
-| USER_EVENTS | 90 дней | DELETE cron (01:00 UTC) |
-| LEARNING_HISTORY | Постоянно | Archive в S3 после 5 лет |
-| FINANCE_PAYMENTS | Постоянно | Annual archive (законодательство) |
+| RAW_EVENTS | 30 дней | pg_partman DROP |
+| USER_EVENTS | 90 дней | DELETE cron |
+| LEARNING_HISTORY | Постоянно | Archive S3 после 5 лет |
+| FINANCE_PAYMENTS | Постоянно | Annual archive |
 | FINANCE_PAYMENTS_AUDIT_LOG | 7 лет | Archive (compliance) |
 | QA_HISTORY | 180 дней | DELETE cron |
 | NOTIFICATION_LOG | 30 дней | DELETE cron |
 | SYNC_LOG | 30 дней | DELETE cron |
-| USER_STATE (неактивные) | 90 дней | soft-delete → archive |
+| USER_STATE (неактивные) | 90 дней | soft-delete (is_inactive=true) |
 
-**Трудозатраты:** ~16h. **РП:** WP-240 (новый).
+**Трудозатраты:** ~16h. Приоритет: средний.
 
 ---
 
-### М-3 — Backup / DR
+### WP-241 — Backup / DR
 
-**Проблема:** Не определены RPO/RTO. Neon PITR 7 дней — недостаточно для FINANCE_PAYMENTS (compliance требует дольше).
+**Проблема:** Не определены RPO/RTO. Neon PITR 7 дней недостаточно для payment-registry (compliance).
 
-**Принятое решение:** Neon PITR (per-database) + pg_dump в S3 через unpooled endpoint.
+**Решение:** Neon PITR per-database + pg_dump в S3 через unpooled endpoint.
 
 | База | RPO | RTO | Механизм |
 |------|-----|-----|----------|
-| platform-core | 1h | 15 мин | Neon PITR 7d + S3 daily |
-| payment-registry | 15 мин | 30 мин | Neon PITR **30d** (upgrade) + S3 каждые 6h |
-| digital-twin | 1h | 30 мин | Neon PITR 7d + S3 daily |
-| activity-hub | 24h | 1h | Neon PITR 7d (события воспроизводимы) |
+| platform-core | 1h | 15 мин | PITR 7d + S3 daily |
+| payment-registry | 15 мин | 30 мин | PITR **30d** (upgrade) + S3 каждые 6h |
+| digital-twin | 1h | 30 мин | PITR 7d + S3 daily |
+| activity-hub | 24h | 1h | PITR 7d (события воспроизводимы) |
 | knowledge | 7 дней | 2h | S3 weekly (знания в git) |
-| aist-bot | 24h | 2h | Neon PITR 7d |
+| aist-bot | 24h | 2h | PITR 7d |
 
-**Трудозатраты:** ~18h. **РП:** WP-241 (новый).
+**Трудозатраты:** ~18h. Приоритет: средний.
+
+</details>
 
 ---
 
-## Сводная таблица РП по архитектуре
+<details open>
+<summary><b>10. Сводная таблица РП</b></summary>
 
 | РП | Проблема | Трудозатраты | Приоритет |
 |----|---------|--------------|-----------|
 | WP-234 | Шифрование токенов (aist-bot) | 16h | критический |
-| WP-235 | Кеш авторизации (gateway-mcp) | 12h | высокий |
-| WP-236 | Correlation ID (activity-hub) | 20h | высокий |
-| WP-237 | Audit trail платежей | 14h | высокий |
-| WP-238 | RLS Metabase | 8h | средний |
-| WP-239 | SSRF защита backend-registry | 10h | средний |
-| WP-240 | Retention policy | 16h | средний |
-| WP-241 | Backup / DR | 18h | средний |
+| WP-235 | Кеш авторизации (gateway-mcp KV) | 12h | высокий |
+| WP-236 | Correlation ID / trace_id (activity-hub) | 20h | высокий |
+| WP-237 | Audit trail FINANCE_PAYMENTS | 14h | высокий |
+| WP-238 | RLS Metabase → payment-registry | 8h | средний |
+| WP-239 | SSRF защита BACKEND_REGISTRY | 10h | средний |
+| WP-240 | Retention policy (все базы) | 16h | средний |
+| WP-241 | Backup / DR (PITR + S3) | 18h | средний |
 | | **Итого** | **114h** | |
 
----
+**Критический путь:**
+1. WP-234 + WP-235 — безопасность и авторизация (параллельно, 2 нед)
+2. WP-236 + WP-237 + WP-238 + WP-239 — данные и compliance (параллельно, 2 нед)
+3. WP-240 + WP-241 — операционная надёжность (1 нед)
 
-## Статус
-
-> **Целевая архитектура.** Текущее состояние (14 апр 2026): все таблицы в одной базе `platform` (WP-232).
-> Разделение на 7 баз — следующий РП (~20-40h).
-> Решение принято: встреча ИТ 8, 14 апр 2026.
+</details>
