@@ -136,44 +136,15 @@ Neon Project: aisystant
 <summary><b>4. Архитектура Neon и связи с системами</b></summary>
 
 **Структура раздела:**
-- **4.1** — связи между базами данных (межбазовый граф)
-- **4.2** — поток идентичности (Ory → Gateway → platform-core)
-- **4.3** — реестр всех систем (таблица)
-- **4.4** — поток событий → ЦД → персональное руководство
+- **4.1** — поток идентичности (Ory → Gateway → platform-core)
+- **4.2** — реестр всех систем (таблица)
+- **4.3** — поток событий → ЦД → персональное руководство
 
 Все стрелки — API / события / cron, не FK.
 
 ---
 
-### 4.1 Связи между базами данных
-
-Как 7 баз обращаются друг к другу через API (FK между базами запрещены — П2).
-
-```mermaid
-graph LR
-    PC[(#1 platform-core)]
-    DT[(#2 digital-twin)]
-    KN[(#3 knowledge)]
-    AH[(#4 activity-hub)]
-    PR[(#5 payment-registry)]
-    AB[(#6 aist-bot)]
-    MB[(#7 metabase)]
-
-    AH -- "ступени ролей (Профайлер)" --> DT
-    AH -- "chat_id → ory_id" --> PC
-    PR -- "subscription-sync" --> PC
-    AB -- "проверка прав" --> PC
-    AB -- "чтение профиля" --> DT
-    KN -- "mastery концептов" --> DT
-    PR -. "финансы (RLS)" .-> MB
-    AH -. "события (без PII)" .-> MB
-```
-
-> Сплошная стрелка = запись. Пунктир = чтение (RO, Metabase читает из PR и AH).
-
----
-
-### 4.2 Поток идентичности и доступа
+### 4.1 Поток идентичности и доступа
 
 ```mermaid
 graph LR
@@ -186,18 +157,18 @@ graph LR
 
     User -->|"логин / OAuth"| Ory
     Ory  -->|"JWT токен"| User
-    Ory  -->|"webhook: регистрация / OAuth callback\n→ USER_IDENTITIES, GITHUB_CONNECTIONS"| PC
+    Ory  -->|"webhook: регистрация"| PC
     User -->|"запрос + JWT"| GW
-    GW   -->|"verify JWT (JWKS cached)"| Ory
+    GW   -->|"verify JWT"| Ory
     GW   -->|"check permissions"| Keto
-    GW   -->|"check subscription\n(KV cache TTL 5 мин)"| PC
+    GW   -->|"check subscription"| PC
     PC   -->|"tier + grants"| GW
-    PR   -->|"subscription-sync cron\n→ SUBSCRIPTION_GRANTS"| PC
+    PR   -->|"subscription-sync cron"| PC
 ```
 
 ---
 
-### 4.3 Реестр всех систем
+### 4.2 Реестр всех систем
 
 > **Легенда статусов:** ✅ — работает (наша инфраструктура) · ✅ внешний — работает (сторонний сервис, данные в Neon не хранит) · 🟡 — в разработке · 🔲 — запланировано
 
@@ -233,7 +204,7 @@ graph LR
 
 ---
 
-### 4.4 Поток данных: события → ЦД → персональное руководство
+### 4.3 Поток данных: события → ЦД → персональное руководство
 
 ```mermaid
 graph TD
@@ -241,6 +212,7 @@ graph TD
     Club([Club]) -->|raw events| AH
     Bot([AIST Bot]) -->|raw events| AH
     WakaTime([WakaTime]) -->|raw events| AH
+    IWE([IWE / exocortex]) -->|raw events| AH
 
     AH[(#4 activity-hub)]
 
@@ -252,7 +224,7 @@ graph TD
     DT -->|контекст| Bot
 ```
 
-> Степень DEG (квалификация) назначается вручную методсоветом МИМ и импортируется в DT отдельно — не через поток событий. Поэтому стрелка LMS → DT здесь не показана.
+> Степень DEG назначается вручную методсоветом МИМ — это не поток событий, поэтому LMS → DT здесь не показана.
 
 </details>
 
