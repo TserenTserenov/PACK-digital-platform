@@ -23,13 +23,25 @@ supersedes: "WP-232 решение об одной базе platform"
 
 **Зачем этот документ:** мы проектируем новую архитектуру всех систем платформы Aisystant. Структура баз данных — фундамент: от неё зависит безопасность, независимость команд, масштабируемость и возможность замены отдельных сервисов. Этот документ — source-of-truth по тому, какие данные где живут, как сервисы связаны и какие проблемы ещё нужно решить.
 
-**Текущее состояние (апр 2026):** все таблицы живут в одной базе `platform` (WP-232). Разделение на 7 баз — следующий РП (~20-40h).
+**Текущее состояние (апр 2026):** все таблицы живут в одной базе `platform` в Neon. Разделение на 7 баз — следующий РП (~20-40h, не начат).
 
 **Что зафиксировано:**
 - Принципы разделения данных (7 инвариантных правил)
-- Карта 7 баз и их ERD
-- Все таблицы включая новые (audit log, trace_id, шифрование токенов)
+- Карта 7 баз + внешние системы и их связи
+- ERD всех таблиц включая новые (audit log, trace_id, тиры, шифрование токенов)
 - Принятые архитектурные решения по безопасности, наблюдаемости, масштабированию
+
+---
+
+**Как читать (для команды):**
+
+Ссылка на документ: **https://github.com/TserenTserenov/PACK-digital-platform/blob/main/pack/digital-platform/02-domain-entities/DP.ARCH.004-neon-data-architecture.md**
+
+**В браузере (GitHub):** разделы открываются кликом на заголовок ▶ / ▼.
+
+**В VS Code:** открыть файл → нажать `Cmd+Shift+V` (Mac) или `Ctrl+Shift+V` (Windows/Linux) → откроется Markdown Preview с интерактивными спойлерами.
+
+**Навигация:** §3 Карта баз — быстрый ориентир. Нужна конкретная таблица → §8 Справочник (Ctrl/Cmd+F по имени таблицы). Нужно понять связи — §4 Диаграмма или §6 кто читает/пишет.
 
 </details>
 
@@ -101,7 +113,19 @@ Neon Project: aisystant
                               читает activity-hub (read-only)
 
 Вне Neon:
-  Ory Kratos ← идентичность, source of truth по ory_id
+  Ory Kratos   ← идентичность, source of truth по ory_id
+  Ory Keto     ← access control (роли/разрешения); данные в Neon не хранит
+  Langfuse     ← AI observability (traces, evals); внешний сервис
+  LMS          ← учебная платформа Aisystant; read-only, синхронизация через staging
+  Club         ← сообщество; события → #4 activity-hub (source='club')
+  Web App      ← Vue.js клиент; серверного state в Neon нет
+  CF Workers   ← gateway-mcp, knowledge-mcp; stateless, пишут/читают в Neon по API
+  Railway      ← хостинг сервисов; инфра-уровень, данных в Neon не хранит
+  WakaTime     ← коллектор активности; события → #4 activity-hub (source='iwe')
+  GitHub App   ← коллектор репо; установки → #3 GITHUB_INSTALLATIONS
+
+⚠ Текущее состояние (апр 2026): все таблицы живут в одной базе `platform` в Neon.
+  Разделение на 7 баз — следующий РП (~20-40h, не начат).
 ```
 
 </details>
@@ -553,10 +577,24 @@ erDiagram
         bigint      chat_id         PK  "Telegram chat_id"
         text        current_state   "FSM state"
         jsonb       data            "FSM context"
+        text        tier            "T0|T1|T2|T3|T4 — текущий тир пользователя"
+        text        mentor_tier     "NULL|TM1|TM2|TM3 — ось наставника (ортогональная)"
+        text        admin_tier      "NULL|TA1|TA2|TA3|TA4 — ось администратора"
+        bool        is_developer    "TD1 — доступ к платформенной разработке"
         bool        is_inactive     "true если нет активности >90 дней (WP-240)"
         timestamptz trial_started_at
         timestamptz last_active_date
         int         active_days_total
+    }
+
+    TIER_EVENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        from_tier       "T0|T1|T2|T3|T4"
+        text        to_tier
+        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
+        timestamptz created_at
+        text        note            "история переходов тиров; 4-осевая модель: T+TM+TA+TD (DP.ARCH.002)"
     }
 
     QA_HISTORY {
@@ -660,6 +698,7 @@ erDiagram
     USER_STATE ||--o{ QA_HISTORY : "conversation"
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
+    USER_STATE ||--o{ TIER_EVENTS : "tier history"
     SEMINARS }o--o{ COMMUNITY_MEMBERS : "members"
 ```
 
@@ -836,7 +875,8 @@ erDiagram
 
 | Таблица | Назначение | Статус | Источник |
 |---------|-----------|--------|----------|
-| USER_STATE | FSM-состояние, счётчик активных дней, триал. | ✅ | `development.user_state`, первая версия бота |
+| USER_STATE | FSM-состояние + тиры (T0-T4, TM, TA, TD) + счётчик активных дней, триал. | ✅ | `development.user_state`, первая версия бота. ⚠️ Колонки tier/mentor_tier/admin_tier/is_developer нужно добавить |
+| TIER_EVENTS | История переходов тиров (T0→T1 при регистрации, T1→T2 при подписке и т.д.). 4 оси: T+TM+TA+TD. | ✅ | `development.tier_events` — существует, но только T-ось. ⚠️ Расширить на все 4 оси |
 | QA_HISTORY | История вопросов/ответов. TTL 180д. | ✅ | `public.qa_history`, WP-132 |
 | NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | ✅ | `public.notification_log`, WP-232 |
 | BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | ⚠️ Уточнить | Возможно заменена `public.subscriptions` (WP-232) |
@@ -986,11 +1026,13 @@ erDiagram
 | WP-239 | Добавить валидацию URL в #1 platform-core BACKEND_REGISTRY (SSRF защита) | 6h | средний |
 | WP-240 | Настроить retention policy для всех баз (pg_partman + cron + S3 archive) | 16h | средний |
 | WP-241 | Настроить backup / DR (PITR per-database + pg_dump → S3) | 14h | средний |
-| | **Итого** | **88h** | |
+| WP-215 | Разделение инфраструктуры мир/Россия: реализовать эту схему в двух инстансах, найти альтернативу Neon для РФ-контура (Neon — US-hosted, GDPR/152-ФЗ), определить стратегию синхронизации | ~40h | высокий |
+| | **Итого** | **~128h** | |
 
 **Критический путь:**
 1. WP-234 + WP-235 — безопасность и авторизация (параллельно, ~2 нед)
 2. WP-236 + WP-237 + WP-238 + WP-239 — данные и compliance (параллельно, ~2 нед)
 3. WP-240 + WP-241 — операционная надёжность (~1 нед)
+4. WP-215 — региональное разделение (блокирует production для РФ-пользователей)
 
 </details>
