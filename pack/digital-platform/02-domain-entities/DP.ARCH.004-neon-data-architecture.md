@@ -721,95 +721,176 @@ erDiagram
 
 ## Справочник таблиц
 
+> **Условные обозначения статуса:**
+> - ✅ **Существует** — таблица есть в миграциях, живёт в текущей единой базе `platform`
+> - ⚠️ **Существует / перенести** — таблица есть, но сейчас в другой базе или схеме, требует переноса при разделении
+> - 🆕 **Создать** — таблицы нет, нужно создавать с нуля
+
 ### platform-core
 
-| Таблица | Назначение |
-|---------|-----------|
-| USER_IDENTITIES | Маппинг идентичностей: ory_id ↔ telegram_id ↔ lms_id. Хранит только то, чего Ory не знает. Source of truth для связывания пользователей между системами. |
-| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway-паттерн: все сервисы проверяют права здесь. Поддерживается payment-registry через cron. |
-| GITHUB_CONNECTIONS | GitHub OAuth-токены и конфигурация публикации (репозитории, ветки). Потребитель — бот-издатель заметок. |
-| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth-токены для интеграции бота с календарём пользователя. |
-| USER_INTEGRATIONS | OAuth-конфигурация для activity-hub коллекторов: GitHub (WakaTime), Google Calendar. Source of truth для collectors; переживает замену движка activity-hub. |
-| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей (экзокортекс). Статус валидации и knowledge gate. |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| USER_IDENTITIES | Маппинг идентичностей: ory_id ↔ telegram_id ↔ lms_id. Хранит только то, чего Ory не знает. Source of truth для связывания пользователей. | ✅ Существует | `public.user_identities` — создана WP-232, живёт в единой `platform` |
+| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway-паттерн: все сервисы проверяют права здесь. Поддерживается payment-registry через cron. | ✅ Существует | `public.subscription_grants` — создана WP-231, данные из payment-registry |
+| GITHUB_CONNECTIONS | GitHub OAuth-токены и конфигурация публикации (репозитории, ветки). Потребитель — бот-издатель заметок. | ✅ Существует | `public.github_connections` — создана WP-187 (бот OAuth) |
+| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth-токены для интеграции бота с календарём пользователя. | ✅ Существует | `public.google_calendar_connections` — создана WP-232 |
+| USER_INTEGRATIONS | OAuth-конфигурация для activity-hub коллекторов: GitHub, WakaTime, Google Calendar. Source of truth для collectors. | ⚠️ Перенести | Сейчас в `development.user_integrations` (activity-hub схема). Переносится в platform-core при разделении баз. |
+| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей (экзокортекс). Статус валидации и knowledge gate. | ✅ Существует | `knowledge.backend_registry` — создана WP-187/WP-189 |
 
 ### digital-twin
 
-| Таблица | Назначение |
-|---------|-----------|
-| DIGITAL_TWINS | Цифровой двойник пользователя. 3 слоя: базовые параметры, вовлечённость, производные показатели (agency, longevity и др.). |
-| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Каждое событие — отдельная строка с rule_code и источником. |
-| LEARNER_CONCEPT_MASTERY | Агрегированная степень освоения концептов (0.0–1.0). Вычисляется profiler из LEARNING_HISTORY. Основа для автоматической квалификации "Ученик". |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| DIGITAL_TWINS | Цифровой двойник пользователя. 3 слоя: базовые параметры, вовлечённость, производные показатели (agency, longevity и др.). | ✅ Существует | `public.digital_twins` — мигрирована из БД `digitaltwin` в `platform` (WP-227) |
+| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Каждое событие — отдельная строка с rule_code и источником. | ✅ Существует | `points.point_transactions` — создана WP-121 |
+| LEARNER_CONCEPT_MASTERY | Агрегированная степень освоения концептов (0.0–1.0). Вычисляется profiler из LEARNING_HISTORY. Основа для автоматической квалификации "Ученик". | ✅ Существует | `concept_graph.learner_concept_mastery` — создана WP-151 (LMS qualification) |
 
 ### knowledge
 
-| Таблица | Назначение |
-|---------|-----------|
-| DOCUMENTS | Документы платформы и персональные документы пользователей. Чанки с векторными эмбеддингами для semantic search. |
-| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов при поиске. Используется для дообучения ранжирования. |
-| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). Каждый концепт — именованная единица знания с уровнем и доменом. |
-| CONCEPT_EDGES | Рёбра графа концептов: prerequisite, related, part_of, contradicts. Основа для графовых рекомендаций. |
-| CONCEPT_MISCONCEPTIONS | Типовые ошибки и заблуждения по концептам. Используются для адаптивного обучения. |
-| GITHUB_INSTALLATIONS | GitHub App installations пользователей. Даёт боту доступ к репозиториям для индексации. |
-| USER_SOURCES | Источники индексации для каждого пользователя (GitHub репозитории, активные/неактивные). |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| DOCUMENTS | Документы платформы и персональные документы пользователей. Чанки с векторными эмбеддингами для semantic search. | ✅ Существует | `knowledge.documents` — создана knowledge-mcp, pgvector 1024-dim HNSW |
+| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов при поиске. Используется для дообучения ранжирования. | ✅ Существует | `knowledge.retrieval_feedback` — создана knowledge-mcp |
+| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). Каждый концепт — именованная единица знания. | ✅ Существует | `concept_graph.concepts` — создана WP-170/knowledge-mcp |
+| CONCEPT_EDGES | Рёбра графа концептов: prerequisite, related, part_of, contradicts. | ✅ Существует | `concept_graph.concept_edges` — создана вместе с CONCEPTS |
+| CONCEPT_MISCONCEPTIONS | Типовые ошибки и заблуждения по концептам. Используются для адаптивного обучения. | ✅ Существует | `concept_graph.concept_misconceptions` — создана knowledge-mcp |
+| GITHUB_INSTALLATIONS | GitHub App installations пользователей. Даёт доступ к репозиториям для индексации. | ✅ Существует | `knowledge.github_installations` — создана WP-187 |
+| USER_SOURCES | Источники индексации для каждого пользователя (GitHub репозитории, активные/неактивные). | ✅ Существует | `knowledge.user_sources` — создана knowledge-mcp |
 
 ### activity-hub
 
-| Таблица | Назначение |
-|---------|-----------|
-| RAW_EVENTS | Landing zone. Сырые события из всех источников (LMS, бот, club, IWE) без трансформаций. Партиционирована по source и fetched_at. Bronze-слой медальонной архитектуры. |
-| USER_EVENTS | Silver-слой. Нормализованные события с атрибуцией пользователя (user_uuid), дедуплицированные по external_id. |
-| LEARNING_HISTORY | Gold-слой. Материализация learning-событий: факты обучения (мемы, практики, ячейки) с оценками. Читается profiler для вычисления mastery. |
-| IDENTITY_MAP | Маппинг внешних ID (chat_id, lms_id) на ory_id для атрибуции событий. user_uuid = NULL до OAuth-связывания. |
-| SYNC_LOG | Журнал запусков коллекторов: статус, количество событий, время. Используется для мониторинга и дебага. |
-| QUARANTINED_EVENTS | Карантин для событий, не прошедших валидацию. Хранятся для ручного разбора и повторной обработки. |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| RAW_EVENTS | Landing zone. Сырые события из всех источников без трансформаций. Партиционирована по (source, fetched_at). Bronze-слой. | ✅ Существует | `development.raw_events` — создана WP-109 Ф8.1 (миграция 004_raw_events.sql) |
+| USER_EVENTS | Silver-слой. Нормализованные события с атрибуцией пользователя, дедуплицированные по external_id. | ✅ Существует | `development.user_events` — создана WP-109 (миграция 001_hub_tables.sql) |
+| LEARNING_HISTORY | Gold-слой. Факты обучения (мемы, практики, ячейки) с оценками. Читается profiler для mastery. | ⚠️ Перенести | Сейчас в `aist_bot` (миграция 007). При разделении баз переезжает в activity-hub. |
+| IDENTITY_MAP | Маппинг внешних ID (chat_id, lms_id) на ory_id для атрибуции событий. user_uuid = NULL до OAuth. | ✅ Существует | `development.identity_map` — создана WP-109 |
+| SYNC_LOG | Журнал запусков коллекторов: статус, количество событий, время. | ✅ Существует | `development.sync_log` — создана WP-109 |
+| QUARANTINED_EVENTS | Карантин для событий, не прошедших валидацию. Хранятся для ручного разбора. | ✅ Существует | `development.quarantined_events` — создана WP-109 |
 
 ### payment-registry
 
-| Таблица | Назначение |
-|---------|-----------|
-| FINANCE_PAYMENTS | Основной реестр всех финансовых транзакций платформы. YooKassa, Stripe, ручные платежи. Источник данных для Metabase и subscription-sync. |
-| SEMINAR_PAYMENTS | Платежи за семинары (через бот). Отдельная таблица для отчётности по семинарскому направлению. |
-| WORKSHOP_PAYMENTS | Платежи за воркшопы (через бот или web). Содержит aisystant_id для связки с LMS. |
-| PAYMENTS_SYNC_STATE | Singleton-ватерmarк инкрементального импорта из Aisystant. Хранит last_payment_id для безопасного возобновления. |
-| SUBSCRIPTION_GRANTS_SYNC_STATE | Singleton-ватерmarк синхронизации грантов подписок в platform-core. |
-| IMPORT_STAGING_PAYMENT | Landing zone для инкрементального импорта платежей из Aisystant API. Временные данные до верификации и merge. |
-| IMPORT_STAGING_CHARGEOFF | Landing zone для списаний из Aisystant. Связывается с FINANCE_PAYMENTS по payment_id. |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| FINANCE_PAYMENTS | Основной реестр всех финансовых транзакций платформы (YooKassa, Stripe, ручные). | ✅ Существует | `public.finance_payments` — создана WP-183, данные импортированы из Aisystant CRM (35 879 строк) |
+| SEMINAR_PAYMENTS | Платежи за семинары через бот. | ⚠️ Перенести | Сейчас в `public.seminar_payments` (aist_bot миграция 011). Переезжает в payment-registry. |
+| WORKSHOP_PAYMENTS | Платежи за воркшопы (бот или web). Содержит aisystant_id для связки с LMS. | ⚠️ Перенести | Сейчас в `public.workshop_payments` (aist_bot миграция 009). Переезжает в payment-registry. |
+| PAYMENTS_SYNC_STATE | Singleton-ватерmarк инкрементального импорта платежей из Aisystant. | ✅ Существует | `public.finance_payments_sync_state` — создана WP-183 |
+| SUBSCRIPTION_GRANTS_SYNC_STATE | Singleton-ватерmarк синхронизации грантов подписок в platform-core. | ✅ Существует | `public.subscription_grants_sync_state` — создана WP-231 |
+| IMPORT_STAGING_PAYMENT | Landing zone для инкрементального импорта платежей из Aisystant API. | ✅ Существует | `public.import_staging_payment` — создана WP-183 (миграция 005) |
+| IMPORT_STAGING_CHARGEOFF | Landing zone для списаний из Aisystant. Связывается с FINANCE_PAYMENTS по payment_id. | ✅ Существует | `public.import_staging_chargeoff` — создана WP-183 (миграция 005) |
 
 ### aist-bot
 
-| Таблица | Назначение |
-|---------|-----------|
-| USER_STATE | FSM-состояние пользователя в боте. Текущий шаг диалога, контекст, счётчик активных дней, триал. |
-| QA_HISTORY | История вопросов и ответов пользователя в боте с флагом полезности и источниками MCP. |
-| NOTIFICATION_LOG | Журнал отправленных уведомлений с idempotency_key для защиты от дублей. |
-| BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). Не связаны с платформенной подпиской (та — в platform-core.SUBSCRIPTION_GRANTS). |
-| SEMINARS | Каталог семинаров: название, цена, дата, Telegram-группа. Оплата → payment-registry.SEMINAR_PAYMENTS. |
-| COMMUNITY_MEMBERS | Участники Telegram-сообщества: join/leave события. |
-| SERVICE_USAGE | Счётчик использования сервисов бота по пользователю. |
-| USER_ACCESS | Временные права доступа к ресурсам (выданные ботом, с expiry). |
-| FEEDBACK_TRIAGE | Фидбек пользователей из бота: категория, статус обработки. Только source='bot'. |
-| ORY_TOKENS | Ory OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. |
-| DT_TOKENS | Digital Twin OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| USER_STATE | FSM-состояние пользователя в боте. Текущий шаг диалога, контекст, счётчик активных дней, триал. | ✅ Существует | `development.user_state` — основная таблица бота, создана с первой версией |
+| QA_HISTORY | История вопросов и ответов пользователя в боте с флагом полезности и источниками MCP. | ✅ Существует | `public.qa_history` — создана WP-132 (AI консультант) |
+| NOTIFICATION_LOG | Журнал отправленных уведомлений с idempotency_key для защиты от дублей. | ✅ Существует | `public.notification_log` — создана WP-232 |
+| BOT_SUBSCRIPTIONS | Telegram Stars подписки бот-уровня. Не связаны с платформенной подпиской. | ⚠️ Устарела? | Заменена на `public.subscriptions` (WP-232). Требует уточнения: удалить или оставить для TG Stars. |
+| SEMINARS | Каталог семинаров: название, цена, дата, Telegram-группа. Оплата → payment-registry. | ✅ Существует | `public.seminars` — создана aist_bot миграция 011 |
+| COMMUNITY_MEMBERS | Участники Telegram-сообщества: join/leave события. | ✅ Существует | `public.community_members` — создана aist_bot миграция 009 |
+| SERVICE_USAGE | Счётчик использования сервисов бота по пользователю. | ✅ Существует | `public.service_usage` — создана aist_bot миграция 003 |
+| USER_ACCESS | Временные права доступа к ресурсам (выданные ботом, с expiry). | ✅ Существует | `public.user_access` — создана aist_bot миграция 002 |
+| FEEDBACK_TRIAGE | Фидбек пользователей из бота: категория, статус обработки. Только source='bot'. | ✅ Существует | `public.feedback_triage` — создана aist_bot миграция 008 |
+| ORY_TOKENS | Ory OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. | ✅ Существует | `public.ory_tokens` — создана WP-209 (бот → gateway). ⚠️ Токены в plaintext — см. открытые вопросы. |
+| DT_TOKENS | Digital Twin OAuth-токены бота (access + refresh). Хранятся для переживания редеплоев. Ключ — chat_id. | ✅ Существует | `public.dt_tokens` — создана WP-82 (DT интеграция бота). ⚠️ Токены в plaintext — см. открытые вопросы. |
 
 ### metabase
 
-| Таблица | Назначение |
-|---------|-----------|
-| METABASE_COLLECTIONS | Иерархические коллекции дашбордов и вопросов (папки в Metabase). |
-| METABASE_DASHBOARDS | Дашборды: финансы, события, активность. Читают из payment-registry и activity-hub. |
-| METABASE_CARDS | Отдельные вопросы (questions): SQL или MBQL-запросы к данным. |
-| METABASE_USERS | Пользователи Metabase (аналитики, финансисты). Не связаны с Ory-пользователями платформы. |
+| Таблица | Назначение | Статус | Источник / примечание |
+|---------|-----------|--------|----------------------|
+| METABASE_COLLECTIONS | Иерархические коллекции дашбордов (папки в Metabase). | ✅ Существует | Управляется Metabase автоматически. ~171 служебная таблица. |
+| METABASE_DASHBOARDS | Дашборды: финансы, события, активность. Читают из payment-registry и activity-hub. | ✅ Существует | Управляется Metabase. Созданы WP-183 (финансовые дашборды). |
+| METABASE_CARDS | Отдельные вопросы (questions): SQL/MBQL-запросы. | ✅ Существует | Управляется Metabase. 8 Questions + 2 dashboards (WP-183). |
+| METABASE_USERS | Пользователи Metabase (аналитики, финансисты). Не связаны с Ory-пользователями. | ✅ Существует | Управляется Metabase. |
 
 ---
 
-## Открытые вопросы
+## Открытые вопросы и известные проблемы
 
-| Вопрос | Владелец | Статус |
-|--------|---------|--------|
-| Retention policy всех таблиц (TTL, архивирование, GDPR right-to-be-forgotten) | WP-214 (Data Governance) + новая фаза WP-228 | pending |
-| Backup / DR: RPO, RTO, PITR по каждой базе | WP-212 Ф5 + новая фаза WP-228 | pending |
-| RLS-политики для Metabase read-only connections к payment-registry | WP-212 Ф9 | pending |
-| Partitioning strategy для USER_EVENTS, LEARNING_HISTORY, POINT_TRANSACTIONS | WP-228 Ф1 | pending |
+> Здесь фиксируются архитектурные вопросы, которые пока не решены, и известные проблемы, требующие отдельных РП (рабочих продуктов/задач). Каждый пункт содержит варианты решения.
+
+### Б-1 — Токены OAuth в plaintext (КРИТИЧЕСКИЙ)
+
+**Проблема:** `ORY_TOKENS` и `DT_TOKENS` в aist-bot хранят `access_token` и `refresh_token` как TEXT без шифрования. Проверено в коде: `db/queries/ory_tokens.py`, `db/queries/dt_tokens.py` — вставка без шифрования, библиотека `cryptography` отсутствует в `requirements.txt`. При компрометации базы aist-bot все OAuth-сессии пользователей утекают.
+
+**Варианты решения:**
+- A) Шифрование на уровне приложения: `cryptography` (Fernet/AES-256-GCM) + ключ из env/Vault (~20h)
+- B) Postgres column encryption: pgcrypto `encrypt()` + ключ в secrets (~10h, но сложнее ротация)
+- C) Короткие TTL + принудительный refresh: токены живут ≤1ч, при компрометации урон ограничен (~5h)
+
+**Рекомендация:** A + C (шифруем И укорачиваем TTL). **РП:** новый WP под безопасность бота или WP-212.
+
+---
+
+### М-1 — Нет кеша авторизации в gateway-mcp (ВЫСОКИЙ)
+
+**Проблема:** Проверено в коде: `gateway-mcp/src/index.ts` — `checkSubscription()` делает SELECT в Neon на каждый запрос без кеша. JWKS кешируется (хорошо), но SUBSCRIPTION_GRANTS — нет. При 10k пользователей = тысячи DB-запросов в минуту.
+
+**Варианты решения:**
+- A) In-memory cache в Cloudflare Worker с TTL 5 мин: `Map<ory_id, {granted: bool, until: timestamp}>` (~5h)
+- B) Redis (Upstash) как distributed cache: надёжнее, но +инфра (~15h)
+- C) JWT-claims: включить subscription status в Ory JWT payload, проверять offline (~20h, нужны изменения в Ory)
+
+**Рекомендация:** A (быстро и достаточно). **РП:** WP-212 или отдельный WP.
+
+---
+
+### О-1 — Нет correlation_id в activity-hub (ВЫСОКИЙ)
+
+**Проблема:** Проверено в миграциях: ни RAW_EVENTS, ни USER_EVENTS не имеют поля `correlation_id` или `trace_id`. Нельзя проследить путь конкретного события: raw → silver → gold. Дебаг в продакшне требует JOIN по `(source, external_id)`.
+
+**Варианты решения:**
+- A) Добавить `correlation_id UUID DEFAULT gen_random_uuid()` в RAW_EVENTS, propagate в USER_EVENTS и LEARNING_HISTORY при transform (~8h миграции + код transform-worker)
+- B) Использовать `external_id + source` как суррогатный trace key (0h миграций, но неудобно)
+
+**Рекомендация:** A. **РП:** WP-228 Ф1 или WP-109 Ф9.
+
+---
+
+### О-2 — Нет audit trail для FINANCE_PAYMENTS (ВЫСОКИЙ)
+
+**Проблема:** Нет поля `updated_at`, нет таблицы истории изменений статуса. Нельзя ответить: "кто и когда изменил статус платежа с pending на failed?"
+
+**Варианты решения:**
+- A) Добавить `finance_payments_log` таблицу: payment_id, old_status, new_status, changed_by, changed_at (~10h)
+- B) Postgres trigger: автоматически пишет в лог при UPDATE статуса (~5h)
+- C) Event Sourcing: только INSERT, никаких UPDATE статусов (immutable log) (~40h, переработка архитектуры)
+
+**Рекомендация:** B (минимально инвазивно). **РП:** новая фаза WP-183 или WP-228.
+
+---
+
+### Б-2 — RLS для Metabase к payment-registry (СРЕДНИЙ)
+
+**Проблема:** Metabase читает FINANCE_PAYMENTS без Row-Level Security. При компрометации Metabase — все финансовые данные открыты. Делегировано в WP-212 Ф9, пока не реализовано.
+
+**Вариант решения:** Создать Postgres роль `metabase_ro` с `GRANT SELECT` только на нужные поля (amount, currency, status, charged_off_at). Без доступа к ory_id, telegram_id. Время: ~4h. **РП:** WP-212 Ф9.
+
+---
+
+### Б-3 — BACKEND_REGISTRY.backend_url: SSRF риск (СРЕДНИЙ)
+
+**Проблема:** Пользователи регистрируют кастомные URL своих MCP-бэкендов. Если validation-worker вызывает URL без проверки схемы — возможен SSRF (http://169.254.169.254/ для cloud metadata, http://localhost и т.п.).
+
+**Вариант решения:** Валидация URL при записи: только `https://`, запрет RFC1918 адресов (10.x, 172.16.x, 192.168.x, 127.x, 169.254.x), allowlist доменов или wildcard. ~4h. **РП:** WP-212 или WP-189.
+
+---
+
+### М-2 — Retention policy и партиционирование (СРЕДНИЙ)
+
+**Проблема:** RAW_EVENTS растёт бесконечно. Нет TTL для старых партиций. USER_EVENTS, LEARNING_HISTORY, POINT_TRANSACTIONS не имеют стратегии партиционирования. GDPR требует права на удаление данных.
+
+**Вариант решения:** Определить TTL по таблицам (RAW_EVENTS — 90д, QA_HISTORY — 180д, FINANCE_PAYMENTS — permanent), добавить партиционирование по дате для крупных таблиц, написать GDPR deletion script. **РП:** WP-214 (Data Governance) + новая фаза WP-228.
+
+---
+
+### М-3 — Нет Backup / DR стратегии (СРЕДНИЙ)
+
+**Проблема:** Не определены RPO (Recovery Point Objective) и RTO (Recovery Time Objective) по базам. Neon даёт PITR 7 дней по умолчанию — достаточно ли для FINANCE_PAYMENTS?
+
+**Вариант решения:** Определить RPO/RTO по каждой базе. FINANCE_PAYMENTS: RPO=0 (hourly snapshot в S3), RTO=1h. Digital-twin: RPO=15min (Neon PITR). Activity-hub: RPO=1h (события воспроизводимы из источников). **РП:** WP-212 Ф5.
 
 ---
 
