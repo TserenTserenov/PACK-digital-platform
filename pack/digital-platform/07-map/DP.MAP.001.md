@@ -34,10 +34,10 @@ generated: true
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 47 |
-| SoTA Annotations (SOTA) | 17 |
+| SoTA Annotations (SOTA) | 18 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **150** |
+| **Total** | **151** |
 
 ## Distinctions
 
@@ -130,6 +130,7 @@ generated: true
 | DP.SOTA.014 | MCP как де-факто стандарт 2026 | Model Context Protocol — универсальный стандарт подключения AI-агентов к enterprise-инструментам. 97M+ скачиваний SDK, 75+ коннекторов | active |
 | DP.SOTA.015 | AI/LLM System Observability (3+1 Framework) | SOTA-модель observability для AI/LLM: 3-сигнальная телеметрия (Traces/Metrics/Logs) + AI-специфичный слой Evaluations. «4-слойная AI observability» как именованный стандарт не существует. | draft |
 | DP.SOTA.016 | Database-per-Service (паттерн изоляции данных) | Каждый сервис владеет собственной базой данных. Схема ≠ изоляция. FK между сервисами заменяются API-контрактами или событиями. | active |
+| DP.SOTA.016 | Инженерная семиотика — мировой опыт | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
 | DP.SOTA.017 | Концептуальные графы — мировой опыт | Паттерны управления knowledge graphs: orphan-prevention, центральные узлы, многоязычность, editorial pipeline. Источники: OBO Foundry, Microsoft GraphRAG, Knowledge Space Theory (ALEKS), Wikidata. | active |
 
 ## Maps
