@@ -108,14 +108,20 @@ Neon Project: aisystant
 │                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
 │                             + ORY_TOKENS + DT_TOKENS
 │
-└── DB #7: metabase        ← ~171 служебная таблица Metabase
-                              читает payment-registry (metabase_reader + RLS)
-                              читает activity-hub (read-only)
+├── DB #7: metabase        ← ~171 служебная таблица Metabase
+│                             читает payment-registry (metabase_reader + RLS)
+│                             читает activity-hub (read-only)
+│
+└── DB #8: health          ← SERVICE_REGISTRY + UPTIME_CHECKS + UPTIME_INCIDENTS
+                              + ANTHROPIC_STATUS_SNAPSHOTS
+                              + ERROR_LOGS + REQUEST_TRACES + PENDING_FIXES
+                              читает Grafana (read-only)
 
 Вне Neon:
   Ory Kratos   ← идентичность, source of truth по ory_id
   Ory Keto     ← access control (роли/разрешения); данные в Neon не хранит
   Langfuse     ← AI observability (traces, evals); внешний сервис
+  Grafana      ← дашборды мониторинга; читает #8 health (read-only)
   LMS          ← учебная платформа Aisystant; read-only, синхронизация через staging
   Club         ← сообщество; события → #4 activity-hub (source='club')
   Web App      ← Vue.js клиент; серверного state в Neon нет
@@ -125,7 +131,7 @@ Neon Project: aisystant
   GitHub App   ← коллектор репо; установки → #3 GITHUB_INSTALLATIONS
 
 ⚠ Текущее состояние (апр 2026): все таблицы живут в одной базе `platform` в Neon.
-  Разделение на 7 баз — следующий РП (~20-40h, не начат).
+  Разделение на 8 баз — следующий РП (~20-40h, не начат).
 ```
 
 </details>
@@ -183,6 +189,12 @@ AIST Bot (только бот) ──────→ #6 aist-bot      ←── 
 
 Metabase internal ──────────→ #7 metabase      ←── Metabase UI
                                  ~171 служебных     (дашборды читают #5, #4)
+
+uptime-collector (GHA) ─────→ #8 health        ←── Grafana (read-only)
+AIST Bot (error_handler) ───→    SERVICE_REGISTRY   алерты → TG bot
+Anthropic Status API ───────→    UPTIME_CHECKS
+                                 ERROR_LOGS
+                                 REQUEST_TRACES
 ```
 
 ---
@@ -220,6 +232,8 @@ Metabase internal ──────────→ #7 metabase      ←── M
 | Event Bus / Dispatcher | 🔲 | AH | AH |
 | AI Training Pipeline | 🔲 | AH, KN | — |
 | Team Service | 🔲 | PC | AH |
+| uptime-collector | 🔲 | — | HL (аптайм + инциденты) |
+| Grafana | ✅ внешний | HL (read-only) | — |
 
 ---
 
@@ -282,6 +296,7 @@ graph LR
     PR[(#5 payment-registry)]
     AB[(#6 aist-bot)]
     MB[(#7 metabase)]
+    HL[(#8 health)]
 
     AH -- "ступени ролей (Профайлер)" --> DT
     AH -- "chat_id → ory_id" --> PC
@@ -291,6 +306,7 @@ graph LR
     KN -- "mastery концептов" --> DT
     PR -. "финансы (RLS)" .-> MB
     AH -. "события (без PII)" .-> MB
+    HL -. "аптайм + ошибки (RO)" .-> MB
 ```
 
 > Сплошная = запись. Пунктир = чтение (RO).
@@ -836,6 +852,91 @@ erDiagram
 
 ---
 
+### DB #8: health
+
+Операционное здоровье платформы. Cross-cutting данные — не принадлежат ни одному продуктовому сервису.
+Writers: uptime-collector (GHA cron), AIST Bot error_handler. Readers: Grafana (RO), алерты → TG.
+
+```mermaid
+erDiagram
+    SERVICE_REGISTRY {
+        serial      id              PK
+        text        name            "gateway-mcp|knowledge-mcp|digital-twin-mcp|aist-bot|…"
+        text        url             "endpoint для пинга"
+        text        check_type      "http|tcp"
+        bool        enabled
+        timestamptz created_at
+    }
+
+    UPTIME_CHECKS {
+        bigserial   id              PK
+        int         service_id      FK
+        int         latency_ms
+        int         status_code
+        bool        is_up
+        text        error_msg
+        timestamptz checked_at
+    }
+
+    UPTIME_INCIDENTS {
+        bigserial   id              PK
+        int         service_id      FK
+        timestamptz started_at
+        timestamptz resolved_at
+        int         duration_min
+        text        severity        "warning|critical"
+        text        note
+    }
+
+    ANTHROPIC_STATUS_SNAPSHOTS {
+        bigserial   id              PK
+        text        component       "claude.ai|api|claude-code|…"
+        text        status          "operational|degraded|partial_outage|major_outage"
+        float       uptime_pct_90d
+        timestamptz checked_at
+    }
+
+    ERROR_LOGS {
+        bigserial   id              PK
+        text        service         "aist-bot|gateway-mcp|…"
+        text        error_key       "дедупликация по паттерну"
+        text        category        "RUNBOOK-категория"
+        text        severity        "L1|L2|L3|L4"
+        text        message
+        jsonb       context
+        timestamptz occurred_at
+        text        note            "перенесено из aist-bot (WP-45)"
+    }
+
+    REQUEST_TRACES {
+        bigserial   id              PK
+        text        service
+        char        trace_id        "32-char OTel"
+        text        span_name
+        int         duration_ms
+        text        status          "ok|error"
+        jsonb       attributes
+        timestamptz started_at
+        text        note            "перенесено из aist-bot (WP-45)"
+    }
+
+    PENDING_FIXES {
+        bigserial   id              PK
+        bigint      error_log_id    FK
+        text        diagnosis       "Claude diagnosis"
+        text        status          "pending|approved|rejected|applied"
+        timestamptz created_at
+        timestamptz resolved_at
+        text        note            "auto-fix pipeline (WP-45)"
+    }
+
+    SERVICE_REGISTRY ||--o{ UPTIME_CHECKS : "checked"
+    SERVICE_REGISTRY ||--o{ UPTIME_INCIDENTS : "incidents"
+    ERROR_LOGS ||--o{ PENDING_FIXES : "fix candidates"
+```
+
+---
+
 ### DB #7: metabase
 
 Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
@@ -891,6 +992,7 @@ erDiagram
 | #5 payment-registry | `incremental-sync.sh` cron (из Aisystant LMS), YooKassa / Stripe / TG Stars webhooks, бот (seminar/workshop записи) | Metabase (`metabase_reader` + RLS, только агрегаты), `subscription-sync` cron (читает FINANCE_PAYMENTS → пишет в #1) |
 | #6 aist-bot | только AIST Bot (FSM state, токены, история QA) | только AIST Bot; Composer MCP (читает состояние FSM) |
 | #7 metabase | Metabase internal (служебные таблицы) | Metabase UI, дашборды читают #5 и #4 напрямую (не через #7) |
+| #8 health | uptime-collector cron (GHA, UPTIME_CHECKS + INCIDENTS), AIST Bot error_handler (ERROR_LOGS, REQUEST_TRACES, PENDING_FIXES) | Grafana (RO, дашборды здоровья), алерты → TG bot |
 
 </details>
 
@@ -1036,6 +1138,18 @@ erDiagram
 | METABASE_CARDS | Questions (8 штук). | ✅ | WP-183 |
 | METABASE_USERS | Пользователи Metabase (не Ory). | ✅ | Управляется Metabase |
 
+### #8 health
+
+| Таблица | Назначение | Статус | Источник |
+|---------|-----------|--------|----------|
+| SERVICE_REGISTRY | Реестр сервисов для мониторинга (name, url, check_type). | 🆕 Создать | WP-244 |
+| UPTIME_CHECKS | Результаты пингов (latency_ms, status_code, is_up). TTL 90d. | 🆕 Создать | WP-244 |
+| UPTIME_INCIDENTS | Агрегированные инциденты (started_at, resolved_at, severity). Permanent. | 🆕 Создать | WP-244 |
+| ANTHROPIC_STATUS_SNAPSHOTS | Снапшоты status.anthropic.com API по компонентам. TTL 90d. | 🆕 Создать | WP-244 |
+| ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+
 </details>
 
 ---
@@ -1131,6 +1245,20 @@ erDiagram
 
 ---
 
+### WP-244 — DB #8 health: операционный мониторинг платформы
+
+**Проблема:** Нет систематического учёта здоровья сервисов. Инциденты обнаруживаются случайно или с задержкой (WP-183: 4.5h без детекции). Таблицы WP-45 (`error_logs`, `request_traces`, `pending_fixes`) не размещены ни в одну целевую базу — «бесхозные» в целевой архитектуре. Нет корреляции деградации наших сервисов с Anthropic API.
+
+**Решение:** Отдельная DB #8 `health` — cross-cutting операционные данные, не принадлежащие ни одному продуктовому сервису. ArchGate пройден: варианты obs.* в platform-core (❌ нарушает П1, смешивает с identity-данными) и obs.* в aist-bot (❌ бот = клиент, не хранилище платформенных данных) отклонены. DB #8 изолирует credentials: компрометация коллектора не открывает PII.
+
+**Таблицы:** SERVICE_REGISTRY, UPTIME_CHECKS, UPTIME_INCIDENTS, ANTHROPIC_STATUS_SNAPSHOTS (новые) + ERROR_LOGS, REQUEST_TRACES, PENDING_FIXES (перенос из WP-45).
+
+**Writer:** uptime-collector (GHA cron, каждые 5 мин) + AIST Bot error_handler. **Reader:** Grafana (RO).
+
+**Трудозатраты:** ~20h. Приоритет: средний.
+
+---
+
 ### WP-241 — Backup / DR
 
 **Проблема:** Не определены RPO/RTO. Neon PITR 7 дней недостаточно для payment-registry (compliance).
@@ -1167,8 +1295,9 @@ erDiagram
 | WP-239 | Добавить валидацию URL в #1 platform-core BACKEND_REGISTRY (SSRF защита) | 6h | средний |
 | WP-240 | Настроить retention policy для всех баз (pg_partman + cron + S3 archive) | 16h | средний |
 | WP-241 | Настроить backup / DR (PITR per-database + pg_dump → S3) | 14h | средний |
+| WP-244 | Создать DB #8 health: SERVICE_REGISTRY, UPTIME_CHECKS, UPTIME_INCIDENTS, ANTHROPIC_STATUS_SNAPSHOTS + перенести ERROR_LOGS/REQUEST_TRACES/PENDING_FIXES из WP-45 | ~20h | средний |
 | WP-215 | Разделение инфраструктуры мир/Россия: реализовать эту схему в двух инстансах, найти альтернативу Neon для РФ-контура (Neon — US-hosted, GDPR/152-ФЗ), определить стратегию синхронизации | ~40h | высокий |
-| | **Итого** | **~128h** | |
+| | **Итого** | **~148h** | |
 
 **Критический путь:**
 1. WP-234 + WP-235 — безопасность и авторизация (параллельно, ~2 нед)
