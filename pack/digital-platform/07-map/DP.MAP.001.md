@@ -29,7 +29,7 @@ generated: true
 | KR (KR) | 1 |
 | Methods (M) | 9 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 1 |
+| METHOD (METHOD) | 2 |
 | NAV (NAV) | 1 |
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
@@ -37,7 +37,7 @@ generated: true
 | SoTA Annotations (SOTA) | 18 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **152** |
+| **Total** | **153** |
 
 ## Distinctions
 
@@ -204,6 +204,7 @@ generated: true
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
+| DP.METHOD.010 | Kinds + Owner Roles | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
 | DP.METHOD.020 | Траектория развития Созидателя | Как строить траекторию персонального развития через 5 ролей Созидателя, ступени и степень квалификации. Для Навигатора, Портного и системы персональных руководств. | active |
 
 ### NAV
