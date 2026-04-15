@@ -11,6 +11,7 @@ trust:
   R: 0.6
 epistemic_stage: emerging
 related:
+  specializes: [U.System]
   refines: [DP.IWE.001]
   uses: [DP.EXOCORTEX.001, DP.ARCH.002, DP.ROLE.001]
 ---

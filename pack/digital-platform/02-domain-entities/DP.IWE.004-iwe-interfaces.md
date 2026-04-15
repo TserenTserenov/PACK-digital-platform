@@ -11,6 +11,7 @@ trust:
   R: 0.7
 epistemic_stage: evidence
 related:
+  specializes: [U.System]
   uses: [DP.IWE.001, DP.IWE.003, DP.ARCH.001, DP.AISYS.014]
 ---
 
