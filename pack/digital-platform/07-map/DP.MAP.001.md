@@ -34,10 +34,10 @@ generated: true
 | ROLE (ROLE) | 11 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 49 |
-| SoTA Annotations (SOTA) | 18 |
+| SoTA Annotations (SOTA) | 19 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **155** |
+| **Total** | **156** |
 
 ## Distinctions
 
@@ -133,6 +133,7 @@ generated: true
 | DP.SOTA.016 | Database-per-Service (паттерн изоляции данных) | Каждый сервис владеет собственной базой данных. Схема ≠ изоляция. FK между сервисами заменяются API-контрактами или событиями. | active |
 | DP.SOTA.016 | Инженерная семиотика — мировой опыт | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
 | DP.SOTA.017 | Концептуальные графы — мировой опыт | Паттерны управления knowledge graphs: orphan-prevention, центральные узлы, многоязычность, editorial pipeline. Источники: OBO Foundry, Microsoft GraphRAG, Knowledge Space Theory (ALEKS), Wikidata. | active |
+| DP.SOTA.018 | Управление терминологией в многоязычных онтологических системах | Паттерны управления терминологией из ISO 704, SKOS, DDD UL и реальной практики крупных проектов — применимость к IWE | active |
 
 ## Maps
 
