@@ -12,6 +12,7 @@ trust:
   R: 0.6
 epistemic_stage: emerging
 related:
+  specializes: [U.System]
   uses: [DP.ARCH.001, DP.ARCH.002, DP.CONCEPT.001, DP.SOTA.009]
   enables: [DP.AISYS.014, DP.CONCEPT.003]
 tags: [digital-twin, event-sourcing, cqrs, learner-model, knowledge-tracing]

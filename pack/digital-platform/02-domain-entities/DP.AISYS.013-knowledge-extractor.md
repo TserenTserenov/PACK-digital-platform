@@ -14,6 +14,7 @@ orientation: system
 initiative: both
 interface: both
 related:
+  specializes: [U.System]
   uses: [DP.M.001]
   produces: [DP.WP.001]
 ---

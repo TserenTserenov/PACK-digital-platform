@@ -6,10 +6,8 @@ status: active
 valid_from: 2026-04-14
 summary: "7 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026."
 related:
-  - DP.SOTA.016   # Database-per-Service SOTA
-  - DP.ARCH.003   # Digital Twin Architecture
-  - DP.ARCH.001   # Platform Architecture
-  - WP-228        # Карта данных Neon
+  specializes: [U.System]
+  uses: [DP.SOTA.016, DP.ARCH.003, DP.ARCH.001]
 decision_source: "Встреча ИТ 8, 14 апр 2026 (транскрипция Zoom)"
 supersedes: "WP-232 решение об одной базе platform"
 ---

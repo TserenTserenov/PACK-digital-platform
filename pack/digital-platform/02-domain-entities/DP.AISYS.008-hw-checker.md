@@ -14,6 +14,7 @@ orientation: system
 initiative: by-request
 interface: api
 related:
+  specializes: [U.System]
   uses: [DP.ROLE.001]
   part_of: [DP.AISYS.014]
   realizes: [DP.SC.003, DP.SC.117]

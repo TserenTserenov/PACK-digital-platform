@@ -12,6 +12,7 @@ trust:
   R: 0.5
 epistemic_stage: emerging
 related:
+  specializes: [U.System]
   uses: [DP.ARCH.001, DP.ARCH.002, DP.NAV.001]
   componentOf: [DP.IWE.001]
 ---

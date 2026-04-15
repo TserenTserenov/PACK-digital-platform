@@ -15,6 +15,7 @@ initiative: both
 interface: dialogue
 updated: 2026-02-18
 related:
+  specializes: [U.System]
   uses: [DP.ARCH.001, DP.ARCH.002, DP.ROLE.001, DP.NAV.001, DP.M.004, DP.RUNBOOK.001]
   integrates: [DP.AISYS.012, DP.AISYS.013]
 ---

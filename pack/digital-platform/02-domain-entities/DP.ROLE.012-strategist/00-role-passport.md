@@ -10,6 +10,7 @@ trust:
   R: 0.5
 epistemic_stage: emerging
 related:
+  specializes: [U.RoleAssignment]
   component_of: [DP.ROLE.001]
   uses: [DP.EXOCORTEX.001]
 ---

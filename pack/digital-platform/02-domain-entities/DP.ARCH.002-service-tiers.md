@@ -12,6 +12,7 @@ trust:
   R: 0.7
 epistemic_stage: emerging
 related:
+  specializes: [U.System]
   uses: [DP.ARCH.001, DP.EXOCORTEX.001, DP.AISYS.014]
   enables: [DP.CONCEPT.001]
   see_also: [DP.D.050]  # Роли Созидателя — отдельная система, не тиры

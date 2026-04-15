@@ -12,6 +12,7 @@ trust:
   R: 0.8
 epistemic_stage: evidence
 related:
+  specializes: [U.System]
   uses: [DP.CONCEPT.001]
 ---
 
