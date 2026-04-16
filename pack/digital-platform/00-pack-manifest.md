@@ -197,6 +197,7 @@
 | DP.SC.117 | Асинхронная проверка и обсуждение ДЗ | SC | Ответы на ДЗ сохраняются в ЦД, проверяются пакетно, результаты персистентны и доступны для обсуждения | draft |
 | DP.SC.118 | Ассистент упоминаний в каналах | SC | Бот отслеживает упоминания пользователя в TG-каналах, генерирует черновик ответа через IWE и присылает в личку | draft |
 | DP.SC.119 | Рабочее пространство из браузера | SC | Пользователь создаёт и управляет IWE-пространствами из браузера — Pack, DS-репо, заметки — без git, без терминала, без VS Code | draft |
+| DP.SC.120 | Приёмник платежей (Payment Receiver) | SC | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

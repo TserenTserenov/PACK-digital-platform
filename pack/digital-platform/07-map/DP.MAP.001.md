@@ -33,11 +33,11 @@ generated: true
 | NAV (NAV) | 1 |
 | ROLE (ROLE) | 12 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 49 |
+| SC (SC) | 50 |
 | SoTA Annotations (SOTA) | 19 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **159** |
+| **Total** | **160** |
 
 ## Distinctions
 
@@ -294,6 +294,7 @@ generated: true
 | DP.SC.117 | Асинхронная проверка и обсуждение ДЗ | Ответы на ДЗ сохраняются в ЦД, проверяются пакетно, результаты персистентны и доступны для обсуждения | draft |
 | DP.SC.118 | Ассистент упоминаний в каналах | Бот отслеживает упоминания пользователя в TG-каналах, генерирует черновик ответа через IWE и присылает в личку | draft |
 | DP.SC.119 | Рабочее пространство из браузера | Пользователь создаёт и управляет IWE-пространствами из браузера — Pack, DS-репо, заметки — без git, без терминала, без VS Code | draft |
+| DP.SC.120 | Приёмник платежей (Payment Receiver) | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
 
 ### SYS
 
