@@ -178,7 +178,7 @@ flowchart LR
         Bot(["AIST Bot"]):::ext
         WebApp(["Web App"]):::ext
         IWE(["IWE / exocortex"]):::ext
-        Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::ext
+        Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::db_infra
     end
 
     %% ── 8 баз Neon ─────────────────────────────────────────────
@@ -204,7 +204,7 @@ flowchart LR
         Profiler(["Профайлер"]):::reader
         Tailor(["Портной"]):::reader
         Navi(["Навигатор"]):::reader
-        Composer(["Composer MCP"]):::reader
+        Composer(["Composer MCP\n(в разработке)"]):::reader
         Metabase(["Metabase\n(дашборды)"]):::reader
         Grafana(["Grafana\n(мониторинг)"]):::reader
         Langfuse(["Langfuse\n(трейсинг AI)"]):::reader
