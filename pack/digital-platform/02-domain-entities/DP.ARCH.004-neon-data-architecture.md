@@ -165,11 +165,9 @@ flowchart LR
     classDef db_infra fill:#f3f4f6,stroke:#9ca3af,color:#374151
     classDef reader  fill:#fef9c3,stroke:#ca8a04,color:#713f12
 
-    %% ── Внешние источники ──────────────────────────────────────
-    subgraph SRC ["Внешние системы"]
+    %% ── Источники данных (пишут в Neon) ───────────────────────
+    subgraph SRC ["Источники данных"]
         direction TB
-        Kratos(["Ory Kratos\n(идентичность)"]):::ext
-        Keto(["Ory Keto\n(права доступа)"]):::ext
         LMS(["LMS Aisystant"]):::ext
         Club(["Discourse Club"]):::ext
         Waka(["WakaTime"]):::ext
@@ -194,9 +192,11 @@ flowchart LR
         HL[("#8 health\nаптайм · ошибки")]:::db_infra
     end
 
-    %% ── Агенты и читатели ───────────────────────────────────────
-    subgraph READ ["Агенты и аналитика"]
+    %% ── Агенты, аналитика и identity-провайдеры ────────────────
+    subgraph READ ["Агенты и сервисы"]
         direction TB
+        Kratos(["Ory Kratos\n(идентичность)"]):::ext
+        Keto(["Ory Keto\n(права доступа)"]):::ext
         GW(["gateway-mcp"]):::reader
         KnMCP(["knowledge-mcp"]):::reader
         PkMCP(["personal-knowledge-mcp"]):::reader
@@ -210,8 +210,7 @@ flowchart LR
         Langfuse(["Langfuse\n(трейсинг AI)"]):::reader
     end
 
-    %% ── Внешние системы → Neon ──────────────────────────────────
-    Kratos -->|"webhook: регистрация"| PC
+    %% ── Источники → Neon ────────────────────────────────────────
     LMS -->|"события"| AH
     Club -->|"события"| AH
     Waka -->|"события"| AH
@@ -224,7 +223,10 @@ flowchart LR
     IWE -->|"события"| AH
     Pinger -->|"аптайм · инциденты"| HL
 
-    %% ── Агенты → Neon (чтение и запись) ────────────────────────
+    %% ── Identity-провайдеры ↔ Neon ──────────────────────────────
+    Kratos -->|"webhook: регистрация"| PC
+
+    %% ── Агенты ↔ Neon ───────────────────────────────────────────
     GW -.->|"проверка JWT"| Kratos
     GW -.->|"проверка прав"| Keto
     GW -.->|"проверка подписки"| PC
