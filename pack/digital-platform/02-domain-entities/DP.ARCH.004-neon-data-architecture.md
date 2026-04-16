@@ -866,12 +866,14 @@ erDiagram
 
 ### DB #6: aist-bot
 
-Только бот. Telegram-first: основной ключ — `chat_id`. 35+ таблиц, сгруппированы по доменам. ⚠️ 10 таблиц — кандидаты на миграцию (помечены).
+Только бот. Telegram-first: основной ключ — `chat_id`. 35+ таблиц, разбиты на 3 ERD по доменам. ⚠️ 10 таблиц — кандидаты на миграцию (помечены).
+
+#### 6a. Ядро бота, токены и доступ
+
+USERS → USER_STATE — центральная ось. Все остальные таблицы привязаны через `chat_id`.
 
 ```mermaid
 erDiagram
-    %% ── Ядро бота (FSM, сессии, идентичность) ──
-
     USERS {
         bigserial   id              PK
         bigint      telegram_id     UK
@@ -913,8 +915,79 @@ erDiagram
         text        note            "TTL: до завершения OAuth flow"
     }
 
-    %% ── Обучение (тренажёры, фид, марафоны) ──
+    ORY_TOKENS {
+        bigint      chat_id         PK  "Telegram chat_id"
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
+        timestamptz expires_at
+        text        ory_id
+        timestamptz updated_at
+        text        note            "персистентность Ory OAuth-сессии; refresh каждые 10 мин"
+    }
 
+    DT_TOKENS {
+        bigint      chat_id         PK  "Telegram chat_id"
+        bytea       access_token    "Fernet-encrypted (WP-234)"
+        bytea       refresh_token   "Fernet-encrypted (WP-234)"
+        text        token_nonce
+        timestamptz expires_at
+        text        dt_user_id
+        timestamptz updated_at
+        text        note            "персистентность DT OAuth-сессии; refresh каждые 10 мин"
+    }
+
+    BOT_SUBSCRIPTIONS {
+        bigserial   id              PK
+        bigint      chat_id
+        text        status          "active|inactive"
+        text        telegram_payment_charge_id
+        int         stars_amount
+        timestamptz started_at
+        timestamptz expires_at
+        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
+    }
+
+    SERVICE_USAGE {
+        bigserial   id              PK
+        bigint      user_id         "Telegram ID"
+        text        service_id
+        timestamptz created_at
+    }
+
+    USER_ACCESS {
+        bigserial   id              PK
+        bigint      user_id         "Telegram ID"
+        text        access_type
+        text        resource_id
+        timestamptz expires_at
+        text        note            "возможно неиспользуемая (миграция 002)"
+    }
+
+    TIER_EVENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        from_tier       "T0|T1|T2|T3|T4"
+        text        to_tier
+        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
+        timestamptz created_at
+        text        note            "⚠️ кандидат → platform-core"
+    }
+
+    USERS ||--|| USER_STATE : "1:1"
+    USER_STATE ||--o{ USER_SESSIONS : "sessions"
+    USER_STATE ||--|| ORY_TOKENS : "auth"
+    USER_STATE ||--|| DT_TOKENS : "auth"
+    USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars"
+    USER_STATE ||--o{ TIER_EVENTS : "tier history"
+```
+
+#### 6b. Обучение и коммуникация
+
+Тренажёры, лента, марафоны, QA, уведомления, фидбек. Все привязаны к `chat_id` через USER_STATE.
+
+```mermaid
+erDiagram
     TRAINING_PROGRESS {
         bigserial   id              PK
         bigint      chat_id         FK
@@ -992,8 +1065,6 @@ erDiagram
         text        note            "кеш LMS-контента; TTL по scheduler"
     }
 
-    %% ── Коммуникация и фидбек ──
-
     QA_HISTORY {
         bigserial   id              PK
         bigint      chat_id         FK
@@ -1041,35 +1112,6 @@ erDiagram
         bool        sent
     }
 
-    %% ── Подписки и доступ ──
-
-    BOT_SUBSCRIPTIONS {
-        bigserial   id              PK
-        bigint      chat_id
-        text        status          "active|inactive"
-        text        telegram_payment_charge_id
-        int         stars_amount
-        timestamptz started_at
-        timestamptz expires_at
-        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
-    }
-
-    SERVICE_USAGE {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        text        service_id
-        timestamptz created_at
-    }
-
-    USER_ACCESS {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        text        access_type
-        text        resource_id
-        timestamptz expires_at
-        text        note            "возможно неиспользуемая (миграция 002)"
-    }
-
     COMMUNITY_MEMBERS {
         bigserial   id              PK
         bigint      telegram_id
@@ -1079,31 +1121,18 @@ erDiagram
         timestamptz left_at
     }
 
-    %% ── Токены и интеграции ──
+    TRAINING_PROGRESS ||--o{ TRAINING_CHILDREN : "children"
+    TRAINING_PROGRESS ||--o{ TRAINING_ATTEMPTS : "attempts"
+    FEED_SESSIONS ||--o{ FEED_WEEKS : "weeks"
+```
 
-    ORY_TOKENS {
-        bigint      chat_id         PK  "Telegram chat_id"
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        timestamptz expires_at
-        text        ory_id
-        timestamptz updated_at
-        text        note            "персистентность Ory OAuth-сессии бота; refresh каждые 10 мин"
-    }
+#### 6c. Публикации, платежи и наблюдаемость
 
-    DT_TOKENS {
-        bigint      chat_id         PK  "Telegram chat_id"
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        timestamptz expires_at
-        text        dt_user_id
-        timestamptz updated_at
-        text        note            "персистентность DT OAuth-сессии бота; refresh каждые 10 мин"
-    }
+Таблицы-кандидаты на миграцию (⚠️) и наблюдаемость бот-уровня.
 
-    %% ── Публикации и каналы ──
+```mermaid
+erDiagram
+    %% ── Публикации и каналы (⚠️ → activity-hub) ──
 
     PUBLISHED_POSTS {
         bigserial   id              PK
@@ -1147,7 +1176,7 @@ erDiagram
         timestamptz created_at
     }
 
-    %% ── Платежи бот-уровня (⚠️ кандидаты → payment-registry) ──
+    %% ── Платежи бот-уровня (⚠️ → payment-registry) ──
 
     WORKSHOP_PAYMENTS {
         bigserial   id              PK
@@ -1214,35 +1243,8 @@ erDiagram
         text        note            "⚠️ копия → #8 health. TTL 90д"
     }
 
-    %% ── Платформенные таблицы (⚠️ кандидаты → другие базы) ──
-
-    TIER_EVENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        from_tier       "T0|T1|T2|T3|T4"
-        text        to_tier
-        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
-        timestamptz created_at
-        text        note            "⚠️ кандидат → platform-core"
-    }
-
-    %% ── Связи ──
-
-    USERS ||--|| USER_STATE : "1:1"
-    USER_STATE ||--o{ QA_HISTORY : "conversation"
-    USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
-    USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
-    USER_STATE ||--o{ TIER_EVENTS : "tier history"
-    USER_STATE ||--o{ TRAINING_PROGRESS : "trainers"
-    USER_STATE ||--o{ FEED_SESSIONS : "feed"
-    USER_STATE ||--o{ ANSWERS : "answers"
-    USER_STATE ||--o{ PUBLISHED_POSTS : "publications"
-    USER_STATE ||--o{ WORKSHOP_PAYMENTS : "payments"
-    USER_STATE ||--o{ SEMINAR_PAYMENTS : "payments"
-    USER_STATE ||--o{ USER_SESSIONS : "sessions"
-    USER_STATE ||--|| ORY_TOKENS : "auth"
-    USER_STATE ||--|| DT_TOKENS : "auth"
-    USER_STATE ||--|| TRAINING_SETTINGS : "settings"
+    SCHEDULED_PUBLICATIONS ||--o{ PUBLISHED_POSTS : "published"
+    CHANNEL_MONITORS ||--o{ CHANNEL_MENTIONS_LOG : "mentions"
 ```
 
 ---
