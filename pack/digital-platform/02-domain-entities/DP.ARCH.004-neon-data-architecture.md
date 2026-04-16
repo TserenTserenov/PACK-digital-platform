@@ -987,6 +987,47 @@ erDiagram
 
 ---
 
+### DB #7: metabase
+
+Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
+
+```mermaid
+erDiagram
+    METABASE_COLLECTIONS {
+        int     id          PK
+        text    name
+        text    color
+        int     parent_id   FK
+    }
+
+    METABASE_DASHBOARDS {
+        int     id              PK
+        text    name
+        int     collection_id   FK
+    }
+
+    METABASE_CARDS {
+        int     id              PK
+        text    name
+        text    display
+        int     dashboard_id    FK
+        text    dataset_query   "SQL / MBQL"
+    }
+
+    METABASE_USERS {
+        int     id          PK
+        text    email       UK
+        bool    is_superuser
+        bool    is_active
+    }
+
+    METABASE_COLLECTIONS ||--o{ METABASE_COLLECTIONS : "parent→child"
+    METABASE_COLLECTIONS ||--o{ METABASE_DASHBOARDS : "contains"
+    METABASE_DASHBOARDS ||--o{ METABASE_CARDS : "contains"
+```
+
+---
+
 ### DB #8: health
 
 Операционное здоровье платформы. Cross-cutting данные — не принадлежат ни одному продуктовому сервису.
@@ -1068,47 +1109,6 @@ erDiagram
     SERVICE_REGISTRY ||--o{ UPTIME_CHECKS : "checked"
     SERVICE_REGISTRY ||--o{ UPTIME_INCIDENTS : "incidents"
     ERROR_LOGS ||--o{ PENDING_FIXES : "fix candidates"
-```
-
----
-
-### DB #7: metabase
-
-Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
-
-```mermaid
-erDiagram
-    METABASE_COLLECTIONS {
-        int     id          PK
-        text    name
-        text    color
-        int     parent_id   FK
-    }
-
-    METABASE_DASHBOARDS {
-        int     id              PK
-        text    name
-        int     collection_id   FK
-    }
-
-    METABASE_CARDS {
-        int     id              PK
-        text    name
-        text    display
-        int     dashboard_id    FK
-        text    dataset_query   "SQL / MBQL"
-    }
-
-    METABASE_USERS {
-        int     id          PK
-        text    email       UK
-        bool    is_superuser
-        bool    is_active
-    }
-
-    METABASE_COLLECTIONS ||--o{ METABASE_COLLECTIONS : "parent→child"
-    METABASE_COLLECTIONS ||--o{ METABASE_DASHBOARDS : "contains"
-    METABASE_DASHBOARDS ||--o{ METABASE_CARDS : "contains"
 ```
 
 </details>
