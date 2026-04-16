@@ -254,7 +254,7 @@ flowchart LR
     KN -->|"освоение концептов"| DT
     PR -.->|"финансы (RLS)"| MB
     AH -.->|"события (без PII)"| MB
-    HL -.->|"аптайм"| MB
+    HL -.->|"доступность"| MB
 ```
 
 ---
@@ -339,7 +339,7 @@ Anthropic Status API ───────→    UPTIME_CHECKS
 | Event Bus / Dispatcher | 🔲 | AH | AH |
 | AI Training Pipeline | 🔲 | AH, KN | — |
 | Team Service | 🔲 | PC | AH |
-| uptime-collector | 🔲 | — | HL (аптайм + инциденты) |
+| uptime-collector | 🔲 | — | HL (доступность + инциденты) |
 | Grafana | ✅ внешний | HL (read-only) | — |
 
 ---
@@ -412,7 +412,7 @@ graph LR
     KN -- "освоение концептов" --> DT
     PR -. "финансы (RLS)" .-> MB
     AH -. "события (без PII)" .-> MB
-    HL -. "аптайм (только чтение)" .-> MB
+    HL -. "доступность (только чтение)" .-> MB
 ```
 
 > Сплошная = запись. Пунктир = чтение (RO).
