@@ -4,7 +4,7 @@ name: Архитектура данных Neon (Database-per-Service)
 type: domain-entity
 status: active
 valid_from: 2026-04-14
-summary: "7 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026."
+summary: "8 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026."
 related:
   specializes: [U.System]
   uses: [DP.SOTA.016, DP.ARCH.003, DP.ARCH.001]
@@ -21,11 +21,11 @@ supersedes: "WP-232 решение об одной базе platform"
 
 **Зачем этот документ:** мы проектируем новую архитектуру всех систем платформы Aisystant. Структура баз данных — фундамент: от неё зависит безопасность, независимость команд, масштабируемость и возможность замены отдельных сервисов. Этот документ — source-of-truth по тому, какие данные где живут, как сервисы связаны и какие проблемы ещё нужно решить.
 
-**Текущее состояние (апр 2026):** все таблицы живут в одной базе `platform` в Neon. Разделение на 7 баз — следующий РП (~20-40h, не начат).
+**Текущее состояние (апр 2026):** все таблицы живут в одной базе `platform` в Neon. Разделение на 8 баз — следующий РП (~20-40h, не начат).
 
 **Что зафиксировано:**
 - Принципы разделения данных (7 инвариантных правил)
-- Карта 7 баз + внешние системы и их связи
+- Карта 8 баз + внешние системы и их связи
 - ERD всех таблиц включая новые (audit log, trace_id, тиры, шифрование токенов)
 - Принятые архитектурные решения по безопасности, наблюдаемости, масштабированию
 
@@ -104,10 +104,10 @@ Neon Project: aisystant
 │                             + PAYMENTS_SYNC_STATE + SUBSCRIPTION_GRANTS_SYNC_STATE
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
-├── DB #6: aist-bot        ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
-│                             + BOT_SUBSCRIPTIONS + COMMUNITY_MEMBERS
-│                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
-│                             + ORY_TOKENS + DT_TOKENS
+├── DB #6: aist-bot        ← 35+ таблиц (FSM, тренажёры, фид, марафоны,
+│                             токены, публикации, оплаты, наблюдаемость)
+│                             ⚠ 10 таблиц — кандидаты на миграцию в #1/#4/#5/#8
+│                             Полный список → §8 #6
 │
 ├── DB #7: metabase        ← ~171 служебная таблица Metabase
 │                             читает payment-registry (metabase_reader + RLS)
@@ -144,7 +144,7 @@ Neon Project: aisystant
 
 **Структура раздела:**
 - **4.0** — обзорная диаграмма: все системы и базы в одном виде
-- **4.1** — 7 баз и внешние системы (что куда пишет/читает)
+- **4.1** — 8 баз и внешние системы (что куда пишет/читает)
 - **4.2** — реестр всех систем (таблица)
 - **4.3** — поток идентичности (Ory → Gateway → platform-core)
 - **4.4** — поток событий → ЦД → персональное руководство
@@ -263,7 +263,7 @@ flowchart LR
 
 ---
 
-### 4.1 Семь баз и внешние системы
+### 4.1 Восемь баз и внешние системы
 
 Какие внешние системы пишут в каждую базу и читают из неё.
 
@@ -319,9 +319,9 @@ Anthropic Status API ───────→    UPTIME_CHECKS
 | Система | Статус | Читает из Neon | Пишет в Neon |
 |---------|--------|---------------|-------------|
 | Web App | ✅ | DT, KN (через GW) | events → AH |
-| AIST Bot | ✅ | PC, DT, AB | AB, AH, PR, DT |
+| AIST Bot | ✅ | PC, DT, AB, PR | AB, AH, PR, DT, HL |
 | IWE / Claude Code | ✅ | KN, DT (через GW) | KN |
-| gateway-mcp | ✅ | PC (subscription) | — |
+| gateway-mcp | ✅ | PC (subscription), KN (github_installations, user_sources) | KN (GitHub App OAuth → github_installations, user_sources) |
 | knowledge-mcp | ✅ | KN | KN |
 | digital-twin-mcp | ✅ | DT | DT |
 | personal-knowledge-mcp | ✅ | KN | KN |
@@ -866,10 +866,20 @@ erDiagram
 
 ### DB #6: aist-bot
 
-Только бот. Telegram-first: основной ключ — `chat_id`. Не содержит платформенных данных и финансовых транзакций.
+Только бот. Telegram-first: основной ключ — `chat_id`. 35+ таблиц, сгруппированы по доменам. ⚠️ 10 таблиц — кандидаты на миграцию (помечены).
 
 ```mermaid
 erDiagram
+    %% ── Ядро бота (FSM, сессии, идентичность) ──
+
+    USERS {
+        bigserial   id              PK
+        bigint      telegram_id     UK
+        text        ory_id
+        text        role
+        timestamptz created_at
+    }
+
     USER_STATE {
         bigint      chat_id         PK  "Telegram chat_id"
         text        current_state   "FSM state"
@@ -881,15 +891,108 @@ erDiagram
         text        note            "тир — в platform-core.USER_IDENTITIES (не здесь)"
     }
 
-    TIER_EVENTS {
+    FSM_STATES {
+        text        key             PK  "aiogram FSM key"
+        jsonb       state
+        jsonb       data
+        text        note            "aiogram persistence между редеплоями"
+    }
+
+    USER_SESSIONS {
         bigserial   id              PK
         bigint      chat_id         FK
-        text        from_tier       "T0|T1|T2|T3|T4"
-        text        to_tier
-        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
-        timestamptz created_at
-        text        note            "история переходов тиров; 4-осевая модель: T+TM+TA+TD (DP.ARCH.002)"
+        timestamptz started_at
+        timestamptz ended_at
     }
+
+    OAUTH_PENDING_STATES {
+        text        state           PK  "OAuth state code"
+        bigint      chat_id
+        text        provider        "github|google"
+        timestamptz created_at
+        text        note            "TTL: до завершения OAuth flow"
+    }
+
+    %% ── Обучение (тренажёры, фид, марафоны) ──
+
+    TRAINING_PROGRESS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        training_type
+        jsonb       progress
+        timestamptz updated_at
+    }
+
+    TRAINING_CHILDREN {
+        bigserial   id              PK
+        bigint      parent_id       FK
+        text        child_type
+        jsonb       data
+    }
+
+    TRAINING_ATTEMPTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        training_type
+        int         score
+        jsonb       answers
+        timestamptz created_at
+    }
+
+    TRAINING_SETTINGS {
+        bigint      chat_id         PK
+        jsonb       settings
+        timestamptz updated_at
+    }
+
+    FEED_SESSIONS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        timestamptz started_at
+        timestamptz ended_at
+        jsonb       data
+    }
+
+    FEED_WEEKS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        int         week_number
+        jsonb       data
+        timestamptz created_at
+    }
+
+    MARATHON_CONTENT {
+        bigserial   id              PK
+        text        content_type
+        jsonb       data
+        timestamptz created_at
+    }
+
+    ANSWERS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        question_id
+        jsonb       answer
+        int         score
+        timestamptz created_at
+    }
+
+    ASSESSMENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        assessment_type
+        jsonb       data
+        timestamptz created_at
+    }
+
+    CONTENT_CACHE {
+        text        cache_key       PK
+        jsonb       content
+        timestamptz expires_at
+        text        note            "кеш LMS-контента; TTL по scheduler"
+    }
+
+    %% ── Коммуникация и фидбек ──
 
     QA_HISTORY {
         bigserial   id              PK
@@ -912,6 +1015,34 @@ erDiagram
         text        note            "TTL 30 дней (WP-240)"
     }
 
+    FEEDBACK_TRIAGE {
+        bigserial   id              PK
+        bigint      chat_id
+        text        category
+        text        status          "new|classified|resolved"
+        text        source          "bot"
+        timestamptz created_at
+        text        note            "только бот-фидбек; кросс-канальный → activity-hub"
+    }
+
+    FEEDBACK_REPORTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        report_type
+        jsonb       data
+        timestamptz created_at
+    }
+
+    REMINDERS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        reminder_type
+        timestamptz scheduled_at
+        bool        sent
+    }
+
+    %% ── Подписки и доступ ──
+
     BOT_SUBSCRIPTIONS {
         bigserial   id              PK
         bigint      chat_id
@@ -921,15 +1052,6 @@ erDiagram
         timestamptz started_at
         timestamptz expires_at
         text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
-    }
-
-    COMMUNITY_MEMBERS {
-        bigserial   id              PK
-        bigint      telegram_id
-        bigint      chat_id
-        text        username
-        timestamptz joined_at
-        timestamptz left_at
     }
 
     SERVICE_USAGE {
@@ -945,17 +1067,19 @@ erDiagram
         text        access_type
         text        resource_id
         timestamptz expires_at
+        text        note            "возможно неиспользуемая (миграция 002)"
     }
 
-    FEEDBACK_TRIAGE {
+    COMMUNITY_MEMBERS {
         bigserial   id              PK
+        bigint      telegram_id
         bigint      chat_id
-        text        category
-        text        status          "new|classified|resolved"
-        text        source          "bot"
-        timestamptz created_at
-        text        note            "только бот-фидбек; кросс-канальный → activity-hub"
+        text        username
+        timestamptz joined_at
+        timestamptz left_at
     }
+
+    %% ── Токены и интеграции ──
 
     ORY_TOKENS {
         bigint      chat_id         PK  "Telegram chat_id"
@@ -979,10 +1103,146 @@ erDiagram
         text        note            "персистентность DT OAuth-сессии бота; refresh каждые 10 мин"
     }
 
+    %% ── Публикации и каналы ──
+
+    PUBLISHED_POSTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        platform        "discourse|telegram"
+        text        external_id
+        timestamptz published_at
+        text        note            "⚠️ кандидат → activity-hub"
+    }
+
+    SCHEDULED_PUBLICATIONS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        platform
+        jsonb       content
+        timestamptz scheduled_at
+        text        status          "pending|published|failed"
+        text        note            "⚠️ кандидат → activity-hub"
+    }
+
+    DISCOURSE_ACCOUNTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        discourse_username
+        text        api_key
+        text        note            "⚠️ кандидат → activity-hub"
+    }
+
+    CHANNEL_MONITORS {
+        bigserial   id              PK
+        bigint      channel_id
+        text        channel_name
+        bool        active
+        timestamptz created_at
+    }
+
+    CHANNEL_MENTIONS_LOG {
+        bigserial   id              PK
+        bigint      channel_id      FK
+        text        mention_text
+        timestamptz created_at
+    }
+
+    %% ── Платежи бот-уровня (⚠️ кандидаты → payment-registry) ──
+
+    WORKSHOP_PAYMENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        workshop_code
+        int         amount
+        timestamptz created_at
+        text        note            "⚠️ кандидат → payment-registry"
+    }
+
+    SEMINAR_PAYMENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        seminar_code
+        int         amount
+        timestamptz created_at
+        text        note            "⚠️ кандидат → payment-registry"
+    }
+
+    CONVERSION_EVENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        event_type
+        jsonb       data
+        timestamptz created_at
+        text        note            "⚠️ кандидат → payment-registry"
+    }
+
+    %% ── Наблюдаемость бот-уровня (⚠️ копии → #8 health) ──
+
+    ACTIVITY_LOG {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        action
+        jsonb       data
+        timestamptz created_at
+    }
+
+    ERROR_LOGS {
+        bigserial   id              PK
+        text        category
+        text        severity
+        text        message
+        jsonb       context
+        timestamptz created_at
+        text        note            "⚠️ копия → #8 health. TTL 180д"
+    }
+
+    REQUEST_TRACES {
+        bigserial   id              PK
+        text        trace_id
+        text        span
+        int         latency_ms
+        timestamptz created_at
+        text        note            "⚠️ копия → #8 health. TTL 30д"
+    }
+
+    PENDING_FIXES {
+        bigserial   id              PK
+        text        diagnosis
+        text        status          "pending|approved|rejected"
+        jsonb       context
+        timestamptz created_at
+        text        note            "⚠️ копия → #8 health. TTL 90д"
+    }
+
+    %% ── Платформенные таблицы (⚠️ кандидаты → другие базы) ──
+
+    TIER_EVENTS {
+        bigserial   id              PK
+        bigint      chat_id         FK
+        text        from_tier       "T0|T1|T2|T3|T4"
+        text        to_tier
+        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
+        timestamptz created_at
+        text        note            "⚠️ кандидат → platform-core"
+    }
+
+    %% ── Связи ──
+
+    USERS ||--|| USER_STATE : "1:1"
     USER_STATE ||--o{ QA_HISTORY : "conversation"
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
     USER_STATE ||--o{ TIER_EVENTS : "tier history"
+    USER_STATE ||--o{ TRAINING_PROGRESS : "trainers"
+    USER_STATE ||--o{ FEED_SESSIONS : "feed"
+    USER_STATE ||--o{ ANSWERS : "answers"
+    USER_STATE ||--o{ PUBLISHED_POSTS : "publications"
+    USER_STATE ||--o{ WORKSHOP_PAYMENTS : "payments"
+    USER_STATE ||--o{ SEMINAR_PAYMENTS : "payments"
+    USER_STATE ||--o{ USER_SESSIONS : "sessions"
+    USER_STATE ||--|| ORY_TOKENS : "auth"
+    USER_STATE ||--|| DT_TOKENS : "auth"
+    USER_STATE ||--|| TRAINING_SETTINGS : "settings"
 ```
 
 ---
@@ -1120,14 +1380,14 @@ erDiagram
 
 | База | Writers | Readers |
 |------|---------|---------|
-| #1 platform-core | Ory callback (identity sync), OAuth flows (GitHub/GCal connections), `subscription-sync` cron (из #5 → SUBSCRIPTION_GRANTS) | gateway-mcp (авторизация каждого запроса), Ory Keto (проверка разрешений), все MCP-сервисы через API |
-| #2 digital-twin | dt-mcp (запись по API), Профайлер R28 (ежедневный расчёт IND.3.* из #4 LEARNING_HISTORY), LMS (степень DEG вручную методсовет МИМ) | dt-mcp (чтение профиля), бот `/twin` (через dt-mcp), knowledge-mcp (контекст пользователя), Навигатор/Портной (через dt-mcp) |
-| #3 knowledge | knowledge-mcp ingest (платформенный и персональный контент), GitHub App webhook → knowledge-mcp | knowledge-mcp search, dt-mcp (контекст концептов) |
-| #4 activity-hub | collectors: LMS + Club + WakaTime + IWE/exocortex + Bot (RAW_EVENTS), transform-worker (RAW→USER→LEARNING) | transform-worker, Профайлер R28 (читает LEARNING_HISTORY для расчёта IND.3.*), Metabase (RO, без PII) |
-| #5 payment-registry | **Payment Receiver** CF Worker (`payment_receiver_writer`: INSERT finance_payments + processed_webhooks, WP-246), `incremental-sync.sh` cron (стадия 2: только сверка), бот (seminar/workshop записи) | Metabase (`metabase_reader` + RLS, только агрегаты), `subscription-sync` cron (читает FINANCE_PAYMENTS → пишет в #1) |
-| #6 aist-bot | только AIST Bot (FSM state, токены, история QA) | только AIST Bot; Composer MCP (читает состояние FSM) |
+| #1 platform-core | Бот (`aist_me_bot_writer`): identity sync + OAuth flows + триал, `sync-subscriptions.sh` cron (из #5 → SUBSCRIPTION_GRANTS), Directus (ручные гранты), миграции (PRODUCTS, MENTOR_ASSIGNMENTS) | gateway-mcp (`gateway_reader`): авторизация каждого запроса, Metabase (`metabase_reader`), activity-hub (identity resolver) |
+| #2 digital-twin | Бот dt_sync (`aist_bot_writer`): `2_collected`, Профайлер R28: `3_derived`, knowledge-mcp: LEARNER_CONCEPT_MASTERY (WP-208 TBD), LMS (DEG вручную методсовет МИМ) | dt-mcp (профиль), tailor-mcp (`1_declarative`+`3_derived`), knowledge-mcp (learner_progress, RLS), *бот /twin через gateway→dt-mcp* |
+| #3 knowledge | knowledge-mcp ingest (платформенный и персональный контент), gateway-mcp: GITHUB_INSTALLATIONS + USER_SOURCES (GitHub App OAuth, RLS) | knowledge-mcp search, *бот через gateway→knowledge-mcp*, gateway-mcp (список подключённых репо) |
+| #4 activity-hub | collectors: LMS + Club + WakaTime + IWE/exocortex + Bot (RAW_EVENTS), transform-worker (RAW→USER→LEARNING) | transform-worker, Профайлер R28 (LEARNING_HISTORY → IND.3.*), Бот dt_sync (USER_EVENTS → ЦД), *Навигатор/Портной: LEARNING_HISTORY*, Metabase (RO, без PII) |
+| #5 payment-registry | **Payment Receiver** CF Worker (`payment_receiver_writer`: INSERT finance_payments + processed_webhooks, WP-246), `incremental-sync.sh` cron (стадия 2: только сверка), бот (seminar/workshop записи) | Бот: has_seminar_access/has_access_to_chat, Metabase (`metabase_reader` + RLS, только агрегаты), `sync-subscriptions.sh` cron (FINANCE_PAYMENTS → SUBSCRIPTION_GRANTS в #1) |
+| #6 aist-bot | только AIST Bot (44 таблицы: FSM, тренажёры, фид, марафоны, токены, публикации, оплаты, наблюдаемость). ⚠️ 10 таблиц — кандидаты на миграцию: 3→activity-hub, 3→payment-registry, 3→platform-core/#8 health | AIST Bot; Composer MCP (состояние FSM) |
 | #7 metabase | Metabase internal (служебные таблицы) | Metabase UI, дашборды читают #5 и #4 напрямую (не через #7) |
-| #8 health | uptime-collector cron (GHA, UPTIME_CHECKS + INCIDENTS), AIST Bot error_handler (ERROR_LOGS, REQUEST_TRACES, PENDING_FIXES) | Grafana (RO, дашборды здоровья), алерты → TG bot |
+| #8 health | uptime-collector cron (GHA, UPTIME_CHECKS + INCIDENTS), AIST Bot error_handler (ERROR_LOGS, REQUEST_TRACES, PENDING_FIXES) | Grafana (RO, дашборды здоровья), Бот (error_classifier, autofix), алерты → TG bot |
 
 </details>
 
@@ -1191,100 +1451,150 @@ erDiagram
 <summary><b>8. Справочник таблиц</b></summary>
 
 > **Статус:** ✅ Существует в `platform` (единая база, WP-232) | ⚠️ Перенести при разделении | 🆕 Создать
+>
+> **Writers / Readers** — кто пишет и читает каждую таблицу (Ф2 WP-228, 16 апр 2026). Роль в скобках = DB role. Курсив = непрямой доступ (через MCP/API).
 
 ### #1 platform-core
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| USER_IDENTITIES | Маппинг ory_id ↔ telegram_id ↔ lms_id. Только то, чего Ory не знает. | ✅ | `public.user_identities`, WP-232 |
-| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway для всех сервисов. | ✅ | `public.subscription_grants`, WP-231 |
-| GITHUB_CONNECTIONS | GitHub OAuth + конфиг публикации (репо, ветки). | ✅ | `public.github_connections`, WP-187 |
-| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth для бота. | ✅ | `public.google_calendar_connections`, WP-232 |
-| USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | ⚠️ Перенести | Сейчас в `development.user_integrations` |
-| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | ✅ | `knowledge.backend_registry`, WP-187/189 |
-| TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный, читается всеми сервисами. | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
-| PRODUCTS | Единый каталог продуктов: подписки, программы, семинары. PK = code. Связь с FINANCE_PAYMENTS по code. Замена SEMINARS. | ✅ | `public.products`, WP-228/текущая сессия |
-| MENTOR_ASSIGNMENTS | Привязка наставников к продуктам по product_code. Роли: lead, assistant, reviewer. | ✅ | `public.mentor_assignments`, WP-228/текущая сессия |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| USER_IDENTITIES | Маппинг ory_id ↔ telegram_id ↔ lms_id. Только то, чего Ory не знает. | Бот (`aist_me_bot_writer`): OAuth callback + LMS sync | gateway-mcp (`gateway_reader`), activity-hub (identity resolver) | ✅ | `public.user_identities`, WP-232 |
+| SUBSCRIPTION_GRANTS | Реестр активных прав подписки. Gateway для всех сервисов. | sync-subscriptions.sh cron (`aist_me_bot_writer`), бот: триал через /start, Directus: ручные гранты | gateway-mcp (`gateway_reader`): проверка на каждый запрос, Metabase (`metabase_reader`) | ✅ | `public.subscription_grants`, WP-231 |
+| GITHUB_CONNECTIONS | GitHub OAuth + конфиг публикации (репо, ветки). | Бот (`aist_me_bot_writer`): OAuth flow | Бот: чтение токенов для публикации | ✅ | `public.github_connections`, WP-187 |
+| GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth для бота. | Бот (`aist_me_bot_writer`): Google OAuth callback | Бот: чтение токенов для calendar sync | ✅ | `public.google_calendar_connections`, WP-232 |
+| USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | Бот (`aist_me_bot_writer`): OAuth callbacks | Бот, activity-hub: чтение токенов для API | ⚠️ Перенести | Сейчас в `development.user_integrations` |
+| BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | gateway-mcp: регистрация BYOB (WP-189, TBD) | gateway-mcp: fan-out маршрутизация | ✅ | `knowledge.backend_registry`, WP-187/189 |
+| TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный. | Бот (`aist_me_bot_writer`): core/tier_detector, fire-and-forget | Metabase (аналитика) | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
+| PRODUCTS | Единый каталог продуктов: подписки, программы, семинары. PK = code. | Миграции (`neondb_owner`): seed, Directus: CMS | Бот: метаданные семинаров/программ, Directus | ✅ | `public.products`, WP-228 |
+| MENTOR_ASSIGNMENTS | Привязка наставников к продуктам по product_code. | Миграции, Directus | Бот: lookup наставников | ✅ | `public.mentor_assignments`, WP-228 |
 
 ### #2 digital-twin
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| DIGITAL_TWINS | Цифровой двойник: 3 слоя (базовые / вовлечённость / производные). | ✅ | `public.digital_twins`, WP-227 |
-| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. | ✅ | `points.point_transactions`, WP-121 |
-| LEARNER_CONCEPT_MASTERY | Степень освоения концептов (0.0–1.0). Основа для квалификации "Ученик". | ✅ | `concept_graph.learner_concept_mastery`, WP-151 |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| DIGITAL_TWINS | Цифровой двойник: 3 слоя (базовые / вовлечённость / производные). | Бот dt_sync (`aist_bot_writer`): `2_collected` (cron 04:30), Profiler R28: `3_derived` (standalone) | dt-mcp: профиль по API, tailor-mcp: `1_declarative`+`3_derived`, *бот /twin через gateway→dt-mcp* | ✅ | `public.digital_twins`, WP-227 |
+| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Append-only. | Бот (`aist_bot_writer`): calculate_points (WP-121 Ф2, TBD) | gateway_reader: баланс (TBD) | ✅ | `points.point_transactions`, WP-121 |
+| LEARNER_CONCEPT_MASTERY | Степень освоения концептов (0.0–1.0). Основа для квалификации "Ученик". | knowledge-mcp: analyze_verbalization (RLS, WP-208 TBD) | knowledge-mcp: learner_progress (RLS по user_id) | ✅ | `concept_graph.learner_concept_mastery`, WP-151 |
 
 ### #3 knowledge
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| DOCUMENTS | Документы + векторные эмбеддинги для semantic search. | ✅ | `knowledge.documents`, knowledge-mcp |
-| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов. | ✅ | `knowledge.retrieval_feedback`, knowledge-mcp |
-| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). | ✅ | `concept_graph.concepts`, WP-170 |
-| CONCEPT_EDGES | Рёбра графа: prerequisite, related, part_of, contradicts. | ✅ | `concept_graph.concept_edges` |
-| CONCEPT_MISCONCEPTIONS | Типовые заблуждения по концептам. | ✅ | `concept_graph.concept_misconceptions` |
-| GITHUB_INSTALLATIONS | GitHub App installations для индексации репо. | ✅ | `knowledge.github_installations`, WP-187 |
-| USER_SOURCES | Источники индексации (GitHub репо, активные/нет). | ✅ | `knowledge.user_sources`, knowledge-mcp |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| DOCUMENTS | Документы + векторные эмбеддинги для semantic search. | knowledge-mcp ingest + /reindex webhook (RLS) | knowledge-mcp: hybrid search, *бот через gateway→knowledge-mcp* | ✅ | `knowledge.documents`, knowledge-mcp |
+| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов. | knowledge-mcp: recordFeedback tool (RLS) | knowledge-mcp: feedback_stats | ✅ | `knowledge.retrieval_feedback`, knowledge-mcp |
+| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). | knowledge-mcp ingest-concepts.ts (без RLS, платформенные) | knowledge-mcp: analyze_verbalization, graph_stats, *бот через gateway* | ✅ | `concept_graph.concepts`, WP-170 |
+| CONCEPT_EDGES | Рёбра графа: prerequisite, related, part_of, contradicts. | knowledge-mcp ingest-concepts.ts | knowledge-mcp: graph_stats, edge coverage | ✅ | `concept_graph.concept_edges` |
+| CONCEPT_MISCONCEPTIONS | Типовые заблуждения по концептам. | knowledge-mcp ingest-concepts.ts (из CAT.001) | knowledge-mcp: analyze_verbalization (LLM-detection) | ✅ | `concept_graph.concept_misconceptions` |
+| GITHUB_INSTALLATIONS | GitHub App installations для индексации репо. | gateway-mcp: GitHub App OAuth (WP-187, RLS) | gateway-mcp: список подключённых репо | ✅ | `knowledge.github_installations`, WP-187 |
+| USER_SOURCES | Источники индексации (GitHub репо, активные/нет). | knowledge-mcp миграция 004 + gateway-mcp webhook (RLS) | knowledge-mcp: resolve user_id при ingest, gateway-mcp: UI источников | ✅ | `knowledge.user_sources`, knowledge-mcp |
 
 ### #4 activity-hub
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| RAW_EVENTS | Bronze: сырые события, партиционированы по (source, fetched_at). TTL 30д. | ✅ | `development.raw_events`, WP-109 Ф8.1 |
-| USER_EVENTS | Silver: нормализованные события с атрибуцией пользователя. TTL 90д. | ✅ | `development.user_events`, WP-109 |
-| LEARNING_HISTORY | Gold: факты обучения. Читается profiler. Archive в S3 после 5 лет. | ⚠️ Перенести | Сейчас в aist_bot (миграция 007) |
-| IDENTITY_MAP | chat_id → ory_id; NULL до OAuth. | ✅ | `development.identity_map`, WP-109 |
-| SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | ✅ | `development.sync_log`, WP-109 |
-| QUARANTINED_EVENTS | Карантин для невалидных событий. | ✅ | `development.quarantined_events`, WP-109 |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| RAW_EVENTS | Bronze: сырые события, партиционированы по (source, fetched_at). TTL 30д. | activity-hub adapters (`aist_bot_writer`): write_raw, ON CONFLICT DO NOTHING | activity-hub transform-worker: _fetch_pending, integrity checks | ✅ | `development.raw_events`, WP-109 Ф8.1 |
+| USER_EVENTS | Silver: нормализованные события с атрибуцией пользователя. TTL 90д. | activity-hub: (1) hub.py ingest_event direct INSERT, (2) transform-worker upsert, (3) ingest_batch bulk | activity-hub: rate_limit check, бот dt_sync: агрегация для ЦД | ✅ | `development.user_events`, WP-109 |
+| LEARNING_HISTORY | Gold: факты обучения. Читается profiler. Archive в S3 после 5 лет. | Бот: DB-триггер на user_events INSERT (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT-расчёты, Навигатор: 7-дневное окно, *Портной: depths_by_direction* | ⚠️ Перенести | Сейчас в aist_bot (миграция 007) |
+| IDENTITY_MAP | chat_id → ory_id; NULL до OAuth. | activity-hub runner.py: populate_bot/csv/lms_identity | activity-hub hub.py: resolve_user_uuid, бот dt_sync: LMS qualification mapping | ✅ | `development.identity_map`, WP-109 |
+| SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | activity-hub runner.py: log_sync после каждого запуска | activity-hub: мониторинг, Metabase (TBD) | ✅ | `development.sync_log`, WP-109 |
+| QUARANTINED_EVENTS | Карантин для невалидных событий. | activity-hub: hub.py _quarantine (validation fail), transform-worker (parse fail) | Ручной разбор (write-only sink) | ✅ | `development.quarantined_events`, WP-109 |
+| PUBLISHED_POSTS | Опубликованные посты (Discourse, Telegram). | Бот: db/queries/discourse, clients/publisher | Бот: db/queries/discourse | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| SCHEDULED_PUBLICATIONS | Запланированные публикации. | Бот: db/queries/discourse, clients/publisher | Бот: db/queries/discourse, core/scheduler | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| DISCOURSE_ACCOUNTS | Аккаунты Discourse для публикации. | Бот: db/queries/discourse | Бот: db/queries/discourse | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
 
 ### #5 payment-registry
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| FINANCE_PAYMENTS | Реестр всех транзакций (YooKassa, Stripe, ручные). Permanent. Колонка `raw_payload JSONB` (WP-246) для аудита оригинальных webhook. Writer: Payment Receiver (`payment_receiver_writer`), incremental-sync (сверка), бот. | ✅ | `public.finance_payments`, WP-183. Данные из Aisystant CRM (35 879 строк) |
-| PROCESSED_WEBHOOKS | Idempotency-дедупликация webhook'ов. PK = event_id (provider payment ID). TTL >72h (Stripe retry window). Writer: Payment Receiver. | 🆕 Создать | `public.processed_webhooks`, WP-246 |
-| FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | 🆕 Создать | WP-237 |
-| PAYMENTS_SYNC_STATE | Ватерmarк импорта из Aisystant. | ✅ | `public.finance_payments_sync_state`, WP-183 |
-| SUBSCRIPTION_GRANTS_SYNC_STATE | Ватерmarк синхронизации грантов. | ✅ | WP-231 |
-| IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | ✅ | WP-183 (миграция 005) |
-| IMPORT_STAGING_CHARGEOFF | Landing zone списаний. | ✅ | WP-183 (миграция 005) |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| FINANCE_PAYMENTS | Реестр всех транзакций. Permanent. `raw_payload JSONB` (WP-246). | Payment Receiver CF Worker (`payment_receiver_writer`), incremental-sync.sh cron (`aist_me_bot_writer`), бот showcase handler | Бот: has_seminar_access/has_access_to_chat, Metabase (`metabase_reader`), sync-subscriptions.sh: → SUBSCRIPTION_GRANTS | ✅ | `public.finance_payments`, WP-183 |
+| PROCESSED_WEBHOOKS | Idempotency-дедупликация webhook'ов. PK = event_id. TTL >72h. | Payment Receiver (`payment_receiver_writer`): isDuplicate + markProcessed | Payment Receiver: проверка дубликатов | 🆕 Создать | `public.processed_webhooks`, WP-246 |
+| FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | (WP-237, TBD) | (WP-237, TBD) | 🆕 Создать | WP-237 |
+| PAYMENTS_SYNC_STATE | Ватермарк импорта из Aisystant. | incremental-sync.sh (`aist_me_bot_writer`) | incremental-sync.sh, Metabase: sync health | ✅ | `public.finance_payments_sync_state`, WP-183 |
+| SUBSCRIPTION_GRANTS_SYNC_STATE | Ватермарк синхронизации грантов. | sync-subscriptions.sh (`aist_me_bot_writer`) | sync-subscriptions.sh: read boundary | ✅ | WP-231 |
+| IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → finance_payments | ✅ | WP-183 (миграция 005) |
+| IMPORT_STAGING_CHARGEOFF | Landing zone списаний. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → UPDATE linked | ✅ | WP-183 (миграция 005) |
+| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | Бот: db/queries/workshop, handlers/workshop | Бот: db/queries/workshop | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | Бот: handlers/payments, db/queries/showcase | Бот: db/queries/showcase | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| CONVERSION_EVENTS | События конверсионной воронки. | Бот: db/queries/conversion, core/scheduler | Бот: db/queries/conversion, db/queries/analytics | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
 
 ### #6 aist-bot
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| USER_STATE | FSM-состояние бота + счётчик активных дней, триал. ⚠️ Колонки tier/mentor_tier убрать после переноса в platform-core | ✅ | `development.user_state`, первая версия бота |
-| QA_HISTORY | История вопросов/ответов. TTL 180д. | ✅ | `public.qa_history`, WP-132 |
-| NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | ✅ | `public.notification_log`, WP-232 |
-| BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | ⚠️ Уточнить | Возможно заменена `public.subscriptions` (WP-232) |
-| ~~SEMINARS~~ | ~~Каталог семинаров~~ → заменена PRODUCTS в platform-core. | ❌ Удалена | Заменена `public.products` |
-| COMMUNITY_MEMBERS | Участники Telegram-сообщества. | ✅ | aist_bot миграция 009 |
-| SERVICE_USAGE | Счётчик использования сервисов бота. | ✅ | aist_bot миграция 003 |
-| USER_ACCESS | Временные права (выданные ботом, с expiry). | ✅ | aist_bot миграция 002 |
-| FEEDBACK_TRIAGE | Фидбек из бота (source='bot'). | ✅ | aist_bot миграция 008 |
-| ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | ✅ | `public.ory_tokens`, WP-209. ⚠️ Сейчас plaintext → WP-234 |
-| DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | ✅ | `public.dt_tokens`, WP-82. ⚠️ Сейчас plaintext → WP-234 |
+> **WP-228 Ф2 (16 апр):** расширен с 11 до 44 таблиц. Таблицы-кандидаты на миграцию помечены ⚠️ с целевой базой.
+
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| **Ядро бота (FSM, сессии, идентичность)** | | | | | |
+| USERS | Локальные пользователи бота (telegram_id, ory_id, роли). | handlers/onboarding, core/ory_register | core/\*, handlers/\*, db/queries/\* | ✅ | Первая миграция |
+| USER_STATE | FSM-состояние бота + счётчик активных дней, триал. ⚠️ Колонки tier/mentor_tier убрать после переноса. | handlers/onboarding, states/\*, core/scheduler, core/machine | handlers/\*, states/\*, core/machine | ✅ | `development.user_state` |
+| FSM_STATES | Хранилище FSM aiogram (персистентность между редеплоями). | core/storage (aiogram) | core/storage | ✅ | aiogram FSM |
+| USER_SESSIONS | Сессии пользователей. | db/queries/sessions | db/queries/analytics | ✅ | Миграция бота |
+| OAUTH_PENDING_STATES | Ожидающие OAuth state-коды (GitHub, Google). TTL: до завершения flow. | db/queries/oauth_states, handlers/github | db/queries/oauth_states | ✅ | Миграция бота |
+| **Обучение (тренажёры, фид, марафоны)** | | | | | |
+| TRAINING_PROGRESS | Прогресс тренажёров (мемы, задания). | db/queries/training, states/training/\* | db/queries/training, states/training/\* | ✅ | Миграция бота |
+| TRAINING_CHILDREN | Дочерние элементы тренажёров. | db/queries/training | db/queries/training | ✅ | Миграция бота |
+| TRAINING_ATTEMPTS | Попытки прохождения (score, ответы). | db/queries/training, states/training/\* | db/queries/training | ✅ | Миграция бота |
+| TRAINING_SETTINGS | Пользовательские настройки тренажёров. | db/queries/training, handlers/settings | db/queries/training | ✅ | Миграция бота |
+| FEED_SESSIONS | Сессии ленты обучения. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | ✅ | Миграция бота |
+| FEED_WEEKS | Недельные циклы ленты. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | ✅ | Миграция бота |
+| MARATHON_CONTENT | Контент марафонов (уроки, задания). | db/queries/marathon, core/scheduler | db/queries/marathon, states/lesson | ✅ | Миграция бота |
+| ANSWERS | Ответы пользователей на задания. | db/queries/answers, states/task | db/queries/answers, db/queries/profile | ✅ | Миграция бота |
+| ASSESSMENTS | Оценки (самооценка, внешняя). | db/queries/assessment, states/assessment/\* | db/queries/assessment, db/queries/dev_stats | ✅ | Миграция бота |
+| CONTENT_CACHE | Кеш контента LMS (уроки, задания). TTL: по scheduler. | db/queries/cache, core/scheduler | db/queries/cache, states/lesson, states/task | ✅ | Миграция бота |
+| **Коммуникация и фидбек** | | | | | |
+| QA_HISTORY | История вопросов/ответов. TTL 180д. | db/queries/qa, states/consultation | db/queries/analytics, handlers/twin | ✅ | `public.qa_history`, WP-132 |
+| NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | db/queries/notifications, core/scheduler | db/queries/notifications | ✅ | `public.notification_log`, WP-232 |
+| FEEDBACK_TRIAGE | Фидбек из бота (source='bot'). | core/feedback_triage, handlers/feedback | core/feedback_triage, db/queries/feedback | ✅ | Миграция 008 |
+| FEEDBACK_REPORTS | Отчёты по фидбеку (агрегированные). | db/queries/feedback, handlers/feedback | db/queries/feedback | ✅ | Миграция бота |
+| REMINDERS | Расписание напоминаний. | core/scheduler | core/scheduler | ✅ | Миграция бота |
+| **Подписки и доступ** | | | | | |
+| BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | db/queries/subscription, handlers/subscription | db/queries/subscription, core/tier_detector | ⚠️ Уточнить | Возможно заменена `public.subscriptions` |
+| SERVICE_USAGE | Счётчик использования сервисов бота. | db/queries/activity | db/queries/analytics, db/queries/dev_stats | ✅ | Миграция 003 |
+| USER_ACCESS | Временные права (выданные ботом, с expiry). | (не найден активный writer) | (не найден активный reader) | ⚠️ Уточнить | Миграция 002, возможно неиспользуемая |
+| COMMUNITY_MEMBERS | Участники Telegram-сообщества. | db/queries/workshop, handlers/workshop | db/queries/workshop | ✅ | Миграция 009 |
+| **Токены и интеграции** | | | | | |
+| ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | db/queries/ory_tokens, handlers/ory_register | db/queries/ory_tokens | ✅ | `public.ory_tokens`, WP-209. ⚠️ plaintext → WP-234 |
+| DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | db/queries/dt_tokens, handlers/connect | db/queries/dt_tokens, core/scheduler | ✅ | `public.dt_tokens`, WP-82. ⚠️ plaintext → WP-234 |
+| **Публикации и каналы** | | | | | |
+| PUBLISHED_POSTS | Опубликованные посты (Discourse, Telegram). | db/queries/discourse, clients/publisher | db/queries/discourse | ⚠️ → activity-hub | Миграция бота |
+| SCHEDULED_PUBLICATIONS | Запланированные публикации. | db/queries/discourse, clients/publisher | db/queries/discourse, core/scheduler | ⚠️ → activity-hub | Миграция бота |
+| DISCOURSE_ACCOUNTS | Аккаунты Discourse для публикации. | db/queries/discourse | db/queries/discourse | ⚠️ → activity-hub | Миграция бота |
+| CHANNEL_MONITORS | Мониторинг Telegram-каналов. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
+| CHANNEL_MENTIONS_LOG | Лог упоминаний в каналах. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
+| **Платежи (бот-уровень)** | | | | | |
+| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | db/queries/workshop, handlers/workshop | db/queries/workshop | ⚠️ → payment-registry | Миграция бота |
+| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | handlers/payments, db/queries/showcase | db/queries/showcase | ⚠️ → payment-registry | Миграция бота |
+| CONVERSION_EVENTS | События конверсионной воронки. | db/queries/conversion, core/scheduler | db/queries/conversion, db/queries/analytics | ⚠️ → payment-registry | Миграция бота |
+| ~~SEMINARS~~ | ~~Каталог семинаров~~ → заменена PRODUCTS в platform-core. | — | — | ❌ Удалена | Заменена `public.products` |
+| **Наблюдаемость (бот-уровень)** | | | | | |
+| ACTIVITY_LOG | Лог активности пользователей в боте. | db/queries/activity, core/scheduler | db/queries/activity, db/queries/analytics | ✅ | Миграция бота |
+| ERROR_LOGS | Ошибки бота (категория, severity). TTL 180д. | core/error_handler | core/error_classifier, db/queries/analytics | ✅ | Миграция бота. ⚠️ Копия → #8 health |
+| REQUEST_TRACES | Трейсы запросов бота. TTL 30д. | core/tracing | db/queries/analytics | ✅ | Миграция бота. ⚠️ Копия → #8 health |
+| PENDING_FIXES | Очередь auto-fix (Claude диагноз). TTL 90д. | db/queries/autofix, core/autofix | db/queries/autofix | ✅ | Миграция бота. ⚠️ Копия → #8 health |
+| **Платформенные таблицы (в aist-bot DB, target: другая база)** | | | | | |
+| TIER_EVENTS | Лог переходов тиров. | core/tier_detector | core/tier_detector, Metabase | ⚠️ → platform-core | `development.tier_events` |
+| LEARNING_HISTORY | Gold-факты обучения (DB-триггер на user_events). | DB-триггер (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT, Навигатор: 7д окно | ⚠️ → activity-hub | Миграция 007 |
+| USER_EVENTS | Нормализованные события (дублирует #4). | db/queries/events, core/scheduler | db/queries/dt_sync, db/queries/events | ⚠️ → activity-hub | Бот-копия, target: #4 |
 
 ### #7 metabase
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| METABASE_COLLECTIONS | Папки дашбордов. | ✅ | Управляется Metabase (~171 таблица) |
-| METABASE_DASHBOARDS | Дашборды (финансы, события). | ✅ | WP-183 (2 дашборда) |
-| METABASE_CARDS | Questions (8 штук). | ✅ | WP-183 |
-| METABASE_USERS | Пользователи Metabase (не Ory). | ✅ | Управляется Metabase |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| METABASE_COLLECTIONS | Папки дашбордов. | Metabase internal | Metabase UI | ✅ | Управляется Metabase (~171 таблица) |
+| METABASE_DASHBOARDS | Дашборды (финансы, события). | Metabase internal | Metabase UI, дашборды читают #5 и #4 напрямую | ✅ | WP-183 (2 дашборда) |
+| METABASE_CARDS | Questions (8 штук). | Metabase internal | Metabase UI | ✅ | WP-183 |
+| METABASE_USERS | Пользователи Metabase (не Ory). | Metabase internal | Metabase internal | ✅ | Управляется Metabase |
 
 ### #8 health
 
-| Таблица | Назначение | Статус | Источник |
-|---------|-----------|--------|----------|
-| SERVICE_REGISTRY | Реестр сервисов для мониторинга (name, url, check_type). | 🆕 Создать | WP-244 |
-| UPTIME_CHECKS | Результаты пингов (latency_ms, status_code, is_up). TTL 90d. | 🆕 Создать | WP-244 |
-| UPTIME_INCIDENTS | Агрегированные инциденты (started_at, resolved_at, severity). Permanent. | 🆕 Создать | WP-244 |
-| ANTHROPIC_STATUS_SNAPSHOTS | Снапшоты status.anthropic.com API по компонентам. TTL 90d. | 🆕 Создать | WP-244 |
-| ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
-| REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
-| PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| SERVICE_REGISTRY | Реестр сервисов для мониторинга (name, url, check_type). | uptime-collector (GHA cron) | Grafana (RO) | 🆕 Создать | WP-244 |
+| UPTIME_CHECKS | Результаты пингов (latency_ms, status_code, is_up). TTL 90d. | uptime-collector (GHA cron) | Grafana (RO), алерты → TG | 🆕 Создать | WP-244 |
+| UPTIME_INCIDENTS | Агрегированные инциденты (started_at, resolved_at, severity). Permanent. | uptime-collector (агрегация) | Grafana (RO), алерты → TG | 🆕 Создать | WP-244 |
+| ANTHROPIC_STATUS_SNAPSHOTS | Снапшоты status.anthropic.com API по компонентам. TTL 90d. | uptime-collector (GHA cron) | Grafana (RO) | 🆕 Создать | WP-244 |
+| ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | Бот error_handler (сейчас в aist_bot), будущее: все сервисы | Grafana (RO), core/error_classifier | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | Бот core/tracing (сейчас в aist_bot), будущее: все сервисы | Grafana (RO) | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | Бот core/autofix (сейчас в aist_bot) | Бот db/queries/autofix, Grafana | 🆕 Перенести | WP-45 (сейчас в `platform`) |
 
 </details>
 
