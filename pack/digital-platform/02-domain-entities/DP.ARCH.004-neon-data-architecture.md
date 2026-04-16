@@ -184,12 +184,12 @@ flowchart LR
         direction TB
         PC[("#1 platform-core\nidentity · подписки")]:::db_gw
         DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
+        AB[("#6 aist-bot\nFSM · OAuth-сессии · QA")]:::db_prod
         KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
         PR[("#5 payment-registry\nфинансы")]:::db_prod
         AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
-        AB[("#6 aist-bot\nFSM · токены · QA")]:::db_prod
         MB[("#7 metabase\nслужебные таблицы")]:::db_infra
-        HL[("#8 health\nаптайм · ошибки")]:::db_infra
+        HL[("#8 health\nдоступность · ошибки")]:::db_infra
     end
 
     %% ── Агенты, аналитика и identity-провайдеры ────────────────
@@ -206,8 +206,8 @@ flowchart LR
         Navi(["Навигатор"]):::reader
         Composer(["Composer MCP\n(в разработке)"]):::reader
         Metabase(["Metabase\n(дашборды)"]):::reader
-        Grafana(["Grafana\n(мониторинг)"]):::reader
-        Langfuse(["Langfuse\n(трейсинг AI)"]):::reader
+        Grafana(["Grafana\n(дашборды доступности)"]):::reader
+        Langfuse(["Langfuse\n(журнал AI-запросов)"]):::reader
     end
 
     %% ── Источники → Neon ────────────────────────────────────────
@@ -221,7 +221,7 @@ flowchart LR
     Bot -->|"ошибки"| HL
     WebApp -->|"события"| AH
     IWE -->|"события"| AH
-    Pinger -->|"аптайм · инциденты"| HL
+    Pinger -->|"доступность · инциденты"| HL
 
     %% ── Identity-провайдеры ↔ Neon ──────────────────────────────
     Kratos -->|"webhook: регистрация"| PC
@@ -245,8 +245,8 @@ flowchart LR
     Metabase -.->|"финансы (RLS)"| PR
     Metabase -.->|"события (без PII)"| AH
     Grafana -.->|"только чтение"| HL
-    Bot -->|"трейсы"| Langfuse
-    GW -->|"трейсы"| Langfuse
+    Bot -->|"журнал запросов"| Langfuse
+    GW -->|"журнал запросов"| Langfuse
 
     %% ── Межбазовые потоки ───────────────────────────────────────
     PR -->|"синхронизация подписок"| PC
