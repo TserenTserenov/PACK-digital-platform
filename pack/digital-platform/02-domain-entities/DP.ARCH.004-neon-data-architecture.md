@@ -84,6 +84,7 @@ Neon Project: aisystant
 ├── DB #1: platform-core   ← USER_IDENTITIES + SUBSCRIPTION_GRANTS
 │                             + GITHUB_CONNECTIONS + GOOGLE_CALENDAR_CONNECTIONS
 │                             + USER_INTEGRATIONS + BACKEND_REGISTRY
+│                             + PRODUCTS + MENTOR_ASSIGNMENTS
 │                             + directus.* (~15 таблиц)
 │
 ├── DB #2: digital-twin    ← DIGITAL_TWINS + POINT_TRANSACTIONS
@@ -99,12 +100,11 @@ Neon Project: aisystant
 │                             ⚠ кандидат на замену ClickHouse/TimescaleDB
 │
 ├── DB #5: payment-registry ← FINANCE_PAYMENTS + FINANCE_PAYMENTS_AUDIT_LOG
-│                             + SEMINAR_PAYMENTS + WORKSHOP_PAYMENTS
 │                             + PAYMENTS_SYNC_STATE + SUBSCRIPTION_GRANTS_SYNC_STATE
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
 ├── DB #6: aist-bot        ← USER_STATE + QA_HISTORY + NOTIFICATION_LOG
-│                             + BOT_SUBSCRIPTIONS + SEMINARS + COMMUNITY_MEMBERS
+│                             + BOT_SUBSCRIPTIONS + COMMUNITY_MEMBERS
 │                             + SERVICE_USAGE + USER_ACCESS + FEEDBACK_TRIAGE
 │                             + ORY_TOKENS + DT_TOKENS
 │
@@ -521,12 +521,55 @@ erDiagram
         timestamptz created_at
     }
 
+    PRODUCTS {
+        text        code            PK  "S1, R1, SE, OD, open-endedness-m-1000, …"
+        text        type            "subscription|program|seminar"
+        text        title
+        text        description
+        text        format          "practicum|residency|research_seminar|review (только program)"
+        decimal     price_rub
+        int         price_stars
+        text        currency        "RUB"
+        bool        is_free
+        bool        installment_ok
+        text        speaker
+        bigint      tg_chat_id      "Telegram-группа продукта"
+        text        video_url
+        date        event_date      "для семинаров"
+        text        duration
+        bool        active
+        bool        show_in_catalog
+        int         sort_order
+        text        source          "manual|aisystant"
+        text        source_id
+        jsonb       metadata        "tilda_uid, seminar_chat_id, masterskaya_chat_id и др."
+        timestamptz created_at
+        timestamptz updated_at
+        text        note            "единый каталог продуктов; замена SEMINARS, привязка к FINANCE_PAYMENTS по code"
+    }
+
+    MENTOR_ASSIGNMENTS {
+        serial      id              PK
+        uuid        ory_id          "ref→USER_IDENTITIES"
+        bigint      telegram_id
+        text        product_code    FK  "→ PRODUCTS"
+        text        role            "lead|assistant|reviewer"
+        text        display_name
+        bool        active
+        date        valid_from
+        date        valid_until
+        timestamptz created_at
+        text        note            "привязка наставников к программам; per-product-code"
+    }
+
     USER_IDENTITIES ||--o{ SUBSCRIPTION_GRANTS : "has"
     USER_IDENTITIES ||--o{ GITHUB_CONNECTIONS : "connects GitHub"
     USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
     USER_IDENTITIES ||--o{ USER_INTEGRATIONS : "service integrations"
     USER_IDENTITIES ||--o{ BACKEND_REGISTRY : "personal MCPs"
     USER_IDENTITIES ||--o{ TIER_EVENTS : "tier history"
+    USER_IDENTITIES ||--o{ MENTOR_ASSIGNMENTS : "mentors"
+    PRODUCTS ||--o{ MENTOR_ASSIGNMENTS : "assigned mentors"
 ```
 
 ---
@@ -764,26 +807,6 @@ erDiagram
         text        note            "append-only; Postgres trigger tr_log_payment_changes (WP-237)"
     }
 
-    SEMINAR_PAYMENTS {
-        bigserial   id              PK
-        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
-        int         seminar_id      "ref→aist-bot.SEMINARS (API)"
-        decimal     amount
-        text        currency        "RUB|STARS"
-        text        status
-        timestamptz paid_at
-    }
-
-    WORKSHOP_PAYMENTS {
-        bigserial   id              PK
-        bigint      telegram_id     "ref→platform-core.USER_IDENTITIES (API)"
-        text        aisystant_id    "ref→Aisystant LMS (external API)"
-        decimal     amount
-        text        status          "pending|success"
-        text        source          "bot|web"
-        timestamptz paid_at
-    }
-
     PAYMENTS_SYNC_STATE {
         int         id              PK  "singleton id=1"
         bigint      last_payment_id
@@ -883,16 +906,6 @@ erDiagram
         text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
     }
 
-    SEMINARS {
-        serial      id              PK
-        text        title
-        decimal     price_rub
-        int         price_stars
-        bigint      tg_group_id
-        date        event_date
-        text        note            "каталог; оплата → payment-registry.SEMINAR_PAYMENTS"
-    }
-
     COMMUNITY_MEMBERS {
         bigserial   id              PK
         bigint      telegram_id
@@ -953,7 +966,6 @@ erDiagram
     USER_STATE ||--o{ NOTIFICATION_LOG : "notifications"
     USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars billing"
     USER_STATE ||--o{ TIER_EVENTS : "tier history"
-    SEMINARS }o--o{ COMMUNITY_MEMBERS : "members"
 ```
 
 ---
@@ -1174,6 +1186,8 @@ erDiagram
 | USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | ⚠️ Перенести | Сейчас в `development.user_integrations` |
 | BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | ✅ | `knowledge.backend_registry`, WP-187/189 |
 | TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный, читается всеми сервисами. | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
+| PRODUCTS | Единый каталог продуктов: подписки, программы, семинары. PK = code. Связь с FINANCE_PAYMENTS по code. Замена SEMINARS. | ✅ | `public.products`, WP-228/текущая сессия |
+| MENTOR_ASSIGNMENTS | Привязка наставников к продуктам по product_code. Роли: lead, assistant, reviewer. | ✅ | `public.mentor_assignments`, WP-228/текущая сессия |
 
 ### #2 digital-twin
 
@@ -1212,8 +1226,6 @@ erDiagram
 |---------|-----------|--------|----------|
 | FINANCE_PAYMENTS | Реестр всех транзакций (YooKassa, Stripe, ручные). Permanent. | ✅ | `public.finance_payments`, WP-183. Данные из Aisystant CRM (35 879 строк) |
 | FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | 🆕 Создать | WP-237 |
-| SEMINAR_PAYMENTS | Платежи за семинары через бот. | ⚠️ Перенести | Сейчас в aist_bot (миграция 011) |
-| WORKSHOP_PAYMENTS | Платежи за воркшопы. Содержит aisystant_id. | ⚠️ Перенести | Сейчас в aist_bot (миграция 009) |
 | PAYMENTS_SYNC_STATE | Ватерmarк импорта из Aisystant. | ✅ | `public.finance_payments_sync_state`, WP-183 |
 | SUBSCRIPTION_GRANTS_SYNC_STATE | Ватерmarк синхронизации грантов. | ✅ | WP-231 |
 | IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | ✅ | WP-183 (миграция 005) |
@@ -1227,7 +1239,7 @@ erDiagram
 | QA_HISTORY | История вопросов/ответов. TTL 180д. | ✅ | `public.qa_history`, WP-132 |
 | NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | ✅ | `public.notification_log`, WP-232 |
 | BOT_SUBSCRIPTIONS | Telegram Stars подписки (бот-уровень). | ⚠️ Уточнить | Возможно заменена `public.subscriptions` (WP-232) |
-| SEMINARS | Каталог семинаров. Оплата → payment-registry. | ✅ | aist_bot миграция 011 |
+| ~~SEMINARS~~ | ~~Каталог семинаров~~ → заменена PRODUCTS в platform-core. | ❌ Удалена | Заменена `public.products` |
 | COMMUNITY_MEMBERS | Участники Telegram-сообщества. | ✅ | aist_bot миграция 009 |
 | SERVICE_USAGE | Счётчик использования сервисов бота. | ✅ | aist_bot миграция 003 |
 | USER_ACCESS | Временные права (выданные ботом, с expiry). | ✅ | aist_bot миграция 002 |
