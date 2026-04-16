@@ -155,21 +155,21 @@ Neon Project: aisystant
 
 ### 4.0 Обзорная диаграмма
 
-> Все внешние системы, 8 баз Neon и читатели в одном виде. Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — в 4.1–4.5.
+> Все внешние системы, 8 баз Neon и агенты/читатели в одном виде. Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — в 4.1–4.5.
 
 ```mermaid
 flowchart LR
-    classDef ext    fill:#f5f0e8,stroke:#b0956a,color:#333
-    classDef db_gw  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef ext     fill:#f5f0e8,stroke:#b0956a,color:#333
+    classDef db_gw   fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef db_prod fill:#dcfce7,stroke:#22c55e,color:#14532d
     classDef db_infra fill:#f3f4f6,stroke:#9ca3af,color:#374151
-    classDef reader fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef reader  fill:#fef9c3,stroke:#ca8a04,color:#713f12
 
     %% ── Внешние источники ──────────────────────────────────────
     subgraph SRC ["Внешние системы"]
         direction TB
         Kratos(["Ory Kratos\n(идентичность)"]):::ext
-        Keto(["Ory Keto\n(RBAC)"]):::ext
+        Keto(["Ory Keto\n(права доступа)"]):::ext
         LMS(["LMS Aisystant"]):::ext
         Club(["Discourse Club"]):::ext
         Waka(["WakaTime"]):::ext
@@ -178,70 +178,78 @@ flowchart LR
         Bot(["AIST Bot"]):::ext
         WebApp(["Web App"]):::ext
         IWE(["IWE / exocortex"]):::ext
-        UptimeC(["uptime-collector\n(GHA cron)"]):::ext
+        Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::ext
     end
 
     %% ── 8 баз Neon ─────────────────────────────────────────────
     subgraph NEON ["Neon (8 баз)"]
         direction TB
-        PC[("#1 platform-core\nidentity · subscriptions")]:::db_gw
+        PC[("#1 platform-core\nidentity · подписки")]:::db_gw
         DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
         KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
-        AH[("#4 activity-hub\nevents Bronze→Gold")]:::db_prod
         PR[("#5 payment-registry\nфинансы")]:::db_prod
+        AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
         AB[("#6 aist-bot\nFSM · токены · QA")]:::db_prod
         MB[("#7 metabase\nслужебные таблицы")]:::db_infra
         HL[("#8 health\nаптайм · ошибки")]:::db_infra
     end
 
-    %% ── Читатели / аналитика ────────────────────────────────────
-    subgraph READ ["Аналитика и агенты"]
+    %% ── Агенты и читатели ───────────────────────────────────────
+    subgraph READ ["Агенты и аналитика"]
         direction TB
-        GW(["gateway-mcp\n(CF Worker)"]):::reader
-        KnMCP(["knowledge-mcp\n(CF Worker)"]):::reader
+        GW(["gateway-mcp"]):::reader
+        KnMCP(["knowledge-mcp"]):::reader
+        PkMCP(["personal-knowledge-mcp"]):::reader
         DtMCP(["digital-twin-mcp"]):::reader
-        Profiler(["Профайлер R28"]):::reader
+        Profiler(["Профайлер"]):::reader
         Tailor(["Портной"]):::reader
         Navi(["Навигатор"]):::reader
-        Metabase(["Metabase UI\n(дашборды)"]):::reader
+        Composer(["Composer MCP"]):::reader
+        Metabase(["Metabase\n(дашборды)"]):::reader
         Grafana(["Grafana\n(мониторинг)"]):::reader
-        Langfuse(["Langfuse\n(AI observability)"]):::reader
+        Langfuse(["Langfuse\n(трейсинг AI)"]):::reader
     end
 
-    %% ── Записи во внешние системы ───────────────────────────────
-    Kratos -->|"webhook: identity"| PC
-    Keto -.->|"RBAC check"| PC
-    LMS -->|"raw events"| AH
-    LMS -->|"DEG (ручная)"| DT
-    Club -->|"raw events"| AH
-    Waka -->|"raw events"| AH
-    GHApp -->|"installations"| KN
+    %% ── Внешние системы → Neon ──────────────────────────────────
+    Kratos -->|"webhook: регистрация"| PC
+    LMS -->|"события"| AH
+    Club -->|"события"| AH
+    Waka -->|"события"| AH
+    GHApp -->|"установки"| KN
     Pay -->|"платежи"| PR
-    Bot -->|"FSM · токены · QA"| AB
-    Bot -->|"raw events"| AH
-    Bot -->|"error logs"| HL
-    WebApp -->|"events"| AH
-    IWE -->|"raw events"| AH
-    UptimeC -->|"аптайм · инциденты"| HL
+    Bot -->|"состояние · токены"| AB
+    Bot -->|"события"| AH
+    Bot -->|"ошибки"| HL
+    WebApp -->|"события"| AH
+    IWE -->|"события"| AH
+    Pinger -->|"аптайм · инциденты"| HL
 
-    %% ── Чтение из баз (аналитика / агенты) ─────────────────────
-    GW -.->|"subscription check"| PC
-    KnMCP -.->|"search · ingest"| KN
+    %% ── Агенты → Neon (чтение и запись) ────────────────────────
+    GW -.->|"проверка JWT"| Kratos
+    GW -.->|"проверка прав"| Keto
+    GW -.->|"проверка подписки"| PC
+    GW -->|"проброс к сервисам"| KnMCP
+    GW -->|"проброс к сервисам"| DtMCP
+    KnMCP -.->|"поиск"| KN
+    KnMCP -->|"индексация"| KN
+    PkMCP -->|"личные документы"| KN
+    PkMCP -->|"событие записи"| AH
     DtMCP -.->|"профиль"| DT
-    Profiler -.->|"LEARNING_HISTORY"| AH
-    Profiler -->|"IND.3.*"| DT
-    Tailor -.->|"профиль + ступени"| DT
-    Navi -.->|"ступени"| DT
-    Metabase -.->|"RLS агрегаты"| PR
-    Metabase -.->|"без PII"| AH
-    Grafana -.->|"read-only"| HL
-    Langfuse -.->|"trace_id correlation"| AH
+    Profiler -.->|"история обучения"| AH
+    Profiler -->|"показатели развития"| DT
+    Tailor -.->|"профиль"| DT
+    Navi -.->|"профиль"| DT
+    Composer -.->|"состояние FSM"| AB
+    Metabase -.->|"финансы (RLS)"| PR
+    Metabase -.->|"события (без PII)"| AH
+    Grafana -.->|"только чтение"| HL
+    Bot -->|"трейсы"| Langfuse
+    GW -->|"трейсы"| Langfuse
 
     %% ── Межбазовые потоки ───────────────────────────────────────
-    PR -->|"subscription-sync cron"| PC
-    AH -->|"IDENTITY_MAP"| PC
-    AB -.->|"проверка прав"| PC
-    KN -->|"mastery концептов"| DT
+    PR -->|"синхронизация подписок"| PC
+    AH -->|"связка chat_id → ory_id"| PC
+    KN -->|"освоение концептов"| DT
     PR -.->|"финансы (RLS)"| MB
     AH -.->|"события (без PII)"| MB
     HL -.->|"аптайм"| MB
@@ -346,14 +354,14 @@ graph LR
     PR[(#5 payment-registry)]
 
     User -->|"логин / OAuth"| Ory
-    Ory  -->|"JWT токен"| User
+    Ory  -->|"JWT"| User
     Ory  -->|"webhook: регистрация"| PC
     User -->|"запрос + JWT"| GW
-    GW   -->|"verify JWT"| Ory
-    GW   -->|"check permissions"| Keto
-    GW   -->|"check subscription"| PC
-    PC   -->|"tier + grants"| GW
-    PR   -->|"subscription-sync cron"| PC
+    GW   -->|"проверка JWT"| Ory
+    GW   -->|"проверка прав"| Keto
+    GW   -->|"проверка подписки"| PC
+    PC   -->|"тир + гранты"| GW
+    PR   -->|"синхронизация подписок"| PC
 ```
 
 ---
@@ -362,20 +370,20 @@ graph LR
 
 ```mermaid
 graph TD
-    LMS([LMS]) -->|raw events| AH
-    Club([Club]) -->|raw events| AH
-    Bot([AIST Bot]) -->|raw events| AH
-    WakaTime([WakaTime]) -->|raw events| AH
-    IWE([IWE / exocortex]) -->|raw events| AH
+    LMS([LMS]) -->|"события"| AH
+    Club([Club]) -->|"события"| AH
+    Bot([AIST Bot]) -->|"события"| AH
+    WakaTime([WakaTime]) -->|"события"| AH
+    IWE([IWE / exocortex]) -->|"события"| AH
 
     AH[(#4 activity-hub)]
 
-    AH -->|LEARNING_HISTORY| Profiler([Профайлер R28])
-    Profiler -->|IND.3.4 ступени ролей| DT[(#2 digital-twin)]
+    AH -->|"история обучения"| Profiler([Профайлер])
+    Profiler -->|"показатели развития"| DT[(#2 digital-twin)]
 
-    DT -->|профиль + ступени| Tailor([Портной])
-    DT -->|ступени + степень| Navigator([Навигатор])
-    DT -->|контекст| Bot
+    DT -->|"профиль"| Tailor([Портной])
+    DT -->|"профиль"| Navigator([Навигатор])
+    DT -->|"контекст"| Bot
 ```
 
 > Степень DEG назначается вручную методсоветом МИМ — не через поток событий.
@@ -395,15 +403,14 @@ graph LR
     MB[(#7 metabase)]
     HL[(#8 health)]
 
-    AH -- "ступени ролей (Профайлер)" --> DT
-    AH -- "chat_id → ory_id" --> PC
-    PR -- "subscription-sync" --> PC
-    AB -- "проверка прав" --> PC
+    AH -- "показатели развития" --> DT
+    AH -- "связка chat_id → ory_id" --> PC
+    PR -- "синхронизация подписок" --> PC
     AB -- "чтение профиля" --> DT
-    KN -- "mastery концептов" --> DT
+    KN -- "освоение концептов" --> DT
     PR -. "финансы (RLS)" .-> MB
     AH -. "события (без PII)" .-> MB
-    HL -. "аптайм + ошибки (RO)" .-> MB
+    HL -. "аптайм (только чтение)" .-> MB
 ```
 
 > Сплошная = запись. Пунктир = чтение (RO).
