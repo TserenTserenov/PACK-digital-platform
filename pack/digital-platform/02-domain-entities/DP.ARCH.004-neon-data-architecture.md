@@ -142,6 +142,7 @@ Neon Project: aisystant
 <summary><b>4. Архитектура Neon и связи с системами</b></summary>
 
 **Структура раздела:**
+- **4.0** — обзорная диаграмма: все системы и базы в одном виде
 - **4.1** — 7 баз и внешние системы (что куда пишет/читает)
 - **4.2** — реестр всех систем (таблица)
 - **4.3** — поток идентичности (Ory → Gateway → platform-core)
@@ -149,6 +150,102 @@ Neon Project: aisystant
 - **4.5** — связи между базами данных (только межбазовый граф)
 
 Все стрелки — API / события / cron, не FK.
+
+---
+
+### 4.0 Обзорная диаграмма
+
+> Все внешние системы, 8 баз Neon и читатели в одном виде. Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — в 4.1–4.5.
+
+```mermaid
+flowchart LR
+    classDef ext    fill:#f5f0e8,stroke:#b0956a,color:#333
+    classDef db_gw  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef db_prod fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef db_infra fill:#f3f4f6,stroke:#9ca3af,color:#374151
+    classDef reader fill:#fef9c3,stroke:#ca8a04,color:#713f12
+
+    %% ── Внешние источники ──────────────────────────────────────
+    subgraph SRC ["Внешние системы"]
+        direction TB
+        Kratos(["Ory Kratos\n(идентичность)"]):::ext
+        Keto(["Ory Keto\n(RBAC)"]):::ext
+        LMS(["LMS Aisystant"]):::ext
+        Club(["Discourse Club"]):::ext
+        Waka(["WakaTime"]):::ext
+        GHApp(["GitHub App"]):::ext
+        Pay(["YooKassa / Stripe\n/ TG Stars"]):::ext
+        Bot(["AIST Bot"]):::ext
+        WebApp(["Web App"]):::ext
+        IWE(["IWE / exocortex"]):::ext
+        UptimeC(["uptime-collector\n(GHA cron)"]):::ext
+    end
+
+    %% ── 8 баз Neon ─────────────────────────────────────────────
+    subgraph NEON ["Neon (8 баз)"]
+        direction TB
+        PC[("#1 platform-core\nidentity · subscriptions")]:::db_gw
+        DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
+        KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
+        AH[("#4 activity-hub\nevents Bronze→Gold")]:::db_prod
+        PR[("#5 payment-registry\nфинансы")]:::db_prod
+        AB[("#6 aist-bot\nFSM · токены · QA")]:::db_prod
+        MB[("#7 metabase\nслужебные таблицы")]:::db_infra
+        HL[("#8 health\nаптайм · ошибки")]:::db_infra
+    end
+
+    %% ── Читатели / аналитика ────────────────────────────────────
+    subgraph READ ["Аналитика и агенты"]
+        direction TB
+        GW(["gateway-mcp\n(CF Worker)"]):::reader
+        KnMCP(["knowledge-mcp\n(CF Worker)"]):::reader
+        DtMCP(["digital-twin-mcp"]):::reader
+        Profiler(["Профайлер R28"]):::reader
+        Tailor(["Портной"]):::reader
+        Navi(["Навигатор"]):::reader
+        Metabase(["Metabase UI\n(дашборды)"]):::reader
+        Grafana(["Grafana\n(мониторинг)"]):::reader
+        Langfuse(["Langfuse\n(AI observability)"]):::reader
+    end
+
+    %% ── Записи во внешние системы ───────────────────────────────
+    Kratos -->|"webhook: identity"| PC
+    Keto -.->|"RBAC check"| PC
+    LMS -->|"raw events"| AH
+    LMS -->|"DEG (ручная)"| DT
+    Club -->|"raw events"| AH
+    Waka -->|"raw events"| AH
+    GHApp -->|"installations"| KN
+    Pay -->|"платежи"| PR
+    Bot -->|"FSM · токены · QA"| AB
+    Bot -->|"raw events"| AH
+    Bot -->|"error logs"| HL
+    WebApp -->|"events"| AH
+    IWE -->|"raw events"| AH
+    UptimeC -->|"аптайм · инциденты"| HL
+
+    %% ── Чтение из баз (аналитика / агенты) ─────────────────────
+    GW -.->|"subscription check"| PC
+    KnMCP -.->|"search · ingest"| KN
+    DtMCP -.->|"профиль"| DT
+    Profiler -.->|"LEARNING_HISTORY"| AH
+    Profiler -->|"IND.3.*"| DT
+    Tailor -.->|"профиль + ступени"| DT
+    Navi -.->|"ступени"| DT
+    Metabase -.->|"RLS агрегаты"| PR
+    Metabase -.->|"без PII"| AH
+    Grafana -.->|"read-only"| HL
+    Langfuse -.->|"trace_id correlation"| AH
+
+    %% ── Межбазовые потоки ───────────────────────────────────────
+    PR -->|"subscription-sync cron"| PC
+    AH -->|"IDENTITY_MAP"| PC
+    AB -.->|"проверка прав"| PC
+    KN -->|"mastery концептов"| DT
+    PR -.->|"финансы (RLS)"| MB
+    AH -.->|"события (без PII)"| MB
+    HL -.->|"аптайм"| MB
+```
 
 ---
 
