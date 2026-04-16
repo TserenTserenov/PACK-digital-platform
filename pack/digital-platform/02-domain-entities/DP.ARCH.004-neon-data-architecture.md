@@ -100,6 +100,7 @@ Neon Project: aisystant
 │                             ⚠ кандидат на замену ClickHouse/TimescaleDB
 │
 ├── DB #5: payment-registry ← FINANCE_PAYMENTS + FINANCE_PAYMENTS_AUDIT_LOG
+│                             + PROCESSED_WEBHOOKS (WP-246)
 │                             + PAYMENTS_SYNC_STATE + SUBSCRIPTION_GRANTS_SYNC_STATE
 │                             + IMPORT_STAGING_PAYMENT + IMPORT_STAGING_CHARGEOFF
 │
@@ -173,6 +174,7 @@ flowchart LR
         Waka(["WakaTime"]):::ext
         GHApp(["GitHub App"]):::ext
         Pay(["YooKassa / Stripe\n/ TG Stars"]):::ext
+        PayRcv(["Payment Receiver\n(CF Worker, WP-246)"]):::reader
         Bot(["AIST Bot"]):::ext
         WebApp(["Web App"]):::ext
         IWE(["IWE / exocortex"]):::ext
@@ -215,7 +217,9 @@ flowchart LR
     Club -->|"события"| AH
     Waka -->|"события"| AH
     GHApp -->|"установки"| KN
-    Pay -->|"платежи"| PR
+    Pay -->|"webhook"| PayRcv
+    PayRcv -->|"платежи + дедупликация"| PR
+    PayRcv -.->|"forward (стадия 1)"| LMS
     Bot -->|"состояние · токены"| AB
     Bot -->|"события"| AH
     Bot -->|"ошибки"| HL
@@ -286,8 +290,10 @@ AIST Bot + IWE/exocortex ───→    RAW_EVENTS         Metabase (без PII
 transform-worker ───────────→    USER_EVENTS
                                  LEARNING_HISTORY
 
-YooKassa / Stripe / TG Stars→ #5 payment-reg.  ←── Metabase (RLS)
-incremental-sync (Aisystant)→    FINANCE_PAYMENTS   subscription-sync cron
+Payment Receiver (CF Worker)→ #5 payment-reg.  ←── Metabase (RLS)
+  (webhook от YooKassa/     →    FINANCE_PAYMENTS   subscription-sync cron
+   Stripe/TG Stars/Paybox)  →    PROCESSED_WEBHOOKS
+incremental-sync (Aisystant)→    (стадия 2: только сверка)
 Directus (ручные правки) ───→
 
 AIST Bot (только бот) ──────→ #6 aist-bot      ←── AIST Bot
@@ -330,7 +336,8 @@ Anthropic Status API ───────→    UPTIME_CHECKS
 | LMS Aisystant | ✅ внешний | — | AH, DT (DEG) |
 | Discourse Club | ✅ внешний | — | AH |
 | WakaTime | ✅ внешний | — | AH |
-| Stripe / YooKassa / TG Stars | ✅ внешний | — | PR |
+| Stripe / YooKassa / TG Stars | ✅ внешний | — | → Payment Receiver |
+| Payment Receiver (CF Worker) | 🔲 WP-246 | — | PR (finance_payments, processed_webhooks) |
 | Langfuse | ✅ внешний | — | — (own store) |
 | Nudge / Уведомления | 🟡 | DT, AH | AH |
 | Composer MCP (FSM) | 🟡 | AB | AB |
@@ -794,6 +801,15 @@ erDiagram
         timestamptz charged_off_at
         timestamptz updated_at
         timestamptz archived_at
+        jsonb       raw_payload     "оригинальный webhook для аудита (WP-246)"
+    }
+
+    PROCESSED_WEBHOOKS {
+        text        event_id        PK  "provider payment ID"
+        text        provider        "yookassa|stripe|paybox|tilda"
+        timestamptz received_at     "DEFAULT now()"
+        boolean     processed       "DEFAULT false"
+        text        note            "idempotency: TTL >72h (Stripe retry window). WP-246"
     }
 
     FINANCE_PAYMENTS_AUDIT_LOG {
@@ -841,6 +857,7 @@ erDiagram
     }
 
     FINANCE_PAYMENTS ||--o{ FINANCE_PAYMENTS_AUDIT_LOG : "change log"
+    PROCESSED_WEBHOOKS ||--o| FINANCE_PAYMENTS : "dedup before insert"
     IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
     IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 ```
@@ -1107,7 +1124,7 @@ erDiagram
 | #2 digital-twin | dt-mcp (запись по API), Профайлер R28 (ежедневный расчёт IND.3.* из #4 LEARNING_HISTORY), LMS (степень DEG вручную методсовет МИМ) | dt-mcp (чтение профиля), бот `/twin` (через dt-mcp), knowledge-mcp (контекст пользователя), Навигатор/Портной (через dt-mcp) |
 | #3 knowledge | knowledge-mcp ingest (платформенный и персональный контент), GitHub App webhook → knowledge-mcp | knowledge-mcp search, dt-mcp (контекст концептов) |
 | #4 activity-hub | collectors: LMS + Club + WakaTime + IWE/exocortex + Bot (RAW_EVENTS), transform-worker (RAW→USER→LEARNING) | transform-worker, Профайлер R28 (читает LEARNING_HISTORY для расчёта IND.3.*), Metabase (RO, без PII) |
-| #5 payment-registry | `incremental-sync.sh` cron (из Aisystant LMS), YooKassa / Stripe / TG Stars webhooks, бот (seminar/workshop записи) | Metabase (`metabase_reader` + RLS, только агрегаты), `subscription-sync` cron (читает FINANCE_PAYMENTS → пишет в #1) |
+| #5 payment-registry | **Payment Receiver** CF Worker (`payment_receiver_writer`: INSERT finance_payments + processed_webhooks, WP-246), `incremental-sync.sh` cron (стадия 2: только сверка), бот (seminar/workshop записи) | Metabase (`metabase_reader` + RLS, только агрегаты), `subscription-sync` cron (читает FINANCE_PAYMENTS → пишет в #1) |
 | #6 aist-bot | только AIST Bot (FSM state, токены, история QA) | только AIST Bot; Composer MCP (читает состояние FSM) |
 | #7 metabase | Metabase internal (служебные таблицы) | Metabase UI, дашборды читают #5 и #4 напрямую (не через #7) |
 | #8 health | uptime-collector cron (GHA, UPTIME_CHECKS + INCIDENTS), AIST Bot error_handler (ERROR_LOGS, REQUEST_TRACES, PENDING_FIXES) | Grafana (RO, дашборды здоровья), алерты → TG bot |
@@ -1224,7 +1241,8 @@ erDiagram
 
 | Таблица | Назначение | Статус | Источник |
 |---------|-----------|--------|----------|
-| FINANCE_PAYMENTS | Реестр всех транзакций (YooKassa, Stripe, ручные). Permanent. | ✅ | `public.finance_payments`, WP-183. Данные из Aisystant CRM (35 879 строк) |
+| FINANCE_PAYMENTS | Реестр всех транзакций (YooKassa, Stripe, ручные). Permanent. Колонка `raw_payload JSONB` (WP-246) для аудита оригинальных webhook. Writer: Payment Receiver (`payment_receiver_writer`), incremental-sync (сверка), бот. | ✅ | `public.finance_payments`, WP-183. Данные из Aisystant CRM (35 879 строк) |
+| PROCESSED_WEBHOOKS | Idempotency-дедупликация webhook'ов. PK = event_id (provider payment ID). TTL >72h (Stripe retry window). Writer: Payment Receiver. | 🆕 Создать | `public.processed_webhooks`, WP-246 |
 | FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | 🆕 Создать | WP-237 |
 | PAYMENTS_SYNC_STATE | Ватерmarк импорта из Aisystant. | ✅ | `public.finance_payments_sync_state`, WP-183 |
 | SUBSCRIPTION_GRANTS_SYNC_STATE | Ватерmarк синхронизации грантов. | ✅ | WP-231 |
@@ -1355,6 +1373,7 @@ erDiagram
 | FINANCE_PAYMENTS | Постоянно | Annual archive |
 | FINANCE_PAYMENTS_AUDIT_LOG | 7 лет | Archive (compliance) |
 | QA_HISTORY | 180 дней | DELETE cron |
+| PROCESSED_WEBHOOKS | 7 дней | DELETE cron (TTL >72h Stripe retry, запас до 7д) |
 | NOTIFICATION_LOG | 30 дней | DELETE cron |
 | SYNC_LOG | 30 дней | DELETE cron |
 | USER_STATE (неактивные) | 90 дней | soft-delete (is_inactive=true) |
@@ -1374,6 +1393,23 @@ erDiagram
 **Writer:** uptime-collector (GHA cron, каждые 5 мин) + AIST Bot error_handler. **Reader:** Grafana (RO).
 
 **Трудозатраты:** ~20h. Приоритет: средний.
+
+---
+
+### WP-246 — Payment Receiver (прямые платежи)
+
+**Проблема:** Все платежи проходят через Aisystant (pull-sync каждые 5-15 мин). Aisystant = единая точка отказа; задержка 10-40 мин от оплаты до начисления подписки. При недоступности Aisystant платежи теряются в окне.
+
+**Решение:** Payment Receiver — Cloudflare Worker, принимает webhook от провайдеров (YooKassa, Stripe, Paybox, Tilda, TG Stars) и пишет напрямую в Neon. 3-стадийная модель перехода (Strangler Fig):
+- **Стадия 0 (текущая):** ch1-5 через Aisystant pull-sync
+- **Стадия 1 (переходная):** Payment Receiver принимает webhook → INSERT в Neon + forward в Aisystant (Дима продолжает работать)
+- **Стадия 2 (целевая):** Aisystant читает из Neon (SSOT). Forward-proxy убирается, incremental-sync → только reconciliation
+
+**Новые артефакты в Neon:** таблица `PROCESSED_WEBHOOKS` (idempotency), колонка `raw_payload JSONB` в FINANCE_PAYMENTS (аудит webhook), роль `payment_receiver_writer` (INSERT finance_payments + processed_webhooks).
+
+**Волны миграции:** ch6 (YooKassa-бот) → ch3 (Stripe) → ch1,2,4,5 (YooKassa-LMS).
+
+**Трудозатраты:** ~33h. Приоритет: высокий. ArchGate: 6✅/1⚠️. Концепция: DP.CONCEPT.004. SC: DP.SC.120.
 
 ---
 
@@ -1414,8 +1450,9 @@ erDiagram
 | WP-240 | Настроить retention policy для всех баз (pg_partman + cron + S3 archive) | 16h | средний |
 | WP-241 | Настроить backup / DR (PITR per-database + pg_dump → S3) | 14h | средний |
 | WP-244 | Создать DB #8 health: SERVICE_REGISTRY, UPTIME_CHECKS, UPTIME_INCIDENTS, ANTHROPIC_STATUS_SNAPSHOTS + перенести ERROR_LOGS/REQUEST_TRACES/PENDING_FIXES из WP-45 | ~20h | средний |
+| WP-246 | Payment Receiver (CF Worker): прямой приём webhook от провайдеров → Neon. 3-стадийный Strangler Fig (pull → push+forward → Neon SSOT). Новая таблица PROCESSED_WEBHOOKS, роль payment_receiver_writer | ~33h | высокий |
 | WP-215 | Разделение инфраструктуры мир/Россия: реализовать эту схему в двух инстансах, найти альтернативу Neon для РФ-контура (Neon — US-hosted, GDPR/152-ФЗ), определить стратегию синхронизации | ~40h | высокий |
-| | **Итого** | **~148h** | |
+| | **Итого** | **~181h** | |
 
 **Критический путь:**
 1. WP-234 + WP-235 — безопасность и авторизация (параллельно, ~2 нед)
