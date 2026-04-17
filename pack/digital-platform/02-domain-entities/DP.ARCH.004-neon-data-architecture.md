@@ -66,6 +66,19 @@ OAuth-конфигурация (`USER_INTEGRATIONS`) хранится в `platfo
 **П6. Платежи — изолированный реестр**
 `payment-registry` — единственная база с финансовыми транзакциями. Metabase читает только через `metabase_reader` с RLS (агрегаты без PII), прямого доступа у других сервисов нет.
 
+**П6.1. Классы чувствительности данных (→ WP-212 Ф9, B7.3)**
+
+Для принятия решений о RLS, ролях и шифровании различать четыре класса:
+
+| Класс | Примеры | Писатель | Читатель | Требования |
+|-------|---------|----------|----------|-------------|
+| `public` | агрегаты, справочники (каналы, валюты, статусы) | сервисы | все роли, Metabase | — |
+| `PII` | email, telegram_id, ory_id, имя, чат | владеющий сервис | владелец + агрегаторы с обезличиванием | RLS по user_id; Metabase — только агрегаты |
+| `payment_credentials` 🔴 | `autopay_data` (payment_method_id YooKassa), токены рекуррентных списаний | incremental-sync LMS→registry | **никто напрямую** (см. ниже) | Строже PII: REVOKE для Metabase и Бота; аудит SELECT; рассмотреть шифрование at-rest; ротация при отписке |
+| `secrets` | API-ключи, webhook secrets, Ory client secrets | деплой | процесс, владеющий секретом | Не в Neon — в Railway/CF secrets |
+
+**Правило класса `payment_credentials`:** зная значение + API-ключ провайдера (YooKassa), злоумышленник может инициировать произвольные списания с карты. Поэтому: (1) минимизировать зеркалирование (читать из LMS, а не копировать в registry — открытый вопрос); (2) если копия нужна — исключительно для аудита, read restricted; (3) никаких агрегаций/JOIN с участием этой колонки в Metabase.
+
 **П7. `SUBSCRIPTION_GRANTS` в `platform-core` — gateway-паттерн**
 `payment-registry` синхронизирует гранты в `platform-core` через cron (push-based sync). Все сервисы проверяют права только здесь — единая точка авторизации, не дублирующая логику.
 
@@ -802,6 +815,8 @@ erDiagram
         timestamptz updated_at
         timestamptz archived_at
         jsonb       raw_payload     "оригинальный webhook для аудита (WP-246)"
+        bool        autopay         "🔴 подписка с автосписанием (source-of-truth в subscription.autopay LMS)"
+        text        autopay_data    "🔴 CRITICAL: payment_method_id YooKassa. Class: payment_credentials (строже PII). См. §4.2"
     }
 
     PROCESSED_WEBHOOKS {
@@ -861,6 +876,31 @@ erDiagram
     IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
     IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 ```
+
+#### 🔴 Autopay subsystem (подсистема автосписаний)
+
+**Что это.** Автоматическое списание с карты пользователя без его участия и подтверждения, при истечении подписки. Реализовано в LMS (Aisystant), не в `payment-registry`.
+
+**Поток данных:**
+
+1. **Источник:** LMS таблица `subscription` (колонка `autopay boolean`) — флаг «включено автопродление». Таблица `payment` (колонка `autopay_data varchar(1023)`) — payment_method_id YooKassa (сохранённая карта).
+2. **Триггер:** `PaymentSchedulerService.autopayCheck()` — cron 2 раза в день (10:00, 21:00 МСК).
+3. **Отбор:** `subscriptionRepository.findAllByToDateAndAutopay(today, true)` — подписки, истекающие сегодня, с включённым autopay.
+4. **Списание:** `PaymentUtil.createPayment()` → YooKassa API POST `/payments` с `payment_method_id` из `autopay_data` + `capture:true`. Без участия пользователя.
+5. **Импорт в `payment-registry`:** `incremental-sync.sh` каждые 10 мин копирует `payment.autopay` и `payment.autopay_data` в `finance_payments` (readonly-зеркало).
+
+**Критический риск (B7.3 Security Gate).** `autopay_data` (payment_method_id) + знание YooKassa API-ключа → произвольное списание с карты пользователя на произвольную сумму. Идемпотентность через `Idempotence-Key` — собственный UUID, от злоумышленника не защищает.
+
+**Требования (WP-212, WP-237):**
+- Класс доступа: `payment_credentials` (строже PII). См. §4.2.
+- Writer в `finance_payments.autopay_data`: только `incremental-sync` cron (`aist_me_bot_writer`).
+- Reader: **никто напрямую.** Metabase — `REVOKE`, Бот — `REVOKE`. Единственный легитимный читатель — процесс автосписания в LMS (через LMS-локальную `payment.autopay_data`).
+- Аудит чтения колонки (Postgres log_statement на SELECT).
+- Ротация: при отписке пользователя (`subscription.autopay=false`) — `autopay_data` в LMS должен обнуляться, в `finance_payments` остаётся только в историческом аудите.
+
+**Открытые вопросы (для WP-212 Ф9):**
+- Зеркалирование `autopay_data` в `finance_payments` — нужно ли вообще? Если единственный потребитель — LMS, то читать из LMS, а в `finance_payments` писать только факт списания без `payment_method_id`.
+- Шифрование at-rest колонки `autopay_data` (pgcrypto / столбцовое шифрование).
 
 ---
 
