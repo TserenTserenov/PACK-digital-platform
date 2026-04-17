@@ -74,10 +74,10 @@ OAuth-конфигурация (`USER_INTEGRATIONS`) хранится в `platfo
 |-------|---------|----------|----------|-------------|
 | `public` | агрегаты, справочники (каналы, валюты, статусы) | сервисы | все роли, Metabase | — |
 | `PII` | email, telegram_id, ory_id, имя, чат | владеющий сервис | владелец + агрегаторы с обезличиванием | RLS по user_id; Metabase — только агрегаты |
-| `payment_credentials` 🔴 | `autopay_data` (payment_method_id YooKassa), токены рекуррентных списаний | incremental-sync LMS→registry | **никто напрямую** (см. ниже) | Строже PII: REVOKE для Metabase и Бота; аудит SELECT; рассмотреть шифрование at-rest; ротация при отписке |
+| `payment_credentials` | `autopay_data` (payment_method_id YooKassa), токены рекуррентных списаний | `payment-scheduler` + `incremental-sync` (до cutover) | `payment-scheduler` (формирование запроса в YooKassa) | Строже PII: REVOKE для Metabase и Бота; аудит SELECT; рассмотреть шифрование at-rest; unlink + обнуление при отмене пользователем |
 | `secrets` | API-ключи, webhook secrets, Ory client secrets | деплой | процесс, владеющий секретом | Не в Neon — в Railway/CF secrets |
 
-**Правило класса `payment_credentials`:** зная значение + API-ключ провайдера (YooKassa), злоумышленник может инициировать произвольные списания с карты. Поэтому: (1) минимизировать зеркалирование (читать из LMS, а не копировать в registry — открытый вопрос); (2) если копия нужна — исключительно для аудита, read restricted; (3) никаких агрегаций/JOIN с участием этой колонки в Metabase.
+**Правило класса `payment_credentials`:** зная значение + API-ключ провайдера (YooKassa), можно инициировать произвольное списание с карты. Поэтому: (1) writer и reader на уровне ролей явно ограничены; (2) никаких агрегаций/JOIN с участием этой колонки в Metabase; (3) при отмене автопродления пользователем — unlink токена в YooKassa + обнуление колонки в Neon. До cutover WP-246 Ф15 source-of-truth для `autopay_data` — LMS; после — Neon.
 
 **П7. `SUBSCRIPTION_GRANTS` в `platform-core` — gateway-паттерн**
 `payment-registry` синхронизирует гранты в `platform-core` через cron (push-based sync). Все сервисы проверяют права только здесь — единая точка авторизации, не дублирующая логику.
@@ -815,8 +815,8 @@ erDiagram
         timestamptz updated_at
         timestamptz archived_at
         jsonb       raw_payload     "оригинальный webhook для аудита (WP-246)"
-        bool        autopay         "🔴 подписка с автосписанием (source-of-truth в subscription.autopay LMS)"
-        text        autopay_data    "🔴 CRITICAL: payment_method_id YooKassa. Class: payment_credentials (строже PII). См. §4.2"
+        bool        autopay         "подписка с автосписанием (source-of-truth в LMS subscription.autopay до cutover WP-246 Ф15)"
+        text        autopay_data    "JSON payment_method_id YooKassa. Class: payment_credentials (§2 П6.1)"
     }
 
     PROCESSED_WEBHOOKS {
@@ -877,30 +877,39 @@ erDiagram
     IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 ```
 
-#### 🔴 Autopay subsystem (подсистема автосписаний)
+#### Autopay subsystem (подсистема автосписаний)
 
-**Что это.** Автоматическое списание с карты пользователя без его участия и подтверждения, при истечении подписки. Реализовано в LMS (Aisystant), не в `payment-registry`.
+**Что это.** Автоматическое списание с сохранённой карты пользователя при истечении подписки, без его участия в момент списания. Используется YooKassa-механизм `save_payment_method=true` + повторный POST `/v3/payments` с сохранённым `payment_method_id`.
 
-**Поток данных:**
+**Текущее состояние (промежуточное, owner — LMS):**
 
-1. **Источник:** LMS таблица `subscription` (колонка `autopay boolean`) — флаг «включено автопродление». Таблица `payment` (колонка `autopay_data varchar(1023)`) — payment_method_id YooKassa (сохранённая карта).
-2. **Триггер:** `PaymentSchedulerService.autopayCheck()` — cron 2 раза в день (10:00, 21:00 МСК).
-3. **Отбор:** `subscriptionRepository.findAllByToDateAndAutopay(today, true)` — подписки, истекающие сегодня, с включённым autopay.
-4. **Списание:** `PaymentUtil.createPayment()` → YooKassa API POST `/payments` с `payment_method_id` из `autopay_data` + `capture:true`. Без участия пользователя.
-5. **Импорт в `payment-registry`:** `incremental-sync.sh` каждые 10 мин копирует `payment.autopay` и `payment.autopay_data` в `finance_payments` (readonly-зеркало).
+1. **Источники данных:** LMS таблица `subscription` (колонка `autopay boolean`) — флаг автопродления. Таблица `payment` (колонка `autopay_data varchar(1023)`) — JSON `{"type":"bank_card","payment_method_id":"...","card.last4":"1234"}`, сохранённый при первом платеже.
+2. **Триггер:** `PaymentSchedulerService.autopayCheck10/21` — Spring `@Scheduled` cron 10:00 и 21:00 МСК.
+3. **Отбор:** `subscriptionRepository.findAllByToDateAndAutopay(today, true)` — подписки, истекающие сегодня.
+4. **Списание:** `PaymentUtil.createAutoPaymentForSubscription` → POST `/v3/payments` с `payment_method_id` + `capture:true` + `save_payment_method:true`. Merchant — один на всю систему (`Keys.getYoAuth()`, ИП).
+5. **Подтверждение:** webhook `/yoo/hook` + polling `updateYooPayments` каждые 30 мин. При `succeeded` → `processPayment` продлевает подписку.
+6. **Нотификации:** `paymentNotificationsCheck` шлёт письма за 7/3/1 день до списания + `sendPaymentAutoExtendMessage` после успеха. При провале письма нет.
+7. **Отмена:** `POST /disable-autopay` ставит `subscription.autopay=false`. YooKassa unlink API **не вызывается** — токен остаётся действительным на стороне YooKassa.
+8. **Зеркало в `payment-registry`:** `incremental-sync.sh` каждые 10 мин копирует `payment.autopay` и `payment.autopay_data` в `finance_payments` (пока read-only, не используется на чтение).
 
-**Критический риск (B7.3 Security Gate).** `autopay_data` (payment_method_id) + знание YooKassa API-ключа → произвольное списание с карты пользователя на произвольную сумму. Идемпотентность через `Idempotence-Key` — собственный UUID, от злоумышленника не защищает.
+**Целевое состояние (после миграции, owner — мы):**
 
-**Требования (WP-212, WP-237):**
-- Класс доступа: `payment_credentials` (строже PII). См. §4.2.
-- Writer в `finance_payments.autopay_data`: только `incremental-sync` cron (`aist_me_bot_writer`).
-- Reader: **никто напрямую.** Metabase — `REVOKE`, Бот — `REVOKE`. Единственный легитимный читатель — процесс автосписания в LMS (через LMS-локальную `payment.autopay_data`).
-- Аудит чтения колонки (Postgres log_statement на SELECT).
-- Ротация: при отписке пользователя (`subscription.autopay=false`) — `autopay_data` в LMS должен обнуляться, в `finance_payments` остаётся только в историческом аудите.
+Подсистема **портируется**, не проектируется заново. Механизм рабочий; меняется только место исполнения:
 
-**Открытые вопросы (для WP-212 Ф9):**
-- Зеркалирование `autopay_data` в `finance_payments` — нужно ли вообще? Если единственный потребитель — LMS, то читать из LMS, а в `finance_payments` писать только факт списания без `payment_method_id`.
-- Шифрование at-rest колонки `autopay_data` (pgcrypto / столбцовое шифрование).
+| LMS (текущее) | Наш стек (целевое) |
+|---|---|
+| `PaymentSchedulerService.@Scheduled` | CF Worker `payment-scheduler` (Cloudflare Cron Triggers) |
+| LMS Postgres `subscription` + `payment` | Neon `subscription_grants` + `finance_payments.autopay_data` |
+| `Keys.getYoAuth()` в LMS env | CF Secrets — **те же ключи** (merchant не меняется, токены валидны) |
+| `YooWebHook → updateYooPayments` | `payment-receiver` CF Worker (Ф1 WP-246 DONE) |
+| `MailService.sendPayment*Message` | Email-провайдер бота |
+| `POST /disable-autopay` (без unlink) | Новый endpoint + `DELETE /v3/payment_methods/{id}` (добавляем unlink) |
+
+**Критичное операционное условие:** merchant-аккаунт YooKassa у LMS и у нас — один и тот же (ИП). Сохранённые `payment_method_id` остаются валидными при переезде. Пользователи перепривязывать карту не должны. В день cutover LMS cron отключается (`@Scheduled` комментируется в `PaymentSchedulerService.java:121-130`), наш включается. Два cron'а одновременно = двойное списание.
+
+**Обработка `payment_credentials` (класс доступа §2 П6.1):** `autopay_data` содержит `payment_method_id` + `card.last4`. Зная эти данные плюс YooKassa API-ключ, можно инициировать произвольное списание. Поэтому: writer — только `payment-scheduler` и `incremental-sync`; reader — только `payment-scheduler` (для формирования запроса); Metabase и Бот — `REVOKE`; при отмене пользователем — вызов YooKassa unlink API + обнуление колонки; рассмотреть шифрование at-rest на Ф11 WP-246.
+
+**Миграция:** → WP-246 Стадия 3 (Ф10–Ф16, ~14h). Gap-фиксы по ходу портирования: письмо при провале списания, retry-логика, unlink API.
 
 ---
 
