@@ -6,7 +6,7 @@ severity: major
 status: draft
 summary: "Каталог повторяющихся паттернов провалов Claude-агента в рамках IWE. Корень дерева защит: паттерн → правило → детектор → Capture. Плоская нумерация P1-PN, постепенное развёртывание в отдельные DP.FM.XXX по мере обкатки"
 created: 2026-04-11
-last_updated: 2026-04-11
+last_updated: 2026-04-17
 related:
   prevented_by: [DP.EXOCORTEX.001]
   references: [DP.FM.002, DP.FM.003, DP.FM.005, DP.FM.006, DP.FM.007, DP.KR.001]
@@ -46,6 +46,7 @@ tags: [agent, failure-mode, catalog, capture-bus, wp-217]
 | **P8** | Слой путается (L1/L2/L3) | частный | auto | — |
 | **P9** | Срезание шагов при составной команде | частный | semi-auto | — |
 | **P10** | Пропуск IntegrationGate при новом инструменте | частный | semi-auto | — |
+| **P11** | Redesign-before-inspection (новый дизайн вместо портирования) | частный | semi-auto | — |
 
 **Развёрнутый FM** — паттерн имеет собственный файл `DP.FM.XXX` с полным описанием (Definition / Symptoms / Root Causes / Detection / Correction). Краткое описание ниже — для паттернов без развёрнутого FM.
 
@@ -169,6 +170,30 @@ tags: [agent, failure-mode, catalog, capture-bus, wp-217]
 
 ---
 
+### P11 — Redesign-before-inspection (новый дизайн вместо портирования)
+
+**Симптом:** агент получает замечание о «дыре» в архитектуре (missing feature, security gap, недокументированный компонент), которая закрывается legacy-системой, запланированной к замене, — и сразу запускает проектирование новой подсистемы (ArchGate, Service Clause, 7 измерений дизайна). Пропускает шаг «проверить, как это работает сейчас в legacy». Ключевые маркеры: «🔴 CRITICAL», «нужна новая подсистема», «требуется отдельный РП с IntegrationGate».
+
+**Отличие от P10 (пропуск IntegrationGate):** P10 — агент знает про IntegrationGate, но сокращает последовательность фаз. P11 — агент формально следует IntegrationGate, но применяет его к неверной задаче: проектирует с нуля там, где нужно портирование. Корень — замечание о разрыве читается как «нужна новая функциональность», а не «есть ли уже рабочий механизм».
+
+**Отличие от P6 (Snapshot ДО действия):** P6 про состояние БД/файлов (структурный snapshot). P11 про состояние **поведения** legacy-компонента (функциональный snapshot: cron/API/merchant/токены).
+
+**Пример инцидента:** WP-228 сессия 17 апр 2026. Дима указал на отсутствующие `autopay`/`autopay_data` в Data Map + security-риск `payment_method_id`. Первая итерация агента — security-пафос («🔴 CRITICAL», «нужна новая подсистема с ArchGate», 7 измерений дизайна). Пользователь двумя вопросами остановил: (1) «Нужно всё это решать тут» (раскрыл, что LMS временная), (2) «Проверь, как сейчас функционируют автосписания у Димы?». Субагент за 15 мин показал: механизм LMS рабочий (Spring `@Scheduled` + YooKassa `save_payment_method` + POST `/v3/payments` с `payment_method_id`), merchant-аккаунт один, токены валидны при переезде. Правильное решение — портировать (+16h, WP-246 Стадия 3 Ф10-Ф16), не проектировать с нуля (+40-60h).
+
+**Правила-источники:**
+- `memory/feedback_behaviour.md` Правило 10 — «Проверить существующее ДО проектирования нового»
+- `CLAUDE.md §2` — `LegacyPortGate`: Pre-action Gate для замены legacy-компонента
+- `.claude/rules/distinctions.md` AUTHOR-ONLY — различение «Портирование ≠ новый дизайн»
+
+**Уровень детекции:** semi-auto.
+**Детектор:** будущий `detector_legacy_port.sh` — при обнаружении в контексте сессии замечания о legacy-компоненте (триггеры: упоминание LMS/@Scheduled/legacy-сервиса + обсуждение замены) проверить, была ли запущена функциональная проверка (субагент / чтение кода legacy) ДО предложения нового дизайна.
+
+**Защита:** `LegacyPortGate` в CLAUDE.md §2 Pre-action Gates — при замене legacy-компонента обязательный первый шаг «15-мин субагент: как это работает сейчас?». Решение «портировать vs новый дизайн» — только после функционального snapshot.
+
+**Тест перед коммитом решения:** «Могу ли я перечислить 3 компонента существующего механизма (владелец кода, API/вендор, расписание/триггер)? Если нет — я проектирую в вакууме».
+
+---
+
 ## Локализация артефактов (OwnerIntegrity)
 
 | Артефакт | Место | Принцип |
@@ -207,6 +232,7 @@ tags: [agent, failure-mode, catalog, capture-bus, wp-217]
 | **P7** | детектор `detector_confirmation.sh` (будущий) | Stop hook: regex на output агента | `<репо-current>/docs/incidents/` | нет |
 | **P8** | детектор `detector_layer_leak.sh` (будущий) | PostToolUse(Write) в L1-путь с персональными константами | `FMT-exocortex-template/docs/incidents/` | нет |
 | **P9** | детектор `detector_compound_command.sh` (будущий) | UserPromptSubmit: составная команда → проверка shutdown-sequence | `<репо-current>/docs/incidents/` | нет |
+| **P11** | детектор `detector_legacy_port.sh` (будущий) | UserPromptSubmit: упоминание legacy-компонента + «новый дизайн» без предшествующей функциональной проверки | `<репо-целевого-домена>/docs/incidents/` | нет |
 
 **Принципы Write Model:**
 
@@ -272,6 +298,7 @@ tags: [agent, failure-mode, catalog, capture-bus, wp-217]
 | Родительский FM | [DP.FM.005](DP.FM.005-model-reality-drift.md) | Model-Reality Drift = родственник P6 |
 | Карта маршрутизации | [DP.KR.001](../02-domain-entities/DP.KR.001-knowledge-routing.md) | P3 = нарушение DP.KR.001 §5 |
 | Инцидент | WP-217 Ф8 (11 апр 2026) | Создание каталога |
+| Инцидент | WP-228 сессия 17 апр 2026 | P11 — redesign-before-inspection (autopay) |
 | Метод | [DP.EXOCORTEX.001](../02-domain-entities/DP.EXOCORTEX.001-modular-exocortex.md) | Карта — часть экзокортекса |
 
 ---
