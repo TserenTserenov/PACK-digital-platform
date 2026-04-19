@@ -18,7 +18,7 @@ generated: true
 | Kind | Count |
 |------|-------|
 | AISYS (AISYS) | 4 |
-| ARCH (ARCH) | 4 |
+| ARCH (ARCH) | 5 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
 | Distinctions (D) | 15 |
@@ -29,7 +29,7 @@ generated: true
 | KR (KR) | 1 |
 | Methods (M) | 9 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 4 |
+| METHOD (METHOD) | 5 |
 | NAV (NAV) | 1 |
 | ROLE (ROLE) | 12 |
 | RUNBOOK (RUNBOOK) | 1 |
@@ -37,7 +37,7 @@ generated: true
 | SoTA Annotations (SOTA) | 19 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **161** |
+| **Total** | **163** |
 
 ## Distinctions
 
@@ -161,7 +161,8 @@ generated: true
 | DP.ARCH.001 | Архитектура платформы | 3-слойная архитектура ИТ-платформы с 7 характеристиками (ЭМОГССБ) и 25 принципами: эволюционируемость, масштабируемость, обучаемость, генеративность, скорость, современность, безопасность | active |
 | DP.ARCH.002 | Тиры платформы | 4-осевая модель тиров: T0–T4 (учащийся) + TM1–TM3 (наставник) + TA1–TA4 (администратор) + TD1 (разработчик). Каждый тир — конфигурация среды по 5 измерениям. Оси ортогональны: один человек = T + TM? + TA? + TD? | draft |
 | DP.ARCH.003 | Архитектура цифрового двойника (3-слойная) | 3-слойная архитектура ЦД: Events → State → Views. Event Sourcing + CQRS. Доменные принципы проекций (BKT, HLR, engagement, misconceptions, qualifications). Эволюция: 5 начальных проекций → CHR-Space (30+ измерений). Реализация (Neon schemas, RLS, масштабирование) → C2.IT-Platform. | approved |
-| DP.ARCH.004 | Архитектура данных Neon (Database-per-Service) | 8 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026. | active |
+| DP.ARCH.004 | Архитектура данных Neon (Database-per-Service) | 9 баз данных в Neon по принципу database-per-service. ERD, диаграммы связей, справочник таблиц, принятые архитектурные решения. Принята на встрече ИТ 14 апр 2026, расширена 19 апр 2026 (content-pipeline). | active |
+| DP.ARCH.004-decisions | Decisions | — | active |
 
 ### ASSIST
 
@@ -211,6 +212,7 @@ generated: true
 | DP.METHOD.020 | Траектория развития Созидателя | Как строить траекторию персонального развития через 5 ролей Созидателя, ступени и степень квалификации. Для Навигатора, Портного и системы персональных руководств. | active |
 | DP.METHOD.030 | Метод перевода терминов IWE | Воспроизводимый алгоритм выбора name_en для Pack-понятия с RU-каноном и обратно. EN — pivot-язык для последующих переводов. | active |
 | DP.METHOD.031 | Метод онтологического сопоставления Pack-понятий с FPF-корнями | Алгоритм назначения FPF-корня (U.*) для нового Pack-понятия. Предотвращает изолированные понятия и silent drop рёбер при индексации. | active |
+| DP.METHOD.040 | Метод ER-моделирования | Правила построения концептуальных ER-диаграмм: сущности физ.мира, связи между ними, трансформация в физическую схему РСУБД. Применяется при проектировании новых БД и при ревизии существующих. | active |
 
 ### NAV
 
@@ -305,6 +307,7 @@ generated: true
 
 ## Warnings
 
+- Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
