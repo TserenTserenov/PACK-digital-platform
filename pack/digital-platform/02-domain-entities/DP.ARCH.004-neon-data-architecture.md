@@ -18,7 +18,8 @@ supersedes: "WP-232 решение об одной базе platform"
 
 ---
 
-## 1. Обзорная диаграмма
+<details>
+<summary><b>1. Обзорная диаграмма</b></summary>
 
 Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — §7.1–7.5.
 
@@ -35,50 +36,87 @@ flowchart TB
         subgraph TOP ["Системы платформы"]
             direction TB
             subgraph SRC ["Источники данных"]
-                direction LR
-                LMS(["LMS Aisystant"]):::ext
-                Club(["Discourse Club"]):::ext
-                Waka(["WakaTime"]):::ext
-                GHApp(["GitHub App"]):::ext
-                Pay(["YooKassa / Stripe\n/ TG Stars"]):::ext
-                PayRcv(["Payment Receiver\n(CF Worker, WP-246)"]):::reader
-                Bot(["AIST Bot"]):::ext
-                WebApp(["Web App"]):::ext
-                IWE(["IWE / exocortex"]):::ext
-                Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::db_infra
+                direction TB
+                subgraph SRC_R1 [" "]
+                    direction LR
+                    LMS(["LMS Aisystant"]):::ext
+                    Club(["Discourse Club"]):::ext
+                    Waka(["WakaTime"]):::ext
+                    GHApp(["GitHub App"]):::ext
+                end
+                subgraph SRC_R2 [" "]
+                    direction LR
+                    Pay(["YooKassa / Stripe\n/ TG Stars"]):::ext
+                    PayRcv(["Payment Receiver\n(CF Worker, WP-246)"]):::reader
+                    Bot(["AIST Bot"]):::ext
+                    WebApp(["Web App"]):::ext
+                end
+                subgraph SRC_R3 [" "]
+                    direction LR
+                    IWE(["IWE / exocortex"]):::ext
+                    Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::db_infra
+                end
             end
 
             subgraph READ ["Агенты и сервисы"]
-                direction LR
-                Kratos(["Ory Kratos\n(идентичность)"]):::ext
-                Keto(["Ory Keto\n(права доступа)"]):::ext
-                GW(["gateway-mcp"]):::reader
-                KnMCP(["knowledge-mcp"]):::reader
-                PkMCP(["personal-knowledge-mcp"]):::reader
-                DtMCP(["digital-twin-mcp"]):::reader
-                Profiler(["Профайлер"]):::reader
-                Tailor(["Портной"]):::reader
-                Navi(["Навигатор"]):::reader
-                Composer(["Composer MCP\n(в разработке)"]):::reader
-                Metabase(["Metabase\n(дашборды)"]):::reader
-                Grafana(["Grafana\n(дашборды доступности)"]):::reader
-                Langfuse(["Langfuse\n(журнал AI-запросов)"]):::reader
+                direction TB
+                subgraph READ_R1 [" "]
+                    direction LR
+                    Kratos(["Ory Kratos\n(идентичность)"]):::ext
+                    Keto(["Ory Keto\n(права доступа)"]):::ext
+                    GW(["gateway-mcp"]):::reader
+                    KnMCP(["knowledge-mcp"]):::reader
+                    PkMCP(["personal-knowledge-mcp"]):::reader
+                end
+                subgraph READ_R2 [" "]
+                    direction LR
+                    DtMCP(["digital-twin-mcp"]):::reader
+                    Profiler(["Профайлер"]):::reader
+                    Tailor(["Портной"]):::reader
+                    Navi(["Навигатор"]):::reader
+                end
+                subgraph READ_R3 [" "]
+                    direction LR
+                    Composer(["Composer MCP\n(в разработке)"]):::reader
+                    Metabase(["Metabase\n(дашборды)"]):::reader
+                    Grafana(["Grafana\n(дашборды доступности)"]):::reader
+                    Langfuse(["Langfuse\n(журнал AI-запросов)"]):::reader
+                end
             end
         end
 
         subgraph NEON ["Neon (9 баз)"]
-            direction LR
-            PC[("#1 platform-core\nidentity · подписки")]:::db_gw
-            DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
-            KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
-            AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
-            PR[("#5 payment-registry\nфинансы")]:::db_prod
-            AB[("#6 aist-bot\nFSM · OAuth-сессии · QA")]:::db_prod
-            MB[("#7 metabase\nслужебные таблицы")]:::db_infra
-            HL[("#8 health\nдоступность · ошибки")]:::db_infra
-            CP[("#9 content-pipeline\nпубликации · OAuth соцсетей")]:::db_prod
+            direction TB
+            subgraph NEON_R1 [" "]
+                direction LR
+                PC[("#1 platform-core\nidentity · подписки")]:::db_gw
+                DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
+                KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
+            end
+            subgraph NEON_R2 [" "]
+                direction LR
+                AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
+                PR[("#5 payment-registry\nфинансы")]:::db_prod
+                AB[("#6 aist-bot\nFSM · OAuth-сессии · QA")]:::db_prod
+            end
+            subgraph NEON_R3 [" "]
+                direction LR
+                MB[("#7 metabase\nслужебные таблицы")]:::db_infra
+                HL[("#8 health\nдоступность · ошибки")]:::db_infra
+                CP[("#9 content-pipeline\nпубликации · OAuth соцсетей")]:::db_prod
+            end
         end
     end
+
+    style SRC_R1 fill:transparent,stroke:transparent
+    style SRC_R2 fill:transparent,stroke:transparent
+    style SRC_R3 fill:transparent,stroke:transparent
+    style READ_R1 fill:transparent,stroke:transparent
+    style READ_R2 fill:transparent,stroke:transparent
+    style READ_R3 fill:transparent,stroke:transparent
+    style NEON_R1 fill:transparent,stroke:transparent
+    style NEON_R2 fill:transparent,stroke:transparent
+    style NEON_R3 fill:transparent,stroke:transparent
 
     %% ── Источники → Neon ────────────────────────────────────────
     LMS -->|"события"| AH
@@ -135,9 +173,12 @@ flowchart TB
     CP -->|"событие публикации"| AH
 ```
 
+</details>
+
 ---
 
-## 2. Карта 9 БД
+<details>
+<summary><b>2. Карта 9 БД</b></summary>
 
 В каждом кластере — все физ.объекты этой БД по реестру §7.0.2 (узел = объект физ.мира, которому можно дать имя собственное). Сплошная линия внутри кластера — связь двух объектов. Пунктирная с подписью — связь 🔗 с атрибутами (наставничество, OAuth): это ребро, а не узел. Стрелка `-->` — поток трансформации (Bronze→Silver→Gold в #4, Job→Post в #9). Стрелки между кластерами `-.->` — межбазовые связи и read-only аналитика. Технические таблицы (`*_log`, `*_session`, `*_cache`, `*_state`, `*_snapshot`) не показаны — они в §10. Правила построения — `DP.METHOD.040`.
 
@@ -284,6 +325,8 @@ flowchart LR
     DB4 -.->|"события (без PII)"| DB7
     DB5 -.->|"финансы (RLS)"| DB7
 ```
+
+</details>
 
 ---
 
