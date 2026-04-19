@@ -14,171 +14,12 @@ supersedes: "WP-232 решение об одной базе platform"
 
 # DP.ARCH.004 — Архитектура данных Neon
 
-Архитектура данных платформы: 9 баз Neon, какие физ.объекты живут в каждой, как базы связаны между собой, кто пишет и читает. Ниже — три ключевые диаграммы: **обзорная** (все системы + 9 баз + агенты в одном виде), **карта 9 БД** (в каждой базе — объекты физ.мира: человек, курс, платёж, событие) и **ERD по каждой БД** (концептуальные ER-диаграммы сущностей и связей). Контекст, принципы, реестр таблиц и принятые решения — в разделах после ERD.
+Архитектура данных платформы: 9 баз Neon, какие физ.объекты живут в каждой, как базы связаны между собой, кто пишет и читает. Ниже — три ключевые диаграммы: **карта 9 БД** (в каждой базе — объекты физ.мира: человек, курс, платёж, событие), **ERD по каждой БД** (концептуальные ER-диаграммы сущностей и связей) и **обзорная** (все системы + 9 баз + агенты в одном виде). Контекст, принципы, реестр таблиц и принятые решения — в разделах после диаграмм.
 
 ---
 
 <details>
-<summary><b>1. Обзорная диаграмма</b></summary>
-
-Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — §7.1–7.5.
-
-```mermaid
-flowchart TB
-    classDef ext     fill:#f5f0e8,stroke:#b0956a,color:#333
-    classDef db_gw   fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
-    classDef db_prod fill:#dcfce7,stroke:#22c55e,color:#14532d
-    classDef db_infra fill:#f3f4f6,stroke:#9ca3af,color:#374151
-    classDef reader  fill:#fef9c3,stroke:#ca8a04,color:#713f12
-
-    subgraph OUTER [" "]
-        direction TB
-        subgraph TOP ["Системы платформы"]
-            direction TB
-            subgraph SRC ["Источники данных"]
-                direction TB
-                subgraph SRC_R1 [" "]
-                    direction LR
-                    LMS(["LMS Aisystant"]):::ext
-                    Club(["Discourse Club"]):::ext
-                    Waka(["WakaTime"]):::ext
-                    GHApp(["GitHub App"]):::ext
-                end
-                subgraph SRC_R2 [" "]
-                    direction LR
-                    Pay(["YooKassa / Stripe\n/ TG Stars"]):::ext
-                    PayRcv(["Payment Receiver\n(CF Worker, WP-246)"]):::reader
-                    Bot(["AIST Bot"]):::ext
-                    WebApp(["Web App"]):::ext
-                end
-                subgraph SRC_R3 [" "]
-                    direction LR
-                    IWE(["IWE / exocortex"]):::ext
-                    Pinger(["Пингер сервисов\n(авто, каждые 5 мин)"]):::db_infra
-                end
-            end
-
-            subgraph READ ["Агенты и сервисы"]
-                direction TB
-                subgraph READ_R1 [" "]
-                    direction LR
-                    Kratos(["Ory Kratos\n(идентичность)"]):::ext
-                    Keto(["Ory Keto\n(права доступа)"]):::ext
-                    GW(["gateway-mcp"]):::reader
-                    KnMCP(["knowledge-mcp"]):::reader
-                    PkMCP(["personal-knowledge-mcp"]):::reader
-                end
-                subgraph READ_R2 [" "]
-                    direction LR
-                    DtMCP(["digital-twin-mcp"]):::reader
-                    Profiler(["Профайлер"]):::reader
-                    Tailor(["Портной"]):::reader
-                    Navi(["Навигатор"]):::reader
-                end
-                subgraph READ_R3 [" "]
-                    direction LR
-                    Composer(["Composer MCP\n(в разработке)"]):::reader
-                    Metabase(["Metabase\n(дашборды)"]):::reader
-                    Grafana(["Grafana\n(дашборды доступности)"]):::reader
-                    Langfuse(["Langfuse\n(журнал AI-запросов)"]):::reader
-                end
-            end
-        end
-
-        subgraph NEON ["Neon (9 баз)"]
-            direction TB
-            subgraph NEON_R1 [" "]
-                direction LR
-                PC[("#1 platform-core\nidentity · подписки")]:::db_gw
-                DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
-                KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
-            end
-            subgraph NEON_R2 [" "]
-                direction LR
-                AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
-                PR[("#5 payment-registry\nфинансы")]:::db_prod
-                AB[("#6 aist-bot\nFSM · OAuth-сессии · QA")]:::db_prod
-            end
-            subgraph NEON_R3 [" "]
-                direction LR
-                MB[("#7 metabase\nслужебные таблицы")]:::db_infra
-                HL[("#8 health\nдоступность · ошибки")]:::db_infra
-                CP[("#9 content-pipeline\nпубликации · OAuth соцсетей")]:::db_prod
-            end
-        end
-    end
-
-    style SRC_R1 fill:transparent,stroke:transparent
-    style SRC_R2 fill:transparent,stroke:transparent
-    style SRC_R3 fill:transparent,stroke:transparent
-    style READ_R1 fill:transparent,stroke:transparent
-    style READ_R2 fill:transparent,stroke:transparent
-    style READ_R3 fill:transparent,stroke:transparent
-    style NEON_R1 fill:transparent,stroke:transparent
-    style NEON_R2 fill:transparent,stroke:transparent
-    style NEON_R3 fill:transparent,stroke:transparent
-
-    %% ── Источники → Neon ────────────────────────────────────────
-    LMS -->|"события"| AH
-    Club -->|"события"| AH
-    Waka -->|"события"| AH
-    GHApp -->|"установки"| KN
-    Pay -->|"webhook"| PayRcv
-    PayRcv -->|"платежи + дедупликация"| PR
-    PayRcv -.->|"forward (стадия 1)"| LMS
-    Bot -->|"состояние · токены"| AB
-    Bot -->|"события"| AH
-    Bot -->|"ошибки"| HL
-    WebApp -->|"события"| AH
-    IWE -->|"события"| AH
-    Pinger -->|"доступность · инциденты"| HL
-
-    %% ── Identity-провайдеры ↔ Neon ──────────────────────────────
-    Kratos -->|"webhook: регистрация"| PC
-
-    %% ── Агенты ↔ Neon ───────────────────────────────────────────
-    GW -.->|"проверка JWT"| Kratos
-    GW -.->|"проверка прав"| Keto
-    GW -.->|"проверка подписки"| PC
-    GW -->|"проброс к сервисам"| KnMCP
-    GW -->|"проброс к сервисам"| DtMCP
-    KnMCP -.->|"поиск"| KN
-    KnMCP -->|"индексация"| KN
-    PkMCP -->|"личные документы"| KN
-    PkMCP -->|"событие записи"| AH
-    DtMCP -.->|"профиль"| DT
-    Profiler -.->|"история обучения"| AH
-    Profiler -->|"показатели развития"| DT
-    Tailor -.->|"профиль"| DT
-    Navi -.->|"профиль"| DT
-    Composer -.->|"состояние FSM"| AB
-    Metabase -.->|"финансы (RLS)"| PR
-    Metabase -.->|"события (без PII)"| AH
-    Grafana -.->|"только чтение"| HL
-    Bot -->|"журнал запросов"| Langfuse
-    GW -->|"журнал запросов"| Langfuse
-
-    %% ── Межбазовые потоки ───────────────────────────────────────
-    PR -->|"синхронизация подписок"| PC
-    AH -->|"связка chat_id → ory_id"| PC
-    KN -->|"освоение концептов"| DT
-    PR -.->|"финансы (RLS)"| MB
-    AH -.->|"события (без PII)"| MB
-    HL -.->|"доступность"| MB
-
-    %% ── #9 content-pipeline ─────────────────────────────────────
-    Bot -->|"UI конвейера"| CP
-    CP -.->|"OAuth токены (изолированно)"| CP
-    CP -->|"публикация в соцсети"| ExtSocial(["Telegram/VK/YouTube\n(внешние каналы)"]):::ext
-    CP -->|"событие публикации"| AH
-```
-
-</details>
-
----
-
-<details>
-<summary><b>2. Карта 9 БД</b></summary>
+<summary><b>1. Карта 9 БД</b></summary>
 
 В каждом кластере — все физ.объекты этой БД по реестру §7.0.2 (узел = объект физ.мира, которому можно дать имя собственное). Сплошная линия внутри кластера — связь двух объектов. Пунктирная с подписью — связь 🔗 с атрибутами (наставничество, OAuth): это ребро, а не узел. Стрелка `-->` — поток трансформации (Bronze→Silver→Gold в #4, Job→Post в #9). Стрелки между кластерами `-.->` — межбазовые связи и read-only аналитика. Технические таблицы (`*_log`, `*_session`, `*_cache`, `*_state`, `*_snapshot`) не показаны — они в §10. Правила построения — `DP.METHOD.040`.
 
@@ -331,7 +172,7 @@ flowchart LR
 ---
 
 <details open>
-<summary><b>3. ERD по базам данных</b></summary>
+<summary><b>2. ERD по базам данных</b></summary>
 
 > Концептуальная ER: только объекты физ.мира (`DP.METHOD.040` §1, HD «ER ≠ Физ.схема», «Объект ≠ Отношение»). Реестр физ.объектов — §7.0.2. Физ.схема с колонками и FK — §10. Связи между БД — §7.5. Не показаны технические таблицы (`*_log`, `*_session`, `*_cache`, `*_snapshot`, `*_state`, `*_staging`), промежуточные M:N-связки без атрибутов и копии/проекции — о них примечание после каждой ER.
 
@@ -849,6 +690,120 @@ erDiagram
 - 🔗 «OAuth-связка Созидатель↔Канал» = связь с атрибутами (токены, scope); на физ.схеме — `CHANNEL_ACCOUNTS`. Класс `payment_credentials` (§5 П6.1).
 - ⚠️ `PUBLICATION_EVENTS` (факт успеха/неудачи) = событие, дублируется в #4 activity-hub через API.
 - **Мульти-тенант** (PMB-4): структура подразумевает одного владельца (tenant=Tseren) в MVP; мульти-тенант — после 24 апр.
+
+</details>
+
+---
+
+<details>
+<summary><b>3. Обзорная диаграмма</b></summary>
+
+Сплошная стрелка = запись, пунктир = чтение (RO). Детали каждого потока — §7.1–7.5. Три параллельные колонки: слева — источники данных, в центре — 9 баз Neon, справа — агенты и сервисы-читатели.
+
+```mermaid
+flowchart LR
+    classDef ext     fill:#f5f0e8,stroke:#b0956a,color:#333
+    classDef db_gw   fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef db_prod fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef db_infra fill:#f3f4f6,stroke:#9ca3af,color:#374151
+    classDef reader  fill:#fef9c3,stroke:#ca8a04,color:#713f12
+
+    subgraph SRC ["Источники данных"]
+        direction TB
+        LMS(["LMS Aisystant"]):::ext
+        Club(["Discourse Club"]):::ext
+        Waka(["WakaTime"]):::ext
+        GHApp(["GitHub App"]):::ext
+        Pay(["YooKassa / Stripe / TG Stars"]):::ext
+        PayRcv(["Payment Receiver\n(CF Worker, WP-246)"]):::reader
+        Bot(["AIST Bot"]):::ext
+        WebApp(["Web App"]):::ext
+        IWE(["IWE / exocortex"]):::ext
+        Pinger(["Пингер сервисов\n(каждые 5 мин)"]):::db_infra
+        Kratos(["Ory Kratos\n(идентичность)"]):::ext
+    end
+
+    subgraph NEON ["Neon (9 баз)"]
+        direction TB
+        PC[("#1 platform-core\nidentity · подписки")]:::db_gw
+        DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
+        KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
+        AH[("#4 activity-hub\nсобытия Bronze→Gold")]:::db_prod
+        PR[("#5 payment-registry\nфинансы")]:::db_prod
+        AB[("#6 aist-bot\nFSM · OAuth-сессии · QA")]:::db_prod
+        MB[("#7 metabase\nслужебные таблицы")]:::db_infra
+        HL[("#8 health\nдоступность · ошибки")]:::db_infra
+        CP[("#9 content-pipeline\nпубликации · OAuth соцсетей")]:::db_prod
+    end
+
+    subgraph READ ["Агенты и сервисы"]
+        direction TB
+        Keto(["Ory Keto\n(права доступа)"]):::ext
+        GW(["gateway-mcp"]):::reader
+        KnMCP(["knowledge-mcp"]):::reader
+        PkMCP(["personal-knowledge-mcp"]):::reader
+        DtMCP(["digital-twin-mcp"]):::reader
+        Profiler(["Профайлер"]):::reader
+        Tailor(["Портной"]):::reader
+        Navi(["Навигатор"]):::reader
+        Composer(["Composer MCP\n(в разработке)"]):::reader
+        Metabase(["Metabase\n(дашборды)"]):::reader
+        Grafana(["Grafana\n(доступность)"]):::reader
+        Langfuse(["Langfuse\n(журнал AI)"]):::reader
+    end
+
+    %% ── Источники → Neon ────────────────────────────────────────
+    LMS -->|"события"| AH
+    Club -->|"события"| AH
+    Waka -->|"события"| AH
+    GHApp -->|"установки"| KN
+    Pay -->|"webhook"| PayRcv
+    PayRcv -->|"платежи + дедупликация"| PR
+    PayRcv -.->|"forward (стадия 1)"| LMS
+    Bot -->|"состояние · токены"| AB
+    Bot -->|"события"| AH
+    Bot -->|"ошибки"| HL
+    WebApp -->|"события"| AH
+    IWE -->|"события"| AH
+    Pinger -->|"доступность · инциденты"| HL
+    Kratos -->|"webhook: регистрация"| PC
+
+    %% ── Агенты ↔ Neon ───────────────────────────────────────────
+    GW -.->|"проверка JWT"| Kratos
+    GW -.->|"проверка прав"| Keto
+    GW -.->|"проверка подписки"| PC
+    GW -->|"проброс к сервисам"| KnMCP
+    GW -->|"проброс к сервисам"| DtMCP
+    KnMCP -.->|"поиск"| KN
+    KnMCP -->|"индексация"| KN
+    PkMCP -->|"личные документы"| KN
+    PkMCP -->|"событие записи"| AH
+    DtMCP -.->|"профиль"| DT
+    Profiler -.->|"история обучения"| AH
+    Profiler -->|"показатели развития"| DT
+    Tailor -.->|"профиль"| DT
+    Navi -.->|"профиль"| DT
+    Composer -.->|"состояние FSM"| AB
+    Metabase -.->|"финансы (RLS)"| PR
+    Metabase -.->|"события (без PII)"| AH
+    Grafana -.->|"только чтение"| HL
+    Bot -->|"журнал запросов"| Langfuse
+    GW -->|"журнал запросов"| Langfuse
+
+    %% ── Межбазовые потоки ───────────────────────────────────────
+    PR -->|"синхронизация подписок"| PC
+    AH -->|"связка chat_id → ory_id"| PC
+    KN -->|"освоение концептов"| DT
+    PR -.->|"финансы (RLS)"| MB
+    AH -.->|"события (без PII)"| MB
+    HL -.->|"доступность"| MB
+
+    %% ── #9 content-pipeline ─────────────────────────────────────
+    Bot -->|"UI конвейера"| CP
+    CP -.->|"OAuth токены (изолированно)"| CP
+    CP -->|"публикация в соцсети"| ExtSocial(["Telegram/VK/YouTube\n(внешние каналы)"]):::ext
+    CP -->|"событие публикации"| AH
+```
 
 </details>
 
