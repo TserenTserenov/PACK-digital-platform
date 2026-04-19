@@ -765,438 +765,284 @@ graph LR
 <details>
 <summary><b>5. ERD по базам данных</b></summary>
 
-> Связи между базами помечены `(API)` с указанием целевой базы.
+> **Уровень:** концептуальная ER. Только объекты физ.мира (см. `DP.METHOD.040-er-modeling.md` §1, `.claude/rules/distinctions.md` «ER ≠ Физ.схема», «Объект ≠ Отношение»).
+>
+> **Источник реестра физ.объектов:** §4.0.2 (таблица ✅/🔗/⚠️ по каждой БД).
+> **Физ.схема** (таблицы с колонками, FK, Writers/Readers) — §8.
+> **Связи между БД** — §4.5. На ER внутри одной БД внешние сущности показаны с пометкой «внешний — из #N».
+>
+> **Не показаны на ER концептуального уровня:** технические таблицы (`*_log`, `*_session`, `*_cache`, `*_snapshot`, `*_state`, `*_staging`), промежуточные M:N-связки без атрибутов, копии/проекции (показаны примечанием после каждой ER).
 
 ---
 
 ### DB #1: platform-core
 
-Ядро платформы: идентичность, подписки, OAuth-соединения, реестр персональных MCP.
-Gateway-паттерн: все сервисы проверяют права только здесь.
+Ядро платформы: созидатели, продукты, подписки, квалификации, баллы. Источник истины идентичности и прав.
+
+**BC:** Identity & Access + Subscription + Qualification + Points Economy.
 
 ```mermaid
 erDiagram
-    USER_IDENTITIES {
-        uuid        ory_id          PK  "source: Ory Kratos"
-        bigint      telegram_id     UK
-        bigint      lms_id
-        text        region          "ru|world"
-        text        tier            "T0|T1|T2|T3|T4 — конфигурация доступа к платформе (DP.D.050)"
-        text        mentor_tier     "NULL|TM1|TM2|TM3"
-        text        admin_tier      "NULL|TA1|TA2|TA3|TA4"
-        bool        is_developer    "TD1"
-        timestamptz created_at
-    }
+    СОЗИДАТЕЛЬ ||--o{ ПОДПИСКА_КОНТРАКТ : "держит"
+    СОЗИДАТЕЛЬ ||--o{ ПЕРСОНАЛЬНЫЙ_MCP_БЭКЕНД : "регистрирует"
+    СОЗИДАТЕЛЬ ||--o{ ПРИСВОЕНИЕ_КВАЛИФИКАЦИИ : "получает"
+    СОЗИДАТЕЛЬ ||--o{ ТРАНЗАКЦИЯ_БАЛЛОВ : "зарабатывает"
+    СОЗИДАТЕЛЬ }o--o{ ПРОДУКТ_ЭКЗЕМПЛЯР : "наставничество"
+    СОЗИДАТЕЛЬ }o--o{ GITHUB_АККАУНТ : "публикация (scope=repo)"
+    СОЗИДАТЕЛЬ }o--o{ GOOGLE_КАЛЕНДАРЬ : "OAuth-связка"
+    СОЗИДАТЕЛЬ }o--o{ WAKATIME_АККАУНТ : "метрики кода"
+    ПРОДУКТ_ЭКЗЕМПЛЯР ||--o{ ПОДПИСКА_КОНТРАКТ : "предоставляется по"
+    УРОВЕНЬ_КВАЛИФИКАЦИИ ||--o{ ПРИСВОЕНИЕ_КВАЛИФИКАЦИИ : "присваивается"
+    УРОВЕНЬ_КВАЛИФИКАЦИИ ||--o| МНОЖИТЕЛЬ_КВАЛИФИКАЦИИ : "умножает балл на"
+    ПРАВИЛО_НАЧИСЛЕНИЯ_БАЛЛОВ ||--o{ ТРАНЗАКЦИЯ_БАЛЛОВ : "порождает"
 
-    TIER_EVENTS {
-        bigserial   id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        text        from_tier
-        text        to_tier
-        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
-        timestamptz created_at
-        text        note            "платформенный лог переходов тиров (DP.ARCH.002)"
+    СОЗИДАТЕЛЬ {
+        string имя "Иванов Иван"
+        string регион "ru | world"
+        string tier "T0 — T4"
     }
-
-    SUBSCRIPTION_GRANTS {
-        uuid        id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id
-        text        product         "br = Бесконечное развитие"
-        text        source          "payment|manual|marketing|trial"
-        timestamptz valid_from
-        timestamptz valid_until
-        timestamptz revoked_at
-        text        note            "поддерживается payment-registry subscription-sync cron"
+    ПРОДУКТ_ЭКЗЕМПЛЯР {
+        string код "СМ-2026-S2, OD-семинар-19.04"
+        string тип "subscription | program | seminar"
+        string название
+        date event_date "для семинара"
     }
-
-    GITHUB_CONNECTIONS {
-        serial      id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id
-        text        github_username
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        text        knowledge_repo
-        text        strategy_repo
-        text        default_branch
-        timestamptz connected_at
-        text        note            "dual-write: токен также в USER_INTEGRATIONS для коллекторов"
+    ПОДПИСКА_КОНТРАКТ {
+        date действует_с
+        date действует_до
+        string источник "payment | manual | marketing | trial"
     }
-
-    GOOGLE_CALENDAR_CONNECTIONS {
-        serial      id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        bigint      telegram_id
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        text        calendar_id
-        text        email
-        timestamptz connected_at
+    ПЕРСОНАЛЬНЫЙ_MCP_БЭКЕНД {
+        string url "BYOB, validated WP-239"
+        string префикс_инструментов
     }
-
-    USER_INTEGRATIONS {
-        serial      id              PK
-        uuid        user_uuid       "→ USER_IDENTITIES"
-        text        service         "github|wakatime|google_calendar"
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        timestamptz token_expires_at
-        text        scope
-        jsonb       metadata
-        timestamptz connected_at
-        text        note            "source of truth для activity-hub collectors; GitHub: dual-write из GITHUB_CONNECTIONS"
+    УРОВЕНЬ_КВАЛИФИКАЦИИ {
+        string код "Интересант — Общественный деятель (11 ступеней)"
+        int порядок
     }
-
-    BACKEND_REGISTRY {
-        serial      id              PK
-        uuid        ory_id          "→ USER_IDENTITIES"
-        text        backend_url     "validated: https only, no RFC1918, max 512 chars (WP-239)"
-        text        tool_prefix
-        text        name
-        text        status          "pending_validation|active|failed"
-        text        knowledge_gate_result "pending|passed|partial|failed"
-        timestamptz created_at
+    ПРИСВОЕНИЕ_КВАЛИФИКАЦИИ {
+        date присвоено
+        string обоснование
+        string источник "LMS | Методсовет | auto"
     }
-
-    PRODUCTS {
-        text        code            PK  "S1, R1, SE, OD, open-endedness-m-1000, …"
-        text        type            "subscription|program|seminar"
-        text        title
-        text        description
-        text        format          "practicum|residency|research_seminar|review (только program)"
-        decimal     price_rub
-        int         price_stars
-        text        currency        "RUB"
-        bool        is_free
-        bool        installment_ok
-        text        speaker
-        bigint      tg_chat_id      "Telegram-группа продукта"
-        text        video_url
-        date        event_date      "для семинаров"
-        text        duration
-        bool        active
-        bool        show_in_catalog
-        int         sort_order
-        text        source          "manual|aisystant"
-        text        source_id
-        jsonb       metadata        "tilda_uid, seminar_chat_id, masterskaya_chat_id и др."
-        timestamptz created_at
-        timestamptz updated_at
-        text        note            "единый каталог продуктов; замена SEMINARS, привязка к FINANCE_PAYMENTS по code"
+    МНОЖИТЕЛЬ_КВАЛИФИКАЦИИ {
+        decimal множитель "×1.0 — ×5.0"
+        int daily_cap "100 — 1000"
     }
-
-    MENTOR_ASSIGNMENTS {
-        serial      id              PK
-        uuid        ory_id          "ref→USER_IDENTITIES"
-        bigint      telegram_id
-        text        product_code    FK  "→ PRODUCTS"
-        text        role            "lead|assistant|reviewer"
-        text        display_name
-        bool        active
-        date        valid_from
-        date        valid_until
-        timestamptz created_at
-        text        note            "привязка наставников к программам; per-product-code"
+    ПРАВИЛО_НАЧИСЛЕНИЯ_БАЛЛОВ {
+        string событие
+        int базовый_балл "2 — 69"
+        string категория "×1 | ×2 | ×3 | ×5"
     }
-
-    USER_IDENTITIES ||--o{ SUBSCRIPTION_GRANTS : "has"
-    USER_IDENTITIES ||--o{ GITHUB_CONNECTIONS : "connects GitHub"
-    USER_IDENTITIES ||--o{ GOOGLE_CALENDAR_CONNECTIONS : "connects GCal"
-    USER_IDENTITIES ||--o{ USER_INTEGRATIONS : "service integrations"
-    USER_IDENTITIES ||--o{ BACKEND_REGISTRY : "personal MCPs"
-    USER_IDENTITIES ||--o{ TIER_EVENTS : "tier history"
-    USER_IDENTITIES ||--o{ MENTOR_ASSIGNMENTS : "mentors"
-    PRODUCTS ||--o{ MENTOR_ASSIGNMENTS : "assigned mentors"
+    ТРАНЗАКЦИЯ_БАЛЛОВ {
+        int величина
+        timestamp момент
+        string event_id UK "идемпотентность"
+    }
+    GITHUB_АККАУНТ {
+        string username "внешний объект"
+    }
+    GOOGLE_КАЛЕНДАРЬ {
+        string calendar_id "внешний объект"
+    }
+    WAKATIME_АККАУНТ {
+        string api_user "внешний объект"
+    }
 ```
+
+**Примечания.**
+- ⚠️ `TIER_EVENTS` (событие смены тира) концептуально принадлежит #4 activity-hub — не показан на этой ER (PMB-кандидат).
+- ⚠️ `Баланс баллов` = агрегат-кеш транзакций, не физ.объект — на ER не показан.
+- 🔗 «Наставничество» = связь Созидатель(наставник)↔Продукт с атрибутом роли (lead/assistant/reviewer); на физ.схеме — `MENTOR_ASSIGNMENTS`.
+- 🔗 Три внешних OAuth-связки (GitHub/GCal/WakaTime) — связи с внешними физ.объектами, не узлы домена. Показаны прямоугольниками с пометкой «внешний объект» для читаемости Mermaid.
 
 ---
 
 ### DB #2: digital-twin
 
-Цифровой двойник пользователя. Writers: dt-mcp, profiler cron, бот (только через DT-MCP API).
+Модель созидателя — снимок в трёх слоях (базовые параметры / вовлечённость / производные индикаторы).
+
+**BC:** Digital Twin.
 
 ```mermaid
 erDiagram
-    DIGITAL_TWINS {
-        uuid        id              PK
-        uuid        ory_id          UK  "ref→platform-core.USER_IDENTITIES (API)"
-        jsonb       layer_1         "Базовые параметры"
-        jsonb       layer_2         "Вовлечённость"
-        jsonb       layer_3         "Производные: agency, longevity…"
-        timestamptz updated_at
-    }
+    СОЗИДАТЕЛЬ ||--|| ЦИФРОВОЙ_ДВОЙНИК : "имеет (1:1)"
+    ЦИФРОВОЙ_ДВОЙНИК ||--|{ ПОКАЗАТЕЛЬ_РАЗВИТИЯ : "содержит (слабая)"
+    СОЗИДАТЕЛЬ }o--o{ КОНЦЕПТ : "освоение (p=0..1)"
 
-    POINT_TRANSACTIONS {
-        bigserial   id              PK
-        uuid        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
-        text        rule_code
-        int         points_delta
-        text        source          "bot|lms|hub|manual"
-        timestamptz created_at
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
     }
-
-    LEARNER_CONCEPT_MASTERY {
-        bigserial   id              PK
-        uuid        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      concept_id      "ref→knowledge.CONCEPTS (API)"
-        float       mastery         "0.0–1.0 Bayesian"
-        int         attempts
-        timestamptz last_assessed_at
-        text        note            "пишет profiler после чтения activity-hub.LEARNING_HISTORY (API)"
+    ЦИФРОВОЙ_ДВОЙНИК {
+        jsonb layer_1 "базовые параметры"
+        jsonb layer_2 "вовлечённость"
+        jsonb layer_3 "производные: agency, longevity"
+        string стадия "Random | Practicing | Systematic | Disciplined | Proactive"
+        timestamp обновлено
     }
-
-    DIGITAL_TWINS ||--o{ POINT_TRANSACTIONS : "accumulates points"
-    DIGITAL_TWINS ||--o{ LEARNER_CONCEPT_MASTERY : "qualification progress"
+    ПОКАЗАТЕЛЬ_РАЗВИТИЯ {
+        string код "IND.3.*"
+        decimal значение
+        timestamp измерено
+    }
+    КОНЦЕПТ {
+        bigint concept_id "внешний — из #3"
+    }
 ```
+
+**Примечания.**
+- 🔗 «Освоение концепта» = связь Созидатель↔Концепт с атрибутами (mastery 0.0-1.0, confidence, attempts, last_assessed_at); на физ.схеме — `LEARNER_CONCEPT_MASTERY`. Пишет knowledge-mcp (через API →#3).
+- **Показатель развития** — слабая сущность: живёт только в контексте двойника, хранится в колонках JSONB. PK составной (twin_id + код).
+- **Стадия развития** показана атрибутом цифрового двойника, а не отдельной сущностью (это вычисленное состояние).
+- ⚠️ `profiling_runs` (запуск профайлера, WP-218 план) = технический лог, не физ.объект; PMB-7.
+- ⚠️ `POINT_TRANSACTIONS` перенесён в #1 (`platform.points.*`), на ER #2 не показан.
 
 ---
 
 ### DB #3: knowledge
 
-Документы платформы и пользователей, граф концептов, источники для индексации.
+Документы и концепты платформы и созидателей. Граф понятий, источники для индексации.
+
+**BC:** Knowledge Base.
 
 ```mermaid
 erDiagram
-    DOCUMENTS {
-        bigserial   id              PK
-        text        filename
-        text        source_type     "platform|personal|github"
-        vector      embedding       "1024-dim HNSW"
-        tsvector    search_vector
-        uuid        user_id         "NULL=platform, set=personal (API→platform-core)"
-        bigint      parent_id       FK
-        timestamptz created_at
-    }
+    ДОКУМЕНТ }o--|| КОНЦЕПТ : "содержит | определяет"
+    КОНЦЕПТ }o--o{ КОНЦЕПТ : "граф (prerequisite | related | part_of | contradicts)"
+    КОНЦЕПТ ||--o{ КОНЦЕПТНОЕ_ЗАБЛУЖДЕНИЕ : "имеет"
+    СОЗИДАТЕЛЬ ||--o{ ИСТОЧНИК_ИНДЕКСАЦИИ : "подключает"
+    СОЗИДАТЕЛЬ }o--o{ GITHUB_АККАУНТ : "индексация (scope=repo read)"
 
-    RETRIEVAL_FEEDBACK {
-        bigserial   id              PK
-        bigint      document_id     FK
-        text        query_hash
-        bool        helpfulness
-        timestamptz created_at
+    ДОКУМЕНТ {
+        string путь "напр. DP.ARCH.004-neon-data-architecture.md"
+        string тип_источника "platform | personal | github"
+        vector embedding "1024-dim"
     }
-
-    CONCEPTS {
-        bigserial   id              PK
-        text        code            UK  "ZP.001, FPF.MIM.001…"
-        text        name
-        text        level           "zp|fpf|pack|guide|course"
-        text        domain          "MIM|DP|PD|ECO"
-        bigint      document_id     FK
-        vector      embedding
-        text        status          "active|deprecated|draft"
+    КОНЦЕПТ {
+        string код "ZP.001, FPF.MIM.001, DP.D.050"
+        string название
+        string уровень "zp | fpf | pack | guide | course"
+        string домен "MIM | DP | PD | ECO"
     }
-
-    CONCEPT_EDGES {
-        bigserial   id              PK
-        bigint      from_concept_id FK
-        bigint      to_concept_id   FK
-        text        edge_type       "prerequisite|related|part_of|contradicts"
-        float       weight
+    КОНЦЕПТНОЕ_ЗАБЛУЖДЕНИЕ {
+        string категория "wrong_concept | folk_substitution"
+        text текст_заблуждения
+        text корректная_версия
     }
-
-    CONCEPT_MISCONCEPTIONS {
-        bigserial   id              PK
-        bigint      concept_id      FK
-        text        category        "wrong_concept|folk_substitution"
-        text        misconception_text
-        text        correct_version
+    ИСТОЧНИК_ИНДЕКСАЦИИ {
+        string url "репо или внешний ресурс"
+        bool активен
     }
-
-    GITHUB_INSTALLATIONS {
-        serial      id              PK
-        uuid        user_id         "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      github_user_id
-        text        installation_id UK
-        jsonb       repos
-        timestamptz created_at
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
     }
-
-    USER_SOURCES {
-        serial      id              PK
-        uuid        user_id         "ref→platform-core.USER_IDENTITIES (API)"
-        text        source
-        text        github_repo
-        bool        active
+    GITHUB_АККАУНТ {
+        bigint github_user_id "внешний объект"
     }
-
-    DOCUMENTS ||--o{ DOCUMENTS : "parent→chunks"
-    DOCUMENTS ||--o{ RETRIEVAL_FEEDBACK : "feedback"
-    DOCUMENTS ||--o{ CONCEPTS : "sourced from"
-    CONCEPTS ||--o{ CONCEPT_EDGES : "from"
-    CONCEPTS ||--o{ CONCEPT_EDGES : "to"
-    CONCEPTS ||--o{ CONCEPT_MISCONCEPTIONS : "has"
-    GITHUB_INSTALLATIONS ||--o{ USER_SOURCES : "enables sources"
 ```
+
+**Примечания.**
+- **Документ** — физ.объект (конкретный .md-файл с путём, эмбеддингом). Чанки/родительская иерархия — техническая декомпозиция, на ER не отдельной сущностью.
+- **Концепт↔Концепт** = связь с атрибутом `edge_type`, на физ.схеме — `CONCEPT_EDGES`.
+- 🔗 «Индексация» = связь Созидатель↔GitHub-аккаунт scope=repo(read), с атрибутом installation_id; на физ.схеме — `GITHUB_INSTALLATIONS`.
+- ⚠️ `RETRIEVAL_FEEDBACK` = событие (факт оценки релевантности), не объект; не показан.
 
 ---
 
 ### DB #4: activity-hub
 
-Medallion-архитектура: Bronze (raw) → Silver (user_events) → Gold (learning_history).
-Кандидат на замену ClickHouse/TimescaleDB при росте объёма.
+Поток событий созидателей из всех внешних систем. Medallion-архитектура: Bronze → Silver → Gold.
+
+**BC:** Activity & Events. **Замечание:** на концептуальном уровне «событие» — физ.объект (факт, который произошёл с атрибуцией). Три слоя — не три разные сущности, а три стадии жизни одного события. Показано как один объект «Событие созидателя» + атрибут `слой`. Отдельно показано «Сырое событие» (до атрибуции — нет связи с Созидателем) и «Факт обучения» (агрегированный для профайлера).
 
 ```mermaid
 erDiagram
-    RAW_EVENTS {
-        bigserial   id              PK
-        char        trace_id        "32-char OTel trace_id (WP-236)"
-        text        source          "lms|bot|club|iwe"
-        text        external_id
-        jsonb       payload         "сырой, без трансформаций"
-        timestamptz fetched_at
-        text        transform_status "pending|done|failed|skipped"
-        text        note            "партиционирована по (source, fetched_at); TTL 30 дней (WP-240)"
-    }
+    ВНЕШНЯЯ_СИСТЕМА ||--o{ СЫРОЕ_СОБЫТИЕ : "генерирует"
+    СЫРОЕ_СОБЫТИЕ ||--o| СОБЫТИЕ_СОЗИДАТЕЛЯ : "нормализуется в"
+    СОЗИДАТЕЛЬ ||--o{ СОБЫТИЕ_СОЗИДАТЕЛЯ : "совершает"
+    СОБЫТИЕ_СОЗИДАТЕЛЯ ||--o| ФАКТ_ОБУЧЕНИЯ : "агрегируется в"
 
-    USER_EVENTS {
-        bigserial   id              PK
-        char        trace_id        "32-char, propagated из RAW_EVENTS (WP-236)"
-        text        source
-        text        external_id     UK
-        text        event_type
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
-        jsonb       payload
-        timestamptz occurred_at
+    ВНЕШНЯЯ_СИСТЕМА {
+        string source "lms | club | wakatime | iwe | bot"
     }
-
-    LEARNING_HISTORY {
-        bigserial   id              PK
-        char        trace_id        "32-char, propagated из USER_EVENTS (WP-236)"
-        uuid        user_uuid       "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      event_id        FK
-        text        element_id
-        text        element_type    "meme|practice|cell"
-        int         area            "1-5"
-        float       score
-        bool        passed
-        int         schema_version  "1=legacy, 2=current"
-        timestamptz created_at
-        timestamptz archived_at     "NULL = активна; SET = заархивирована в S3 (WP-240)"
-        text        note            "Gold layer; читается profiler → LEARNER_CONCEPT_MASTERY"
+    СЫРОЕ_СОБЫТИЕ {
+        string external_id "ID в источнике"
+        jsonb payload "без трансформаций"
+        timestamp fetched_at
     }
-
-    IDENTITY_MAP {
-        bigserial   id              PK
-        text        source
-        text        external_id
-        uuid        user_uuid       "ref→platform-core (API); NULL до OAuth (WP-187)"
+    СОБЫТИЕ_СОЗИДАТЕЛЯ {
+        string event_type
+        jsonb payload "нормализованный"
+        timestamp occurred_at
+        string trace_id "OTel"
     }
-
-    QUARANTINED_EVENTS {
-        bigserial   id              PK
-        text        source
-        text        reason
-        jsonb       payload
-        timestamptz created_at
+    ФАКТ_ОБУЧЕНИЯ {
+        string element_id
+        string element_type "meme | practice | cell"
+        int area "1 — 5"
+        float score
+        bool passed
     }
-
-    SYNC_LOG {
-        bigserial   id              PK
-        text        source
-        text        status          "success|partial|failed"
-        int         events_fetched
-        int         events_written
-        int         events_quarantined
-        timestamptz started_at
-        timestamptz finished_at
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
     }
-
-    RAW_EVENTS ||--o{ USER_EVENTS : "transform → silver"
-    USER_EVENTS ||--o{ LEARNING_HISTORY : "materialize → gold"
-    RAW_EVENTS ||--o{ QUARANTINED_EVENTS : "invalid → quarantine"
-    IDENTITY_MAP }o--|| USER_EVENTS : "resolves user_uuid"
 ```
+
+**Примечания.**
+- 🔗 `IDENTITY_MAP` = связь «внешний идентификатор (chat_id / lms_id) ↔ Созидатель», слабая идентификация до OAuth. На ER не узел — показана как атрибут связи `Сырое событие → Событие созидателя` (нормализация через identity resolver).
+- ⚠️ `QUARANTINED_EVENTS` = технический sink (события, не прошедшие валидацию) — не на ER.
+- ⚠️ `SYNC_LOG` = технический лог запусков коллекторов — не на ER.
+- ⚠️ `TIER_EVENTS` и `CONVERSION_EVENTS` (из #1 и #5) концептуально сюда — PMB.
 
 ---
 
 ### DB #5: payment-registry
 
-Единственная база с финансовыми транзакциями.
-Metabase читает через `metabase_reader` (RLS, только агрегаты без PII).
+Финансовые транзакции и автосписания. Единственная БД платформы с платёжной информацией.
+
+**BC:** Payments.
 
 ```mermaid
 erDiagram
-    FINANCE_PAYMENTS {
-        bigserial   id              PK
-        text        ory_id          "ref→platform-core.USER_IDENTITIES (API)"
-        bigint      telegram_id
-        bigint      suser_id        "Aisystant legacy ID"
-        text        purpose         "BALANCE|SUBSCRIPTION|DONATION|INTERNSHIP|WORKSHOP"
-        decimal     amount
-        text        currency        "RUB|USD|EUR|STARS"
-        int         channel         "1=YooKassa 2=Paybox 3=Stripe 8=Manual"
-        text        status
-        text        updated_by      "сервис, изменивший статус (для audit)"
-        timestamptz charged_off_at
-        timestamptz updated_at
-        timestamptz archived_at
-        jsonb       raw_payload     "оригинальный webhook для аудита (WP-246)"
-        bool        autopay         "подписка с автосписанием (source-of-truth в LMS subscription.autopay до cutover WP-246 Ф15)"
-        text        autopay_data    "JSON payment_method_id YooKassa. Class: payment_credentials (§2 П6.1)"
-    }
+    СОЗИДАТЕЛЬ ||--o{ ПЛАТЁЖ : "совершает"
+    СОЗИДАТЕЛЬ ||--o| АВТОСПИСАНИЕ_ДОГОВОР : "заключает"
+    ПРОДУКТ_ЭКЗЕМПЛЯР ||--o{ ПЛАТЁЖ : "оплачивается за"
+    АВТОСПИСАНИЕ_ДОГОВОР ||--o{ ПЛАТЁЖ : "порождает (расписанием)"
+    ПЛАТЁЖ ||--o| ПОДПИСКА_КОНТРАКТ : "активирует (в #1)"
 
-    PROCESSED_WEBHOOKS {
-        text        event_id        PK  "provider payment ID"
-        text        provider        "yookassa|stripe|paybox|tilda"
-        timestamptz received_at     "DEFAULT now()"
-        boolean     processed       "DEFAULT false"
-        text        note            "idempotency: TTL >72h (Stripe retry window). WP-246"
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
     }
-
-    FINANCE_PAYMENTS_AUDIT_LOG {
-        bigserial   id              PK
-        bigint      payment_id      FK  "→ FINANCE_PAYMENTS"
-        text        field_name      "status|amount|channel"
-        text        old_value
-        text        new_value
-        text        changed_by      "payment-sync|manual-admin|bot"
-        timestamptz changed_at
-        text        note            "append-only; Postgres trigger tr_log_payment_changes (WP-237)"
+    ПРОДУКТ_ЭКЗЕМПЛЯР {
+        string код "внешний — из #1"
     }
-
-    PAYMENTS_SYNC_STATE {
-        int         id              PK  "singleton id=1"
-        bigint      last_payment_id
-        timestamptz last_sync_at
-        text        last_sync_status
+    ПОДПИСКА_КОНТРАКТ {
+        uuid id "внешний — из #1"
     }
-
-    SUBSCRIPTION_GRANTS_SYNC_STATE {
-        int         id              PK  "singleton id=1"
-        bigint      last_subscription_id
-        timestamptz last_sync_at
-        text        note            "watermark → platform-core.SUBSCRIPTION_GRANTS"
+    ПЛАТЁЖ {
+        string provider_id "yookassa|stripe|paybox|tg_stars payment ID"
+        decimal amount
+        string currency "RUB | USD | EUR | STARS"
+        string purpose "BALANCE | SUBSCRIPTION | DONATION | WORKSHOP | SEMINAR"
+        timestamp charged_off_at
+        string status
     }
-
-    IMPORT_STAGING_PAYMENT {
-        bigint      id
-        text        ext_id
-        bigint      suser_id
-        text        purpose
-        text        payment_system
-        decimal     amount
-        bool        success
-        text        note            "landing zone, incremental sync из Aisystant"
+    АВТОСПИСАНИЕ_ДОГОВОР {
+        string payment_method_id "YooKassa, класс payment_credentials"
+        string card_last4
+        string cron_schedule "10:00 и 21:00 МСК"
+        bool активен
     }
-
-    IMPORT_STAGING_CHARGEOFF {
-        bigint      id
-        bigint      suser_id
-        decimal     amount
-        bigint      payment_id      "→ FINANCE_PAYMENTS"
-        text        note            "landing zone, incremental sync"
-    }
-
-    FINANCE_PAYMENTS ||--o{ FINANCE_PAYMENTS_AUDIT_LOG : "change log"
-    PROCESSED_WEBHOOKS ||--o| FINANCE_PAYMENTS : "dedup before insert"
-    IMPORT_STAGING_PAYMENT ||--o{ FINANCE_PAYMENTS : "syncs into"
-    IMPORT_STAGING_CHARGEOFF ||--o{ FINANCE_PAYMENTS : "links to"
 ```
+
+**Примечания.**
+- **Платёж** — физ.объект (конкретная транзакция с ID провайдера, суммой, датой). Физ.реализация в трёх таблицах — `FINANCE_PAYMENTS` (основная), `SEMINAR_PAYMENTS`, `WORKSHOP_PAYMENTS` (кандидаты на миграцию из #6).
+- **Автосписание-договор** — контракт-объект между созидателем и платформой на регулярное списание с сохранённой карты. Класс данных — `payment_credentials` (§2 П6.1), строже PII.
+- 🔗 Активация подписки — факт: успешный платёж с `purpose=SUBSCRIPTION` создаёт `SUBSCRIPTION_GRANT` в #1 через `sync-subscriptions.sh`. На ER показано связью «активирует» с внешней сущностью.
+- ⚠️ `PROCESSED_WEBHOOKS` = технический idempotency-механизм, не узел ER.
+- ⚠️ `FINANCE_PAYMENTS_AUDIT_LOG` = лог изменений статуса (WP-237), на ER не узел (только на физ.схеме §8).
+- ⚠️ `IMPORT_STAGING_*`, `*_SYNC_STATE` = landing zone и watermark — технические.
+- ⚠️ `CONVERSION_EVENTS` — событие воронки, концептуально в #4 activity-hub.
 
 #### Autopay subsystem (подсистема автосписаний)
 
@@ -1236,512 +1082,213 @@ erDiagram
 
 ### DB #6: aist-bot
 
-Только бот. Telegram-first: основной ключ — `chat_id`. 35+ таблиц, разбиты на 3 ERD по доменам. ⚠️ 10 таблиц — кандидаты на миграцию (помечены).
+Telegram-first среда обучения и коммуникации. 35+ физ.таблиц, но на концептуальном уровне — ~10 физ.объектов: всё остальное (FSM-state, токены, кеш, логи, проекции) — технические.
 
-#### 6a. Ядро бота, токены и доступ
-
-USERS → USER_STATE — центральная ось. Все остальные таблицы привязаны через `chat_id`.
+**BC:** Bot Learning & Community. **Замечание:** многие объекты (публикация, платёж, концепт) здесь — проекции из других БД. В §8 физ.схема разбита на 3 подраздела (6a/6b/6c) — на концептуальной ER оставляем одну диаграмму.
 
 ```mermaid
 erDiagram
-    USERS {
-        bigserial   id              PK
-        bigint      telegram_id     UK
-        text        ory_id
-        text        role
-        timestamptz created_at
-    }
+    СОЗИДАТЕЛЬ ||--|| ПОЛЬЗОВАТЕЛЬ_БОТА : "проекция (1:1)"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ ОТВЕТ_НА_ЗАДАНИЕ : "даёт"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ ОЦЕНКА : "получает"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ ПОПЫТКА_ТРЕНАЖЁРА : "проходит"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ QA_ПАРА : "задаёт"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ FEEDBACK_ЗАПИСЬ : "оставляет"
+    ПОЛЬЗОВАТЕЛЬ_БОТА ||--o{ НЕДЕЛЬНЫЙ_ЦИКЛ_ЛЕНТЫ : "читает"
+    ПОЛЬЗОВАТЕЛЬ_БОТА }o--o{ TELEGRAM_КАНАЛ : "участник сообщества"
+    ПОЛЬЗОВАТЕЛЬ_БОТА }o--o{ НАПОМИНАНИЕ : "триггер"
+    ЭЛЕМЕНТ_МАРАФОНА ||--o{ ПОПЫТКА_ТРЕНАЖЁРА : "основа для"
 
-    USER_STATE {
-        bigint      chat_id         PK  "Telegram chat_id"
-        text        current_state   "FSM state"
-        jsonb       data            "FSM context"
-        bool        is_inactive     "true если нет активности >90 дней (WP-240)"
-        timestamptz trial_started_at
-        timestamptz last_active_date
-        int         active_days_total
-        text        note            "тир — в platform-core.USER_IDENTITIES (не здесь)"
+    ПОЛЬЗОВАТЕЛЬ_БОТА {
+        bigint telegram_id "PK"
+        uuid ory_id "ссылка на Созидателя в #1"
+        date trial_started_at
+        int active_days_total
     }
-
-    FSM_STATES {
-        text        key             PK  "aiogram FSM key"
-        jsonb       state
-        jsonb       data
-        text        note            "aiogram persistence между редеплоями"
+    ОТВЕТ_НА_ЗАДАНИЕ {
+        string question_id
+        int score
+        timestamp создано
     }
-
-    USER_SESSIONS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        timestamptz started_at
-        timestamptz ended_at
+    ОЦЕНКА {
+        string тип "self | external | peer"
+        jsonb данные
     }
-
-    OAUTH_PENDING_STATES {
-        text        state           PK  "OAuth state code"
-        bigint      chat_id
-        text        provider        "github|google"
-        timestamptz created_at
-        text        note            "TTL: до завершения OAuth flow"
+    ПОПЫТКА_ТРЕНАЖЁРА {
+        string training_type "meme | practice"
+        int score
+        timestamp начата
     }
-
-    ORY_TOKENS {
-        bigint      chat_id         PK  "Telegram chat_id"
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        timestamptz expires_at
-        text        ory_id
-        timestamptz updated_at
-        text        note            "персистентность Ory OAuth-сессии; refresh каждые 10 мин"
+    ЭЛЕМЕНТ_МАРАФОНА {
+        string content_type "meme | question | lesson"
+        int номер_в_марафоне
     }
-
-    DT_TOKENS {
-        bigint      chat_id         PK  "Telegram chat_id"
-        bytea       access_token    "Fernet-encrypted (WP-234)"
-        bytea       refresh_token   "Fernet-encrypted (WP-234)"
-        text        token_nonce
-        timestamptz expires_at
-        text        dt_user_id
-        timestamptz updated_at
-        text        note            "персистентность DT OAuth-сессии; refresh каждые 10 мин"
+    QA_ПАРА {
+        text вопрос
+        text ответ
+        bool helpful
     }
-
-    BOT_SUBSCRIPTIONS {
-        bigserial   id              PK
-        bigint      chat_id
-        text        status          "active|inactive"
-        text        telegram_payment_charge_id
-        int         stars_amount
-        timestamptz started_at
-        timestamptz expires_at
-        text        note            "Telegram Stars billing (бот-уровень); платформ-подписка → platform-core"
+    FEEDBACK_ЗАПИСЬ {
+        string категория
+        string статус "new | classified | resolved"
     }
-
-    SERVICE_USAGE {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        text        service_id
-        timestamptz created_at
+    НЕДЕЛЬНЫЙ_ЦИКЛ_ЛЕНТЫ {
+        int номер_недели
+        timestamp создана
     }
-
-    USER_ACCESS {
-        bigserial   id              PK
-        bigint      user_id         "Telegram ID"
-        text        access_type
-        text        resource_id
-        timestamptz expires_at
-        text        note            "возможно неиспользуемая (миграция 002)"
+    TELEGRAM_КАНАЛ {
+        bigint channel_id "внешний"
+        string название
     }
-
-    TIER_EVENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        from_tier       "T0|T1|T2|T3|T4"
-        text        to_tier
-        text        reason          "ory_registration|subscription|dt_complete|github_connect|manual"
-        timestamptz created_at
-        text        note            "⚠️ кандидат → platform-core"
+    НАПОМИНАНИЕ {
+        string тип
+        timestamp запланировано
     }
-
-    USERS ||--|| USER_STATE : "1:1"
-    USER_STATE ||--o{ USER_SESSIONS : "sessions"
-    USER_STATE ||--|| ORY_TOKENS : "auth"
-    USER_STATE ||--|| DT_TOKENS : "auth"
-    USER_STATE ||--o{ BOT_SUBSCRIPTIONS : "TG Stars"
-    USER_STATE ||--o{ TIER_EVENTS : "tier history"
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
+    }
 ```
 
-#### 6b. Обучение и коммуникация
-
-Тренажёры, лента, марафоны, QA, уведомления, фидбек. Все привязаны к `chat_id` через USER_STATE.
-
-```mermaid
-erDiagram
-    TRAINING_PROGRESS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        training_type
-        jsonb       progress
-        timestamptz updated_at
-    }
-
-    TRAINING_CHILDREN {
-        bigserial   id              PK
-        bigint      parent_id       FK
-        text        child_type
-        jsonb       data
-    }
-
-    TRAINING_ATTEMPTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        training_type
-        int         score
-        jsonb       answers
-        timestamptz created_at
-    }
-
-    TRAINING_SETTINGS {
-        bigint      chat_id         PK
-        jsonb       settings
-        timestamptz updated_at
-    }
-
-    FEED_SESSIONS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        timestamptz started_at
-        timestamptz ended_at
-        jsonb       data
-    }
-
-    FEED_WEEKS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        int         week_number
-        jsonb       data
-        timestamptz created_at
-    }
-
-    MARATHON_CONTENT {
-        bigserial   id              PK
-        text        content_type
-        jsonb       data
-        timestamptz created_at
-    }
-
-    ANSWERS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        question_id
-        jsonb       answer
-        int         score
-        timestamptz created_at
-    }
-
-    ASSESSMENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        assessment_type
-        jsonb       data
-        timestamptz created_at
-    }
-
-    CONTENT_CACHE {
-        text        cache_key       PK
-        jsonb       content
-        timestamptz expires_at
-        text        note            "кеш LMS-контента; TTL по scheduler"
-    }
-
-    QA_HISTORY {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        question
-        text        answer
-        bool        helpful
-        jsonb       mcp_sources
-        timestamptz created_at
-        text        note            "TTL 180 дней (WP-240)"
-    }
-
-    NOTIFICATION_LOG {
-        bigserial   id              PK
-        bigint      chat_id
-        text        notification_type
-        text        idempotency_key UK
-        jsonb       payload
-        timestamptz created_at
-        text        note            "TTL 30 дней (WP-240)"
-    }
-
-    FEEDBACK_TRIAGE {
-        bigserial   id              PK
-        bigint      chat_id
-        text        category
-        text        status          "new|classified|resolved"
-        text        source          "bot"
-        timestamptz created_at
-        text        note            "только бот-фидбек; кросс-канальный → activity-hub"
-    }
-
-    FEEDBACK_REPORTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        report_type
-        jsonb       data
-        timestamptz created_at
-    }
-
-    REMINDERS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        reminder_type
-        timestamptz scheduled_at
-        bool        sent
-    }
-
-    COMMUNITY_MEMBERS {
-        bigserial   id              PK
-        bigint      telegram_id
-        bigint      chat_id
-        text        username
-        timestamptz joined_at
-        timestamptz left_at
-    }
-
-    TRAINING_PROGRESS ||--o{ TRAINING_CHILDREN : "children"
-    TRAINING_PROGRESS ||--o{ TRAINING_ATTEMPTS : "attempts"
-    FEED_SESSIONS ||--o{ FEED_WEEKS : "weeks"
-```
-
-#### 6c. Публикации, платежи и наблюдаемость
-
-Таблицы-кандидаты на миграцию (⚠️) и наблюдаемость бот-уровня.
-
-```mermaid
-erDiagram
-    %% ── Публикации и каналы (⚠️ → activity-hub) ──
-
-    PUBLISHED_POSTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        platform        "discourse|telegram"
-        text        external_id
-        timestamptz published_at
-        text        note            "⚠️ кандидат → activity-hub"
-    }
-
-    SCHEDULED_PUBLICATIONS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        platform
-        jsonb       content
-        timestamptz scheduled_at
-        text        status          "pending|published|failed"
-        text        note            "⚠️ кандидат → activity-hub"
-    }
-
-    DISCOURSE_ACCOUNTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        discourse_username
-        text        api_key
-        text        note            "⚠️ кандидат → activity-hub"
-    }
-
-    CHANNEL_MONITORS {
-        bigserial   id              PK
-        bigint      channel_id
-        text        channel_name
-        bool        active
-        timestamptz created_at
-    }
-
-    CHANNEL_MENTIONS_LOG {
-        bigserial   id              PK
-        bigint      channel_id      FK
-        text        mention_text
-        timestamptz created_at
-    }
-
-    %% ── Платежи бот-уровня (⚠️ → payment-registry) ──
-
-    WORKSHOP_PAYMENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        workshop_code
-        int         amount
-        timestamptz created_at
-        text        note            "⚠️ кандидат → payment-registry"
-    }
-
-    SEMINAR_PAYMENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        seminar_code
-        int         amount
-        timestamptz created_at
-        text        note            "⚠️ кандидат → payment-registry"
-    }
-
-    CONVERSION_EVENTS {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        event_type
-        jsonb       data
-        timestamptz created_at
-        text        note            "⚠️ кандидат → payment-registry"
-    }
-
-    %% ── Наблюдаемость бот-уровня (⚠️ копии → #8 health) ──
-
-    ACTIVITY_LOG {
-        bigserial   id              PK
-        bigint      chat_id         FK
-        text        action
-        jsonb       data
-        timestamptz created_at
-    }
-
-    ERROR_LOGS {
-        bigserial   id              PK
-        text        category
-        text        severity
-        text        message
-        jsonb       context
-        timestamptz created_at
-        text        note            "⚠️ копия → #8 health. TTL 180д"
-    }
-
-    REQUEST_TRACES {
-        bigserial   id              PK
-        text        trace_id
-        text        span
-        int         latency_ms
-        timestamptz created_at
-        text        note            "⚠️ копия → #8 health. TTL 30д"
-    }
-
-    PENDING_FIXES {
-        bigserial   id              PK
-        text        diagnosis
-        text        status          "pending|approved|rejected"
-        jsonb       context
-        timestamptz created_at
-        text        note            "⚠️ копия → #8 health. TTL 90д"
-    }
-
-    SCHEDULED_PUBLICATIONS ||--o{ PUBLISHED_POSTS : "published"
-    CHANNEL_MONITORS ||--o{ CHANNEL_MENTIONS_LOG : "mentions"
-```
+**Примечания.**
+- **Пользователь бота** ≠ Созидатель: это проекция Созидателя в контексте Telegram-клиента (локальные атрибуты триала, счётчик активных дней). Связь 1:1 по `ory_id`.
+- 🔗 «Участник сообщества» (`COMMUNITY_MEMBERS`) и «Мониторируемый канал» (`CHANNEL_MONITORS`) — связи Пользователь↔Канал с разным scope (участие vs слежение ботом). Упомянуто одной сущностью «Telegram-канал» для упрощения концепта.
+- 🔗 «Напоминание» = связь Пользователь↔Триггер с атрибутами (тип, время); на физ.схеме — `REMINDERS`.
+- **Сессия ленты** (`FEED_SESSIONS`) = связь Пользователь↔Недельный цикл (факт захода в конкретную неделю); не показана как узел.
+- ⚠️ Технические (не показаны на ER): `USER_STATE`, `FSM_STATES` (FSM-состояние), `USER_SESSIONS`, `ORY_TOKENS`, `DT_TOKENS` (OAuth-носители), `OAUTH_PENDING_STATES`, `CONTENT_CACHE`, `TRAINING_PROGRESS` (state-файл), `ACTIVITY_LOG`, `ERROR_LOGS`, `REQUEST_TRACES` (копии → #8), `PENDING_FIXES` (копия → #8), `NOTIFICATION_LOG`, `CHANNEL_MENTIONS_LOG`, `SERVICE_USAGE`.
+- ⚠️ Кандидаты на миграцию (остаются физ.таблицами в #6 до миграции, концептуально принадлежат другим БД):
+  - `PUBLISHED_POSTS`, `SCHEDULED_PUBLICATIONS`, `DISCOURSE_ACCOUNTS` → #9 content-pipeline
+  - `SEMINAR_PAYMENTS`, `WORKSHOP_PAYMENTS` → #5 payment-registry
+  - `CONVERSION_EVENTS` → #4 activity-hub
+  - `TIER_EVENTS` → #4 (или #1)
+  - `BOT_SUBSCRIPTIONS` → проекция/кеш из #1 `SUBSCRIPTION_GRANTS`
+- ⚠️ `USER_ACCESS`, `FEEDBACK_REPORTS` — требуют аудита владельца (Ф13).
 
 ---
 
 ### DB #7: metabase
 
-Служебные таблицы Metabase BI (~171 таблица). Не хранит прикладные данные платформы.
+BI-инструмент Metabase. Сам прикладных данных не хранит — читает #5 и #4 через RLS.
+
+**BC:** BI & Analytics. 4 пользовательских физ.объекта из ~171 служебной таблицы Metabase.
 
 ```mermaid
 erDiagram
-    METABASE_COLLECTIONS {
-        int     id          PK
-        text    name
-        text    color
-        int     parent_id   FK
-    }
+    КОЛЛЕКЦИЯ_ДАШБОРДОВ ||--o{ КОЛЛЕКЦИЯ_ДАШБОРДОВ : "вложенная (parent)"
+    КОЛЛЕКЦИЯ_ДАШБОРДОВ ||--o{ ДАШБОРД : "содержит"
+    ДАШБОРД ||--o{ КАРТА_ЗАПРОС : "состоит из"
+    АНАЛИТИК }o--o{ ДАШБОРД : "просматривает | редактирует"
 
-    METABASE_DASHBOARDS {
-        int     id              PK
-        text    name
-        int     collection_id   FK
+    КОЛЛЕКЦИЯ_ДАШБОРДОВ {
+        string название "напр. Финансы, Обучение"
     }
-
-    METABASE_CARDS {
-        int     id              PK
-        text    name
-        text    display
-        int     dashboard_id    FK
-        text    dataset_query   "SQL / MBQL"
+    ДАШБОРД {
+        string название "напр. Финансы 2026 Q2"
     }
-
-    METABASE_USERS {
-        int     id          PK
-        text    email       UK
-        bool    is_superuser
-        bool    is_active
+    КАРТА_ЗАПРОС {
+        string название
+        text dataset_query "SQL / MBQL"
+        string визуализация "bar | line | table"
     }
-
-    METABASE_COLLECTIONS ||--o{ METABASE_COLLECTIONS : "parent→child"
-    METABASE_COLLECTIONS ||--o{ METABASE_DASHBOARDS : "contains"
-    METABASE_DASHBOARDS ||--o{ METABASE_CARDS : "contains"
+    АНАЛИТИК {
+        string email "не-Ory, локальный Metabase"
+        bool суперпользователь
+    }
 ```
+
+**Примечания.**
+- «Данные» дашбордов живут в #5 (финансы) и #4 (события), Metabase их только визуализирует через SQL-запросы с RLS. На концептуальной ER #7 эти связи не показаны (они — между БД, не внутри #7).
+- ⚠️ ~167 других служебных таблиц (`metabase_field`, `metabase_query_execution`, `metabase_session`, etc.) — технические, не на ER.
 
 ---
 
 ### DB #8: health
 
-Операционное здоровье платформы. Cross-cutting данные — не принадлежат ни одному продуктовому сервису.
-Writers: uptime-collector (GHA cron), AIST Bot error_handler. Readers: Grafana (RO), алерты → TG.
+Операционное здоровье платформы. Cross-cutting — не принадлежит ни одному продуктовому сервису.
+
+**BC:** Platform Health & Observability. Физ.объекты — инфраструктурные, не доменные.
 
 ```mermaid
 erDiagram
-    SERVICE_REGISTRY {
-        serial      id              PK
-        text        name            "gateway-mcp|knowledge-mcp|digital-twin-mcp|aist-bot|…"
-        text        url             "endpoint для пинга"
-        text        check_type      "http|tcp"
-        bool        enabled
-        timestamptz created_at
-    }
+    МИКРОСЕРВИС_ДЕПЛОЙМЕНТ ||--o{ ИНЦИДЕНТ : "страдает от"
+    ИНЦИДЕНТ ||--o| ЗАДАНИЕ_AUTO_FIX : "порождает"
 
-    UPTIME_CHECKS {
-        bigserial   id              PK
-        int         service_id      FK
-        int         latency_ms
-        int         status_code
-        bool        is_up
-        text        error_msg
-        timestamptz checked_at
+    МИКРОСЕРВИС_ДЕПЛОЙМЕНТ {
+        string имя "aist-bot@Railway | gateway-mcp@Cloudflare | knowledge-mcp@Railway"
+        string url "endpoint для пинга"
+        string тип_проверки "http | tcp"
+        bool активен
     }
-
-    UPTIME_INCIDENTS {
-        bigserial   id              PK
-        int         service_id      FK
-        timestamptz started_at
-        timestamptz resolved_at
-        int         duration_min
-        text        severity        "warning|critical"
-        text        note
+    ИНЦИДЕНТ {
+        timestamp начало
+        timestamp завершение
+        int длительность_мин
+        string severity "warning | critical"
+        text описание
     }
-
-    ANTHROPIC_STATUS_SNAPSHOTS {
-        bigserial   id              PK
-        text        component       "claude.ai|api|claude-code|…"
-        text        status          "operational|degraded|partial_outage|major_outage"
-        float       uptime_pct_90d
-        timestamptz checked_at
+    ЗАДАНИЕ_AUTO_FIX {
+        text diagnosis "Claude diagnosis"
+        string статус "pending | approved | rejected | applied"
+        timestamp создано
     }
-
-    ERROR_LOGS {
-        bigserial   id              PK
-        text        service         "aist-bot|gateway-mcp|…"
-        text        error_key       "дедупликация по паттерну"
-        text        category        "RUNBOOK-категория"
-        text        severity        "L1|L2|L3|L4"
-        text        message
-        jsonb       context
-        timestamptz occurred_at
-        text        note            "перенесено из aist-bot (WP-45)"
-    }
-
-    REQUEST_TRACES {
-        bigserial   id              PK
-        text        service
-        char        trace_id        "32-char OTel"
-        text        span_name
-        int         duration_ms
-        text        status          "ok|error"
-        jsonb       attributes
-        timestamptz started_at
-        text        note            "перенесено из aist-bot (WP-45)"
-    }
-
-    PENDING_FIXES {
-        bigserial   id              PK
-        bigint      error_log_id    FK
-        text        diagnosis       "Claude diagnosis"
-        text        status          "pending|approved|rejected|applied"
-        timestamptz created_at
-        timestamptz resolved_at
-        text        note            "auto-fix pipeline (WP-45)"
-    }
-
-    SERVICE_REGISTRY ||--o{ UPTIME_CHECKS : "checked"
-    SERVICE_REGISTRY ||--o{ UPTIME_INCIDENTS : "incidents"
-    ERROR_LOGS ||--o{ PENDING_FIXES : "fix candidates"
 ```
+
+**Примечания.**
+- **Микросервис-деплоймент** — инфраструктурный физ.объект: конкретный запущенный экземпляр сервиса на конкретной платформе. Экземпляру можно дать имя («aist-bot production» на Railway) и показать пальцем (URL endpoint).
+- ⚠️ Технические сущности (лог/снимок, не показаны): `UPTIME_CHECKS` (пинги, TTL 90d), `ANTHROPIC_STATUS_SNAPSHOTS` (снимки чужого status page), `ERROR_LOGS` (перенесено из #6 WP-45), `REQUEST_TRACES` (OTel).
+- **Источник истины** для status.anthropic.com — внешний. Снимки — периодический fetch, не физ.объект домена.
+
+---
+
+### DB #9: content-pipeline
+
+Конвейер публикаций: черновик → одобрение → рендер → публикация в соцсети. Единственная БД с мульти-канальными публикациями. Токены соц.сетей — класс `payment_credentials` (строгая изоляция).
+
+**BC:** Content Pipeline. Референс: `WP-155`, `DP.SC.121` (TBD).
+
+```mermaid
+erDiagram
+    СОЗИДАТЕЛЬ ||--o{ ЗАДАНИЕ_ПУБЛИКАЦИЯ : "автор"
+    СОЗИДАТЕЛЬ }o--o{ КАНАЛ_СОЦСЕТИ : "OAuth-связка (токены)"
+    ЗАДАНИЕ_ПУБЛИКАЦИЯ }o--o{ АССЕТ : "включает"
+    ЗАДАНИЕ_ПУБЛИКАЦИЯ ||--o| РАСПИСАНИЕ_ПУБЛИКАЦИИ : "запланировано на"
+    ЗАДАНИЕ_ПУБЛИКАЦИЯ ||--o{ ПУБЛИКАЦИЯ : "порождает"
+    ПУБЛИКАЦИЯ ||--|| КАНАЛ_СОЦСЕТИ : "размещена в"
+
+    СОЗИДАТЕЛЬ {
+        uuid ory_id "внешний — из #1"
+    }
+    ЗАДАНИЕ_ПУБЛИКАЦИЯ {
+        text черновик_текста
+        string статус "draft | approved | rendering | published | failed"
+        timestamp создано
+    }
+    АССЕТ {
+        string url
+        string тип "video | audio | image"
+        jsonb metadata
+    }
+    РАСПИСАНИЕ_ПУБЛИКАЦИИ {
+        timestamp слот
+        bool подтверждено
+    }
+    ПУБЛИКАЦИЯ {
+        string внешний_id "ID поста в TG/YouTube/X"
+        string url
+        timestamp опубликовано
+    }
+    КАНАЛ_СОЦСЕТИ {
+        string тип "telegram | youtube | x | discourse"
+        string название "@aist_me, IWE-канал"
+        string external_id "ID канала у провайдера"
+    }
+```
+
+**Примечания.**
+- **Задание-публикация (Job)** — физ.объект жизненного цикла (от черновика до финала). Не «сообщение», а контракт на публикацию с возможностью предварительного одобрения.
+- **Публикация (Post)** — результат успешного Job: уже опубликованный пост в конкретный канал с URL. Один Job может породить несколько Публикаций (кросс-постинг в несколько каналов).
+- 🔗 «OAuth-связка Созидатель↔Канал» = связь с атрибутами (токены, scope); на физ.схеме — `CHANNEL_ACCOUNTS`. Класс `payment_credentials` (§2 П6.1).
+- ⚠️ `PUBLICATION_EVENTS` (факт успеха/неудачи) = событие, дублируется в #4 activity-hub через API.
+- **Мульти-тенант** (PMB-4): структура подразумевает одного владельца (tenant=Tseren) в MVP; мульти-тенант — после 24 апр.
 
 </details>
 
