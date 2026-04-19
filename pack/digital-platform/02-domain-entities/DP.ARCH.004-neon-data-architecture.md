@@ -174,7 +174,7 @@ Neon Project: aisystant
 > **Обновление 19 апр 2026 (WP-228 Ф7-Ф8):** добавлена БД #9 `content-pipeline` (WP-155). Картография по замечанию Андрея: каждая база = кластер с главными объектами физ.мира (см. §4.0.1).
 
 ```mermaid
-flowchart LR
+flowchart TB
     classDef ext     fill:#f5f0e8,stroke:#b0956a,color:#333
     classDef db_gw   fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef db_prod fill:#dcfce7,stroke:#22c55e,color:#14532d
@@ -198,7 +198,7 @@ flowchart LR
 
     %% ── 9 баз Neon ─────────────────────────────────────────────
     subgraph NEON ["Neon (9 баз)"]
-        direction TB
+        direction LR
         PC[("#1 platform-core\nidentity · подписки")]:::db_gw
         DT[("#2 digital-twin\nпрофиль пользователя")]:::db_prod
         KN[("#3 knowledge\nдокументы · концепты")]:::db_prod
