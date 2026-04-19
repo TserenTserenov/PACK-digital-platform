@@ -31,13 +31,15 @@ generated: true
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 5 |
 | NAV (NAV) | 1 |
+| ONT (ONT) | 1 |
+| ORG (ORG) | 1 |
 | ROLE (ROLE) | 12 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 50 |
 | SoTA Annotations (SOTA) | 19 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **163** |
+| **Total** | **165** |
 
 ## Distinctions
 
@@ -219,6 +221,18 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.NAV.001 | Навигация знаний | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
+
+### ONT
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ONT.001 | Онтология платформы | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
+
+### ORG
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ORG.001 | Организация (род сущности) | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
 
 ### ROLE
 
