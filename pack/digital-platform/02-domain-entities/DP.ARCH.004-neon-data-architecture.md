@@ -1009,7 +1009,8 @@ Neon Project: aisystant
 | Google Calendar-подключение | OAuth-связка созидателя с Google Calendar | GOOGLE_CALENDAR_CONNECTIONS | 🔗 связь | WP-232 |
 | WakaTime-интеграция | OAuth-сессия для сбора метрик кода | USER_INTEGRATIONS | 🔗 связь | — |
 | Баланс баллов (кеш) | Агрегат-кэш баланса созидателя (пересчитывается из transactions) | `platform.points.point_balances` | ⚠️ технический кеш (source-of-truth = transactions) | DP.ECON.001 |
-| Событие смены тира | Факт перехода T0→T1 и т.д. | TIER_EVENTS | ⚠️ это **событие**, его место в #4 activity-hub (запланировано) | — |
+| Текущий тир созидателя | Runtime feature-gating уровень (T0/T1/...). Производное от истории событий | колонка `current_tier` в SUBSCRIPTION_GRANTS | проекция (событие → #4) | Решение Р-W17-1 |
+| Предварительное право (Pre-Grant) | Право доступа к продукту ДО регистрации Ory (pending-identity = email / telegram_id / phone). Claim flow: при регистрации связывается с ory_id → создаётся subscription_grants | PRE_GRANTS (🆕 создать) | 🔗 pending-связь «Identity ↔ Продукт» с атрибутами expires_at, payment_id, claimed_at | Решение Р-W17-2 |
 
 #### БД #2 digital-twin
 
@@ -1072,7 +1073,7 @@ Neon Project: aisystant
 | **Мониторируемый Telegram-канал** | Конкретный TG-канал, за которым следит бот | CHANNEL_MONITORS | ✅ | — |
 | **Детский-трек** | Конкретный учебный детский трек | TRAINING_CHILDREN | ✅ (добавлен 20 апр, Р9) | — |
 | Напоминание | Конкретная запись расписания | REMINDERS | 🔗 связь «Созидатель ↔ Триггер» с атрибутами | — |
-| Права доступа | Временные права, выданные ботом (scope, expiry) | USER_ACCESS | 🔗 связь «Созидатель ↔ Ресурс» с атрибутами (добавлено 20 апр, Р9) | — |
+| ~~Права доступа~~ | ~~Временные права, выданные ботом~~ → перенесено в #1 как Pre-Grant | — | ❌ удалена из #6, см. §7.0.2 #1 «Предварительное право» | Решение Р-W17-2 (20 апр 2026) |
 | Настройка трека | Пользовательские настройки тренажёров | TRAINING_SETTINGS | 🔗 связь «Созидатель ↔ Настройка-трека» (добавлено 20 апр, Р9) | — |
 | Feedback-запись | Отзыв созидателя из бота | FEEDBACK_TRIAGE | ✅ | — |
 | Недельный цикл ленты | Feed-неделя для созидателя | FEED_WEEKS | ✅ | — |
@@ -1427,9 +1428,10 @@ graph LR
 | GOOGLE_CALENDAR_CONNECTIONS | Google Calendar OAuth для бота. | Бот (`aist_me_bot_writer`): Google OAuth callback | Бот: чтение токенов для calendar sync | §7.0.2 #1 «Google Calendar-подключение» — 🔗 связь | aist_bot_newarchitecture/db/queries/google_calendar.py, aist_bot_newarchitecture/clients/google_calendar_oauth.py | ✅ | `public.google_calendar_connections`, WP-232 |
 | USER_INTEGRATIONS | OAuth-конфиг для activity-hub collectors (GitHub, WakaTime). | Бот (`aist_me_bot_writer`): OAuth callbacks | Бот, activity-hub: чтение токенов для API | §7.0.2 #1 «WakaTime-интеграция» — 🔗 связь | aist_bot_newarchitecture/db/queries/wakatime.py, aist_bot_newarchitecture/clients/wakatime_oauth.py | ⚠️ Перенести | Сейчас в `development.user_integrations` |
 | BACKEND_REGISTRY | Реестр персональных MCP-бэкендов пользователей. | gateway-mcp: регистрация BYOB (WP-189, TBD) | gateway-mcp: fan-out маршрутизация | §7.0.2 #1 «Персональный MCP-бэкенд» (WP-189) | DS-MCP/gateway-mcp/src/backend-registry.ts, DS-MCP/gateway-mcp/scripts/backend-registry-schema.sql | ✅ | `knowledge.backend_registry`, WP-187/189 |
-| TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный. | Бот (`aist_me_bot_writer`): core/tier_detector, fire-and-forget | Metabase (аналитика) | —, log (по смыслу — событие, место в #4 activity-hub; §7.0.2 #1 помечен ⚠️) | aist_bot_newarchitecture/core/tier_detector.py | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
+| ~~TIER_EVENTS~~ | ~~Лог переходов тиров~~ → разложена на `#4.user_events` (событие) + `#1.subscription_grants.current_tier` (проекция). | — | — | — | — | ❌ Удалена | Решение Р-W17-1 (20 апр 2026) |
 | PRODUCTS | Единый каталог продуктов: подписки, программы, семинары. PK = code. | Миграции (`neondb_owner`): seed, Directus: CMS | Бот: метаданные семинаров/программ, Directus | §7.0.2 #1 «Продукт-экземпляр» (DP.ECON.001) | aist_bot_newarchitecture/db/queries/showcase.py | ✅ | `public.products`, WP-228 |
 | MENTOR_ASSIGNMENTS | Привязка наставников к продуктам по product_code. | Миграции, Directus | Бот: lookup наставников | §7.0.2 #1 «Наставник-назначение» — 🔗 связь «Созидатель(наставник) ↔ Продукт» (DP.ROLE.001) | —, TBD (Ф15b.3) | ✅ | `public.mentor_assignments`, WP-228 |
+| PRE_GRANTS | Предварительное право: доступ к продукту до регистрации Ory. Сценарий: гость оплатил семинар → запись по email/telegram_id → claim при регистрации. (pending_identity_type, pending_identity_value, product_code, expires_at, payment_id, claimed_at?, claimed_ory_id?) | `payment_receiver` CF Worker (оплата без ory_id), Directus (ручные гранты без оплаты) | `identity-resolver` (gateway-mcp / бот onboarding): SELECT unresolved pre_grants по email/telegram_id при регистрации → INSERT в subscription_grants | §7.0.2 #1 «Предварительное право (Pre-Grant)» — 🔗 pending-связь «Identity ↔ Продукт» | DS-MCP/payment-receiver/src/ (writer), DS-MCP/gateway-mcp/src/ (reader в claim flow) | 🆕 Создать | Решение Р-W17-2 (20 апр 2026). Заменяет orphan `USER_ACCESS` из #6 |
 | **Квалификация и баллы** | | | | | | | |
 | qualification_events | Событие присвоения квалификационного уровня (timeline). Append-only. | LMS backend (через backend-registry), Методсовет (через Directus), recalculate_qualifications.py | Бот tier_detector, dt_sync (LMS→ЦД mapping), Metabase (когорты) | §7.0.2 #1 «Присвоение квалификации» (WP-151) | —, планируется (WP-151 Ф7a) | 🆕 Создать | WP-151 Ф7a |
 | qualification_levels | Справочник 11 ступеней шкалы (Интересант → Общественный деятель) | — (справочник, ручное наполнение через миграцию) | Все consumer'ы qualification_events (JOIN для resolving level-id → name/threshold) | §7.0.2 #1 «Уровень квалификации-справочник» (WP-151) | —, планируется (WP-151 Ф7a) | 🆕 Создать | WP-151 Ф7a |
@@ -1517,7 +1519,7 @@ graph LR
 | **Подписки и доступ** | | | | | | | |
 | BOT_SUBSCRIPTIONS | 🔵 Проекция из #1 platform-core (SUBSCRIPTION_GRANTS) — read-cache для бота (Stars-подписки, бот-уровень). | db/queries/subscription, handlers/subscription | db/queries/subscription, core/tier_detector | §7.0.2 #6 «Telegram Stars подписка» —, proxy (source-of-truth = #1) | aist_bot_newarchitecture/db/queries/subscription.py, aist_bot_newarchitecture/handlers/, aist_bot_newarchitecture/core/tier_detector.py | 🔵 Проекция (source-of-truth = #1) | Проекция/кеш из `public.subscription_grants` |
 | SERVICE_USAGE | Счётчик использования сервисов бота. | db/queries/activity | db/queries/analytics, db/queries/dev_stats | —, log (usage counter) | aist_bot_newarchitecture/db/queries/activity.py, aist_bot_newarchitecture/db/queries/analytics.py, aist_bot_newarchitecture/db/queries/dev_stats.py | ⚠️ → activity-hub (событие usage tracking) | Миграция 003 |
-| USER_ACCESS | Временные права (выданные ботом, с expiry). | (не найден активный writer) | (не найден активный reader) | §7.0.2 #6 «Права доступа» — 🔗 связь «Созидатель ↔ Ресурс» | —, TBD (Ф15b.3) | 🔗 связь «Созидатель ↔ Ресурс: права доступа» | Миграция 002 |
+| ~~USER_ACCESS~~ | ~~Временные права~~ → заменена на `#1.pre_grants` (Pre-Grant для оплат до регистрации Ory). | — | — | — | — | ❌ Удалена | Решение Р-W17-2 (20 апр 2026). Миграция 002 rollback в PMB |
 | COMMUNITY_MEMBERS | Участники Telegram-сообщества. | db/queries/workshop, handlers/workshop | db/queries/workshop | §7.0.2 #6 «Участник сообщества» | aist_bot_newarchitecture/db/queries/workshop.py, aist_bot_newarchitecture/handlers/ | ✅ | Миграция 009 |
 | **Токены и интеграции** | | | | | | | |
 | ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | db/queries/ory_tokens, handlers/ory_register | db/queries/ory_tokens | §7.0.2 #6 «Ory OAuth-токены» —, state (класс payment_credentials) | aist_bot_newarchitecture/db/queries/ory_tokens.py, aist_bot_newarchitecture/handlers/ | ✅ | `public.ory_tokens`, WP-209. ⚠️ plaintext → WP-234 |
@@ -1538,7 +1540,7 @@ graph LR
 | ERROR_LOGS | Ошибки бота (категория, severity). TTL 180д. | core/error_handler | core/error_classifier, db/queries/analytics | §7.0.2 #6 «Лог ошибок» —, log (копия → #8) | aist_bot_newarchitecture/core/error_handler.py, aist_bot_newarchitecture/core/error_classifier.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота. ⚠️ Копия → #8 health |
 | REQUEST_TRACES | Трейсы запросов бота. TTL 30д. | core/tracing | db/queries/analytics | §7.0.2 #6 «Трейс запроса» —, log (копия → #8) | aist_bot_newarchitecture/core/tracing.py, aist_bot_newarchitecture/db/queries/traces.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота. ⚠️ Копия → #8 health |
 | **Платформенные таблицы (в aist-bot DB, target: другая база)** | | | | | | | |
-| TIER_EVENTS | Лог переходов тиров. | core/tier_detector | core/tier_detector, Metabase | §7.0.2 #1 «Событие смены тира» (legacy, target #4) | aist_bot_newarchitecture/core/tier_detector.py, —, через UI (Metabase) | ⚠️ → platform-core | `development.tier_events` |
+| ~~TIER_EVENTS~~ | ~~Лог переходов тиров~~ → разложена на `#4.user_events.event_type='tier_transition'` (событие) + `#1.subscription_grants.current_tier` (проекция). | — | — | — | — | ❌ Удалена | Решение Р-W17-1 (20 апр 2026) |
 | LEARNING_HISTORY | Gold-факты обучения (DB-триггер на user_events). | DB-триггер (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT, Навигатор: 7д окно | §7.0.2 #4 «Факт обучения (Gold)» (legacy, target #4) | aist_bot_newarchitecture/migrations/007-*.sql, aist_bot_newarchitecture/migrations/010-*.sql, aist_bot_newarchitecture/db/queries/dt_sync.py | ⚠️ → activity-hub | Миграция 007 |
 | USER_EVENTS | Нормализованные события (дублирует #4). | db/queries/events, core/scheduler | db/queries/dt_sync, db/queries/events | §7.0.2 #4 «Событие созидателя (Silver)» (legacy, target #4) | aist_bot_newarchitecture/db/queries/events.py, aist_bot_newarchitecture/core/scheduler.py, aist_bot_newarchitecture/db/queries/dt_sync.py | ⚠️ → activity-hub | Бот-копия, target: #4 |
 
@@ -1718,6 +1720,99 @@ graph LR
 | aist-bot | 24h | 2h | PITR 7d |
 
 **Трудозатраты:** ~18h. Приоритет: средний.
+
+---
+
+### Р-W17-1 — TIER_EVENTS: разделить событие и состояние (20 апр 2026)
+
+**Проблема.** Таблица `TIER_EVENTS` в #6 aist-bot смешивает две сущности: (а) событие перехода тира (T0→T1 в момент X — append-only log) и (б) текущий тир пользователя (one row per user — runtime feature-gating). §10 говорит «перенести в #1 platform-core», §7.0.2 #1 поддерживает. Но по ВДВ-инварианту (Ф22, различение «событие ≠ объект») события принадлежат #4 activity-hub, а состояния — платформенной БД.
+
+**Решение.** Разделить на две сущности:
+
+| Сущность | Где | Формат |
+|----------|-----|--------|
+| **Событие перехода тира** | `#4.user_events` (Silver) с `event_type='tier_transition'` | `{ory_id, from_tier, to_tier, reason, ts}`. TTL 90д как у всех user_events. Gold-агрегат — в Metabase views или отдельной Gold-таблице если понадобится |
+| **Текущий тир** (runtime) | Колонка `current_tier TEXT` в `#1.subscription_grants` | 1 строка на ory_id (как сейчас grant). Быстрый lookup для бота. Upsert в момент записи события |
+
+**Писатель:** `tier_detector` (в боте) при обнаружении перехода делает **две атомарные записи**:
+1. POST `#4/ingest_event` с `event_type='tier_transition'` (fire-and-forget через activity-hub API)
+2. UPDATE `#1.subscription_grants SET current_tier = ?, tier_updated_at = now() WHERE ory_id = ?`
+
+**Читатели:**
+- Бот feature-gating → `#1.subscription_grants.current_tier` (cache через kv)
+- Metabase когорты, аналитика траекторий → `#4.user_events WHERE event_type='tier_transition'`
+- /twin → может строить timeline из `#4.user_events`
+
+**Следствия для §10:**
+- Строка `TIER_EVENTS` в §10 #1 → **удалить** (не переносим таблицу, просто закрываем).
+- Строка `TIER_EVENTS` в §10 #6 → помечаем ❌ «Удалена, разложена на `#4.user_events.tier_transition` + `#1.subscription_grants.current_tier`».
+- Строка `TIER_EVENTS` в §7.0.2 #1 → **удалить**, заменить ссылкой из «Переход тира» → `#4` (событие) + `#1.subscription_grants.current_tier` (проекция).
+- В `#1.subscription_grants` добавить колонку `current_tier` (следующая миграция).
+
+**Применимые принципы:** П6 OwnerIntegrity (один факт — одно место: событие в #4, состояние в #1), П12 Layer-through-processing (Bronze→Silver→Gold), ВДВ (инвариант: событие → #4).
+
+**Трудозатраты:** ~6h (миграция колонки + правка `tier_detector` + удаление таблицы). Приоритет: низкий (не блокер).
+
+---
+
+### Р-W17-2 — USER_ACCESS: заменить на Pre-Grant в #1 platform-core (20 апр 2026)
+
+**Проблема.** Таблица `USER_ACCESS` в #6 aist-bot — orphan (миграция 002, без активных writer/reader). Но домен в §7.0.2 #6 фиксирует её как 🔗-связь «Созидатель ↔ Ресурс: права доступа». Сценарий реальный: **гость оплачивает семинар до регистрации Ory** → нужно связать платёж с будущим пользователем по email/telegram_id. При регистрации Ory — связать pending-право с новым ory_id.
+
+**Решение.** Заменить `USER_ACCESS` на новую сущность **Pre-Grant** в #1 platform-core.
+
+**Таблица `#1.pre_grants`:**
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| `id` | UUID | PK |
+| `pending_identity_type` | TEXT | `'email'` / `'telegram_id'` / `'phone'` |
+| `pending_identity_value` | TEXT | email-адрес / telegram_id / phone (нормализованный) |
+| `product_code` | TEXT | FK → `products.code` |
+| `granted_at` | TIMESTAMPTZ | Момент создания pre-grant (обычно = момент оплаты) |
+| `expires_at` | TIMESTAMPTZ | Окончание права (например, +3мес от оплаты) |
+| `payment_id` | UUID | FK → `finance_payments.id` (nullable для ручных грантов через Directus) |
+| `claimed_at` | TIMESTAMPTZ | NULL пока не связан; timestamp момента регистрации Ory |
+| `claimed_ory_id` | UUID | NULL до регистрации; ory_id при claim |
+| `created_at`, `updated_at` | TIMESTAMPTZ | Стандартные |
+
+**Индексы:** `(pending_identity_type, pending_identity_value, claimed_at)` для быстрого lookup unresolved pre-grants при регистрации.
+
+**Писатели:**
+1. **`payment-receiver` CF Worker** при успешной оплате БЕЗ `ory_id` → создаёт `pre_grant(email/telegram_id, product_code, expires_at, payment_id)`.
+2. **Directus** для ручных грантов (Методсовет выдаёт доступ конкретному email/phone без оплаты).
+
+**Читатели:**
+1. **`identity-resolver` (gateway-mcp / бот onboarding)** при регистрации Ory — SELECT pre_grants по известным identity (email из Ory, telegram_id из TG onboarding) с `claimed_at IS NULL`. Каждый найденный → создать соответствующую запись в `subscription_grants` + UPDATE `pre_grants SET claimed_at=now(), claimed_ory_id=?`.
+2. **Бот checkout flow** — при показе «у тебя уже есть предоплата» лучше до регистрации (опционально).
+
+**Claim flow (регистрация Ory):**
+```
+1. Пользователь регистрируется → Ory создаёт ory_id + привязывает email/phone
+2. identity-resolver: SELECT * FROM pre_grants 
+   WHERE pending_identity_value IN (email, telegram_id) 
+   AND claimed_at IS NULL AND expires_at > now()
+3. Для каждой строки → INSERT INTO subscription_grants (ory_id, product_code, granted_at, expires_at, source='pre_grant_claim', source_id=pre_grant.id)
+4. UPDATE pre_grants SET claimed_at=now(), claimed_ory_id=ory_id WHERE id IN (...)
+```
+
+**RLS:**
+- До claim: RLS по `pending_identity_value` — доступ через short-lived token (например, magic link в email о покупке). **Не** user-level политика, а token-gated.
+- После claim: RLS по `claimed_ory_id` (уже не актуально, данные «замороженные»).
+
+**Следствия:**
+- §7.0.2 #6 «Права-доступа-тайм-бонд» (🔗-связь) → **удалить**.
+- §10 #6 строка `USER_ACCESS` → ❌ «Удалена, заменена на `#1.pre_grants`».
+- §7.0.2 #1 → добавить физ.объект «Предварительное право (Pre-Grant)» с DS-реализацией `#1.pre_grants`.
+- §10 #1 → добавить строку `PRE_GRANTS`.
+- Миграция 002 в #6 → rollback при следующей миграции (`DROP TABLE user_access`).
+- Отдельный DP.D.NNN для сущности «Pre-Grant» — не обязательно, достаточно §7.0.2.
+
+**Применимые принципы:** П6 OwnerIntegrity (права — в #1 рядом с `subscription_grants`), ВДВ-инвариант (таблица имеет writer/reader, не orphan), П9 Identity-before-ownership (владение ресурсом может предшествовать Ory-регистрации, pre_grants — мост).
+
+**Связи:** WP-246 (Payment Receiver писатель), WP-231 (subscription_grants консумер в claim flow), WP-212 B9.2 (RLS token-gated — отдельная модель, не стандартная).
+
+**Трудозатраты:** ~12h (миграция таблицы + payment-receiver писатель + identity-resolver в gateway-mcp/боте + тесты claim flow).  Приоритет: высокий (разблокирует приём платежей до Ory, сейчас блокер для прямых платежей от guest-users).
 
 </details>
 
