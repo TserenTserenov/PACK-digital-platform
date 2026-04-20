@@ -1040,6 +1040,7 @@ Neon Project: aisystant
 | **Сырое событие (Bronze)** | Неконсолидированный факт от внешней системы (LMS/Club/WakaTime) с атрибутами источника | RAW_EVENTS | ✅ | WP-109 |
 | **Событие созидателя (Silver)** | Нормализованное событие с атрибуцией конкретного созидателя | USER_EVENTS | ✅ | WP-109 |
 | **Факт обучения (Gold)** | Агрегированный факт для профайлера (концепт, корректность, длительность) | LEARNING_HISTORY | ✅ | миграция 007 |
+| **Ежедневный снимок метрик созидателя (Gold)** | Агрегат метрик экзокортекса за сутки (мультипликатор, закрытый бюджет, WakaTime, счётчики РП, registry). Одна строка на (date, ory_id). Основа для period-queries. | IWE_DAILY_METRICS | 🆕 Создать (эстафета от WP-139 snapshot) | WP-228 Ф22.2 (20 апр 2026), WP-139 Ф7 |
 | **Событие конверсии** | Факт шага воронки созидателя (chat_id, trigger_type C1-C7, milestone, action shown/clicked/dismissed). Чистое событие без payment_id/amount. | CONVERSION_EVENTS | ✅ событие-факт (принято 20 апр: → #4 activity-hub) | Решение 20 апр 2026 (Р3) |
 | Идентичность-маппинг | chat_id ↔ ory_id (связка до OAuth) | IDENTITY_MAP | 🔗 связь «Telegram-id ↔ Созидатель», слабая идентификация | WP-109 |
 | Запись карантина | Событие, не прошедшее валидацию | QUARANTINED_EVENTS | ⚠️ **технический** sink | — |
@@ -1466,7 +1467,7 @@ graph LR
 | SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | activity-hub runner.py: log_sync после каждого запуска | activity-hub: мониторинг, Metabase (TBD) | ✅ | `development.sync_log`, WP-109 |
 | QUARANTINED_EVENTS | Карантин для невалидных событий. | activity-hub: hub.py _quarantine (validation fail), transform-worker (parse fail) | Ручной разбор (write-only sink) | ✅ | `development.quarantined_events`, WP-109 |
 | CONVERSION_EVENTS | События конверсионной воронки (chat_id, trigger_type C1-C7, milestone, action shown/clicked/dismissed). Чистое событие воронки, без payment_id / amount. | Бот: core/scheduler, conversion.py | Бот: cooldown check, Metabase (RO аналитика) | ✅ (принято 20 апр: → #4) | Решение 20 апр 2026 (Р3): по смыслу событие воронки, не платёж |
-| IWE_DAILY_METRICS | Append-only timeline ежедневных метрик экзокортекса созидателя (date, ory_id, multiplier, budget_closed_h, wakatime_h, wp_in_progress/done/pending, registry_stats). Основа для period-queries (неделя/месяц/квартал) и Metabase-дашбордов мультипликатора. | `dt-collect.sh` (WP-139, через activity-hub ingest API, source='iwe') | Metabase (period queries), `/twin insights` (для weekly/monthly aggregates), WP-109 analytics | 🆕 Создать (эстафета от WP-139 snapshot → WP-109 timeline) | WP-228 Ф22.2 (20 апр 2026), DP.ARCH.004 §7.0.3 |
+| IWE_DAILY_METRICS | **Gold: append-only daily aggregates.** Ежедневный снимок метрик экзокортекса созидателя (date, ory_id, multiplier, budget_closed_h, wakatime_h, wp_in_progress/done/pending, registry_stats). Одна строка на (date, ory_id). Основа для period-queries (неделя/месяц/квартал) и Metabase-дашбордов мультипликатора. | `dt-collect.sh` (WP-139, через activity-hub ingest API, source='iwe') | Metabase (period queries), `/twin insights` (для weekly/monthly aggregates), WP-109 analytics | 🆕 Создать (эстафета от WP-139 snapshot → WP-109 timeline) | WP-228 Ф22.2 (20 апр 2026), §7.0.2 БД #4 |
 
 ### #5 payment-registry
 
