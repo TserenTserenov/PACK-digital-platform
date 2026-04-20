@@ -1429,13 +1429,18 @@ graph LR
 | TIER_EVENTS | Лог переходов тиров (T0→T1 при регистрации и т.д.). Платформенный. | Бот (`aist_me_bot_writer`): core/tier_detector, fire-and-forget | Metabase (аналитика) | 🆕 Перенести из aist-bot | Сейчас в `development.tier_events` (aist-bot) |
 | PRODUCTS | Единый каталог продуктов: подписки, программы, семинары. PK = code. | Миграции (`neondb_owner`): seed, Directus: CMS | Бот: метаданные семинаров/программ, Directus | ✅ | `public.products`, WP-228 |
 | MENTOR_ASSIGNMENTS | Привязка наставников к продуктам по product_code. | Миграции, Directus | Бот: lookup наставников | ✅ | `public.mentor_assignments`, WP-228 |
+| **Квалификация и баллы** | | | | | |
+| qualification_events | Событие присвоения квалификационного уровня (timeline). Append-only. | LMS backend (через backend-registry), Методсовет (через Directus), recalculate_qualifications.py | Бот tier_detector, dt_sync (LMS→ЦД mapping), Metabase (когорты) | 🆕 Создать | WP-151 Ф7a |
+| qualification_levels | Справочник 11 ступеней шкалы (Интересант → Общественный деятель) | — (справочник, ручное наполнение через миграцию) | Все consumer'ы qualification_events (JOIN для resolving level-id → name/threshold) | 🆕 Создать | WP-151 Ф7a |
+| points.point_transactions | Лог начислений/списаний баллов активности (append-only, FK на qualification_events для расчёта прогресса) | calculate_points (WP-121 Ф2, TBD) | gateway_reader: баланс, Metabase | 🆕 Перенести из #2 digital-twin → #1 (решение 19 апр) | WP-121 |
+| points.point_rules | Правила начисления баллов по типу активности | Методсовет (через Directus/seed) | calculate_points (на каждой event) | 🆕 Создать | WP-121 |
+| points.qualification_multipliers | Множитель квалификации (бонус за ступень) | Методсовет (через Directus/seed) | calculate_points (умножение на базовый балл) | 🆕 Создать | WP-121 |
 
 ### #2 digital-twin
 
 | Таблица | Назначение | Writers | Readers | Статус | Источник |
 |---------|-----------|---------|---------|--------|----------|
 | DIGITAL_TWINS | Цифровой двойник: 3 слоя (базовые / вовлечённость / производные). | Бот dt_sync (`aist_bot_writer`): `2_collected` (cron 04:30), Profiler R28: `3_derived` (standalone) | dt-mcp: профиль по API, tailor-mcp: `1_declarative`+`3_derived`, *бот /twin через gateway→dt-mcp* | ✅ | `public.digital_twins`, WP-227 |
-| POINT_TRANSACTIONS | Лог начислений/списаний баллов активности. Append-only. | Бот (`aist_bot_writer`): calculate_points (WP-121 Ф2, TBD) | gateway_reader: баланс (TBD) | ✅ | `points.point_transactions`, WP-121 |
 | LEARNER_CONCEPT_MASTERY | Степень освоения концептов (0.0–1.0). Основа для квалификации "Ученик". Реализация 🔗-связи «Созидатель освоил Концепт» (DP.METHOD.040 §4: связь с атрибутами `mastery_level`, `last_reviewed_at`). | knowledge-mcp: analyze_verbalization (RLS, WP-208 TBD) | knowledge-mcp: learner_progress (RLS по user_id) | ✅ (физ.реализация 🔗) | `concept_graph.learner_concept_mastery`, WP-151 |
 
 ### #3 knowledge
@@ -1516,6 +1521,9 @@ graph LR
 | ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | db/queries/ory_tokens, handlers/ory_register | db/queries/ory_tokens | ✅ | `public.ory_tokens`, WP-209. ⚠️ plaintext → WP-234 |
 | DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | db/queries/dt_tokens, handlers/connect | db/queries/dt_tokens, core/scheduler | ✅ | `public.dt_tokens`, WP-82. ⚠️ plaintext → WP-234 |
 | **Публикации и каналы** | | | | | |
+| PUBLISHED_POSTS | Опубликованные посты (Discourse, Telegram). | db/queries/discourse, clients/publisher | db/queries/discourse | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
+| SCHEDULED_PUBLICATIONS | Запланированные публикации. | db/queries/discourse, clients/publisher | db/queries/discourse, core/scheduler | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
+| DISCOURSE_ACCOUNTS | Аккаунты Discourse для публикации. | db/queries/discourse | db/queries/discourse | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
 | CHANNEL_MONITORS | Мониторинг Telegram-каналов. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
 | CHANNEL_MENTIONS_LOG | Лог упоминаний в каналах. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
 | **Платежи (бот-уровень)** | | | | | |
@@ -1552,6 +1560,18 @@ graph LR
 | ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | Бот error_handler (сейчас в aist_bot), будущее: все сервисы | Grafana (RO), core/error_classifier | 🆕 Перенести | WP-45 (сейчас в `platform`) |
 | REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | Бот core/tracing (сейчас в aist_bot), будущее: все сервисы | Grafana (RO) | 🆕 Перенести | WP-45 (сейчас в `platform`) |
 | PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | Бот core/autofix | Бот db/queries/autofix, Grafana | ✅ Перенесено (WP-244) | WP-45 → WP-244 |
+
+### #9 content-pipeline
+
+| Таблица | Назначение | Writers | Readers | Статус | Источник |
+|---------|-----------|---------|---------|--------|----------|
+| PUBLICATION_JOBS | Задание-публикация: план публикации в соцсеть (канал, контент, расписание) | ContentPipeline Worker (create + update statuses) | ContentPipeline Worker (scheduler), Metabase (RO) | 🆕 Создать | WP-155 Ф1 |
+| PUBLISHED_POSTS | Опубликованный пост: факт публикации (URL, dates, metrics) | ContentPipeline Worker (social API callback handler) | Бот, ContentPipeline Worker (analytics), Metabase (RO) | 🆕 Создать (миграция из #6) | WP-155 |
+| CHANNELS | Канал/аккаунт соцсети (TG, YouTube, Discourse, etc.) | ContentPipeline Worker (onboarding flow) | ContentPipeline Worker (publisher), Metabase | 🆕 Создать | WP-155 |
+| ASSETS | Файл (видео/аудио/обложка) с URL и метаданными | ContentPipeline Worker (upload handler) | ContentPipeline Worker (publisher) | 🆕 Создать | WP-155 Ф0.5 |
+| SCHEDULES | Расписание публикации: запланированный слот (timezone, cadence) | ContentPipeline Worker (scheduler API) | ContentPipeline Worker (cron dispatcher) | 🆕 Создать (миграция SCHEDULED_PUBLICATIONS из #6) | WP-155 |
+| CHANNEL_ACCOUNTS | OAuth-связка созидателя с каналом (токены — class payment_credentials, зашифрованы) | ContentPipeline Worker (OAuth callback) | ContentPipeline Worker (publisher: decrypt+use) | 🆕 Создать (миграция DISCOURSE_ACCOUNTS из #6) | WP-155, §5 П6.1 |
+| PUBLICATION_EVENTS | Факт успеха/неудачи публикации (дублируется в #4 activity-hub) | ContentPipeline Worker | activity-hub hub.py (raw events), Grafana | 🆕 Создать | WP-155 |
 
 </details>
 
