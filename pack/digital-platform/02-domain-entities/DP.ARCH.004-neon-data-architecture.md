@@ -1466,6 +1466,7 @@ graph LR
 | SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | activity-hub runner.py: log_sync после каждого запуска | activity-hub: мониторинг, Metabase (TBD) | ✅ | `development.sync_log`, WP-109 |
 | QUARANTINED_EVENTS | Карантин для невалидных событий. | activity-hub: hub.py _quarantine (validation fail), transform-worker (parse fail) | Ручной разбор (write-only sink) | ✅ | `development.quarantined_events`, WP-109 |
 | CONVERSION_EVENTS | События конверсионной воронки (chat_id, trigger_type C1-C7, milestone, action shown/clicked/dismissed). Чистое событие воронки, без payment_id / amount. | Бот: core/scheduler, conversion.py | Бот: cooldown check, Metabase (RO аналитика) | ✅ (принято 20 апр: → #4) | Решение 20 апр 2026 (Р3): по смыслу событие воронки, не платёж |
+| IWE_DAILY_METRICS | Append-only timeline ежедневных метрик экзокортекса созидателя (date, ory_id, multiplier, budget_closed_h, wakatime_h, wp_in_progress/done/pending, registry_stats). Основа для period-queries (неделя/месяц/квартал) и Metabase-дашбордов мультипликатора. | `dt-collect.sh` (WP-139, через activity-hub ingest API, source='iwe') | Metabase (period queries), `/twin insights` (для weekly/monthly aggregates), WP-109 analytics | 🆕 Создать (эстафета от WP-139 snapshot → WP-109 timeline) | WP-228 Ф22.2 (20 апр 2026), DP.ARCH.004 §7.0.3 |
 
 ### #5 payment-registry
 
