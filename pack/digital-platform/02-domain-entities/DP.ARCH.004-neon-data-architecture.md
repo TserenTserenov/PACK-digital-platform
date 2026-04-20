@@ -1446,134 +1446,134 @@ graph LR
 
 ### #3 knowledge
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| DOCUMENTS | Документы + векторные эмбеддинги для semantic search. | knowledge-mcp ingest + /reindex webhook (RLS) | knowledge-mcp: hybrid search, *бот через gateway→knowledge-mcp* | ✅ | `knowledge.documents`, knowledge-mcp |
-| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов. | knowledge-mcp: recordFeedback tool (RLS) | knowledge-mcp: feedback_stats | ⚠️ → activity-hub (событие retrieval feedback) | `knowledge.retrieval_feedback`, knowledge-mcp |
-| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). | knowledge-mcp ingest-concepts.ts (без RLS, платформенные) | knowledge-mcp: analyze_verbalization, graph_stats, *бот через gateway* | ✅ | `concept_graph.concepts`, WP-170 |
-| CONCEPT_EDGES | Рёбра графа: prerequisite, related, part_of, contradicts. | knowledge-mcp ingest-concepts.ts | knowledge-mcp: graph_stats, edge coverage | ✅ | `concept_graph.concept_edges` |
-| CONCEPT_MISCONCEPTIONS | Типовые заблуждения по концептам. | knowledge-mcp ingest-concepts.ts (из CAT.001) | knowledge-mcp: analyze_verbalization (LLM-detection) | ✅ | `concept_graph.concept_misconceptions` |
-| GITHUB_INSTALLATIONS | GitHub App installations для индексации репо. | gateway-mcp: GitHub App OAuth (WP-187, RLS) | gateway-mcp: список подключённых репо | ✅ | `knowledge.github_installations`, WP-187 |
-| USER_SOURCES | Источники индексации (GitHub репо, активные/нет). | knowledge-mcp миграция 004 + gateway-mcp webhook (RLS) | knowledge-mcp: resolve user_id при ingest, gateway-mcp: UI источников | ✅ | `knowledge.user_sources`, knowledge-mcp |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| DOCUMENTS | Документы + векторные эмбеддинги для semantic search. | knowledge-mcp ingest + /reindex webhook (RLS) | knowledge-mcp: hybrid search, *бот через gateway→knowledge-mcp* | §7.0.2 #3 «Документ» | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/001-hybrid-search.sql | ✅ | `knowledge.documents`, knowledge-mcp |
+| RETRIEVAL_FEEDBACK | Обратная связь по релевантности документов. | knowledge-mcp: recordFeedback tool (RLS) | knowledge-mcp: feedback_stats | —, log (событие retrieval feedback) | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/003-retrieval-feedback.sql | ⚠️ → activity-hub (событие retrieval feedback) | `knowledge.retrieval_feedback`, knowledge-mcp |
+| CONCEPTS | Граф концептов платформы (ZP, FPF, Pack, курсы). | knowledge-mcp ingest-concepts.ts (без RLS, платформенные) | knowledge-mcp: analyze_verbalization, graph_stats, *бот через gateway* | §7.0.2 #3 «Концепт» | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/005-concept-graph.sql | ✅ | `concept_graph.concepts`, WP-170 |
+| CONCEPT_EDGES | Рёбра графа: prerequisite, related, part_of, contradicts. | knowledge-mcp ingest-concepts.ts | knowledge-mcp: graph_stats, edge coverage | 🔗 связь «Концепт ↔ Концепт» (§7.0.2 #3) | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/005-concept-graph.sql | ✅ | `concept_graph.concept_edges` |
+| CONCEPT_MISCONCEPTIONS | Типовые заблуждения по концептам. | knowledge-mcp ingest-concepts.ts (из CAT.001) | knowledge-mcp: analyze_verbalization (LLM-detection) | §7.0.2 #3 «Концептное заблуждение» | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/005-concept-graph.sql | ✅ | `concept_graph.concept_misconceptions` |
+| GITHUB_INSTALLATIONS | GitHub App installations для индексации репо. | gateway-mcp: GitHub App OAuth (WP-187, RLS) | gateway-mcp: список подключённых репо | §7.0.2 #3 «GitHub-установка (индексация)» — 🔗 связь «Созидатель ↔ GitHub-аккаунт» scope=repo(read) | DS-MCP/gateway-mcp/src/index.ts, DS-MCP/gateway-mcp/src/backend-registry.ts | ✅ | `knowledge.github_installations`, WP-187 |
+| USER_SOURCES | Источники индексации (GitHub репо, активные/нет). | knowledge-mcp миграция 004 + gateway-mcp webhook (RLS) | knowledge-mcp: resolve user_id при ingest, gateway-mcp: UI источников | §7.0.2 #3 «Источник индексации» | DS-MCP/knowledge-mcp/src/index.ts, DS-MCP/knowledge-mcp/migrations/004-user-github-onboarding.sql, DS-MCP/gateway-mcp/src/index.ts | ✅ | `knowledge.user_sources`, knowledge-mcp |
 
 ### #4 activity-hub
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| RAW_EVENTS | Bronze: сырые события, партиционированы по (source, fetched_at). TTL 30д. | activity-hub adapters (`aist_bot_writer`): write_raw, ON CONFLICT DO NOTHING | activity-hub transform-worker: _fetch_pending, integrity checks | ✅ | `development.raw_events`, WP-109 Ф8.1 |
-| USER_EVENTS | Silver: нормализованные события с атрибуцией пользователя. TTL 90д. | activity-hub: (1) hub.py ingest_event direct INSERT, (2) transform-worker upsert, (3) ingest_batch bulk | activity-hub: rate_limit check, бот dt_sync: агрегация для ЦД | ✅ | `development.user_events`, WP-109 |
-| LEARNING_HISTORY | Gold: факты обучения. Читается profiler. Archive в S3 после 5 лет. | Бот: DB-триггер на user_events INSERT (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT-расчёты, Навигатор: 7-дневное окно, *Портной: depths_by_direction* | ⚠️ Перенести | Сейчас в aist_bot (миграция 007) |
-| IDENTITY_MAP | chat_id → ory_id; NULL до OAuth. | activity-hub runner.py: populate_bot/csv/lms_identity | activity-hub hub.py: resolve_user_uuid, бот dt_sync: LMS qualification mapping | ✅ | `development.identity_map`, WP-109 |
-| SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | activity-hub runner.py: log_sync после каждого запуска | activity-hub: мониторинг, Metabase (TBD) | ✅ | `development.sync_log`, WP-109 |
-| QUARANTINED_EVENTS | Карантин для невалидных событий. | activity-hub: hub.py _quarantine (validation fail), transform-worker (parse fail) | Ручной разбор (write-only sink) | ✅ | `development.quarantined_events`, WP-109 |
-| CONVERSION_EVENTS | События конверсионной воронки (chat_id, trigger_type C1-C7, milestone, action shown/clicked/dismissed). Чистое событие воронки, без payment_id / amount. | Бот: core/scheduler, conversion.py | Бот: cooldown check, Metabase (RO аналитика) | ✅ (принято 20 апр: → #4) | Решение 20 апр 2026 (Р3): по смыслу событие воронки, не платёж |
-| IWE_DAILY_METRICS | **Gold: append-only daily aggregates.** Ежедневный снимок метрик экзокортекса созидателя (date, ory_id, multiplier, budget_closed_h, wakatime_h, wp_in_progress/done/pending, registry_stats). Одна строка на (date, ory_id). Основа для period-queries (неделя/месяц/квартал) и Metabase-дашбордов мультипликатора. | `dt-collect.sh` (WP-139, через activity-hub ingest API, source='iwe') | Metabase (period queries), `/twin insights` (для weekly/monthly aggregates), WP-109 analytics | 🆕 Создать (эстафета от WP-139 snapshot → WP-109 timeline) | WP-228 Ф22.2 (20 апр 2026), §7.0.2 БД #4 |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| RAW_EVENTS | Bronze: сырые события, партиционированы по (source, fetched_at). TTL 30д. | activity-hub adapters (`aist_bot_writer`): write_raw, ON CONFLICT DO NOTHING | activity-hub transform-worker: _fetch_pending, integrity checks | §7.0.2 #4 «Сырое событие (Bronze)» | activity-hub/activity_hub/adapters/*.py, activity-hub/runner.py | ✅ | `development.raw_events`, WP-109 Ф8.1 |
+| USER_EVENTS | Silver: нормализованные события с атрибуцией пользователя. TTL 90д. | activity-hub: (1) hub.py ingest_event direct INSERT, (2) transform-worker upsert, (3) ingest_batch bulk | activity-hub: rate_limit check, бот dt_sync: агрегация для ЦД | §7.0.2 #4 «Событие созидателя (Silver)» | activity-hub/activity_hub/core/, activity-hub/activity_hub/transforms/, aist_bot_newarchitecture/db/queries/dt_sync.py | ✅ | `development.user_events`, WP-109 |
+| LEARNING_HISTORY | Gold: факты обучения. Читается profiler. Archive в S3 после 5 лет. | Бот: DB-триггер на user_events INSERT (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT-расчёты, Навигатор: 7-дневное окно, *Портной: depths_by_direction* | §7.0.2 #4 «Факт обучения (Gold)» | aist_bot_newarchitecture/db/queries/dt_sync.py, aist_bot_newarchitecture/migrations/007-*.sql, DS-MCP/tailor-mcp/src/queries.py | ⚠️ Перенести | Сейчас в aist_bot (миграция 007) |
+| IDENTITY_MAP | chat_id → ory_id; NULL до OAuth. | activity-hub runner.py: populate_bot/csv/lms_identity | activity-hub hub.py: resolve_user_uuid, бот dt_sync: LMS qualification mapping | §7.0.2 #4 «Идентичность-маппинг» — 🔗 связь «Telegram-id ↔ Созидатель» | activity-hub/runner.py, activity-hub/activity_hub/core/, aist_bot_newarchitecture/db/queries/dt_sync.py | ✅ | `development.identity_map`, WP-109 |
+| SYNC_LOG | Журнал запусков коллекторов. TTL 30д. | activity-hub runner.py: log_sync после каждого запуска | activity-hub: мониторинг, Metabase (TBD) | —, log (журнал запусков) | activity-hub/runner.py, —, через UI (Metabase) | ✅ | `development.sync_log`, WP-109 |
+| QUARANTINED_EVENTS | Карантин для невалидных событий. | activity-hub: hub.py _quarantine (validation fail), transform-worker (parse fail) | Ручной разбор (write-only sink) | —, log (технический sink) | activity-hub/activity_hub/core/, activity-hub/activity_hub/transforms/ | ✅ | `development.quarantined_events`, WP-109 |
+| CONVERSION_EVENTS | События конверсионной воронки (chat_id, trigger_type C1-C7, milestone, action shown/clicked/dismissed). Чистое событие воронки, без payment_id / amount. | Бот: core/scheduler, conversion.py | Бот: cooldown check, Metabase (RO аналитика) | §7.0.2 #4 «Событие конверсии» (принято 20 апр: → #4) | aist_bot_newarchitecture/db/queries/conversion.py, aist_bot_newarchitecture/core/scheduler.py | ✅ (принято 20 апр: → #4) | Решение 20 апр 2026 (Р3): по смыслу событие воронки, не платёж |
+| IWE_DAILY_METRICS | **Gold: append-only daily aggregates.** Ежедневный снимок метрик экзокортекса созидателя (date, ory_id, multiplier, budget_closed_h, wakatime_h, wp_in_progress/done/pending, registry_stats). Одна строка на (date, ory_id). Основа для period-queries (неделя/месяц/квартал) и Metabase-дашбордов мультипликатора. | `dt-collect.sh` (WP-139, через activity-hub ingest API, source='iwe') | Metabase (period queries), `/twin insights` (для weekly/monthly aggregates), WP-109 analytics | §7.0.2 #4 «Ежедневный снимок метрик созидателя (Gold)» | DS-my-strategy/scripts/dt-collect.sh, activity-hub/activity_hub/adapters/iwe.py | 🆕 Создать (эстафета от WP-139 snapshot → WP-109 timeline) | WP-228 Ф22.2 (20 апр 2026), §7.0.2 БД #4 |
 
 ### #5 payment-registry
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| FINANCE_PAYMENTS | Реестр всех транзакций. Permanent. `raw_payload JSONB` (WP-246). | Payment Receiver CF Worker (`payment_receiver_writer`), incremental-sync.sh cron (`aist_me_bot_writer`), бот showcase handler | Бот: has_seminar_access/has_access_to_chat, Metabase (`metabase_reader`), sync-subscriptions.sh: → SUBSCRIPTION_GRANTS | ✅ | `public.finance_payments`, WP-183 |
-| PROCESSED_WEBHOOKS | Idempotency-дедупликация webhook'ов. PK = event_id. TTL >72h. | Payment Receiver (`payment_receiver_writer`): isDuplicate + markProcessed | Payment Receiver: проверка дубликатов | 🆕 Создать | `public.processed_webhooks`, WP-246 |
-| FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | (WP-237, TBD) | (WP-237, TBD) | 🆕 Создать | WP-237 |
-| PAYMENTS_SYNC_STATE | Ватермарк импорта из Aisystant. | incremental-sync.sh (`aist_me_bot_writer`) | incremental-sync.sh, Metabase: sync health | ✅ | `public.finance_payments_sync_state`, WP-183 |
-| SUBSCRIPTION_GRANTS_SYNC_STATE | Ватермарк синхронизации грантов. | sync-subscriptions.sh (`aist_me_bot_writer`) | sync-subscriptions.sh: read boundary | ✅ | WP-231 |
-| IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → finance_payments | ✅ | WP-183 (миграция 005) |
-| IMPORT_STAGING_CHARGEOFF | Landing zone списаний. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → UPDATE linked | ✅ | WP-183 (миграция 005) |
-| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | Бот: db/queries/workshop, handlers/workshop | Бот: db/queries/workshop | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
-| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | Бот: handlers/payments, db/queries/showcase | Бот: db/queries/showcase | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
-| AUTOPAY | Договор автосписания с пользователем (payment_method_id YooKassa). | payment-receiver (`payment_receiver_writer`, WP-246) | autopay-executor, Бот (проверка статуса) | ✅ (план WP-246 Ф10-Ф16) | WP-246 Стадия 3 |
-| AUTOPAY_DATA | Состояние/история автосписаний (попытки, ответы YooKassa, даты). | autopay-executor CF Worker | Бот, Metabase (RO, без payment_method_id) | ✅ (план WP-246 Ф10-Ф16) | WP-246 Стадия 3 |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| FINANCE_PAYMENTS | Реестр всех транзакций. Permanent. `raw_payload JSONB` (WP-246). | Payment Receiver CF Worker (`payment_receiver_writer`), incremental-sync.sh cron (`aist_me_bot_writer`), бот showcase handler | Бот: has_seminar_access/has_access_to_chat, Metabase (`metabase_reader`), sync-subscriptions.sh: → SUBSCRIPTION_GRANTS | §7.0.2 #5 «Платёж» | DS-MCP/payment-receiver/src/, DS-ecosystem-development/scripts/incremental-sync.sh, aist_bot_newarchitecture/db/queries/showcase.py | ✅ | `public.finance_payments`, WP-183 |
+| PROCESSED_WEBHOOKS | Idempotency-дедупликация webhook'ов. PK = event_id. TTL >72h. | Payment Receiver (`payment_receiver_writer`): isDuplicate + markProcessed | Payment Receiver: проверка дубликатов | §7.0.2 #5 «Webhook-дедупликация» —, state | DS-MCP/payment-receiver/src/ | 🆕 Создать | `public.processed_webhooks`, WP-246 |
+| FINANCE_PAYMENTS_AUDIT_LOG | Append-only лог изменений статуса. 7 лет. | (WP-237, TBD) | (WP-237, TBD) | §7.0.2 #5 «Аудит-запись изменений статуса» —, log | —, TBD (Ф15b.3), план WP-237 | 🆕 Создать | WP-237 |
+| PAYMENTS_SYNC_STATE | Ватермарк импорта из Aisystant. | incremental-sync.sh (`aist_me_bot_writer`) | incremental-sync.sh, Metabase: sync health | §7.0.2 #5 «Ватермарк импорта» —, state | DS-ecosystem-development/scripts/incremental-sync.sh, —, через UI (Metabase) | ✅ | `public.finance_payments_sync_state`, WP-183 |
+| SUBSCRIPTION_GRANTS_SYNC_STATE | Ватермарк синхронизации грантов. | sync-subscriptions.sh (`aist_me_bot_writer`) | sync-subscriptions.sh: read boundary | §7.0.2 #5 «Ватермарк импорта» —, state | DS-ecosystem-development/scripts/sync-subscriptions.sh | ✅ | WP-231 |
+| IMPORT_STAGING_PAYMENT | Landing zone импорта платежей из Aisystant. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → finance_payments | §7.0.2 #5 «Landing zone» —, state | DS-ecosystem-development/scripts/incremental-sync.sh, DS-ecosystem-development/migrations/005-*.sql | ✅ | WP-183 (миграция 005) |
+| IMPORT_STAGING_CHARGEOFF | Landing zone списаний. | incremental-sync.sh: TRUNCATE + COPY | incremental-sync.sql: transform → UPDATE linked | §7.0.2 #5 «Landing zone» —, state | DS-ecosystem-development/scripts/incremental-sync.sh, DS-ecosystem-development/migrations/005-*.sql | ✅ | WP-183 (миграция 005) |
+| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | Бот: db/queries/workshop, handlers/workshop | Бот: db/queries/workshop | §7.0.2 #5 «Платёж» (тип workshop) | aist_bot_newarchitecture/db/queries/workshop.py, aist_bot_newarchitecture/handlers/workshop.py | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | Бот: handlers/payments, db/queries/showcase | Бот: db/queries/showcase | §7.0.2 #5 «Платёж» (тип seminar) | aist_bot_newarchitecture/handlers/payments.py, aist_bot_newarchitecture/db/queries/showcase.py | ⚠️ Перенести из aist-bot | Сейчас в aist_bot |
+| AUTOPAY | Договор автосписания с пользователем (payment_method_id YooKassa). | payment-receiver (`payment_receiver_writer`, WP-246) | autopay-executor, Бот (проверка статуса) | §7.0.2 #5 «Автосписание-договор» | DS-MCP/payment-receiver/src/, aist_bot_newarchitecture/db/queries/subscription.py | ✅ (план WP-246 Ф10-Ф16) | WP-246 Стадия 3 |
+| AUTOPAY_DATA | Состояние/история автосписаний (попытки, ответы YooKassa, даты). | autopay-executor CF Worker | Бот, Metabase (RO, без payment_method_id) | §7.0.2 #5 «Автосписание-договор» (история, класс payment_credentials) | DS-MCP/payment-receiver/src/, —, через UI (Metabase) | ✅ (план WP-246 Ф10-Ф16) | WP-246 Стадия 3 |
 
 ### #6 aist-bot
 
 > **WP-228 Ф2 (16 апр):** расширен с 11 до 44 таблиц. Таблицы-кандидаты на миграцию помечены ⚠️ с целевой базой.
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| **Ядро бота (FSM, сессии, идентичность)** | | | | | |
-| USERS | Локальные пользователи бота (telegram_id, ory_id, роли). | handlers/onboarding, core/ory_register | core/\*, handlers/\*, db/queries/\* | ✅ | Первая миграция |
-| USER_STATE | FSM-состояние бота + счётчик активных дней, триал. ⚠️ Колонки tier/mentor_tier убрать после переноса. | handlers/onboarding, states/\*, core/scheduler, core/machine | handlers/\*, states/\*, core/machine | ✅ | `development.user_state` |
-| FSM_STATES | Хранилище FSM aiogram (персистентность между редеплоями). | core/storage (aiogram) | core/storage | ✅ | aiogram FSM |
-| USER_SESSIONS | Сессии пользователей. | db/queries/sessions | db/queries/analytics | ✅ | Миграция бота |
-| OAUTH_PENDING_STATES | Ожидающие OAuth state-коды (GitHub, Google). TTL: до завершения flow. | db/queries/oauth_states, handlers/github | db/queries/oauth_states | ✅ | Миграция бота |
-| **Обучение (тренажёры, фид, марафоны)** | | | | | |
-| TRAINING_PROGRESS | Прогресс тренажёров (мемы, задания). | db/queries/training, states/training/\* | db/queries/training, states/training/\* | ✅ | Миграция бота |
-| TRAINING_CHILDREN | Детские учебные треки (физ.объект: конкретный Детский-трек). | db/queries/training | db/queries/training | ✅ физ.объект «Детский-трек» (добавлен в §7.0.2 #6) | Миграция бота |
-| TRAINING_ATTEMPTS | Попытки прохождения (score, ответы). | db/queries/training, states/training/\* | db/queries/training | ✅ | Миграция бота |
-| TRAINING_SETTINGS | Пользовательские настройки тренажёров. | db/queries/training, handlers/settings | db/queries/training | 🔗 связь «Созидатель ↔ Настройка-трека» | Миграция бота |
-| FEED_SESSIONS | Сессии ленты обучения. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | ✅ | Миграция бота |
-| FEED_WEEKS | Недельные циклы ленты. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | ✅ | Миграция бота |
-| MARATHON_CONTENT | Контент марафонов (уроки, задания). | db/queries/marathon, core/scheduler | db/queries/marathon, states/lesson | ✅ | Миграция бота |
-| ANSWERS | Ответы пользователей на задания. | db/queries/answers, states/task | db/queries/answers, db/queries/profile | ✅ | Миграция бота |
-| ASSESSMENTS | Оценки (самооценка, внешняя). | db/queries/assessment, states/assessment/\* | db/queries/assessment, db/queries/dev_stats | ✅ | Миграция бота |
-| CONTENT_CACHE | Кеш контента LMS (уроки, задания). TTL: по scheduler. | db/queries/cache, core/scheduler | db/queries/cache, states/lesson, states/task | ✅ | Миграция бота |
-| **Коммуникация и фидбек** | | | | | |
-| QA_HISTORY | История вопросов/ответов. TTL 180д. | db/queries/qa, states/consultation | db/queries/analytics, handlers/twin | ✅ | `public.qa_history`, WP-132 |
-| NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | db/queries/notifications, core/scheduler | db/queries/notifications | ✅ | `public.notification_log`, WP-232 |
-| FEEDBACK_TRIAGE | Фидбек из бота (source='bot'). | core/feedback_triage, handlers/feedback | core/feedback_triage, db/queries/feedback | ✅ | Миграция 008 |
-| FEEDBACK_REPORTS | Отчёты по фидбеку (агрегированные). | db/queries/feedback, handlers/feedback | db/queries/feedback | ⚠️ → activity-hub (событие feedback) | Миграция бота |
-| REMINDERS | Расписание напоминаний. | core/scheduler | core/scheduler | ✅ | Миграция бота |
-| **Подписки и доступ** | | | | | |
-| BOT_SUBSCRIPTIONS | 🔵 Проекция из #1 platform-core (SUBSCRIPTION_GRANTS) — read-cache для бота (Stars-подписки, бот-уровень). | db/queries/subscription, handlers/subscription | db/queries/subscription, core/tier_detector | 🔵 Проекция (source-of-truth = #1) | Проекция/кеш из `public.subscription_grants` |
-| SERVICE_USAGE | Счётчик использования сервисов бота. | db/queries/activity | db/queries/analytics, db/queries/dev_stats | ⚠️ → activity-hub (событие usage tracking) | Миграция 003 |
-| USER_ACCESS | Временные права (выданные ботом, с expiry). | (не найден активный writer) | (не найден активный reader) | 🔗 связь «Созидатель ↔ Ресурс: права доступа» | Миграция 002 |
-| COMMUNITY_MEMBERS | Участники Telegram-сообщества. | db/queries/workshop, handlers/workshop | db/queries/workshop | ✅ | Миграция 009 |
-| **Токены и интеграции** | | | | | |
-| ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | db/queries/ory_tokens, handlers/ory_register | db/queries/ory_tokens | ✅ | `public.ory_tokens`, WP-209. ⚠️ plaintext → WP-234 |
-| DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | db/queries/dt_tokens, handlers/connect | db/queries/dt_tokens, core/scheduler | ✅ | `public.dt_tokens`, WP-82. ⚠️ plaintext → WP-234 |
-| **Публикации и каналы** | | | | | |
-| PUBLISHED_POSTS | Опубликованные посты (Discourse, Telegram). | db/queries/discourse, clients/publisher | db/queries/discourse | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
-| SCHEDULED_PUBLICATIONS | Запланированные публикации. | db/queries/discourse, clients/publisher | db/queries/discourse, core/scheduler | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
-| DISCOURSE_ACCOUNTS | Аккаунты Discourse для публикации. | db/queries/discourse | db/queries/discourse | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
-| CHANNEL_MONITORS | Мониторинг Telegram-каналов. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
-| CHANNEL_MENTIONS_LOG | Лог упоминаний в каналах. | db/queries/channels, handlers/channels | db/queries/channels | ✅ | Миграция бота |
-| **Платежи (бот-уровень)** | | | | | |
-| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | db/queries/workshop, handlers/workshop | db/queries/workshop | ⚠️ → payment-registry | Миграция бота |
-| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | handlers/payments, db/queries/showcase | db/queries/showcase | ⚠️ → payment-registry | Миграция бота |
-| CONVERSION_EVENTS | События конверсионной воронки. | db/queries/conversion, core/scheduler | db/queries/conversion, db/queries/analytics | ⚠️ → activity-hub (принято 20 апр: Р3) | Миграция бота |
-| ~~SEMINARS~~ | ~~Каталог семинаров~~ → заменена PRODUCTS в platform-core. | — | — | ❌ Удалена | Заменена `public.products` |
-| **Наблюдаемость (бот-уровень)** | | | | | |
-| ACTIVITY_LOG | Лог активности пользователей в боте. | db/queries/activity, core/scheduler | db/queries/activity, db/queries/analytics | ✅ | Миграция бота |
-| ERROR_LOGS | Ошибки бота (категория, severity). TTL 180д. | core/error_handler | core/error_classifier, db/queries/analytics | ✅ | Миграция бота. ⚠️ Копия → #8 health |
-| REQUEST_TRACES | Трейсы запросов бота. TTL 30д. | core/tracing | db/queries/analytics | ✅ | Миграция бота. ⚠️ Копия → #8 health |
-| **Платформенные таблицы (в aist-bot DB, target: другая база)** | | | | | |
-| TIER_EVENTS | Лог переходов тиров. | core/tier_detector | core/tier_detector, Metabase | ⚠️ → platform-core | `development.tier_events` |
-| LEARNING_HISTORY | Gold-факты обучения (DB-триггер на user_events). | DB-триггер (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT, Навигатор: 7д окно | ⚠️ → activity-hub | Миграция 007 |
-| USER_EVENTS | Нормализованные события (дублирует #4). | db/queries/events, core/scheduler | db/queries/dt_sync, db/queries/events | ⚠️ → activity-hub | Бот-копия, target: #4 |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| **Ядро бота (FSM, сессии, идентичность)** | | | | | | | |
+| USERS | Локальные пользователи бота (telegram_id, ory_id, роли). | handlers/onboarding, core/ory_register | core/\*, handlers/\*, db/queries/\* | §7.0.2 #6 «Пользователь бота» (проекция «Созидатель в контексте бота») | aist_bot_newarchitecture/db/queries/users.py, aist_bot_newarchitecture/handlers/onboarding.py, aist_bot_newarchitecture/core/ory_register.py | ✅ | Первая миграция |
+| USER_STATE | FSM-состояние бота + счётчик активных дней, триал. ⚠️ Колонки tier/mentor_tier убрать после переноса. | handlers/onboarding, states/\*, core/scheduler, core/machine | handlers/\*, states/\*, core/machine | §7.0.2 #6 «FSM-состояние» —, state | aist_bot_newarchitecture/handlers/onboarding.py, aist_bot_newarchitecture/states/, aist_bot_newarchitecture/core/scheduler.py | ✅ | `development.user_state` |
+| FSM_STATES | Хранилище FSM aiogram (персистентность между редеплоями). | core/storage (aiogram) | core/storage | —, state (aiogram FSM) | aist_bot_newarchitecture/core/storage.py | ✅ | aiogram FSM |
+| USER_SESSIONS | Сессии пользователей. | db/queries/sessions | db/queries/analytics | §7.0.2 #6 «Сессия пользователя» —, state | aist_bot_newarchitecture/db/queries/sessions.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота |
+| OAUTH_PENDING_STATES | Ожидающие OAuth state-коды (GitHub, Google). TTL: до завершения flow. | db/queries/oauth_states, handlers/github | db/queries/oauth_states | §7.0.2 #6 «OAuth-state ожидания» —, state | aist_bot_newarchitecture/db/queries/oauth_states.py, aist_bot_newarchitecture/handlers/github.py | ✅ | Миграция бота |
+| **Обучение (тренажёры, фид, марафоны)** | | | | | | | |
+| TRAINING_PROGRESS | Прогресс тренажёров (мемы, задания). | db/queries/training, states/training/\* | db/queries/training, states/training/\* | §7.0.2 #6 «Прогресс тренажёра» —, state | aist_bot_newarchitecture/db/queries/training.py, aist_bot_newarchitecture/states/training/ | ✅ | Миграция бота |
+| TRAINING_CHILDREN | Детские учебные треки (физ.объект: конкретный Детский-трек). | db/queries/training | db/queries/training | §7.0.2 #6 «Детский-трек» | aist_bot_newarchitecture/db/queries/training.py | ✅ физ.объект «Детский-трек» (добавлен в §7.0.2 #6) | Миграция бота |
+| TRAINING_ATTEMPTS | Попытки прохождения (score, ответы). | db/queries/training, states/training/\* | db/queries/training | §7.0.2 #6 «Попытка тренажёра» | aist_bot_newarchitecture/db/queries/training.py, aist_bot_newarchitecture/states/training/ | ✅ | Миграция бота |
+| TRAINING_SETTINGS | Пользовательские настройки тренажёров. | db/queries/training, handlers/settings | db/queries/training | §7.0.2 #6 «Настройка трека» — 🔗 связь «Созидатель ↔ Настройка-трека» | aist_bot_newarchitecture/db/queries/training.py, aist_bot_newarchitecture/handlers/ | 🔗 связь «Созидатель ↔ Настройка-трека» | Миграция бота |
+| FEED_SESSIONS | Сессии ленты обучения. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | §7.0.2 #6 «Сессия ленты» — 🔗 связь «Созидатель ↔ Feed-неделя» | aist_bot_newarchitecture/db/queries/feed.py, aist_bot_newarchitecture/states/feed/ | ✅ | Миграция бота |
+| FEED_WEEKS | Недельные циклы ленты. | db/queries/feed, states/feed/\* | db/queries/feed, db/queries/answers | §7.0.2 #6 «Недельный цикл ленты» | aist_bot_newarchitecture/db/queries/feed.py, aist_bot_newarchitecture/states/feed/ | ✅ | Миграция бота |
+| MARATHON_CONTENT | Контент марафонов (уроки, задания). | db/queries/marathon, core/scheduler | db/queries/marathon, states/lesson | §7.0.2 #6 «Элемент марафона» | aist_bot_newarchitecture/db/queries/marathon.py, aist_bot_newarchitecture/core/scheduler.py, aist_bot_newarchitecture/states/ | ✅ | Миграция бота |
+| ANSWERS | Ответы пользователей на задания. | db/queries/answers, states/task | db/queries/answers, db/queries/profile | §7.0.2 #6 «Ответ на задание» | aist_bot_newarchitecture/db/queries/answers.py, aist_bot_newarchitecture/states/, aist_bot_newarchitecture/db/queries/profile.py | ✅ | Миграция бота |
+| ASSESSMENTS | Оценки (самооценка, внешняя). | db/queries/assessment, states/assessment/\* | db/queries/assessment, db/queries/dev_stats | §7.0.2 #6 «Оценка» | aist_bot_newarchitecture/db/queries/assessment.py, aist_bot_newarchitecture/states/, aist_bot_newarchitecture/db/queries/dev_stats.py | ✅ | Миграция бота |
+| CONTENT_CACHE | Кеш контента LMS (уроки, задания). TTL: по scheduler. | db/queries/cache, core/scheduler | db/queries/cache, states/lesson, states/task | §7.0.2 #6 «Кеш контента LMS» —, proxy | aist_bot_newarchitecture/db/queries/cache.py, aist_bot_newarchitecture/core/scheduler.py | ✅ | Миграция бота |
+| **Коммуникация и фидбек** | | | | | | | |
+| QA_HISTORY | История вопросов/ответов. TTL 180д. | db/queries/qa, states/consultation | db/queries/analytics, handlers/twin | §7.0.2 #6 «QA-пара» | aist_bot_newarchitecture/db/queries/qa.py, aist_bot_newarchitecture/db/queries/analytics.py, aist_bot_newarchitecture/handlers/ | ✅ | `public.qa_history`, WP-132 |
+| NOTIFICATION_LOG | Журнал уведомлений с idempotency_key. TTL 30д. | db/queries/notifications, core/scheduler | db/queries/notifications | §7.0.2 #6 «Уведомление» —, log | aist_bot_newarchitecture/db/queries/notifications.py, aist_bot_newarchitecture/core/scheduler.py | ✅ | `public.notification_log`, WP-232 |
+| FEEDBACK_TRIAGE | Фидбек из бота (source='bot'). | core/feedback_triage, handlers/feedback | core/feedback_triage, db/queries/feedback | §7.0.2 #6 «Feedback-запись» | aist_bot_newarchitecture/core/feedback_triage.py, aist_bot_newarchitecture/handlers/, aist_bot_newarchitecture/db/queries/feedback.py | ✅ | Миграция 008 |
+| FEEDBACK_REPORTS | Отчёты по фидбеку (агрегированные). | db/queries/feedback, handlers/feedback | db/queries/feedback | —, log (агрегат фидбеков) | aist_bot_newarchitecture/db/queries/feedback.py, aist_bot_newarchitecture/handlers/ | ⚠️ → activity-hub (событие feedback) | Миграция бота |
+| REMINDERS | Расписание напоминаний. | core/scheduler | core/scheduler | §7.0.2 #6 «Напоминание» — 🔗 связь «Созидатель ↔ Триггер» | aist_bot_newarchitecture/core/scheduler.py | ✅ | Миграция бота |
+| **Подписки и доступ** | | | | | | | |
+| BOT_SUBSCRIPTIONS | 🔵 Проекция из #1 platform-core (SUBSCRIPTION_GRANTS) — read-cache для бота (Stars-подписки, бот-уровень). | db/queries/subscription, handlers/subscription | db/queries/subscription, core/tier_detector | §7.0.2 #6 «Telegram Stars подписка» —, proxy (source-of-truth = #1) | aist_bot_newarchitecture/db/queries/subscription.py, aist_bot_newarchitecture/handlers/, aist_bot_newarchitecture/core/tier_detector.py | 🔵 Проекция (source-of-truth = #1) | Проекция/кеш из `public.subscription_grants` |
+| SERVICE_USAGE | Счётчик использования сервисов бота. | db/queries/activity | db/queries/analytics, db/queries/dev_stats | —, log (usage counter) | aist_bot_newarchitecture/db/queries/activity.py, aist_bot_newarchitecture/db/queries/analytics.py, aist_bot_newarchitecture/db/queries/dev_stats.py | ⚠️ → activity-hub (событие usage tracking) | Миграция 003 |
+| USER_ACCESS | Временные права (выданные ботом, с expiry). | (не найден активный writer) | (не найден активный reader) | §7.0.2 #6 «Права доступа» — 🔗 связь «Созидатель ↔ Ресурс» | —, TBD (Ф15b.3) | 🔗 связь «Созидатель ↔ Ресурс: права доступа» | Миграция 002 |
+| COMMUNITY_MEMBERS | Участники Telegram-сообщества. | db/queries/workshop, handlers/workshop | db/queries/workshop | §7.0.2 #6 «Участник сообщества» | aist_bot_newarchitecture/db/queries/workshop.py, aist_bot_newarchitecture/handlers/ | ✅ | Миграция 009 |
+| **Токены и интеграции** | | | | | | | |
+| ORY_TOKENS | Ory OAuth-токены бота. Зашифрованы Fernet. | db/queries/ory_tokens, handlers/ory_register | db/queries/ory_tokens | §7.0.2 #6 «Ory OAuth-токены» —, state (класс payment_credentials) | aist_bot_newarchitecture/db/queries/ory_tokens.py, aist_bot_newarchitecture/handlers/ | ✅ | `public.ory_tokens`, WP-209. ⚠️ plaintext → WP-234 |
+| DT_TOKENS | DT OAuth-токены бота. Зашифрованы Fernet. | db/queries/dt_tokens, handlers/connect | db/queries/dt_tokens, core/scheduler | §7.0.2 #6 «DT OAuth-токены» —, state (класс payment_credentials) | aist_bot_newarchitecture/db/queries/dt_tokens.py, aist_bot_newarchitecture/handlers/, aist_bot_newarchitecture/core/scheduler.py | ✅ | `public.dt_tokens`, WP-82. ⚠️ plaintext → WP-234 |
+| **Публикации и каналы** | | | | | | | |
+| PUBLISHED_POSTS | Опубликованные посты (Discourse, Telegram). | db/queries/discourse, clients/publisher | db/queries/discourse | §7.0.2 #9 «Публикация (Post)» (legacy, переносится) | aist_bot_newarchitecture/db/queries/discourse.py, aist_bot_newarchitecture/clients/ | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
+| SCHEDULED_PUBLICATIONS | Запланированные публикации. | db/queries/discourse, clients/publisher | db/queries/discourse, core/scheduler | §7.0.2 #9 «Расписание публикации» (legacy, переносится) | aist_bot_newarchitecture/db/queries/discourse.py, aist_bot_newarchitecture/clients/, aist_bot_newarchitecture/core/scheduler.py | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
+| DISCOURSE_ACCOUNTS | Аккаунты Discourse для публикации. | db/queries/discourse | db/queries/discourse | §7.0.2 #9 «Аккаунт созидателя в канале» (legacy, переносится) | aist_bot_newarchitecture/db/queries/discourse.py | ⚠️ → #9 content-pipeline (миграция WP-155) | Миграция бота, физически в `platform` |
+| CHANNEL_MONITORS | Мониторинг Telegram-каналов. | db/queries/channels, handlers/channels | db/queries/channels | §7.0.2 #6 «Мониторируемый Telegram-канал» | aist_bot_newarchitecture/db/queries/channels.py, aist_bot_newarchitecture/handlers/ | ✅ | Миграция бота |
+| CHANNEL_MENTIONS_LOG | Лог упоминаний в каналах. | db/queries/channels, handlers/channels | db/queries/channels | —, log | aist_bot_newarchitecture/db/queries/channels.py, aist_bot_newarchitecture/handlers/ | ✅ | Миграция бота |
+| **Платежи (бот-уровень)** | | | | | | | |
+| WORKSHOP_PAYMENTS | Оплаты воркшопов через бота. | db/queries/workshop, handlers/workshop | db/queries/workshop | §7.0.2 #5 «Платёж» (legacy, переносится в #5) | aist_bot_newarchitecture/db/queries/workshop.py, aist_bot_newarchitecture/handlers/ | ⚠️ → payment-registry | Миграция бота |
+| SEMINAR_PAYMENTS | Оплаты семинаров через бота. | handlers/payments, db/queries/showcase | db/queries/showcase | §7.0.2 #5 «Платёж» (legacy, переносится в #5) | aist_bot_newarchitecture/handlers/, aist_bot_newarchitecture/db/queries/showcase.py | ⚠️ → payment-registry | Миграция бота |
+| CONVERSION_EVENTS | События конверсионной воронки. | db/queries/conversion, core/scheduler | db/queries/conversion, db/queries/analytics | §7.0.2 #4 «Событие конверсии» (legacy, переносится в #4) | aist_bot_newarchitecture/db/queries/conversion.py, aist_bot_newarchitecture/core/scheduler.py, aist_bot_newarchitecture/db/queries/analytics.py | ⚠️ → activity-hub (принято 20 апр: Р3) | Миграция бота |
+| ~~SEMINARS~~ | ~~Каталог семинаров~~ → заменена PRODUCTS в platform-core. | — | — | —, удалена (заменена §7.0.2 #1 «Продукт-экземпляр») | —, удалена | ❌ Удалена | Заменена `public.products` |
+| **Наблюдаемость (бот-уровень)** | | | | | | | |
+| ACTIVITY_LOG | Лог активности пользователей в боте. | db/queries/activity, core/scheduler | db/queries/activity, db/queries/analytics | §7.0.2 #6 «Лог активности» —, log | aist_bot_newarchitecture/db/queries/activity.py, aist_bot_newarchitecture/core/scheduler.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота |
+| ERROR_LOGS | Ошибки бота (категория, severity). TTL 180д. | core/error_handler | core/error_classifier, db/queries/analytics | §7.0.2 #6 «Лог ошибок» —, log (копия → #8) | aist_bot_newarchitecture/core/error_handler.py, aist_bot_newarchitecture/core/error_classifier.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота. ⚠️ Копия → #8 health |
+| REQUEST_TRACES | Трейсы запросов бота. TTL 30д. | core/tracing | db/queries/analytics | §7.0.2 #6 «Трейс запроса» —, log (копия → #8) | aist_bot_newarchitecture/core/tracing.py, aist_bot_newarchitecture/db/queries/traces.py, aist_bot_newarchitecture/db/queries/analytics.py | ✅ | Миграция бота. ⚠️ Копия → #8 health |
+| **Платформенные таблицы (в aist-bot DB, target: другая база)** | | | | | | | |
+| TIER_EVENTS | Лог переходов тиров. | core/tier_detector | core/tier_detector, Metabase | §7.0.2 #1 «Событие смены тира» (legacy, target #4) | aist_bot_newarchitecture/core/tier_detector.py, —, через UI (Metabase) | ⚠️ → platform-core | `development.tier_events` |
+| LEARNING_HISTORY | Gold-факты обучения (DB-триггер на user_events). | DB-триггер (миграция 007), backfill (миграция 010) | Бот dt_sync: BKT, Навигатор: 7д окно | §7.0.2 #4 «Факт обучения (Gold)» (legacy, target #4) | aist_bot_newarchitecture/migrations/007-*.sql, aist_bot_newarchitecture/migrations/010-*.sql, aist_bot_newarchitecture/db/queries/dt_sync.py | ⚠️ → activity-hub | Миграция 007 |
+| USER_EVENTS | Нормализованные события (дублирует #4). | db/queries/events, core/scheduler | db/queries/dt_sync, db/queries/events | §7.0.2 #4 «Событие созидателя (Silver)» (legacy, target #4) | aist_bot_newarchitecture/db/queries/events.py, aist_bot_newarchitecture/core/scheduler.py, aist_bot_newarchitecture/db/queries/dt_sync.py | ⚠️ → activity-hub | Бот-копия, target: #4 |
 
 ### #7 metabase
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| METABASE_COLLECTIONS | Папки дашбордов. | Metabase internal | Metabase UI | ✅ | Управляется Metabase (~171 таблица) |
-| METABASE_DASHBOARDS | Дашборды (финансы, события). | Metabase internal | Metabase UI, дашборды читают #5 и #4 напрямую | ✅ | WP-183 (2 дашборда) |
-| METABASE_CARDS | Questions (8 штук). | Metabase internal | Metabase UI | ✅ | WP-183 |
-| METABASE_USERS | Пользователи Metabase (не Ory). | Metabase internal | Metabase internal | ✅ | Управляется Metabase |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| METABASE_COLLECTIONS | Папки дашбордов. | Metabase internal | Metabase UI | §7.0.2 #7 «Коллекция дашбордов» | —, Metabase internal | ✅ | Управляется Metabase (~171 таблица) |
+| METABASE_DASHBOARDS | Дашборды (финансы, события). | Metabase internal | Metabase UI, дашборды читают #5 и #4 напрямую | §7.0.2 #7 «Дашборд» | —, Metabase internal | ✅ | WP-183 (2 дашборда) |
+| METABASE_CARDS | Questions (8 штук). | Metabase internal | Metabase UI | §7.0.2 #7 «Карта-запрос» | —, Metabase internal | ✅ | WP-183 |
+| METABASE_USERS | Пользователи Metabase (не Ory). | Metabase internal | Metabase internal | §7.0.2 #7 «Аналитик» | —, Metabase internal | ✅ | Управляется Metabase |
 
 ### #8 health
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| SERVICE_REGISTRY | Реестр сервисов для мониторинга (name, url, check_type). | uptime-collector (GHA cron) | Grafana (RO) | 🆕 Создать | WP-244 |
-| UPTIME_CHECKS | Результаты пингов (latency_ms, status_code, is_up). TTL 90d. | uptime-collector (GHA cron) | Grafana (RO), алерты → TG | 🆕 Создать | WP-244 |
-| UPTIME_INCIDENTS | Агрегированные инциденты (started_at, resolved_at, severity). Permanent. | uptime-collector (агрегация) | Grafana (RO), алерты → TG | 🆕 Создать | WP-244 |
-| ANTHROPIC_STATUS_SNAPSHOTS | Снапшоты status.anthropic.com API по компонентам. TTL 90d. | uptime-collector (GHA cron) | Grafana (RO) | 🆕 Создать | WP-244 |
-| ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | Бот error_handler (сейчас в aist_bot), будущее: все сервисы | Grafana (RO), core/error_classifier | 🆕 Перенести | WP-45 (сейчас в `platform`) |
-| REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | Бот core/tracing (сейчас в aist_bot), будущее: все сервисы | Grafana (RO) | 🆕 Перенести | WP-45 (сейчас в `platform`) |
-| PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | Бот core/autofix | Бот db/queries/autofix, Grafana | ✅ Перенесено (WP-244) | WP-45 → WP-244 |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| SERVICE_REGISTRY | Реестр сервисов для мониторинга (name, url, check_type). | uptime-collector (GHA cron) | Grafana (RO) | §7.0.2 #8 «Микросервис-деплоймент» | —, TBD (Ф15b.3), план WP-244 (uptime-collector GHA cron) | 🆕 Создать | WP-244 |
+| UPTIME_CHECKS | Результаты пингов (latency_ms, status_code, is_up). TTL 90d. | uptime-collector (GHA cron) | Grafana (RO), алерты → TG | §7.0.2 #8 «Пинг (uptime check)» —, log | —, TBD (Ф15b.3), план WP-244 (uptime-collector GHA cron) | 🆕 Создать | WP-244 |
+| UPTIME_INCIDENTS | Агрегированные инциденты (started_at, resolved_at, severity). Permanent. | uptime-collector (агрегация) | Grafana (RO), алерты → TG | §7.0.2 #8 «Инцидент» | —, TBD (Ф15b.3), план WP-244 (uptime-collector агрегация) | 🆕 Создать | WP-244 |
+| ANTHROPIC_STATUS_SNAPSHOTS | Снапшоты status.anthropic.com API по компонентам. TTL 90d. | uptime-collector (GHA cron) | Grafana (RO) | §7.0.2 #8 «Снимок статуса Anthropic» —, log | —, TBD (Ф15b.3), план WP-244 (uptime-collector GHA cron) | 🆕 Создать | WP-244 |
+| ERROR_LOGS | Структурированные ошибки сервисов (категория, severity, дедупликация). TTL 180d. | Бот error_handler (сейчас в aist_bot), будущее: все сервисы | Grafana (RO), core/error_classifier | §7.0.2 #8 «Ошибка сервиса» —, log | aist_bot_newarchitecture/core/error_handler.py, aist_bot_newarchitecture/core/error_classifier.py (target: общий для всех сервисов) | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| REQUEST_TRACES | Трейсы запросов (OTel trace_id, span, latency). TTL 30d. | Бот core/tracing (сейчас в aist_bot), будущее: все сервисы | Grafana (RO) | §7.0.2 #8 «Трейс запроса» —, log | aist_bot_newarchitecture/core/tracing.py, aist_bot_newarchitecture/db/queries/traces.py (target: общий для всех сервисов) | 🆕 Перенести | WP-45 (сейчас в `platform`) |
+| PENDING_FIXES | Очередь auto-fix (диагноз Claude, статус approve/reject). TTL 90d. | Бот core/autofix | Бот db/queries/autofix, Grafana | §7.0.2 #8 «Задание auto-fix» | aist_bot_newarchitecture/core/autofix.py, aist_bot_newarchitecture/db/queries/autofix.py | ✅ Перенесено (WP-244) | WP-45 → WP-244 |
 
 ### #9 content-pipeline
 
-| Таблица | Назначение | Writers | Readers | Статус | Источник |
-|---------|-----------|---------|---------|--------|----------|
-| PUBLICATION_JOBS | Задание-публикация: план публикации в соцсеть (канал, контент, расписание) | ContentPipeline Worker (create + update statuses) | ContentPipeline Worker (scheduler), Metabase (RO) | 🆕 Создать | WP-155 Ф1 |
-| PUBLISHED_POSTS | Опубликованный пост: факт публикации (URL, dates, metrics) | ContentPipeline Worker (social API callback handler) | Бот, ContentPipeline Worker (analytics), Metabase (RO) | 🆕 Создать (миграция из #6) | WP-155 |
-| CHANNELS | Канал/аккаунт соцсети (TG, YouTube, Discourse, etc.) | ContentPipeline Worker (onboarding flow) | ContentPipeline Worker (publisher), Metabase | 🆕 Создать | WP-155 |
-| ASSETS | Файл (видео/аудио/обложка) с URL и метаданными | ContentPipeline Worker (upload handler) | ContentPipeline Worker (publisher) | 🆕 Создать | WP-155 Ф0.5 |
-| SCHEDULES | Расписание публикации: запланированный слот (timezone, cadence) | ContentPipeline Worker (scheduler API) | ContentPipeline Worker (cron dispatcher) | 🆕 Создать (миграция SCHEDULED_PUBLICATIONS из #6) | WP-155 |
-| CHANNEL_ACCOUNTS | OAuth-связка созидателя с каналом (токены — class payment_credentials, зашифрованы) | ContentPipeline Worker (OAuth callback) | ContentPipeline Worker (publisher: decrypt+use) | 🆕 Создать (миграция DISCOURSE_ACCOUNTS из #6) | WP-155, §5 П6.1 |
-| PUBLICATION_EVENTS | Факт успеха/неудачи публикации (дублируется в #4 activity-hub) | ContentPipeline Worker | activity-hub hub.py (raw events), Grafana | 🆕 Создать | WP-155 |
+| Таблица | Назначение | Writers | Readers | Pack-сущность | DS-реализация | Статус | Источник |
+|---------|-----------|---------|---------|---------------|---------------|--------|----------|
+| PUBLICATION_JOBS | Задание-публикация: план публикации в соцсеть (канал, контент, расписание) | ContentPipeline Worker (create + update statuses) | ContentPipeline Worker (scheduler), Metabase (RO) | §7.0.2 #9 «Задание-публикация (Job)» | —, TBD (Ф15b.3), план WP-155 Ф1 (ContentPipeline Worker) | 🆕 Создать | WP-155 Ф1 |
+| PUBLISHED_POSTS | Опубликованный пост: факт публикации (URL, dates, metrics) | ContentPipeline Worker (social API callback handler) | Бот, ContentPipeline Worker (analytics), Metabase (RO) | §7.0.2 #9 «Публикация (Post)» | —, TBD (Ф15b.3), план WP-155 (миграция из aist_bot_newarchitecture/db/queries/discourse.py) | 🆕 Создать (миграция из #6) | WP-155 |
+| CHANNELS | Канал/аккаунт соцсети (TG, YouTube, Discourse, etc.) | ContentPipeline Worker (onboarding flow) | ContentPipeline Worker (publisher), Metabase | §7.0.2 #9 «Канал соцсети» | —, TBD (Ф15b.3), план WP-155 (ContentPipeline Worker onboarding) | 🆕 Создать | WP-155 |
+| ASSETS | Файл (видео/аудио/обложка) с URL и метаданными | ContentPipeline Worker (upload handler) | ContentPipeline Worker (publisher) | §7.0.2 #9 «Ассет» | —, TBD (Ф15b.3), план WP-155 Ф0.5 (ContentPipeline Worker upload) | 🆕 Создать | WP-155 Ф0.5 |
+| SCHEDULES | Расписание публикации: запланированный слот (timezone, cadence) | ContentPipeline Worker (scheduler API) | ContentPipeline Worker (cron dispatcher) | §7.0.2 #9 «Расписание публикации» | —, TBD (Ф15b.3), план WP-155 (миграция SCHEDULED_PUBLICATIONS из aist_bot_newarchitecture/db/queries/discourse.py) | 🆕 Создать (миграция SCHEDULED_PUBLICATIONS из #6) | WP-155 |
+| CHANNEL_ACCOUNTS | OAuth-связка созидателя с каналом (токены — class payment_credentials, зашифрованы) | ContentPipeline Worker (OAuth callback) | ContentPipeline Worker (publisher: decrypt+use) | §7.0.2 #9 «Аккаунт созидателя в канале» — 🔗 связь «Созидатель ↔ Канал» (класс payment_credentials) | —, TBD (Ф15b.3), план WP-155 (миграция DISCOURSE_ACCOUNTS из aist_bot_newarchitecture/db/queries/discourse.py) | 🆕 Создать (миграция DISCOURSE_ACCOUNTS из #6) | WP-155, §5 П6.1 |
+| PUBLICATION_EVENTS | Факт успеха/неудачи публикации (дублируется в #4 activity-hub) | ContentPipeline Worker | activity-hub hub.py (raw events), Grafana | §7.0.2 #9 «Событие публикации» —, log (дублируется в #4) | —, TBD (Ф15b.3), план WP-155 (ContentPipeline Worker → activity-hub) | 🆕 Создать | WP-155 |
 
 </details>
 
