@@ -33,13 +33,14 @@ generated: true
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
+| ROADMAP (ROADMAP) | 1 |
 | ROLE (ROLE) | 12 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 50 |
 | SoTA Annotations (SOTA) | 19 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **169** |
+| **Total** | **170** |
 
 ## Distinctions
 
@@ -237,6 +238,12 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.ORG.001 | Организация (род сущности) | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
+
+### ROADMAP
+
+| ID | Name | Summary | Status |
+|----|------|---------|--------|
+| DP.ROADMAP.001 | План миграции Neon 9 → 12 БД | Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков. | draft |
 
 ### ROLE
 
