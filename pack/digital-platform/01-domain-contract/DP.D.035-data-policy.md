@@ -3,15 +3,16 @@ id: DP.D.035
 name: "Data Policy — политика данных IWE"
 type: distinction
 status: active
-summary: "Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.003"
+summary: "Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007"
 created: 2026-03-10
-edition: "2026-03"
+updated: 2026-04-22
+edition: "2026-04"
 trust:
   F: 4
   G: domain
   R: 0.9
 related:
-  aggregates: [DP.D.028, DP.D.031, DP.ARCH.003]
+  aggregates: [DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.D.050]
   integrates_with: [DP.ARCH.002, DP.AISYS.014]
 tags: [privacy, data-policy, gdpr, transparency, consent]
 ---
@@ -77,15 +78,15 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 
 > **Платформа не имеет доступа к `personal/`.** Эти файлы существуют только на машине пользователя и в его приватном GitHub-репо.
 
-### 3.3 Трёхслойная архитектура ЦД
+### 3.3 Три слоя пользовательской модели
 
-Данные платформы (L2) организованы в 3 слоя. Подробно: [DP.ARCH.003](../02-domain-entities/DP.ARCH.003-digital-twin-architecture.md).
+Пользовательская модель разделена на три сущности по критерию writer+owner ([DP.D.050](DP.D.050-persona-memory-context.md)):
 
-| Слой | Природа | Хранится? | Пример |
-|------|---------|-----------|--------|
-| **Events** | Неизменяемые факты | Да, бессрочно | test_answered, session_start, note_created |
-| **State** | Вычисляемый профиль | Да (snapshot) | skill_mastery, engagement, misconceptions |
-| **Views** | Генерируемые ответы | Нет | Рекомендации, прогнозы, отчёты |
+| Слой | Writer | Owner | Что хранит | Подробно |
+|------|--------|-------|------------|----------|
+| **Персона** | Пользователь | Git пользователя | Декларации: цели, preferences, captures | [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) |
+| **Память** | Платформа runtime | Neon | Observed (события) + Derived (агрегаты: BKT, HLR, engagement, misconceptions) | [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) |
+| **Проекция** | Агент runtime | Эфемерно | LLM Context, user view, nudge — не хранится | [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md) |
 
 ---
 
@@ -235,6 +236,7 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 | Версия | Дата | Изменения |
 |--------|------|-----------|
 | 1.0 | 2026-03-10 | Первая версия. Агрегация DP.D.028, DP.D.031, DP.ARCH.003 |
+| 1.1 | 2026-04-22 | WP-257 Ф5: ЦД расщеплён на Персону (DP.ARCH.005) / Память (DP.ARCH.006) / Проекцию (DP.ARCH.007) по writer+owner (DP.D.050). §3.3 переписан. |
 
 ---
 
@@ -242,6 +244,9 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 
 - [DP.D.028](DP.D.028-user-data-tiers.md) — тирование данных пользователя (детали по тирам)
 - [DP.D.031](DP.D.031-mcp-access-model.md) — модель доступа MCP (публичный vs приватный)
+- [DP.D.050](DP.D.050-persona-memory-context.md) — различение Персона / Память / Контекст (writer+owner)
 - [DP.ARCH.002](../02-domain-entities/DP.ARCH.002-service-tiers.md) — тиры обслуживания
-- [DP.ARCH.003](../02-domain-entities/DP.ARCH.003-digital-twin-architecture.md) — архитектура ЦД (3 слоя)
+- [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) — Персона (декларативный слой, user-owned)
+- [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) — Память (Observed + Derived, platform-owned)
+- [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md) — Проекция (runtime, ephemeral)
 - [DP.AISYS.014](../05-ai-systems/DP.AISYS.014-aist-bot.md) — бот Aist (/mydata, удаление)

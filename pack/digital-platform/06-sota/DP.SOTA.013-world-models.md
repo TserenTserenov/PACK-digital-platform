@@ -84,7 +84,7 @@ tags: [world-model, llm, embodied-intelligence, open-endedness, lecun, schmidhub
 
 **Связь с IWE:**
 - Будущие Hub agents: embodied reasoning через world model (не текущий приоритет)
-- DP.ARCH.003 (ЦД): Layer 3 ЦД = world model? (открытый вопрос)
+- [DP.ARCH.006 Memory Record](../02-domain-entities/DP.ARCH.006-memory-record.md) §4 Derived (ранее «Layer 3 ЦД»): агрегаты baseline/potential/indicators — world model пользователя? Открытый вопрос (world model = предсказание физ.мира; Derived = предсказание состояния человека — частный случай).
 - Текущая стратегия: harness + human-in-the-loop (§5), не попытка превратить LLM в world model
 
 ## 7. Источники

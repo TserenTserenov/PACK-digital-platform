@@ -8,7 +8,7 @@ created: 2026-04-13
 updated: 2026-04-13
 related:
   realizes: [DP.SC.105]
-  uses: [DP.ARCH.003, DP.SYS.001]
+  uses: [DP.ARCH.006, DP.SYS.001]
   source: "WP-121 Ф0 калибровка 9 апр 2026, WP-121 Ф1 миграции 13 апр 2026"
 tags: [points, contribution-economy, gamification, billing]
 ---
@@ -287,7 +287,7 @@ user_events.INSERT (Activity Hub, WP-109)
 | Сущность | Связь |
 |----------|-------|
 | DP.SC.105 | Реализует обещание «Экономика вклада» |
-| DP.ARCH.003 | ЦД предоставляет квалификацию для множителя |
+| DP.ARCH.006 | Память.Derived предоставляет квалификацию для множителя |
 | DP.SYS.001 | Activity Hub поставляет user_events |
 | WP-109 | Readiness Gate + Activity Hub |
 | WP-183 | Billing Service вызывает spent-транзакции |

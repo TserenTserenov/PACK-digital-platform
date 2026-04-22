@@ -102,4 +102,4 @@ tags: [tiers, user-data, privacy, transparency, personalization]
 
 ## Связанные документы
 
-- [DP.D.035](DP.D.035-data-policy.md) — единая политика данных IWE (агрегирует этот документ + DP.D.031 + DP.ARCH.003)
+- [DP.D.035](DP.D.035-data-policy.md) — единая политика данных IWE (агрегирует этот документ + DP.D.031 + DP.ARCH.005/006/007)

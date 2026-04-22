@@ -4,13 +4,13 @@ name: Асинхронная проверка и обсуждение ДЗ
 type: sc
 status: draft
 layer: L2-Platform
-summary: "Ответы на ДЗ сохраняются в ЦД, проверяются пакетно, результаты персистентны и доступны для обсуждения"
+summary: "Ответы на ДЗ сохраняются в Память.Observed, проверяются пакетно, результаты персистентны и доступны для обсуждения"
 consumer: R16 Ученик (L4 Personal)
 created: 2026-03-18
-updated: 2026-03-18
+updated: 2026-04-22
 related:
   realizes: [S13, S37, S60]
-  uses: [DP.ARCH.003, DP.AISYS.008, DP.M.004]
+  uses: [DP.ARCH.006, DP.AISYS.008, DP.M.004]
   extends: [DP.SC.003, DP.SC.104]
 ---
 
@@ -54,9 +54,9 @@ related:
 
 > **S60 HW-Discussion** — новый сервис. Ведёт контекстный диалог по конкретному замечанию с опорой на норматив. Отличие от S12 (Q&A): S12 отвечает на произвольные вопросы; S60 привязан к конкретному замечанию конкретной проверки.
 
-## Данные в ЦД (development.user_events)
+## Данные в Память.Observed (development.user_events)
 
-Три новых event_type в существующей таблице (append-only, Layer 1 DP.ARCH.003):
+Три новых event_type в существующей таблице (append-only, Observed-слой [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) §3):
 
 | event_type | source | payload | confidence |
 |------------|--------|---------|------------|
@@ -138,7 +138,7 @@ related:
 
 ### Почему append-only events, а не отдельная таблица
 
-Ответы, проверки и обсуждения — события в ЦД (DP.ARCH.003 Layer 1). Это даёт:
+Ответы, проверки и обсуждения — события в Память.Observed ([DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) §3). Это даёт:
 - Полную траекторию (replay любого момента)
 - Единый механизм `log_event()` (Activity Hub, WP-109)
 - skill_mastery пересчитывается стандартным pipeline из событий
