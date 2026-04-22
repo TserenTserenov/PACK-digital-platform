@@ -14,7 +14,7 @@ trust:
 epistemic_stage: emerging
 related:
   specializes: [U.System]
-  uses: [DP.ARCH.001, DP.D.050]
+  uses: [DP.ARCH.001, DP.D.052]
   used_by: [DP.ARCH.006, DP.ARCH.007, DP.SC.104, DP.CONCEPT.003]
   replaces_part_of: [DP.ARCH.003]
 tags: [persona, user-model, declarative, git-owned]
@@ -22,7 +22,7 @@ tags: [persona, user-model, declarative, git-owned]
 
 # Персона (декларативная модель созидателя)
 
-> **Расщепление ЦД (WP-257 Ф5).** Монолит DP.ARCH.003 «Архитектура цифрового двойника» распался на три сущности по критерию writer + owner (DP.D.050):
+> **Расщепление ЦД (WP-257 Ф5).** Монолит DP.ARCH.003 «Архитектура цифрового двойника» распался на три сущности по критерию writer + owner (DP.D.052):
 > - **Персона** (этот файл) — writer = пользователь, owner = Git
 > - **Память** ([DP.ARCH.006](DP.ARCH.006-memory-record.md)) — writer = платформа runtime, owner = Neon
 > - **Проекция** ([DP.ARCH.007](DP.ARCH.007-projection.md)) — writer = агент в runtime, owner = ephemeral
@@ -33,7 +33,7 @@ tags: [persona, user-model, declarative, git-owned]
 
 **Ключевой принцип writer + owner:** пользователь — единственный writer Персоны. Платформа читает Персону, но не пишет в неё. Агент может редактировать Персону **только по поручению пользователя** (capture flow → acceptance).
 
-**Критерий различения от Памяти** (DP.D.050):
+**Критерий различения от Памяти** (DP.D.052):
 - Персона: «Я говорю о себе» (декларация)
 - Память.Observed: «платформа наблюдает, что я делал» (событие)
 - Память.Derived: «платформа вычислила из моих действий» (агрегат)
@@ -65,7 +65,7 @@ tags: [persona, user-model, declarative, git-owned]
 
 ## 4. Граница Персоны
 
-> **Тест границы** (DP.D.050): «Что пропадёт, если удалю X? Git пользователя → Персона. Neon → Память. Прервать LLM-вызов → Контекст.»
+> **Тест границы** (DP.D.052): «Что пропадёт, если удалю X? Git пользователя → Персона. Neon → Память. Прервать LLM-вызов → Контекст.»
 
 **Внутри Персоны:**
 - PACK-personal Pack со всеми Pack-сущностями пользователя (цели, системы, характеристики, методы)
@@ -123,7 +123,7 @@ tags: [persona, user-model, declarative, git-owned]
 
 ## 9. Связанные документы
 
-- [DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md) — различение Персона/Память/Контекст
+- [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md) — различение Персона/Память/Контекст
 - [DP.ARCH.006](DP.ARCH.006-memory-record.md) — Память (platform-owned observed + derived)
 - [DP.ARCH.007](DP.ARCH.007-projection.md) — Проекция (runtime compilation)
 - [DP.SC.104](../08-service-clauses/DP.SC.104-adaptive-personalization.md) — Адаптивная персонализация

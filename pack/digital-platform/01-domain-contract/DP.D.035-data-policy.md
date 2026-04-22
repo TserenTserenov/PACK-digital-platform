@@ -12,7 +12,7 @@ trust:
   G: domain
   R: 0.9
 related:
-  aggregates: [DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.D.050]
+  aggregates: [DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.D.052]
   integrates_with: [DP.ARCH.002, DP.AISYS.014]
 tags: [privacy, data-policy, gdpr, transparency, consent]
 ---
@@ -80,7 +80,7 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 
 ### 3.3 Три слоя пользовательской модели
 
-Пользовательская модель разделена на три сущности по критерию writer+owner ([DP.D.050](DP.D.050-persona-memory-context.md)):
+Пользовательская модель разделена на три сущности по критерию writer+owner ([DP.D.052](DP.D.052-persona-memory-context.md)):
 
 | Слой | Writer | Owner | Что хранит | Подробно |
 |------|--------|-------|------------|----------|
@@ -236,7 +236,7 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 | Версия | Дата | Изменения |
 |--------|------|-----------|
 | 1.0 | 2026-03-10 | Первая версия. Агрегация DP.D.028, DP.D.031, DP.ARCH.003 |
-| 1.1 | 2026-04-22 | WP-257 Ф5: ЦД расщеплён на Персону (DP.ARCH.005) / Память (DP.ARCH.006) / Проекцию (DP.ARCH.007) по writer+owner (DP.D.050). §3.3 переписан. |
+| 1.1 | 2026-04-22 | WP-257 Ф5: ЦД расщеплён на Персону (DP.ARCH.005) / Память (DP.ARCH.006) / Проекцию (DP.ARCH.007) по writer+owner (DP.D.052). §3.3 переписан. |
 
 ---
 
@@ -244,7 +244,7 @@ tags: [privacy, data-policy, gdpr, transparency, consent]
 
 - [DP.D.028](DP.D.028-user-data-tiers.md) — тирование данных пользователя (детали по тирам)
 - [DP.D.031](DP.D.031-mcp-access-model.md) — модель доступа MCP (публичный vs приватный)
-- [DP.D.050](DP.D.050-persona-memory-context.md) — различение Персона / Память / Контекст (writer+owner)
+- [DP.D.052](DP.D.052-persona-memory-context.md) — различение Персона / Память / Контекст (writer+owner)
 - [DP.ARCH.002](../02-domain-entities/DP.ARCH.002-service-tiers.md) — тиры обслуживания
 - [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) — Персона (декларативный слой, user-owned)
 - [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) — Память (Observed + Derived, platform-owned)

@@ -8,7 +8,7 @@ created: 2026-04-15
 updated: 2026-04-22
 related:
   realizes: [DP.SC.104]
-  uses: [DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.D.050]
+  uses: [DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.D.052]
   distinguished_in: [HD.49]
 tags: [personalization, adaptive-learning, persona, memory, projection, iwe]
 ---
@@ -53,7 +53,7 @@ tags: [personalization, adaptive-learning, persona, memory, projection, iwe]
 - **DP.ARCH.005** — Персона (декларативный слой, носитель Индивидуализации)
 - **DP.ARCH.006** — Память (Observed + Derived, носитель Адаптивности)
 - **DP.ARCH.007** — Проекция (runtime-сборка под потребителя, носитель Персонализации)
-- **DP.D.050** — различение слоёв по writer+owner
+- **DP.D.052** — различение слоёв по writer+owner
 - **HD #49** — различение трёх механизмов (персонализация/индивидуализация/адаптивность)
 - **PD.FORM.003** — ступени ученика (вход для персонализации)
 - **WP-151** — Память.Derived как данные для адаптивности (BKT, HLR)

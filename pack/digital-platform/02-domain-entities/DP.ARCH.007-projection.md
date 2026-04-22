@@ -14,7 +14,7 @@ trust:
 epistemic_stage: emerging
 related:
   specializes: [U.System]
-  uses: [DP.ARCH.005, DP.ARCH.006, DP.D.050, DP.M.007]
+  uses: [DP.ARCH.005, DP.ARCH.006, DP.D.052, DP.M.007]
   used_by: [DP.AISYS.014, DP.SC.104, DP.CONCEPT.003]
   replaces_part_of: [DP.ARCH.003]
 tags: [projection, runtime, views, nudge-engine, ephemeral]
@@ -22,7 +22,7 @@ tags: [projection, runtime, views, nudge-engine, ephemeral]
 
 # Проекция (runtime-компиляция под потребителя)
 
-> **Расщепление ЦД (WP-257 Ф5).** Проекция — третья сущность после [Персона](DP.ARCH.005-persona-entity.md) и [Память](DP.ARCH.006-memory-record.md). Критерий writer + owner (DP.D.050):
+> **Расщепление ЦД (WP-257 Ф5).** Проекция — третья сущность после [Персона](DP.ARCH.005-persona-entity.md) и [Память](DP.ARCH.006-memory-record.md). Критерий writer + owner (DP.D.052):
 > - **Персона** — writer = пользователь, owner = Git
 > - **Память** — writer = платформа, owner = Neon
 > - **Проекция** (этот файл) — writer = агент в runtime, owner = нет (эфемерна)
@@ -33,7 +33,7 @@ tags: [projection, runtime, views, nudge-engine, ephemeral]
 
 **Ключевой принцип writer + owner:** писатель Проекции — агент в runtime (LLM-вызов, бот-хендлер, nudge-скрипт). Владельца долгосрочного нет: каждая Проекция существует до возврата ответа потребителю. Персистируется только `nudge_log` — запись о том, что Проекция была создана и доставлена (это → Память.Observed, не сама Проекция).
 
-**Критерий различения** (DP.D.050):
+**Критерий различения** (DP.D.052):
 - Память.Derived: «агрегат, пересчитанный по событиям, хранится»
 - Проекция: «сборка под конкретный вызов, не хранится»
 
@@ -232,7 +232,7 @@ Event: test_answered {skill: ZP.3, correct: true}   ──→ Память.Obser
 
 ## 10. Связанные документы
 
-- [DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md) — различение Персона/Память/Контекст (Проекция = runtime-форма Контекста)
+- [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md) — различение Персона/Память/Контекст (Проекция = runtime-форма Контекста)
 - [DP.ARCH.005](DP.ARCH.005-persona-entity.md) — Персона (user-declared, source для Context)
 - [DP.ARCH.006](DP.ARCH.006-memory-record.md) — Память (platform-observed, source для Context)
 - [DP.M.007](DP.M.007-intervention-loop.md) — Intervention Loop (закрывается через Проекцию)

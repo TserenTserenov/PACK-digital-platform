@@ -8,7 +8,7 @@ supersedes: "DP.ARCH.004 v1 (14 апр 2026) — 9 БД, монолитный Ц
 summary: "12 баз данных Neon по принципу database-per-BoundedContext. Сводная таблица, карта, ERD по каждой БД, связи, потоки, реестр физ.объектов, миграция 9 → 12 БД, верификация по чеклистам SPF.SPEC.005, замечаниям Андрея Д1-Д12 и категориям WP-257."
 related:
   specializes: [U.System]
-  uses: [DP.SOTA.016, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.ARCH.001, DP.D.050, DP.METHOD.040]
+  uses: [DP.SOTA.016, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, DP.ARCH.001, DP.D.052, DP.METHOD.040]
   supersedes_term: "ЦД (монолитный цифровой двойник) → Персона + Память (Observed/Derived) + Контекст (WP-257)"
 decision_source: "Встречи ИТ 8 и 10 (14 апр, 21 апр 2026); ревью Андрея Ф24 (Д1-Д12); целевая карта Ф25 (22 апр); канон Персона/Память/Контекст (WP-257)"
 ---
@@ -1518,7 +1518,7 @@ sequenceDiagram
 
 | Различение (HD / distinctions.md) | Где применено в архитектуре |
 |---|---|
-| Персона ≠ Память ≠ Контекст (DP.D.050, HD #27) | §1 сводная таблица — категория WP-257 для каждой БД |
+| Персона ≠ Память ≠ Контекст (DP.D.052, HD #27) | §1 сводная таблица — категория WP-257 для каждой БД |
 | Событие ≠ Хранилище-контейнер (Р-W17-1, Д11) | Activity Hub распущен (§8), `#2 journal.EVENT` — единственное место всех событий |
 | Объект ≠ Атрибут (Д10) | Все ERD в §3 — множители/коды/lookup как атрибуты, не узлы |
 | Система ≠ Роль (D.141 PD) | `#1.ACCOUNT` = система; mentorship/ambassador в `#10` = роли через связи |
@@ -1573,7 +1573,7 @@ Pack-сущности определены (DP.ARCH.005 Persona Entity, DP.ARCH.
 - **Аудит LMS:** `DS-my-strategy/inbox/WP-228-F24-lms-audit.md`
 - **Правила границ:** `SPF/spec/SPF.SPEC.005-boundary-rules.md`
 - **Метод ER-моделирования:** `PACK-digital-platform/.../DP.METHOD.040-er-modeling.md`
-- **Канон Персона/Память/Контекст:** `memory/project_persona_memory_context.md` (DP.D.050)
+- **Канон Персона/Память/Контекст:** `memory/project_persona_memory_context.md` (DP.D.052)
 - **Классификация данных (B7.3):** WP-212 B7.3.1 L2 Data Classification Map (в работе)
 
 ---

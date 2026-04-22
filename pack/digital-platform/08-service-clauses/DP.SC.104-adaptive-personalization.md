@@ -17,7 +17,7 @@ related:
 # [DP.SC.104] Адаптивная персонализация через Персону, Память и Проекцию
 
 > **Концепт:** [DP.CONCEPT.003](../02-domain-entities/DP.CONCEPT.003-adaptive-personalization.md) — три механизма персонализации.
-> **Онтология:** [DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md) — различение Персона / Память / Проекция.
+> **Онтология:** [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md) — различение Персона / Память / Проекция.
 > **Реализация:** [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md), [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md), [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md).
 
 ## Обещание
@@ -83,4 +83,4 @@ related:
 
 - **Потребляет события** (в Память.Observed): DP.SC.102 (Обучение), DP.SC.103 (Целевые системы), DP.SC.105 (Баллы), DP.SC.117 (Асинхронная проверка ДЗ — homework_answer_submitted, homework_checked, homework_discussion)
 - **Поставляет Проекции** (из Память.Derived + Персона): DP.SC.101 (Онбординг), DP.SC.102 (Обучение), DP.SC.116 (Уведомления)
-- **Онтологическое основание:** DP.D.050 (различение слоёв), DP.CONCEPT.003 (три механизма)
+- **Онтологическое основание:** DP.D.052 (различение слоёв), DP.CONCEPT.003 (три механизма)

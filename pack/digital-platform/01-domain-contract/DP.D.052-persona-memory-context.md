@@ -1,5 +1,5 @@
 ---
-id: DP.D.050
+id: DP.D.052
 name: "Различение: Персона / Память / Контекст"
 type: distinction
 status: active
@@ -14,11 +14,11 @@ trust:
 related:
   distinguishes: [DP.ARCH.005, DP.ARCH.006, DP.ARCH.007]
   replaces_part_of: [DP.ARCH.003]
-  used_by: [DP.SC.104, DP.CONCEPT.003, DP.D.035]
+  used_by: [DP.SC.104, DP.CONCEPT.003, DP.D.035, DP.ARCH.004]
 tags: [persona, memory, projection, user-model, writer-owner, distinction]
 ---
 
-# DP.D.050 — Различение: Персона / Память / Контекст
+# DP.D.052 — Различение: Персона / Память / Контекст
 
 > **Онтологическая замена «ЦД».** Монолит «цифровой двойник» (DP.ARCH.003) расщепляется на три сущности с разными writer и owner.
 
@@ -41,7 +41,7 @@ tags: [persona, memory, projection, user-model, writer-owner, distinction]
 | **Память** | Платформа автоматически | Neon | Events (activity-hub), payments, baseline/potential/BKT/HLR, подписки | [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) |
 | **Контекст** (= Проекция) | Агент в runtime | Не хранится долго | Промпт LLM, Open Learner Model view, nudge message | [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md) |
 
-> **Терминология.** «Контекст» = runtime-форма того, что стабильно хранилось бы как Проекция. В Pack-дискурсе мы используем **Проекция** как архитектурную сущность (DP.ARCH.007), а «Контекст» оставляем как обиходный термин (LLM context window).
+> **Терминология (канон).** В архитектурном дискурсе используем **Проекция** (DP.ARCH.007) как каноническую сущность runtime-слоя. «Контекст» = обиходный синоним (LLM context window, промпт-сборка) — встречается в названии различения и тестах границы ради читаемости, но в спецификациях и кода ссылаемся на Проекцию. Путать не надо: это одно и то же, просто обиходное слово и архитектурное.
 
 ## 3. Тест границы
 
@@ -51,7 +51,7 @@ tags: [persona, memory, projection, user-model, writer-owner, distinction]
 |---------|------|
 | Git пользователя | → Персона пропала |
 | Neon | → Память пропала |
-| Прервать текущий LLM-вызов | → Контекст/Проекция пропала |
+| Прервать текущий LLM-вызов | → Проекция пропала |
 
 ## 4. Под-уровни Памяти
 

@@ -14,7 +14,7 @@ trust:
 epistemic_stage: emerging
 related:
   specializes: [U.System]
-  uses: [DP.ARCH.001, DP.ARCH.002, DP.ARCH.004, DP.CONCEPT.001, DP.SOTA.009, DP.D.050]
+  uses: [DP.ARCH.001, DP.ARCH.002, DP.ARCH.004, DP.CONCEPT.001, DP.SOTA.009, DP.D.052]
   used_by: [DP.AISYS.014, DP.CONCEPT.003, DP.ARCH.007, DP.SC.104]
   replaces_part_of: [DP.ARCH.003]
 tags: [memory, event-sourcing, cqrs, learner-model, knowledge-tracing, observed, derived]
@@ -40,7 +40,7 @@ tags: [memory, event-sourcing, cqrs, learner-model, knowledge-tracing, observed,
 - **Owner:** Neon PostgreSQL (`digital-twin` DB #5, `activity-hub` DB #3 — см. WP-228 Ф25 для финального именования)
 - **Reader:** MCP `dt_*`, Портной, Оценщик, Nudge Engine, Open Learner Model
 
-**Память ≠ Персона:** Персона = «что пользователь говорит о себе» (writer=user, owner=Git). Память = «что платформа наблюдает и вычисляет» (writer=platform, owner=Neon). См. [DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md).
+**Память ≠ Персона:** Персона = «что пользователь говорит о себе» (writer=user, owner=Git). Память = «что платформа наблюдает и вычисляет» (writer=platform, owner=Neon). См. [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md).
 
 > **Память как инфраструктура адаптивной персонализации:** Память — основа механизма Персонализации (механизм 1 из 3 в [DP.CONCEPT.003](DP.CONCEPT.003-adaptive-personalization.md)). Данные Памяти.Derived → Портной → персонализированный контент. Механизм Адаптивности (BKT/HLR) обновляет Derived по обратной связи.
 
@@ -590,7 +590,7 @@ Derived update: P(known ZP.3) = 0.19 → 0.35
 | **Half-Life Regression** | Duolingo (Settles 2016), production 1B+ exercises/day | Memory decay, spaced repetition |
 | **BKTransformer** | JEDM 2025 | Эволюция BKT → hybrid (v2) |
 | **Open Learner Model** | IEEE TLT 2020 | Видимый профиль для пользователя |
-| **Personal AI Memory (Letta/Mem0/LangMem)** | 2025-2026 | Различение Persona/Memory/Context ([DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md)) |
+| **Personal AI Memory (Letta/Mem0/LangMem)** | 2025-2026 | Различение Persona/Memory/Context ([DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md)) |
 | **Overlay + Perturbation Model** | PMC 2022 | Skill mastery + misconception map |
 | **Duolingo Birdbrain** | Duolingo Engineering Blog | ELO-подобная система ability+difficulty |
 | **Khan Academy Mastery** | EDM 2022 | 4-уровневый state machine per skill |
@@ -604,7 +604,7 @@ Derived update: P(known ZP.3) = 0.19 → 0.35
 - [DP.ARCH.004](DP.ARCH.004-neon-data-architecture.md) — Архитектура Neon (9 БД)
 - [DP.ARCH.005](DP.ARCH.005-persona-entity.md) — Персона (writer=user, owner=Git)
 - [DP.ARCH.007](DP.ARCH.007-projection.md) — Проекция (writer=agent runtime)
-- [DP.D.050](../01-domain-contract/DP.D.050-persona-memory-context.md) — Персона ≠ Память ≠ Контекст
+- [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md) — Персона ≠ Память ≠ Контекст
 - [DP.CONCEPT.001](DP.CONCEPT.001-platform-concept.md) — Концепция платформы
 - [DP.CONCEPT.003](DP.CONCEPT.003-adaptive-personalization.md) — Адаптивная персонализация
 - [DP.SOTA.009](../06-sota/DP.SOTA.009-knowledge-digital-twins.md) — Knowledge-Based Digital Twins
