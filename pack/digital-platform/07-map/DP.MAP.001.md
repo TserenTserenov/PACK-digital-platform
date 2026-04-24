@@ -37,10 +37,10 @@ generated: true
 | ROLE (ROLE) | 13 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 52 |
-| SoTA Annotations (SOTA) | 19 |
+| SoTA Annotations (SOTA) | 20 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **174** |
+| **Total** | **175** |
 
 ## Distinctions
 
@@ -139,6 +139,7 @@ generated: true
 | DP.SOTA.016 | Инженерная семиотика — мировой опыт | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
 | DP.SOTA.017 | Концептуальные графы — мировой опыт | Паттерны управления knowledge graphs: orphan-prevention, центральные узлы, многоязычность, editorial pipeline. Источники: OBO Foundry, Microsoft GraphRAG, Knowledge Space Theory (ALEKS), Wikidata. | active |
 | DP.SOTA.018 | Управление терминологией в многоязычных онтологических системах | Паттерны управления терминологией из ISO 704, SKOS, DDD UL и реальной практики крупных проектов — применимость к IWE | active |
+| DP.SOTA.019 | Граф как runtime-инструмент агента + наблюдаемость | Паттерны использования concept-графа агентом в runtime (Graph-RAG 2024-2026) + observability KG в продакшене + feedback loop от usage к эволюции графа. Дополняет DP.SOTA.004 (общая технология) и DP.SOTA.017 (структурная гигиена). | active |
 
 ## Maps
 
