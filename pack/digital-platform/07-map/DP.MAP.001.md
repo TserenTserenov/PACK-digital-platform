@@ -307,8 +307,8 @@ generated: true
 | DP.SC.026 | Мониторинг поведения агента | — | draft |
 | DP.SC.027 | Repo Touch Gate | — | draft |
 | DP.SC.028 | Семиотическое качество Pack | Pack-автор получает верифицированные сущности с корректной Kinds-структурой, защитой от лексической дедупликации и читаемым смыслом для агентов и людей | draft |
-| DP.SC.029 | Personal Read Api | — | draft |
 | DP.SC.029 | Терминологический процесс IWE | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
+| DP.SC.031 | Personal Read Api | — | draft |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -351,7 +351,7 @@ generated: true
 - Missing `summary`: DP.SC.025 (DP.SC.025-capture-bus.md)
 - Missing `summary`: DP.SC.026 (DP.SC.026-agent-behavior-monitoring.md)
 - Missing `summary`: DP.SC.027 (DP.SC.027-repo-touch-gate.md)
-- Missing `summary`: DP.SC.029 (DP.SC.029-personal-read-api.md)
+- Missing `summary`: DP.SC.031 (DP.SC.031-personal-read-api.md)
 
 ---
 
