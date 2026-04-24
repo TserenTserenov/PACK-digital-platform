@@ -29,18 +29,18 @@ generated: true
 | KR (KR) | 1 |
 | Methods (M) | 9 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 6 |
+| METHOD (METHOD) | 7 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 13 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 52 |
+| SC (SC) | 53 |
 | SoTA Annotations (SOTA) | 20 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **175** |
+| **Total** | **177** |
 
 ## Distinctions
 
@@ -221,6 +221,7 @@ generated: true
 | DP.METHOD.031 | Метод онтологического сопоставления Pack-понятий с FPF-корнями | Алгоритм назначения FPF-корня (U.*) для нового Pack-понятия. Предотвращает изолированные понятия и silent drop рёбер при индексации. | active |
 | DP.METHOD.040 | Метод ER-моделирования | Правила построения концептуальных ER-диаграмм: сущности физ.мира, связи между ними, трансформация в физическую схему РСУБД. Применяется при проектировании новых БД и при ревизии существующих. | active |
 | DP.METHOD.041 | Метод связывания доменных сущностей с физ.реализацией | Правило связывания доменных сущностей Pack (DP.D.*, DP.CONCEPT.*) с физ.реализацией (таблица БД в DP.ARCH.004 §10) и кодовой реализацией (DS-файлы/модули). Сохраняет OwnerIntegrity: один факт — одно место, обратная ссылка из Pack в реализацию есть, но источник правды — DP.ARCH.004. | active |
+| DP.METHOD.042 | Сценарии использования concept-графа агентами в runtime | 4 сценария применения concept-графа агентами платформы IWE: Claude Code (я), автор Pack, ролевые агенты бота (Портной/Оценщик/Навигатор), учебная траектория. Каждый описан по шаблону IntegrationGate шаг 2: потребитель → триггер → запрос → использование → observable-сигнал. | draft |
 
 ### NAV
 
@@ -306,6 +307,7 @@ generated: true
 | DP.SC.026 | Мониторинг поведения агента | — | draft |
 | DP.SC.027 | Repo Touch Gate | — | draft |
 | DP.SC.028 | Семиотическое качество Pack | Pack-автор получает верифицированные сущности с корректной Kinds-структурой, защитой от лексической дедупликации и читаемым смыслом для агентов и людей | draft |
+| DP.SC.029 | Personal Read Api | — | draft |
 | DP.SC.029 | Терминологический процесс IWE | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
@@ -349,6 +351,7 @@ generated: true
 - Missing `summary`: DP.SC.025 (DP.SC.025-capture-bus.md)
 - Missing `summary`: DP.SC.026 (DP.SC.026-agent-behavior-monitoring.md)
 - Missing `summary`: DP.SC.027 (DP.SC.027-repo-touch-gate.md)
+- Missing `summary`: DP.SC.029 (DP.SC.029-personal-read-api.md)
 
 ---
 
