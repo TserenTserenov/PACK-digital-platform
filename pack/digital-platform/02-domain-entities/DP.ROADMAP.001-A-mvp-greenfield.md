@@ -113,7 +113,7 @@ updated: 2026-04-24
 ### Ф9.2 — Новые Neon БД (вторник 5 мая, утро)
 
 **Артефакты:**
-- Создать в Neon проекте 9 новых БД (или схем, решение при старте): persona, journal, indicators, subscription, reference, knowledge-platform, learning, rewards, payment (foreign-view)
+- Создать в Neon проекте 9 новых БД согласно DP.ARCH.004 v2.2 (database-per-BoundedContext, решение принято в WP-228): persona, journal, indicators, subscription, reference, knowledge-platform, learning, rewards, payment (foreign-view)
 - DDL миграции в `DS-IT-systems/neon-migrations/mvp/*`
 - Seeds для reference (event_schemas, payment_kind, qualification_level, tariffs)
 
