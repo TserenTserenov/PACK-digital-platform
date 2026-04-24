@@ -1,75 +1,7 @@
-# Pack Manifest: ИТ-платформа и цифровой двойник
-
-## Идентификатор
-
-- **Pack ID**: `DP`
-- **Версия**: 0.2.1
-- **Статус**: Draft
-
-## Область
-
-**Название**: ИТ-платформа и цифровой двойник
-
-**Описание**: Предметная область ИТ-платформы экосистемы развития интеллекта: архитектура платформы (3 слоя, 7 характеристик ЭМОГССБ), ИИ-системы (агенты + ассистенты), цифровой двойник созидателя, навигация знаний между репозиториями, модульный экзокортекс пользователя, метод экстракции знаний, IPO-паттерн компонентов, отчуждаемость (platform-space vs user-space), генеративность (общее знание → шаблон → fork).
-
-## Scope
-
-### В scope
-
-- Архитектура платформы (3-слойная модель с двумя зонами обработки)
-- Архитектурные характеристики (эволюционируемость, масштабируемость, обучаемость, генеративность, скорость, современность, безопасность)
-- ИИ-системы платформы (реестр, классификация, паспорта)
-- Цифровой двойник как модель созидателя
-- Различения объект/модель/данные/представление + доменные различения
-- Навигация знаний (4 уровня, кросс-репо ссылки)
-- Модульный экзокортекс (CLAUDE.md + Memory шаблоны, 3-слойная архитектура инструкций)
-- Метод экстракции знаний (информация → Pack-совместимые сущности)
-- IPO-паттерн как универсальный контракт компонентов
-- Отчуждаемость: platform-space vs user-space
-- Индикаторы и их типы
-- Детерминированные системы и MCP-серверы
-- Типовые ошибки (failure modes)
-
-### Вне scope
-
-- Код MCP-сервиса (это DS-twin — downstream/instrument)
-- Код бота (это DS-aist-bot — downstream/instrument)
-- Код Стратега (это DS-strategist — downstream/instrument)
-- UI/UX (это downstream/surface)
-- Содержание индикаторов созидателя (это PACK-personal)
-- Знания об экосистеме (это PACK-ecosystem)
-- Планы, сроки, реестры проекта (это DS-ecosystem-development — downstream/governance)
-
-## Расширенные виды (SPF.SPEC.001)
-
-> Доменные виды сущностей, определённые этим Pack. Базовые виды (M, WP, FM, D, R, CHR, SOTA, MAP) определены в SPF.
-
-| Код | Вид | Описание | Папка |
-|-----|-----|----------|-------|
-| `ONT` | Ontology | Единый реестр родов сущностей и маршрутизации описаний | `01-domain-contract/` |
-| `ORG` | Organization | Коллективный субъект: юр.лицо / сообщество со службами, сотрудниками, процессами | `02-domain-entities/` |
-| `ARCH` | Architecture | Архитектурное описание системы | `02-domain-entities/` |
-| `CONCEPT` | Concept | Концепция системы/подсистемы | `02-domain-entities/` |
-| `SYS` | System | Детерминированная подсистема (сервис, MCP) | `02-domain-entities/` |
-| `ROLE` | Platform Role | Реестр / паспорт платформенной роли | `02-domain-entities/` |
-| `AISYS` | AI System | Конкретная ИИ-система (паспорт) | `02-domain-entities/` |
-| `NAV` | Navigation | Навигационная структура знаний | `02-domain-entities/` |
-| `EXOCORTEX` | Exocortex | Модульный экзокортекс пользователя | `02-domain-entities/` |
-
-## Содержимое Pack'а
-
-| Категория | Файлов | Ключевые сущности |
-|-----------|--------|-------------------|
-| Доменный контракт | 6 | DP.ONT.001 (5 родов + маршрутизация), 17 различений, bounded context, онтология (SPF.SPEC.002), DP.D.025, DP.D.026, DP.D.027 |
-| Доменные сущности | 10+1 | DP.ARCH.001, DP.ARCH.002, DP.ORG.001, DP.ROLE.001, DP.AISYS.013, DP.NAV.001, DP.EXOCORTEX.001, DP.ROLE.012, DP.SYS.001, DP.CONCEPT.001 |
-| Методы | 8 | DP.M.001–008 (экстракция, DDD, CE, персонализация, АрхГейт, Vibe-Check, Intervention Loop, Operating Rules) |
-| Рабочие продукты | 14 | DP.WP.001–014 (отчёт экстракции, UL, DayPlan, WeekPlan, ~~WeekReport~~ (deprecated → секция в WeekPlan), Fleeting Notes, Consistency Report, Code Scan Report, Unsatisfied Questions Report, CQRS Projection, Triage Backlog, Analytics Report, Publication Schedule, Validation Report) |
-| Failure modes | 2 | DP.FM.001 (информация как знание), DP.FM.002 (смешение слоёв) |
-| Карта | 1 | DP.MAP.001 (навигационная карта) |
-| Обещания | 5 | DP.SC.001–005 (обещания потребителям) |
-
-> Полная карта: [07-map/DP.MAP.001.md](07-map/DP.MAP.001.md)
-
+Domain: DP
+Pack directory: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-platform
+MAP written to: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-platform/07-map/DP.MAP.001.md
+Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-platform/00-pack-manifest.md
 ## Entity Index
 
 | ID | Name | Kind | Summary | Status |
@@ -147,7 +79,7 @@
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
 | DP.ROADMAP.001 | План миграции Neon 9 → 12 БД | ROADMAP | Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P2b dt-collect миграция на event-gateway, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков. | draft |
-| DP.ROADMAP.001-A | Neon MVP-greenfield для волонтёров (спринт 4-17 мая) | ROADMAP | Параллельный к основному Roadmap план: MVP-greenfield 9+3 БД для 5 волонтёров за 2 недели. Не трогает прод старой архитектуры. | draft |
+| DP.ROADMAP.001-A | Neon MVP-greenfield (infra-first, старт 24 апр) | ROADMAP | Параллельный к основному Roadmap план: MVP-greenfield 12 БД, infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю. | in_progress |
 | DP.ROLE.001 | ИИ-системы | ROLE | Реестр и классификация ИИ-систем платформы: роли (Стратег, Экстрактор, Проводник и др.) и исполнители (Claude, бот, скрипты) | active |
 | DP.ROLE.012 | 00 Role Passport | ROLE | Роль Стратег (R1) преобразует намерения в структурированные планы рабочих продуктов на месяц, неделю и день с отслеживанием выполнения | draft |
 | DP.ROLE.012.SC.01 | 01 Strategy Session | ROLE | Еженедельная сессия стратегирования (strategy_day 7:00): ревью НЭП, анализ прошлой недели, сдвиг фокуса месяца, формирование плана на неделю | active |
@@ -195,6 +127,7 @@
 | DP.SC.028 | Семиотическое качество Pack | SC | Pack-автор получает верифицированные сущности с корректной Kinds-структурой, защитой от лексической дедупликации и читаемым смыслом для агентов и людей | draft |
 | DP.SC.029 | Терминологический процесс IWE | SC | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
 | DP.SC.031 | Personal Read Api | SC | — | draft |
+| DP.SC.032 | Personal Data View Audit | SC | — | draft |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | SC | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | SC | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | SC | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -254,29 +187,3 @@
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 
 > *Auto-generated by `generate-map.py` on 2026-04-24*
-
-## Upstream dependencies
-
-- [TserenTserenov/SPF](https://github.com/TserenTserenov/SPF) — Second Principles Framework
-- [ailev/FPF](https://github.com/ailev/FPF) — First Principles Framework
-- [aisystant/PACK-personal](https://github.com/aisystant/PACK-personal) — контракт индикаторов созидателя
-
-## Downstream outputs
-
-- [DS-twin](https://github.com/aisystant/DS-twin) — MCP-реализация цифрового двойника (instrument)
-- [DS-aist-bot](https://github.com/aisystant/DS-aist-bot) — Telegram-бот, тонкий клиент (instrument)
-- [DS-strategist](https://github.com/TserenTserenov/DS-strategist) — Агент Стратег (instrument)
-- [DS-extractor](https://github.com/TserenTserenov/DS-extractor) — Знание-Экстрактор, prompt-based ИИ-система (instrument)
-- [DS-exocortex-setup](https://github.com/TserenTserenov/DS-exocortex-setup) — Агент развёртывания экзокортекса (instrument)
-- [FMT-exocortex](https://github.com/TserenTserenov/FMT-exocortex) — Шаблон экзокортекса (format)
-- [DS-strategy](https://github.com/TserenTserenov/DS-strategy) — Личный стратегический хаб (governance)
-
-## Maintainers
-
-- @TserenTserenov
-
-## Changelog
-
-- 0.2.1 — Архитектурная ревизия: 4 слоя → 3 слоя (ИИ + детерминированные = слой обработки с двумя зонами-пирами), +4-я характеристика «Генеративность» (общее знание → шаблон → fork → созидатель)
-- 0.2.0 — Архитектурное обновление: 4-слойная модель, ИИ-системы (объединение агентов/ассистентов), 3 характеристики (эволюционируемость, масштабируемость, обучаемость), IPO-паттерн, отчуждаемость, навигация знаний, модульный экзокортекс, метод экстракции знаний, 6 новых различений, failure modes, навигационная карта
-- 0.1.0 — Initial structure

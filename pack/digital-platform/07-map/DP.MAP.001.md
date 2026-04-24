@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 13 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 53 |
+| SC (SC) | 54 |
 | SoTA Annotations (SOTA) | 20 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **177** |
+| **Total** | **178** |
 
 ## Distinctions
 
@@ -246,7 +246,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.ROADMAP.001 | План миграции Neon 9 → 12 БД | Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P2b dt-collect миграция на event-gateway, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков. | draft |
-| DP.ROADMAP.001-A | Neon MVP-greenfield для волонтёров (спринт 4-17 мая) | Параллельный к основному Roadmap план: MVP-greenfield 9+3 БД для 5 волонтёров за 2 недели. Не трогает прод старой архитектуры. | draft |
+| DP.ROADMAP.001-A | Neon MVP-greenfield (infra-first, старт 24 апр) | Параллельный к основному Roadmap план: MVP-greenfield 12 БД, infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю. | in_progress |
 
 ### ROLE
 
@@ -309,6 +309,7 @@ generated: true
 | DP.SC.028 | Семиотическое качество Pack | Pack-автор получает верифицированные сущности с корректной Kinds-структурой, защитой от лексической дедупликации и читаемым смыслом для агентов и людей | draft |
 | DP.SC.029 | Терминологический процесс IWE | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
 | DP.SC.031 | Personal Read Api | — | draft |
+| DP.SC.032 | Personal Data View Audit | — | draft |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -352,6 +353,7 @@ generated: true
 - Missing `summary`: DP.SC.026 (DP.SC.026-agent-behavior-monitoring.md)
 - Missing `summary`: DP.SC.027 (DP.SC.027-repo-touch-gate.md)
 - Missing `summary`: DP.SC.031 (DP.SC.031-personal-read-api.md)
+- Missing `summary`: DP.SC.032 (DP.SC.032-personal-data-view-audit.md)
 
 ---
 
