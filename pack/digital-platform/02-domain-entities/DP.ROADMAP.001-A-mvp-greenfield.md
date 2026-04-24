@@ -1,11 +1,11 @@
 ---
 id: DP.ROADMAP.001-A
-name: Neon MVP-greenfield для волонтёров (спринт 4-17 мая)
+name: Neon MVP-greenfield (infra-first, старт 24 апр)
 type: roadmap-variant
-status: draft
-valid_from: 2026-05-04
+status: in_progress
+valid_from: 2026-04-24
 parent: DP.ROADMAP.001-neon-migration
-summary: "Параллельный к основному Roadmap план: MVP-greenfield 9+3 БД для 5 волонтёров за 2 недели. Не трогает прод старой архитектуры."
+summary: "Параллельный к основному Roadmap план: MVP-greenfield 12 БД, infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю."
 related:
   realizes: [WP-253]
   uses:
@@ -13,12 +13,14 @@ related:
     - DP.SC.101    # LMS Subscription Webhook контракт
     - DP.ROLE.032  # Event Ingester роль
     - DP.ARCH.004  # Карта 12 БД v2.2
-  source: "WP-253 Ф9 MVP-greenfield"
+  source: "WP-253 Ф9 MVP-greenfield (переработан 24 апр вечером: volunteer-first → infra-first)"
 created: 2026-04-24
 updated: 2026-04-24
 ---
 
-# Neon MVP-greenfield для волонтёров
+# Neon MVP-greenfield (infra-first)
+
+> **Переработан 24 апр вечером.** План изменён с volunteer-first (старт 4 мая, entry gate = 5 ory_ids) на infra-first (старт немедленно, волонтёры подключаются по reliability-gate). Причина: нельзя тестировать на несуществующих БД; Red Line 1 мая работает в параллельном ресурсе (content/landing) и не конкурирует с Neon DDL. Подробности — см. WP-253 Ф9 «Переработка 24 апр».
 
 ## Контекст и разделение с DP.ROADMAP.001
 
@@ -28,16 +30,18 @@ updated: 2026-04-24
 
 | Критерий | DP.ROADMAP.001 (основной) | DP.ROADMAP.001-A (MVP-greenfield) |
 |---------|---------------------------|-----------------------------------|
-| Аудитория | Все пользователи (~5000) | 5 core team (Дима, Ильшат, Наталья, Инга, Паша) |
-| Длительность | 4 месяца | 2 недели (4-17 мая) |
+| Аудитория | Все пользователи (~5000) | Core team (Дима, Ильшат, Наталья, Инга, Паша) → затем волонтёры |
+| Длительность | 4 месяца | ~2-3 недели (infra-first, по готовности) |
 | Dual-write | Да, 14 дней parity | Нет, greenfield |
 | Трогает прод-БД | Да (rename digital-twin, split knowledge) | Нет, новые БД с нуля |
 | Cut-over | Per-БД с rollback L1-L4 | Feature flag в боте по user_id |
-| Goal | Полная миграция | `/personal-guide-start` + баллы работают на новой схеме у 5 человек |
+| Goal | Полная миграция | `/personal-guide-start` + баллы работают на новой схеме у core-team, затем волонтёров |
 
 **После успеха MVP-A:** основной Roadmap использует новую архитектуру как целевое состояние, но остальные пользователи мигрируют по основному плану постепенно.
 
-## Scope: 12 БД по неделям
+## Scope: 12 БД (infra-first, порядок = критический путь)
+
+> **Примечание по датам:** секции «Неделя 1» / «Неделя 2» и даты «4 мая», «10 мая», «17 мая» в исходном тексте ниже — ориентировочные. Реальный старт каждой фазы — по exit-gate предыдущей. Актуальный порядок и бюджеты фаз Ф9.1–Ф9.7 — см. WP-253 Ф9 context файл (инбокс).
 
 ### Неделя 1 (4-10 мая): 9 БД активных
 
@@ -314,16 +318,21 @@ WHERE flag_name = 'mvp_greenfield' AND ory_user_id IN (<5 uuids>);
 - Bridge-1 LMS→нас продолжит работать (он pull'ит из LMS вне зависимости от feature-flag). Если нужен полный stop — отключить Cloudflare Worker Bridge-1 (deploy с пустым cron).
 - Если волонтёр успел получить runtime-материалы из `/personal-guide-start` (PACK-personal в его GitHub) — они остаются у пользователя. Это **фича, не баг** (Персона = его собственность).
 
-## Entry gate для Ф9 MVP-greenfield
+## Entry gate для Ф9 MVP-greenfield (v2, infra-first)
+
+**Entry** (что нужно до старта Ф9.1 DDL):
 
 - [x] Read-only credentials LMS подтверждены (memory/reference_lms_db.md, 8 апр)
 - [x] DP.SC.020 Event Ingest создан
 - [x] DP.ROLE.032 Event Ingester создан
-- [x] DP.SC.101 LMS Webhook контракт (draft, передача отложена)
-- [x] **ArchGate ЭМОГССБ v3 для event-gateway ПРОХОДИТ (24 апр, см. §ArchGate ниже)** — 2⚠️ (Скорость, Безопасность) с митигациями; пересмотр на 3 мая если smoke-test p95 >1s или B2.1 Secrets Inventory не закрыт
-- [ ] Список 5 ory_id волонтёров подтверждён
-- [x] Feature flag вариант принят (24 апр): `reference.feature_flags` (generic таблица БД #8)
-- [x] Buffer решение принято (24 апр): прямая запись без outbox для MVP; CF Queues поверх — Phase 2 (при кросс-БД или ×100 нагрузки)
+- [x] DP.SC.101 LMS Webhook контракт (draft, передача отложена до reliability-gate)
+- [x] **ArchGate ЭМОГССБ v3 для event-gateway ПРОХОДИТ (24 апр)** — 2⚠️ (Скорость, Безопасность) с митигациями; пересмотр если smoke-test p95 >1s или B2.1 Secrets Inventory не закрыт
+- [x] Feature flag механизм принят: `reference.feature_flags` (generic таблица БД #8)
+- [x] Buffer решение принято: прямая запись без outbox для MVP; CF Queues поверх — Phase 2
+
+**Internal gate** (перед подключением волонтёров, Ф9.7):
+
+- [ ] Список ory_id первой волны волонтёров (≥2, не блокирует старт DDL) — собирается во время Ф9.5/Ф9.6
 
 ## Exit gate (полный MVP принят)
 
