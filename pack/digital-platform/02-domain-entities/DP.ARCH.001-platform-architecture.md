@@ -454,6 +454,8 @@ Platform-space (обогащённое знание)
 
 **Два режима подключения (Gateway-архитектура, DP.IWE.003):**
 
+> Gateway — архитектурный паттерн; инстанс — **Aisystant MCP** (`mcp.aisystant.com`).
+
 | Режим | Аудитория | Точка входа |
 |---|---|---|
 | **Gateway** (массовый) | Нетехническая аудитория | Один MCP Gateway URL + OAuth (claude.ai, ChatGPT, Cursor, Telegram) |

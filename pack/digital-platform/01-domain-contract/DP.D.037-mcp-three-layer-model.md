@@ -61,4 +61,4 @@ personal-knowledge-mcp ← Pack и репо пользователя
 ## Доставка пользователю
 
 - **Технарь:** `setup.sh` создаёт `.mcp.json` с платформенными MCP. Пользовательские — через `extensions/mcp-user.json`.
-- **Нетехнарь:** один Gateway URL (OAuth через Ory). Все три платформенных MCP доступны за ним.
+- **Нетехнарь:** один Gateway URL (OAuth через Ory). Все три платформенных MCP доступны за ним. Gateway — паттерн (DP.IWE.003); инстанс — **Aisystant MCP** (`mcp.aisystant.com`).

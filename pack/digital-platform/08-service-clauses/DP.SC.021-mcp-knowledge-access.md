@@ -19,7 +19,7 @@ links: [WP-189, DP.D.031, DP.ARCH.001, WP-210, DP.SC.112]
 
 **Технарь (VS Code + Claude Code):** `knowledge-mcp` и `digital-twin-mcp` подключены автоматически после `setup.sh`. Агент знает ZP, FPF, SPF, Pack платформы и Память пользователя (прогресс, агрегаты) + Персону (декларации) из коробки.
 
-**Нетехнарь (claude.ai / ChatGPT / Cursor):** Один Gateway URL — добавляется как connector один раз. Агент получает тот же доступ к знаниям через Gateway.
+**Нетехнарь (claude.ai / ChatGPT / Cursor):** Один Gateway URL — добавляется как connector один раз. Агент получает тот же доступ к знаниям через Gateway. Gateway — паттерн (DP.IWE.003); инстанс — **Aisystant MCP** (`mcp.aisystant.com`).
 
 ## Что пользователь получает
 
