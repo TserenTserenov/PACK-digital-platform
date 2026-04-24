@@ -70,7 +70,7 @@ updated: 2026-04-24
 - **Journal Aggregator** (WP-253 Ф9.6) — читает `journal.event` raw, POST-ит derived events.
 
 **Выход (поставщик обещаний другим ролям):**
-- **Rewards Projection** (DP.ROLE.034 — создаётся в Ф9.8) — LISTEN на learning.domain_event, пишет в rewards.point_balances.
+- **Rewards Projection** ([DP.ROLE.034](./DP.ROLE.034-rewards-projector.md) — draft с 24 апр, WP-253 Ф9.3) — LISTEN на learning.domain_event, пишет в rewards.point_balances.
 - **Indicators Calculator** — читает learning.domain_event для baseline/RCS.
 - **Analytics/Metabase** — read-replica learning.domain_event.
 
