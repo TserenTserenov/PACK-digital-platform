@@ -5,8 +5,9 @@ type: domain-entity
 status: approved
 summary: "Память — операционный слой модели пользователя. Писатель = платформа runtime, владелец = Neon. Два под-слоя: Observed (append-only события) + Derived (вычисляемые агрегаты, бывший узкий ЦД). Event Sourcing + CQRS. BKT, HLR, engagement, misconceptions, qualifications. Замещает основную часть монолита DP.ARCH.003."
 created: 2026-04-22
-updated: 2026-04-22
+updated: 2026-04-24
 valid_from: 2026-04-22
+derived_from: DP.ARCH.004@v2.3
 trust:
   F: 4
   G: domain
@@ -439,7 +440,7 @@ Derived update: P(known ZP.3) = 0.19 → 0.35
 
 ## 7. Хранилище: схемы данных
 
-> **Implementation Note.** Конкретная реализация в Neon PostgreSQL: schemas, таблицы, потоки данных, именование БД (финальный пересмотр 9 БД — WP-228 Ф25) → [C2.IT-Platform / Data-Stores](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Data-Stores/).
+> **Implementation Note.** Конкретная реализация в Neon PostgreSQL: schemas, таблицы, потоки данных, именование БД (целевая карта 12 БД утверждена в [DP.ARCH.004](DP.ARCH.004-neon-data-architecture.md) §1 v2.3 через WP-228 Ф25 DONE 22 апр) → [C2.IT-Platform / Data-Stores](../../../DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/Data-Stores/).
 
 **Доменные принципы:**
 - **Память = несколько БД Neon** (не одна schema, не одна БД):
@@ -601,7 +602,7 @@ Derived update: P(known ZP.3) = 0.19 → 0.35
 
 - [DP.ARCH.001](DP.ARCH.001-platform-architecture.md) — 3-слойная архитектура платформы
 - [DP.ARCH.002](DP.ARCH.002-service-tiers.md) — Тиры обслуживания
-- [DP.ARCH.004](DP.ARCH.004-neon-data-architecture.md) — Архитектура Neon (9 БД)
+- [DP.ARCH.004](DP.ARCH.004-neon-data-architecture.md) — Архитектура Neon (12 БД v2.3)
 - [DP.ARCH.005](DP.ARCH.005-persona-entity.md) — Персона (writer=user, owner=Git)
 - [DP.ARCH.007](DP.ARCH.007-projection.md) — Проекция (writer=agent runtime)
 - [DP.D.052](../01-domain-contract/DP.D.052-persona-memory-context.md) — Персона ≠ Память ≠ Контекст

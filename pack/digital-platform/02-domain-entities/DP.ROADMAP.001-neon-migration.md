@@ -4,12 +4,13 @@ name: План миграции Neon 9 → 12 БД
 type: roadmap
 status: draft
 valid_from: 2026-04-22
+derived_from: DP.ARCH.004@v2.3
 related:
   elaborates: [DP.ARCH.004]
   coordinates: [WP-155, WP-187, WP-227, WP-246, WP-253, WP-254, WP-256, WP-244, WP-212, WP-188, WP-121, WP-224, WP-240, WP-139, WP-109]
   depends_on: [DP.ARCH.004, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, SPF.SPEC.005]
 parent_wp: WP-253 Ф1
-summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P2b dt-collect миграция на event-gateway, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков."
+summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (согласно DP.ARCH.004 §1 v2.3). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P2b dt-collect миграция на event-gateway, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков."
 ---
 
 # DP.ROADMAP.001 — План миграции Neon 9 → 12 БД

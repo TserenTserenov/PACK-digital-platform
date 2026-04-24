@@ -4,16 +4,17 @@ name: Neon MVP-greenfield (infra-first, старт 24 апр)
 type: roadmap-variant
 status: in_progress
 valid_from: 2026-04-24
+derived_from: DP.ARCH.004@v2.3
 parent: DP.ROADMAP.001-neon-migration
-summary: "Параллельный к основному Roadmap план: MVP-greenfield 12 БД, infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю."
+summary: "Параллельный к основному Roadmap план: MVP-greenfield с 9 БД активных из 12 целевых (согласно DP.ARCH.004 §1 v2.3), infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю."
 related:
   realizes: [WP-253]
   uses:
     - DP.SC.020    # Event Ingest обещание
     - DP.SC.101    # LMS Subscription Webhook контракт
     - DP.ROLE.032  # Event Ingester роль
-    - DP.ARCH.004  # Карта 12 БД v2.2
-  source: "WP-253 Ф9 MVP-greenfield (переработан 24 апр вечером: volunteer-first → infra-first)"
+    - DP.ARCH.004  # Карта 12 БД v2.3
+  source: "WP-253 Ф9 MVP-greenfield (переработан 24 апр вечером: volunteer-first → infra-first), WP-228 Ф30 sync @v2.3"
 created: 2026-04-24
 updated: 2026-04-24
 ---
@@ -113,7 +114,7 @@ updated: 2026-04-24
 ### Ф9.2 — Новые Neon БД (вторник 5 мая, утро)
 
 **Артефакты:**
-- Создать в Neon проекте 9 новых БД согласно DP.ARCH.004 v2.2 (database-per-BoundedContext, решение принято в WP-228): persona, journal, indicators, subscription, reference, knowledge-platform, learning, rewards, payment (foreign-view)
+- Создать в Neon проекте 9 активных БД MVP (подмножество 12 целевых согласно [DP.ARCH.004](DP.ARCH.004-neon-data-architecture.md) §1 v2.3, принцип database-per-BoundedContext): persona, journal, indicators, subscription, reference, knowledge-platform, learning, rewards, payment (foreign-view). БД #10 community, #11 lead, #12 rewards — post-MVP (P5 основного Roadmap).
 - DDL миграции в `DS-IT-systems/neon-migrations/mvp/*`
 - Seeds для reference (event_schemas, payment_kind, qualification_level, tariffs)
 
