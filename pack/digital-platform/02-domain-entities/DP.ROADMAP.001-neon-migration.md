@@ -6,10 +6,10 @@ status: draft
 valid_from: 2026-04-22
 related:
   elaborates: [DP.ARCH.004]
-  coordinates: [WP-155, WP-187, WP-227, WP-246, WP-253, WP-254, WP-256, WP-244, WP-212, WP-188, WP-121, WP-224, WP-240]
+  coordinates: [WP-155, WP-187, WP-227, WP-246, WP-253, WP-254, WP-256, WP-244, WP-212, WP-188, WP-121, WP-224, WP-240, WP-139, WP-109]
   depends_on: [DP.ARCH.004, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007, SPF.SPEC.005]
 parent_wp: WP-253 Ф1
-summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков."
+summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр) на 12 БД (v2 22 апр по Ф25). P0 подготовка, P1 низкорисковые переименования, P2 роспуск activity-hub, P2b dt-collect миграция на event-gateway, P3 расщепление platform, P4 knowledge split + aist-bot, P5 новые БД (#10/#11/#12), P6 decommissioning, P7 verification ongoing. Gating-критерии, rollback playbook, координация с child-WP, матрица рисков."
 ---
 
 # DP.ROADMAP.001 — План миграции Neon 9 → 12 БД
@@ -189,6 +189,63 @@ summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр)
 
 ---
 
+### 5.2b P2b — dt-collect миграция на event-gateway (июнь, 8-10h)
+
+**Контекст.** Скрипт `FMT-exocortex-template/roles/synchronizer/scripts/dt-collect.sh` (в связке с `dt-collect-neon.py`) писал активность пользователя напрямую в `digital-twin.public.digital_twins` + `development.user_events` через `psycopg2.connect(NEON_URL)`. Это L3-утечка: FMT-шаблон требовал от конечных пользователей производственных секретов платформы (`NEON_URL`, `DT_USER_ID`). 24 апр 2026 инцидент по запросу пользователя boberru@gmail.com — scope-fix: скрипт помечен author-only, scheduler guard пропускает без env автора. Сам writer остаётся переходным артефактом до этой фазы.
+
+**Вход:**
+- P2 DONE (`journal` #2 принимает events, outbox-реле работает).
+- event-gateway (POST endpoint в Activity Hub runtime) live, принимает service-token auth.
+- ArchGate решение по auth: `service-token` для cron vs `OAuth-for-cron` (Ory не даёт long-lived refresh для скриптов) — решено **до** фазы, в P0 extension.
+- B7.3 ответ на Security Gate по классам PII (git commit messages, WakaTime project names, file paths, device fingerprint) — approved.
+
+**Содержание:**
+1. **IntegrationGate (Pack):**
+   - `DP.SC.NNN` — обещание endpoint `POST /hub/events`: триггер (cron дергает), входы (batch of events: type, timestamp, payload, user_id, device_id), выходы (200 ok / 4xx rejected / 5xx retry), время отклика (≤500ms p95), инвариант (Single-Event Ledger — событие immutable, отмена = обратное событие), режим отказа (503 → exponential backoff клиента, не потерять event).
+   - Минимум 3 сценария: (a) dt-collect cron на ноутбуке пишет git-commits каждые 15 мин; (b) iwe-collector стандалон пишет WakaTime heartbeat-ы раз в час; (c) веб-UI (будущее) пишет user action event в реальном времени.
+   - Роль — `DP.ROLE.NNN Синхронизатор` обновление: убрать прямое подключение к БД из обязанностей, добавить «клиент event-gateway».
+2. **Security Gate B7.3:**
+   - Классификация PII: `commit_message` → PII (может содержать имена, токены); `waka_project` → public; `device_fingerprint` → PII; `user_id` → PII; `file_paths` → potentially PII (.env, personal Pack имена).
+   - Retention: журнал Observed — 180 дней default, PII-поля маскируются после 90 дней (replace на `[MASKED_PII]` по cron).
+   - RLS на `journal.event` — пользователь читает только свои events через gateway, cross-user read возможен только для service role (Портной, Оценщик).
+3. **ArchGate — auth для cron:**
+   - Вариант 1: service-token hash в `~/.config/aist/env`, gateway валидирует + rate-limit. Простой, но токен долгоживущий на пользовательской машине = риск утечки.
+   - Вариант 2: OAuth-for-cron через Ory — device flow с refresh token → refresh через Ory endpoint. Сложнее, но unified с подпиской.
+   - Решение фазы: ArchGate ЭМОГССБ ≥8, фиксация в `DP.ADR.NNN`.
+4. **Вариант A vs B по dt-collect (архитектурное решение фазы):**
+   - **Вариант A — атомарные события.** Cron пишет per-commit events + per-session events + WakaTime heartbeats. Портной позже агрегирует в `indicators.*` (snapshot). Соответствует О/С/Р/К маркерам DP.ARCH.004 v2.2 (events = О-Observed, baseline = С-Snapshot derived).
+   - **Вариант B — удалить writer вовсе.** Git-сигнал уже есть в `activity-hub` через `/webhook/github/workbook` (HMAC). WakaTime интегрируется отдельным server-side pull-ом. Cron-скрипт убирается совсем.
+   - Решение — на исполнении фазы после ревизии сигналов. Baseline prediction: B предпочтительнее (меньше клиентского кода, OwnerIntegrity сильнее).
+5. **Реализация (если вариант A выбран):**
+   - REST endpoint `POST /hub/events` в Activity Hub — middleware auth + schema validation + outbox write.
+   - Переписать `dt-collect-neon.py` на HTTPS-клиент (без psycopg2): batch POST + retry + дедупликация по `client_event_id`.
+   - Убрать `psycopg2-binary` из зависимостей `FMT-exocortex-template/roles/synchronizer/requirements.txt`.
+   - Убрать author-only маркер из `dt-collect.sh` (header + scheduler guard) — скрипт возвращается в штатное расписание для всех пользователей.
+6. **Реализация (если вариант B выбран):**
+   - Удалить `dt-collect.sh`, `dt-collect-neon.py` из FMT-шаблона.
+   - Убрать запись в `scheduler.sh`.
+   - GitHub webhook остаётся как primary signal для commits. WakaTime backfill (если нужно) — отдельный server-side worker.
+7. **Верификация:**
+   - Вариант A: client smoke-test — отправить 100 events с тестового окружения, проверить `journal.event` COUNT + latency p95.
+   - Вариант B: grep-verification — ни одной ссылки на `NEON_URL` в `FMT-exocortex-template/`, ни одного вызова `psycopg2` в `roles/synchronizer/`.
+
+**Выход:**
+- [ ] `FMT-exocortex-template/roles/synchronizer/` не требует `NEON_URL` / `DT_USER_ID` от пользователя.
+- [ ] Activity Hub принимает events через `POST /hub/events` с service-token (или OAuth-for-cron).
+- [ ] Для всех пользователей IWE (не только автора) активность пишется в `journal` — или скрипт удалён (вариант B).
+- [ ] SC, IntegrationGate, ArchGate артефакты в Pack.
+
+**Откат:**
+- L1: revert auth middleware — endpoint принимает все requests (только для rollback window).
+- L2: вернуть psycopg2-клиент из git history + author-only маркер — скрипт снова работает только у автора.
+- Срок: ≤30 дней после cut-over старая ветка сохраняется за feature flag `USE_LEGACY_PSYCOPG2_WRITER=1`.
+
+**Бюджет:** 8-10h (2h SC+IntegrationGate, 1h B7.3, 1h ArchGate auth, 3-4h endpoint+client реализация или удаление, 1h верификация+документирование).
+
+**Владелец:** WP-253 (координация фазы), WP-109 Activity Hub (server-side endpoint), WP-139 IWE metrics sync (client переписывание).
+
+---
+
 ### 5.3 P3 — Расщепление `platform` (июнь, 8h)
 
 **Объём:** `platform` (v1 #1) → `persona` (#1 new), `subscription` (#4 new), `reference` (#8 new).
@@ -364,6 +421,7 @@ flowchart LR
     P0[P0 Подготовка]
     P1[P1 Renames]
     P2[P2 activity-hub dissolution]
+    P2b[P2b dt-collect migration]
     P3[P3 platform split]
     P4[P4 knowledge+bot]
     P5[P5 new DBs #10/#11/#12]
@@ -372,17 +430,19 @@ flowchart LR
 
     P0 --> P1
     P1 --> P2
+    P2 --> P2b
     P2 --> P3
     P2 --> P5
     P3 --> P4
     P4 --> P6
     P5 --> P6
+    P2b --> P6
     P6 --> P7
 ```
 
-**Критический путь:** P0 → P1 → P2 → P3 → P4 → P6 (≥34h). P5 параллелен P3/P4.
+**Критический путь:** P0 → P1 → P2 → P3 → P4 → P6 (≥34h). P5 и P2b параллельны P3/P4.
 
-**Параллелизация:** P1 (renames) и ранние подготовительные шаги P2 (journal schema) могут идти одновременно; P5 (new DBs) начинается после P2, независимо от P3/P4.
+**Параллелизация:** P1 (renames) и ранние подготовительные шаги P2 (journal schema) могут идти одновременно; P5 (new DBs) и P2b (dt-collect migration) начинаются после P2, независимо от P3/P4.
 
 ---
 
@@ -404,6 +464,8 @@ flowchart LR
 | R12 | Ключевой исполнитель (Tseren/Паша) out-of-office в cut-over окне | средняя | высокий (затор) | P0 согласование окон cut-over с календарём исполнителей, +2 недели slack в Timeline |
 | R13 | Neon tier upgrade cost превышает бюджет | низкая | низкий | P0 явный расчёт storage/compute delta для 12 vs 9 БД, approval до P1 |
 | R14 | Orphaned connection strings в `.github/workflows/*.yml` или одноразовых скриптах не попали в inventory | средняя | средний | P0 inventory покрывает не только код, но и CI YAML + shell-скрипты в `/scripts/` |
+| R15 | L3-утечка: FMT-шаблон требует секретов автора платформы (NEON_URL/DT_USER_ID) | **материализовался 24 апр** (boberru) | средний (user confusion, security posture) | Scope-fix 24 апр: author-only маркер + scheduler guard. Системная замена — P2b |
+| R16 | Cron-скрипт на пользовательской машине утечёт service-token в `~/.config/aist/env` | средняя | средний (spoofed events от пользователя) | P2b ArchGate выбирает OAuth-for-cron ИЛИ короткоживущий rotated service-token |
 
 ---
 
@@ -421,6 +483,8 @@ flowchart LR
 | **WP-121** points calculation | Writer для `rewards` (#12) | P5 | Требует Ф2 calculate_points |
 | **WP-244** health SaaS | Decommission `health` DB | P6 | Better Uptime провайдер выбран |
 | **WP-212** B7.3.1 | Data classification map | P3 entry | Должна быть approved до split platform |
+| **WP-139** iwe-metrics-sync | Клиент event-gateway: переписать `dt-collect-neon.py` или удалить | P2b | Ф1/Ф6.1/Ф8 blocked до P2b DONE |
+| **WP-109** activity-hub | Server-side endpoint `POST /hub/events` + service-token auth | P2b | journal live (P2 DONE) |
 | **WP-253** этот план | Общая координация + drift детектор | P7 | Ongoing |
 
 **Правило координации:** ни одна child-WP не trigger-ит cut-over без разрешения WP-253. Разрешение = строка в статусе фазы `ready-to-cutover: yes` + verification query passed.
@@ -545,6 +609,7 @@ railway redeploy --service <name>
 | P0 Подготовка | 1-10 мая | 10 дней (календарно) | 3h |
 | P1 Renames | 10-24 мая | 14 дней (cut-over windows) | 4h |
 | P2 activity-hub dissolution | 20 мая - 20 июня | 1 мес | 12h |
+| P2b dt-collect migration | 10-25 июня | 2 недели | 8-10h |
 | P3 platform split | 15 июня - 15 июля | 1 мес | 8h |
 | P4 knowledge + bot | 1 июля - 1 августа | 1 мес | 10h |
 | P5 new DBs | 15 июля - 15 августа | 1 мес | 8h |
@@ -571,3 +636,4 @@ railway redeploy --service <name>
 | Версия | Дата | Описание |
 |---|---|---|
 | v0.1 draft | 22 апр 2026 | Первая версия после Ф25 DONE. Скелет 7 фаз, матрица рисков, координация child-WP. Ждёт ArchGate + ревью Андрея. |
+| v0.2 draft | 24 апр 2026 | +P2b «dt-collect миграция на event-gateway». Триггер — L3-утечка scope в FMT (boberru инцидент 24 апр, scope-fix DONE). Системная замена psycopg2-writer на REST endpoint через Activity Hub. +R15/R16 риски, +WP-139/WP-109 координация, +DAG node P2b. Бюджет фазы 8-10h, активация после P2. |
