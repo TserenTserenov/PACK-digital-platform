@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 15 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 56 |
+| SC (SC) | 57 |
 | SoTA Annotations (SOTA) | 20 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **182** |
+| **Total** | **183** |
 
 ## Distinctions
 
@@ -335,6 +335,7 @@ generated: true
 | DP.SC.120 | Приёмник платежей (Payment Receiver) | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
 | DP.SC.122 | Rewards Projection (точная проекция баллов по доменным событиям) | Точная идемпотентная проекция из learning.domain_event в rewards.point_balances по reference.reward_rules через LISTEN/NOTIFY | draft |
 | DP.SC.123 | Platform Observability (наблюдаемость инфраструктуры) | Минимально достаточный набор сигналов о здоровье 12 БД и ~10 сервисов: реактивные ответы, проактивные алерты, retro-queries для root-cause. PII-граница на ingress. | draft |
+| DP.SC.124 | Lifework Pack Coaching | Созидатель получает поэтапную помощь Портного в составлении документа очередного уровня охвата пакета Lifework при условии, что документ предыдущего уровня работает ≥6 месяцев | draft |
 
 ### SYS
 
