@@ -162,7 +162,7 @@ summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр)
 - Новые БД `#11 lead` и `#12 rewards` созданы пустыми.
 - Outbox pattern реализован (библиотека `outbox-relay.ts` или эквивалент).
 - **WP-212 B7.3.1 PII классификация journal events approved** (ArchGate v3 митигация Безопасность ⚠️ Решение 1, 26 апр) — поля `commit_message`, `device_fingerprint`, `user_id`, `file_paths`, `ip` маркированы как PII; retention 90d default + masking; RLS на `journal.event` + service role only для cross-user.
-- **Sandbox-тест L2.5 outbox-replay** на postgresql@16 (1000 событий, drift recovery) — PASS (см. §10).
+- **Sandbox-тест L2.5 outbox-replay** на postgresql@16 — ✅ **DONE 25 апр** (`DS-IT-systems/neon-migrations/sandbox/L2.5-outbox-replay/`, 11/11 assertions PASS).
 
 **Содержание:**
 1. **Создать `journal` (#2)** — новая БД, табличная схема = events из activity-hub RAW.
@@ -571,12 +571,12 @@ railway redeploy --service <name>
 3. Writer пишет только в старую БД.
 4. Новая БД в read-only до расследования.
 
-**Playbook L2.5 (outbox-replay) — добавлен ArchGate v3 26 апр:**
+**Playbook L2.5 (outbox-replay) — добавлен ArchGate v3 26 апр; sandbox PASS 25 апр:**
 1. Зафиксировать watermark (last_processed_event_id) во всех projection consumers.
 2. Запустить `outbox-replay.py --since=<watermark> --consumer=<name>` — повторно прокачать события из `journal.outbox` в проблемный consumer.
 3. Reconciliation SQL: `count-parity.sql --table=<projection>` — должен показать дельта = 0 после replay.
 4. Если дельта ≠ 0 после replay → эскалация в L3 (Neon backup).
-5. **Sandbox-prerequisite:** до старта P2 проверить L2.5 на postgresql@16 на 1000 событий с искусственным drift 0.5%; PASS = replay восстанавливает parity за ≤2 мин CPU time. Без PASS — НЕ начинать P2.
+5. **Sandbox-prerequisite:** ✅ **DONE 25 апр 2026** — `DS-IT-systems/neon-migrations/sandbox/L2.5-outbox-replay/` (11/11 assertions PASS, 22ms duration на 1000 событий с drift 0.5%, idempotency проверена). Production-перенос `outbox_replay.py` в `DS-ecosystem-development/scripts/neon/` — в P0 prep до P2.
 
 **Playbook L3 (Neon backup):**
 1. `neon branch create --name rollback-<date>` из point-in-time recovery (PITR) до момента миграции.
@@ -625,7 +625,7 @@ railway redeploy --service <name>
 1. **Timing MVP → P1.** «14 дней стабильной работы content-pipeline» — достаточно ли? Или лучше 30 дней? Решение — после sprint 1 MVP.
 2. **Redis для FSM aist-bot.** Self-host Redis или Upstash/Railway Redis? Стоимость vs надёжность. P0 определяет.
 3. **Outbox implementation.** Своя lib или библиотека (pgmq/river)? ArchGate в P2 entry.
-4. ~~**Metabase read-replica.**~~ ✅ ArchGate v3 26 апр: (c) direct read-only ×12 БД для MVP P6, (a) logical replication Phase 2 при росте нагрузки. Финальное согласие — Андрей (см. §16).
+4. ~~**Metabase read-replica.**~~ ✅ RESOLVED 25 апр (Tseren): (c) direct read-only ×12 БД для MVP P6, (a) logical replication Phase 2 при росте нагрузки/внешних BI.
 5. **Backup retention.** 90 дней для dropped DBs — достаточно ли? Согласовать с юрдоком (WP-212 B8.0).
 6. **Cross-DB JOIN замена.** Где неизбежны JOIN между БД — использовать projection или API gateway? Per-case в каждой фазе.
 7. **Cost projection.** 12 БД в Neon vs 9 — дельта цены? P0 калькуляция.
@@ -645,19 +645,19 @@ railway redeploy --service <name>
 | P5 new DBs | 15 июля - 15 августа | 1 мес | 8h |
 | P6 Decomm | 15-30 августа | 2 недели | 4h |
 | P7 Verification | 1 сентября+ | ongoing | 0.5h/week |
-| **Итого active work** | **1 мая - 30 августа** | **~4 мес** | **~49h** |
+| **Итого active work** | **1 мая - 30 августа** + **+2-3 нед slack (25 апр решение)** | **~4-4.5 мес** | **~49h** |
 
-**Пессимистичный сдвиг:** +1 мес при обнаружении R2/R5 рисков в P2-P3. Реалистичный finish — сентябрь-октябрь 2026.
+**Финиш с встроенным slack (RESOLVED 25 апр §15.2):** **октябрь-ноябрь 2026.** Дополнительные +2-3 недели явно заложены поверх оптимистичного плана как митигация R12 (исполнитель OOO в cut-over окне) при 20+ параллельных WP. Не «пессимистичный сдвиг» — рабочая базовая линия.
 
 ---
 
 ## 15. Deferred к ArchGate review
 
-ArchGate v3 проведён 26 апр (см. §16). Status:
+ArchGate v3 проведён 26 апр (§16). Все 3 пункта закрыты 25 апр (Tseren — без эскалации Андрею):
 
 1. ~~**L3 rollback playbook для P2-P4.**~~ ✅ RESOLVED: добавлен Playbook L2.5 (outbox-replay) в §10 с sandbox-prerequisite на postgresql@16 до старта P2.
-2. ~~**Temporal slack в P2-P3.**~~ → OPEN: вопрос Андрею (§16). Рекомендация: принять +2-3 нед явно (finish октябрь-ноябрь), митигирует R12.
-3. ~~**Metabase read-replica механизм (P6).**~~ → OPEN: вопрос Андрею (§16). Рекомендация: (c) direct read-only ×12 БД для MVP, (a) logical replication Phase 2 при росте нагрузки.
+2. ~~**Temporal slack в P2-P3.**~~ ✅ RESOLVED 25 апр: принят +2-3 нед явно. Timeline §14 finish сдвинут на октябрь-ноябрь 2026.
+3. ~~**Metabase read-replica механизм (P6).**~~ ✅ RESOLVED 25 апр: (c) direct read-only ×12 БД для MVP, (a) logical replication Phase 2 при росте нагрузки/внешних BI.
 
 ---
 
@@ -675,8 +675,8 @@ ArchGate v3 проведён 26 апр (см. §16). Status:
 | 2 | Cut-over windows | **A3 адаптивные**: 7d/14d/30d для P1, 14d/30d/60d для P2-P4 | 8✅ 0⚠️ | ПРОХОДИТ |
 | 3 | Rollback playbook | **A2 +L2.5 outbox-replay** (sandbox-тест ~2h до P2) | 7✅ 1⚠️ (О) | ПРОХОДИТ |
 | 4a | L3 playbook P2-P4 | Закрыто принятием A2 в #3 | — | RESOLVED |
-| 4b | Temporal slack | Принят явно: finish октябрь-ноябрь (R12 митигация) | 3✅ 0⚠️ | OPEN→Андрей |
-| 4c | Metabase механизм | (c) direct read-only ×12 для MVP, (a) Phase 2 | 4✅ 1⚠️ (Э) | OPEN→Андрей |
+| 4b | Temporal slack | Принят явно: finish октябрь-ноябрь (R12 митигация) | 3✅ 0⚠️ | **RESOLVED 25 апр** (Tseren — без эскалации Андрею) |
+| 4c | Metabase механизм | (c) direct read-only ×12 для MVP, (a) Phase 2 | 4✅ 1⚠️ (Э) | **RESOLVED 25 апр** (Tseren — без эскалации Андрею) |
 
 **Вето-фильтр (conjunctive screening):**
 - Правило 1 (критические Э+Б): обе ⚠️, не ❌ — не сработало.
@@ -701,13 +701,13 @@ ArchGate v3 проведён 26 апр (см. §16). Status:
 | Обучаемость ⚠️ Решение 3 | §10 + §11 | Sandbox-тест L2.5 на postgresql@16 (1000 событий) — entry для P2 |
 | Эволюционируемость ⚠️ Решение 4c | §15 + §13 #4 | (c) MVP принят, Phase 2 (a) при росте нагрузки/внешних BI |
 
-### 3 вопроса Андрею (требуют ответа до старта P2)
+### 3 решения автора 25 апр (RESOLVED — без эскалации Андрею)
 
-1. **L2.5 outbox-replay sandbox-тест до P2** (+3-4h: 1-2h доку + 2h sandbox-тест на postgresql@16) — согласен? Альтернатива — 4h downtime в момент инцидента.
-2. **Temporal slack +2-3 нед явно** (finish октябрь-ноябрь 2026) или держим 30 авг и принимаем R12?
-3. **Metabase: (c) direct read-only ×12 БД для MVP P6**, (a) Neon logical replication Phase 2 — согласен? Или сразу (a)/(b)?
+1. **L2.5 outbox-replay sandbox-тест до P2 — ПРИНЯТО.** +3-4h до P2 (1-2h доку + 2h sandbox-тест на postgresql@16, 1000 событий с искусственным drift 0.5%). Аргумент: цена страховки 3-4h vs 4h downtime + post-mortem под давлением.
+2. **Temporal slack +2-3 нед — ПРИНЯТО.** Timeline §14 finish сдвигается на октябрь-ноябрь 2026. Аргумент: эмпирически (W17 off-plan ~7h на skeleton) оптимистичные оценки слайдают; буфер встроен явно.
+3. **Metabase для P6 — ПРИНЯТО (c) direct read-only ×12, (a) Phase 2.** Аргумент: простейшее работающее, vendor-agnostic, ~1h конфигурации. (a) активируется при росте нагрузки или подключении внешних BI.
 
-→ Озвучить в оперативке ИТ; ответ закрывает §13 открытые вопросы #2/#3/#4.
+→ §13 открытые вопросы #4 закрыт; §15 Deferred всех 3 пунктов = RESOLVED.
 
 ---
 
@@ -718,3 +718,4 @@ ArchGate v3 проведён 26 апр (см. §16). Status:
 | v0.1 draft | 22 апр 2026 | Первая версия после Ф25 DONE. Скелет 7 фаз, матрица рисков, координация child-WP. Ждёт ArchGate + ревью Андрея. |
 | v0.2 draft | 24 апр 2026 | +P2b «dt-collect миграция на event-gateway». Триггер — L3-утечка scope в FMT (boberru инцидент 24 апр, scope-fix DONE). Системная замена psycopg2-writer на REST endpoint через Activity Hub. +R15/R16 риски, +WP-139/WP-109 координация, +DAG node P2b. Бюджет фазы 8-10h, активация после P2. |
 | v0.3 ArchGate PASS | 26 апр 2026 | Батчевый ArchGate v3 на 4 миграционных решениях — PASS с условием A2 в Решении 3 (L2.5 outbox-replay). 5 митигаций внесены: B7.3.1 entry для P2, DAG checkpoint, адаптивные cut-over окна, L2.5 уровень rollback, sandbox-тест. 3 вопроса для Андрея в §16. Status WP-253 Ф1 → DONE. |
+| v0.4 решения закрыты | 25 апр 2026 | Tseren принял все 3 OPEN-решения автономно (без эскалации Андрею): L2.5 sandbox до P2, temporal slack +2-3 нед (finish окт-нояб), Metabase (c) MVP / (a) Phase 2. Roadmap полностью разблокирован для исполнения. Timeline §14 finish сдвинут на октябрь-ноябрь. |
