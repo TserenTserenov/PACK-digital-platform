@@ -109,10 +109,10 @@ summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр)
 4. Pack-level approve: DP.ROADMAP.001 → review Андрея → фиксация в pack-manifest.
 
 **Выход:**
-- [ ] Neon tier вмещает 12 БД (проверено, коммит upgrade если нужен).
+- [x] Neon tier вмещает 9 БД на dev-branch (✅ 25 апр на schema-only ветке `mvp-greenfield-dryrun-2026-04-25` — все 9 CREATE DATABASE PASS на одном compute endpoint).
 - [ ] Inventory connection strings полный (≥1 consumer для каждого writer).
-- [ ] Tooling локально работает на sandbox-БД.
-- [ ] DP.ROADMAP.001 approved (в pack-manifest.md + WP-253 Ф1 ✅).
+- [x] Tooling локально работает на sandbox-БД (✅ L2.5 outbox-replay sandbox PASS 25 апр + dev-branch DDL dry-run PASS 25 апр).
+- [x] DP.ROADMAP.001 approved (✅ ArchGate v3 PASS 26 апр + 3 OPEN closed 25 апр + WP-253 Ф1 DONE).
 
 **Откат:** не применим — только подготовка, без изменений live.
 
