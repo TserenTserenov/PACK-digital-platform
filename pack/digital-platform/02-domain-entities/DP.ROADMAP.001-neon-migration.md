@@ -94,9 +94,10 @@ summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр)
 ### 5.0 P0 — Подготовка (до 10 мая, 3h)
 
 **Вход:**
-- DP.ARCH.004 v2 approved (done 22 апр).
-- DP.ROADMAP.001 (этот документ) approved через ArchGate (pending, 25-30 апр).
+- DP.ARCH.004 v2.3 approved (done 22 апр + Ф27/Ф30 patches).
+- DP.ROADMAP.001 (этот документ) approved через ArchGate v3 (DONE 26 апр, PASS — см. §16).
 - MVP 1 мая — live, ≥5 команд onboarded.
+- 3 ответа Андрея (§16): L2.5 sandbox-test до P2 / temporal slack / Metabase механизм.
 
 **Содержание:**
 1. Проверить лимиты Neon: может ли текущий план держать 12 БД. Если нет — upgrade tier.
@@ -160,6 +161,8 @@ summary: "Фазовый план перехода Neon с 9 БД (v1 14 апр)
 - P1 DONE.
 - Новые БД `#11 lead` и `#12 rewards` созданы пустыми.
 - Outbox pattern реализован (библиотека `outbox-relay.ts` или эквивалент).
+- **WP-212 B7.3.1 PII классификация journal events approved** (ArchGate v3 митигация Безопасность ⚠️ Решение 1, 26 апр) — поля `commit_message`, `device_fingerprint`, `user_id`, `file_paths`, `ip` маркированы как PII; retention 90d default + masking; RLS на `journal.event` + service role only для cross-user.
+- **Sandbox-тест L2.5 outbox-replay** на postgresql@16 (1000 событий, drift recovery) — PASS (см. §10).
 
 **Содержание:**
 1. **Создать `journal` (#2)** — новая БД, табличная схема = events из activity-hub RAW.
@@ -445,6 +448,13 @@ flowchart LR
 
 **Параллелизация:** P1 (renames) и ранние подготовительные шаги P2 (journal schema) могут идти одновременно; P5 (new DBs) и P2b (dt-collect migration) начинаются после P2, независимо от P3/P4.
 
+**Phase checkpoint (ArchGate v3 митигация Эволюционируемость ⚠️ Решение 1, 26 апр):** между фазами — go/no-go gate (≤30 мин ритуал):
+- ✅ Drift `count-parity.sql` <0.1% за 7 дней;
+- ✅ Rollback playbook L1+L2 проверены на sandbox для следующей фазы;
+- ✅ Все child-WP писатели/читатели ack'нули готовность.
+
+→ Не выполнен хоть один = СТОП до фикса. Альтернатива A3 (P5↔P4 swap) активируется на checkpoint при готовности WP-188 (sales funnel) раньше WP-187 Ф-M.1 (knowledge split).
+
 ---
 
 ## 7. Риски и митигации
@@ -496,6 +506,16 @@ flowchart LR
 
 **Паттерн:** dual-write + shadow-read + atomic reader switch.
 
+**Адаптивные окна (ArchGate v3 Решение 2 A3, 26 апр):**
+
+| Профиль фазы | dual-write | read-only | drop | Применимо |
+|--------------|:-:|:-:|:-:|---|
+| Низкорискованный (renames, single-writer) | 7d | 14d | 30d | P1 (`indicators`, `publication`) |
+| Высокорискованный (split, multi-consumer, cross-BC JOIN) | 14d | 30d | 60d | P2, P2b, P3, P4 |
+| Новые БД (greenfield) | — | — | — | P5 (нет old БД для cut-over) |
+
+Адаптивность даёт реалистичный compromise: ~9 мес parallel legacy/new (60d × 12 БД сериализованно) → ~6 мес для high-risk + 3 мес для low-risk.
+
 ```
                  время →
 T0   T+7d   T+14d        T+30d       T+60d
@@ -533,6 +553,7 @@ T0   T+7d   T+14d        T+30d       T+60d
 |---|---|---|---|
 | L1: revert env var | ≤15 мин | тривиально | atomic reader switch провалился |
 | L2: revert writers dual-write | ≤1 час | стандартно | расхождение обнаружено после cut-over |
+| **L2.5: outbox-replay** | **≤2 часа** | **средне** | **multi-consumer drift 0.5–1% (P2: 3 projections; P3: persona+subscription+reference)** |
 | L3: restore из Neon backup | ≤4 часа | сложно | новая БД повреждена, дрифт >1% |
 | L4: restore full snapshot | ≤24 часа | критично | обе БД (old+new) в неконсистентном состоянии |
 
@@ -549,6 +570,13 @@ railway redeploy --service <name>
 2. Rollback deploy: `railway rollback --service <writer>` до предыдущей стабильной версии.
 3. Writer пишет только в старую БД.
 4. Новая БД в read-only до расследования.
+
+**Playbook L2.5 (outbox-replay) — добавлен ArchGate v3 26 апр:**
+1. Зафиксировать watermark (last_processed_event_id) во всех projection consumers.
+2. Запустить `outbox-replay.py --since=<watermark> --consumer=<name>` — повторно прокачать события из `journal.outbox` в проблемный consumer.
+3. Reconciliation SQL: `count-parity.sql --table=<projection>` — должен показать дельта = 0 после replay.
+4. Если дельта ≠ 0 после replay → эскалация в L3 (Neon backup).
+5. **Sandbox-prerequisite:** до старта P2 проверить L2.5 на postgresql@16 на 1000 событий с искусственным drift 0.5%; PASS = replay восстанавливает parity за ≤2 мин CPU time. Без PASS — НЕ начинать P2.
 
 **Playbook L3 (Neon backup):**
 1. `neon branch create --name rollback-<date>` из point-in-time recovery (PITR) до момента миграции.
@@ -568,6 +596,7 @@ railway redeploy --service <name>
 | `dual-write-shim.ts` | TypeScript middleware для двойной записи | `gateway-mcp/src/lib/` |
 | `count-parity.sql` | Сверка COUNT + MD5 | `DS-ecosystem-development/scripts/neon/` |
 | `outbox-relay` | Реле событий old → new через outbox | отдельный сервис (Railway) |
+| `outbox-replay.py` | Повторная прокачка событий из watermark (Playbook L2.5) | `DS-ecosystem-development/scripts/neon/` |
 | `check-entity-binding.py` | Drift-детектор Pack↔БД↔DS | `DS-ecosystem-development/scripts/verify/` |
 | `connection-inventory.yaml` | Реестр всех connection strings | `DS-my-strategy/inbox/WP-253-neon-connection-inventory.md` |
 
@@ -596,7 +625,7 @@ railway redeploy --service <name>
 1. **Timing MVP → P1.** «14 дней стабильной работы content-pipeline» — достаточно ли? Или лучше 30 дней? Решение — после sprint 1 MVP.
 2. **Redis для FSM aist-bot.** Self-host Redis или Upstash/Railway Redis? Стоимость vs надёжность. P0 определяет.
 3. **Outbox implementation.** Своя lib или библиотека (pgmq/river)? ArchGate в P2 entry.
-4. **Metabase read-replica.** Какой именно механизм? Logical replication в Neon или materialized views в каждой БД? P6.
+4. ~~**Metabase read-replica.**~~ ✅ ArchGate v3 26 апр: (c) direct read-only ×12 БД для MVP P6, (a) logical replication Phase 2 при росте нагрузки. Финальное согласие — Андрей (см. §16).
 5. **Backup retention.** 90 дней для dropped DBs — достаточно ли? Согласовать с юрдоком (WP-212 B8.0).
 6. **Cross-DB JOIN замена.** Где неизбежны JOIN между БД — использовать projection или API gateway? Per-case в каждой фазе.
 7. **Cost projection.** 12 БД в Neon vs 9 — дельта цены? P0 калькуляция.
@@ -624,17 +653,68 @@ railway redeploy --service <name>
 
 ## 15. Deferred к ArchGate review
 
-Отложено до ArchGate (25-30 апр) — требуют решения, не просто уточнения:
+ArchGate v3 проведён 26 апр (см. §16). Status:
 
-1. **L3 rollback playbook для P2-P4.** При дрифте dual-write >1% нужен детальный процесс replay outbox + reconciliation SQL. Сейчас §10 говорит только «restore из Neon backup» — недостаточно для сложных multi-consumer фаз.
-2. **Temporal slack в P2-P3.** Сейчас бюджет тесный (49h активно за 4 мес) при 20+ параллельных WP у владельца. Надо явно заложить +2-3 недели slack или принять риск смещения finish на октябрь-ноябрь.
-3. **Metabase read-replica механизм (P6).** Logical replication требует внешнего pg — provisioning в P0 или materialized views в каждой БД? Решение не выбрано.
+1. ~~**L3 rollback playbook для P2-P4.**~~ ✅ RESOLVED: добавлен Playbook L2.5 (outbox-replay) в §10 с sandbox-prerequisite на postgresql@16 до старта P2.
+2. ~~**Temporal slack в P2-P3.**~~ → OPEN: вопрос Андрею (§16). Рекомендация: принять +2-3 нед явно (finish октябрь-ноябрь), митигирует R12.
+3. ~~**Metabase read-replica механизм (P6).**~~ → OPEN: вопрос Андрею (§16). Рекомендация: (c) direct read-only ×12 БД для MVP, (a) logical replication Phase 2 при росте нагрузки.
 
 ---
 
-## 16. История
+## 16. ArchGate v3 verdict (26 апр 2026)
+
+**Вход:** [`inbox/WP-253-F1-archgate-prep.md`](../../../../DS-my-strategy/inbox/WP-253-F1-archgate-prep.md) — 4 миграционных решения. Target state DP.ARCH.004 v2.3 read-only (Правило 22).
+
+**Критические характеристики:** Безопасность + Эволюционируемость.
+
+### Профиль ЭМОГССБ (батч 4 решений)
+
+| # | Решение | Принятый вариант | Профиль | Вердикт |
+|---|---------|------------------|---------|---------|
+| 1 | Phase order P0→P7 | Baseline (gating важнее −1 мес от A2 parallel) | 5✅ 3⚠️ (Э+Г+Б) | ПРОХОДИТ |
+| 2 | Cut-over windows | **A3 адаптивные**: 7d/14d/30d для P1, 14d/30d/60d для P2-P4 | 8✅ 0⚠️ | ПРОХОДИТ |
+| 3 | Rollback playbook | **A2 +L2.5 outbox-replay** (sandbox-тест ~2h до P2) | 7✅ 1⚠️ (О) | ПРОХОДИТ |
+| 4a | L3 playbook P2-P4 | Закрыто принятием A2 в #3 | — | RESOLVED |
+| 4b | Temporal slack | Принят явно: finish октябрь-ноябрь (R12 митигация) | 3✅ 0⚠️ | OPEN→Андрей |
+| 4c | Metabase механизм | (c) direct read-only ×12 для MVP, (a) Phase 2 | 4✅ 1⚠️ (Э) | OPEN→Андрей |
+
+**Вето-фильтр (conjunctive screening):**
+- Правило 1 (критические Э+Б): обе ⚠️, не ❌ — не сработало.
+- Правило 2 (≥2 блокеров ❌): 0 блокеров — не сработало.
+- Правило 3 (≥4⚠️ и 0✅): свод 5⚠️ × 27✅ — не сработало.
+
+→ **PASS.**
+
+### L2 доменные расширения (информативно)
+
+- **L2.1 Переносимость данных** ✅ — DDL vanilla Postgres, pg_dump через unpooled, gen_random_uuid стандартный.
+- **L2.6 Сохранность знаний** ✅ — Neon PITR per-DB (WP-241), retention WP-240, drift-детектор Ф6, rollback L1-L4 + L2.5.
+
+### Митигации (внесены в Roadmap)
+
+| Хар-ка | Где | Что |
+|--------|-----|-----|
+| Безопасность ⚠️ Решение 1 | §5.2 P2 entry | B7.3.1 PII классификация **journal events** добавлена как entry-gate для P2 (не только P3) |
+| Эволюционируемость ⚠️ Решение 1 | §6 DAG | Checkpoint между фазами: drift <0.1% + L1-L2 PASS как go/no-go gate |
+| — Решение 2 | §9 cut-over | Адаптивные окна (P1: 7d/14d/30d; P2-P4: 14d/30d/60d) |
+| Безопасность ⚠️ Решение 3 | §10 rollback | Уровень L2.5 outbox-replay добавлен (≤2h, multi-consumer drift 0.5-1%) |
+| Обучаемость ⚠️ Решение 3 | §10 + §11 | Sandbox-тест L2.5 на postgresql@16 (1000 событий) — entry для P2 |
+| Эволюционируемость ⚠️ Решение 4c | §15 + §13 #4 | (c) MVP принят, Phase 2 (a) при росте нагрузки/внешних BI |
+
+### 3 вопроса Андрею (требуют ответа до старта P2)
+
+1. **L2.5 outbox-replay sandbox-тест до P2** (+3-4h: 1-2h доку + 2h sandbox-тест на postgresql@16) — согласен? Альтернатива — 4h downtime в момент инцидента.
+2. **Temporal slack +2-3 нед явно** (finish октябрь-ноябрь 2026) или держим 30 авг и принимаем R12?
+3. **Metabase: (c) direct read-only ×12 БД для MVP P6**, (a) Neon logical replication Phase 2 — согласен? Или сразу (a)/(b)?
+
+→ Озвучить в оперативке ИТ; ответ закрывает §13 открытые вопросы #2/#3/#4.
+
+---
+
+## 17. История
 
 | Версия | Дата | Описание |
 |---|---|---|
 | v0.1 draft | 22 апр 2026 | Первая версия после Ф25 DONE. Скелет 7 фаз, матрица рисков, координация child-WP. Ждёт ArchGate + ревью Андрея. |
 | v0.2 draft | 24 апр 2026 | +P2b «dt-collect миграция на event-gateway». Триггер — L3-утечка scope в FMT (boberru инцидент 24 апр, scope-fix DONE). Системная замена psycopg2-writer на REST endpoint через Activity Hub. +R15/R16 риски, +WP-139/WP-109 координация, +DAG node P2b. Бюджет фазы 8-10h, активация после P2. |
+| v0.3 ArchGate PASS | 26 апр 2026 | Батчевый ArchGate v3 на 4 миграционных решениях — PASS с условием A2 в Решении 3 (L2.5 outbox-replay). 5 митигаций внесены: B7.3.1 entry для P2, DAG checkpoint, адаптивные cut-over окна, L2.5 уровень rollback, sandbox-тест. 3 вопроса для Андрея в §16. Status WP-253 Ф1 → DONE. |
