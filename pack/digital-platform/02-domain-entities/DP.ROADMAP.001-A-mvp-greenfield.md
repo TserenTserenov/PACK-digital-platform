@@ -4,6 +4,7 @@ name: Neon MVP-greenfield (infra-first, старт 24 апр)
 type: roadmap-variant
 status: in_progress
 valid_from: 2026-04-24
+version: 0.6
 derived_from: DP.ARCH.004@v2.3
 parent: DP.ROADMAP.001-neon-migration
 summary: "Параллельный к основному Roadmap план: MVP-greenfield с 9 БД активных из 12 целевых (согласно DP.ARCH.004 §1 v2.3), infra-first. Core-team и волонтёры подключаются по факту готовности инфры, не по календарю."
@@ -12,16 +13,39 @@ related:
   uses:
     - DP.SC.020    # Event Ingest обещание
     - DP.SC.101    # LMS Subscription Webhook контракт
+    - DP.SC.122    # Rewards Projection обещание
     - DP.ROLE.032  # Event Ingester роль
+    - DP.ROLE.034  # Rewards Projector роль
     - DP.ARCH.004  # Карта 12 БД v2.3
   source: "WP-253 Ф9 MVP-greenfield (переработан 24 апр вечером: volunteer-first → infra-first), WP-228 Ф30 sync @v2.3"
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-04-25
 ---
 
 # Neon MVP-greenfield (infra-first)
 
+> ⚠️ **DRIFT NOTICE (v0.6, 25 апр):** Нумерация фаз Ф9.X в этом документе **не синхронизирована** с фактическим прогрессом WP-253 после ускорения 25 апр (4 gates PASS за день). Source-of-truth для актуальной последовательности фаз и их статусов — context-файл WP-253 в `~/IWE/DS-my-strategy/inbox/WP-253-neon-architecture-implementation.md` § Ф9. Полная rewrite этого документа запланирована на W18 (≥28 апр) после Strategy Session.
+>
+> **Краткая карта drift'а:**
+>
+> | Roadmap-A v0.5 | Context-файл (актуальное состояние) |
+> |---|---|
+> | Ф9.1 (event-gateway+projection) | Ф9.1 (DDL только) + Ф9.2 (event-gateway smoke) + Ф9.3 (projection-worker) — расщеплено |
+> | Ф9.2 (Neon БД) | Ф9.1 (включает) + Ф9.1b (dev-branch dry-run) |
+> | Ф9.3 (Bridge-1) | post-MVP |
+> | Ф9.4 (aist-bot refactor) | Ф9.5 (часть core-team флага) |
+> | Ф9.5 (payment-receiver) | post-MVP (вне Ф9 объёма) |
+> | Ф9.6 (journal aggregator) | Ф9.9 (post-Ф9.7) |
+> | Ф9.7 (indicators calc) | post-MVP |
+> | Ф9.8 (projection-worker rewards) | Ф9.3 (уже DONE 25 апр) |
+> | Ф9.9 (knowledge-platform shadow) | Ф9.8 (после Ф9.7 reliability gate) |
+> | Ф9.10 (personal-guide E2E) | Ф9.5 (часть core-team прогона) |
+>
+> **Что DONE по факту 25 апр (4 gates PASS):** Ф9.1 DDL → Ф9.1b dev-branch → Ф9.2 event-gateway smoke → Ф9.3 LISTEN/NOTIFY round-trip → Ф9.4 internal smoke G-I4 (10k req @ 1113 rps, p95=138ms, projection 578ms median). Подробности — context-файл WP-253.
+
 > **Переработан 24 апр вечером.** План изменён с volunteer-first (старт 4 мая, entry gate = 5 ory_ids) на infra-first (старт немедленно, волонтёры подключаются по reliability-gate). Причина: нельзя тестировать на несуществующих БД; Red Line 1 мая работает в параллельном ресурсе (content/landing) и не конкурирует с Neon DDL. Подробности — см. WP-253 Ф9 «Переработка 24 апр».
+>
+> **Дальнейшее ускорение 25 апр:** 4 internal gates Ф9.1-Ф9.4 пройдены за один день (другой инстанс утром + субагент-ревью + production toolchain). MVP узкое место снято на 5 дней раньше плана. Core-team прогон по Ф9.5 — 30 апр – 3 мая. Production deploy event-gateway + projection-worker — 27-29 апр (см. `inbox/WP-253-F9.5-deploy-runbook.md`).
 
 ## Контекст и разделение с DP.ROADMAP.001
 
