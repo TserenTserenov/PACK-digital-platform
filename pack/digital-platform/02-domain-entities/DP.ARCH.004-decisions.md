@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.004-decisions
+version: v1.0
 title: "Архитектурные решения по карте данных Neon"
 parent: DP.ARCH.004-neon-data-architecture
 type: decisions-log

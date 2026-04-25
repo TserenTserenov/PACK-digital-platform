@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.005
+version: v1.0
 name: Персона (декларативная модель созидателя)
 type: domain-entity
 status: approved

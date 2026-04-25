@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.006
+version: v1.0
 name: Память (Observed события + Derived агрегаты)
 type: domain-entity
 status: approved

@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 14 |
+| ROLE (ROLE) | 15 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 55 |
+| SC (SC) | 56 |
 | SoTA Annotations (SOTA) | 20 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **180** |
+| **Total** | **182** |
 
 ## Distinctions
 
@@ -266,6 +266,7 @@ generated: true
 | DP.ROLE.031 | Терминолог | Роль Терминолог отвечает за качество терминологии Pack: выбор переводов, онтологическое сопоставление с FPF, разрешение конфликтов имён. | draft |
 | DP.ROLE.032 | Event Ingester | Роль единого приёмника доменных событий обучения от всех источников — гарантирует идемпотентность, валидацию и защиту от PII на входе в learning.domain_event | draft |
 | DP.ROLE.034 | Rewards Projector | Роль проектора баллов: читает learning.domain_event по LISTEN/NOTIFY, применяет reference.reward_rules, пишет в rewards.point_balances идемпотентно через cursor | draft |
+| DP.ROLE.035 | Platform Observer | Роль наблюдателя за здоровьем платформы — собирает uptime/request/external-status сигналы, агрегирует в schema `health`, инициирует TG-алерты команде. Не публикует наружу (это external SaaS). | draft |
 
 ### RUNBOOK
 
@@ -333,6 +334,7 @@ generated: true
 | DP.SC.119 | Рабочее пространство из браузера | Пользователь создаёт и управляет IWE-пространствами из браузера — Pack, DS-репо, заметки — без git, без терминала, без VS Code | draft |
 | DP.SC.120 | Приёмник платежей (Payment Receiver) | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
 | DP.SC.122 | Rewards Projection (точная проекция баллов по доменным событиям) | Точная идемпотентная проекция из learning.domain_event в rewards.point_balances по reference.reward_rules через LISTEN/NOTIFY | draft |
+| DP.SC.123 | Platform Observability (наблюдаемость инфраструктуры) | Минимально достаточный набор сигналов о здоровье 12 БД и ~10 сервисов: реактивные ответы, проактивные алерты, retro-queries для root-cause. PII-граница на ingress. | draft |
 
 ### SYS
 

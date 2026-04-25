@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.007
+version: v1.0
 name: Проекция (runtime-компиляция под потребителя)
 type: domain-entity
 status: approved

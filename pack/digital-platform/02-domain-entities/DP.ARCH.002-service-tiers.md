@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.002
+version: v1.0
 name: Тиры платформы
 type: domain-entity
 status: draft

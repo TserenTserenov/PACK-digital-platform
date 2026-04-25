@@ -1,5 +1,6 @@
 ---
 id: DP.ARCH.004
+version: v2.3
 name: Архитектура данных Neon (Database-per-BoundedContext)
 type: domain-entity
 status: active

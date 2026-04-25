@@ -94,6 +94,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.031 | Терминолог | ROLE | Роль Терминолог отвечает за качество терминологии Pack: выбор переводов, онтологическое сопоставление с FPF, разрешение конфликтов имён. | draft |
 | DP.ROLE.032 | Event Ingester | ROLE | Роль единого приёмника доменных событий обучения от всех источников — гарантирует идемпотентность, валидацию и защиту от PII на входе в learning.domain_event | draft |
 | DP.ROLE.034 | Rewards Projector | ROLE | Роль проектора баллов: читает learning.domain_event по LISTEN/NOTIFY, применяет reference.reward_rules, пишет в rewards.point_balances идемпотентно через cursor | draft |
+| DP.ROLE.035 | Platform Observer | ROLE | Роль наблюдателя за здоровьем платформы — собирает uptime/request/external-status сигналы, агрегирует в schema `health`, инициирует TG-алерты команде. Не публикует наружу (это external SaaS). | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -151,6 +152,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.119 | Рабочее пространство из браузера | SC | Пользователь создаёт и управляет IWE-пространствами из браузера — Pack, DS-репо, заметки — без git, без терминала, без VS Code | draft |
 | DP.SC.120 | Приёмник платежей (Payment Receiver) | SC | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
 | DP.SC.122 | Rewards Projection (точная проекция баллов по доменным событиям) | SC | Точная идемпотентная проекция из learning.domain_event в rewards.point_balances по reference.reward_rules через LISTEN/NOTIFY | draft |
+| DP.SC.123 | Platform Observability (наблюдаемость инфраструктуры) | SC | Минимально достаточный набор сигналов о здоровье 12 БД и ~10 сервисов: реактивные ответы, проактивные алерты, retro-queries для root-cause. PII-граница на ingress. | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
