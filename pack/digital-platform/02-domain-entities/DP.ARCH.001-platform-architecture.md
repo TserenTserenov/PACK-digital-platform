@@ -399,6 +399,7 @@ Platform-space (обогащённое знание)
 | 23 | **Vendor-agnostic AI** | Платформа не привязана к конкретному LLM-провайдеру. AI Provider Interface абстрагирует Claude / GPT / Gemini / локальные модели. Пользователь выбирает провайдера; платформа гарантирует одинаковое поведение протоколов | М, С(овр) |
 | 24 | **Data Portability by Default** | Пользователь выгружает ВСЕ свои данные одной командой. Открытые форматы (Git + Markdown + YAML). Отсутствие lock-in -- главный moat. Стандартизованный формат дистрибутива позволяет IWE «устанавливаться» в любую среду | П, Г |
 | 25 | **AI-first, Human-escalation** | ИИ-персонализация покрывает 80% функций наставника для T1-T2. Наставник подключается по эскалации, не по умолчанию. Масштабирование без линейного роста наставников. Три механизма адаптивной персонализации → [DP.CONCEPT.003](DP.CONCEPT.003-adaptive-personalization.md) | М, О |
+| 26 | **Read-only mode для скиллов с side-effects** | Любой скилл, имеющий побочные эффекты (Write/git/MCP-write/cross-repo), обязан поддерживать read-only режим, защищённый sentinel + PreToolUse-хуком (а не только декларативным флагом, который LLM может пропустить). Контракт: [memory/dry-run-contract.md](https://github.com/TserenTserenov/FMT-exocortex-template/blob/main/memory/dry-run-contract.md). Применение — `/audit-installation` smoke-test ритуалов | Б, Э |
 
 > **Не включены (3-й уровень, проектные ADR):** Единая БД Neon (ADR-004), Единое сообщество + две юрисдикции (ADR-007), Strategy pattern для биллинга (ADR-008).
 >
