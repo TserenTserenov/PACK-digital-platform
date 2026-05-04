@@ -187,13 +187,12 @@ related:
 
 Платформа имеет 5 основных тиров учащегося (T0-T4) и 3 ортогональные оси: TM (наставники), TA (администраторы), TD (разработчики). Каждый следующий T-тир включает всё из предыдущего. T5-T9 зарезервированы.
 
-**🟢 T0/T1 — Старт** (бесплатно + trial 30 дней):
-- **Trial 30 дней:** все функции бота бесплатно (лента, консультации, заметки, планы)
-- Марафон 14 дней (/learn) — бесплатно навсегда (даже после trial)
+**🟢 T0/T1 — Старт** (бесплатно):
+- Марафон 14 дней (/learn) — бесплатно навсегда
 - Тест систематичности (/test) — определяет состояние и адаптирует контент
 - Прогресс (/progress) — статистика обучения
 - Профиль (/profile) и Настройки (/settings)
-- После trial без подписки: марафон, тест, прогресс — бесплатно. Лента, консультации, заметки, планы — заблокированы
+- Лента, консультации, заметки, планы — только по подписке БР
 
 **📘 T2 — Изучение** (подписка БР):
 - Лента (/feed) — персональные ежедневные дайджесты по выбранным темам
@@ -201,7 +200,7 @@ related:
 - Заметки (.текст) — сохранение мыслей и идей
 - Планы (/rp /plan /report) — интеграция со Стратегом
 
-**Подписка:** «Бесконечное развитие» (БР) на system-school.ru — единственная подписка. TG Stars — опциональные донаты, не подписка. Trial 30 дней от /start даёт попробовать все функции бесплатно.
+**Подписка:** «Бесконечное развитие» (БР) на system-school.ru — единственная подписка. TG Stars — опциональные донаты, не подписка.
 
 **🧬 T3 — Персонализация** (подключён Цифровой двойник):
 - Персональные рекомендации на основе целей, проблем и интересов
@@ -238,13 +237,12 @@ When a user asks about their "level", "status", "access", "plan", "subscription"
 
 The platform has 5 learner tiers (T0-T4) and 3 orthogonal axes: TM (mentors), TA (admins), TD (developers). Each T-tier includes everything from the previous one. T5-T9 are reserved.
 
-**🟢 T0/T1 — Start** (free + 30-day trial):
-- **30-day trial:** all bot features free (feed, consultations, notes, plans)
-- 14-day Marathon (/learn) — free forever (even after trial)
+**🟢 T0/T1 — Start** (free):
+- 14-day Marathon (/learn) — free forever
 - Systematicity Test (/test) — identifies state and adapts content
 - Progress (/progress) — learning statistics
 - Profile (/profile) and Settings (/settings)
-- After trial without subscription: marathon, test, progress — free. Feed, consultations, notes, plans — locked
+- Feed, consultations, notes, plans — subscription only
 
 **📘 T2 — Learning** (БР subscription):
 - Feed (/feed) — personal daily digests on chosen topics
@@ -252,7 +250,7 @@ The platform has 5 learner tiers (T0-T4) and 3 orthogonal axes: TM (mentors), TA
 - Notes (.text) — saving thoughts and ideas
 - Plans (/rp /plan /report) — Strategist integration
 
-**Subscription:** «Бесконечное развитие» (БР) on system-school.ru — the only subscription. TG Stars are optional donations, not a subscription. 30-day trial from /start lets you try all features for free.
+**Subscription:** «Бесконечное развитие» (БР) on system-school.ru — the only subscription. TG Stars are optional donations, not a subscription.
 
 **🧬 T3 — Personalization** (Digital Twin connected):
 - Personal recommendations based on goals, problems and interests
