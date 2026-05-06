@@ -2,7 +2,8 @@
 
 > **Источник:** WP-189 Ф2 (1 апр 2026)
 > **Статус:** active
-> **Связи:** WP-175 (tailor-mcp контракт), WP-187 (knowledge-mcp изоляция), WP-184 (knowledge_feedback), WP-73 ADR-018
+> **Связи:** WP-187 (knowledge-mcp изоляция), WP-184 (knowledge_feedback), WP-73 ADR-018, WP-222 (закрытие отдельного tailor-mcp; функцию покрывает digital-twin-mcp как backend Памяти.Derived)
+> **Обновлено:** 2026-05-06 (WP-222 Ф6) — удалены упоминания `tailor-mcp` как отдельного сервиса; уточнено имя `digital-twin-mcp` как machine identity (см. HD «MCP display identity ≠ machine identity»); функционально это backend **Памяти.Derived** (HD #27).
 
 ## Namespace соглашение
 
@@ -25,8 +26,10 @@
 │  knowledge-mcp        ← общее знание платформы  │
 │  (L2 shared + L4 per-user) ZP/FPF/SPF/Pack + личные репо │
 │                                                  │
-│  digital-twin-mcp     ← ЦД пользователя         │
-│  (per-user RLS)         прогресс, профиль        │
+│  digital-twin-mcp     ← Память.Derived          │
+│  (per-user RLS)         (machine name = legacy;  │
+│                         function = derived       │
+│                         memory backend)          │
 │                                                  │
 │  personal-knowledge-mcp  ← его репо             │
 │  (per-user RLS)           эмбеддинги на нашей   │
@@ -41,10 +44,12 @@
 | MCP | Читает | Пишет | Владелец расчёта |
 |-----|--------|-------|-----------------|
 | `knowledge-mcp` | ZP, FPF, SPF, Pack платформы | — | Платформа |
-| `digital-twin-mcp` | `3_derived` из Neon | `1_declarative`, `2_collected` | **R28 Профилировщик** = writer `3_derived` |
+| `digital-twin-mcp` | Память.Derived (`indicators.calculated_profile`, `indicators.digital_twins`) | `1_declarative`, `2_collected` через bot-side writers | **projection-worker (WP-253)** + R28 Профилировщик = writers Памяти.Derived. Machine name = legacy alias (HD «display ≠ machine»). |
 | `personal-knowledge-mcp` | Репо пользователя (выбранные) + Qdrant | GitHub коммит (async) | Пользователь |
 
-> **⚠️ digital-twin-mcp = read-only потребитель `3_derived`.** R28 Профилировщик (AISYS.018) = единственный writer. On-demand recalc → вызов через R28, не внутри digital-twin-mcp.
+> **⚠️ digital-twin-mcp = read-only потребитель Памяти.Derived.** projection-worker (WP-253) + R28 Профилировщик = writers. On-demand recalc → вызов через projection-worker / R28, не внутри digital-twin-mcp.
+>
+> **Имя сервиса:** `digital-twin-mcp` (machine name) — historical artefact из эпохи когда «digital twin» был основным концептом. После переименования в **Память.Derived** (HD #27, WP-257) machine identity сохранена для обратной совместимости (бот, gateway-mcp upstream registry, OAuth registrations). В Pack документации, tool descriptions, OAuth consent screens — используется **Память.Derived**. Переименование machine identity отложено до Q3+ (по принципу осторожности; см. WP-222 Ф2 АрхГейт).
 
 ## Выбор репо для индексации (personal-knowledge-mcp)
 
@@ -80,14 +85,28 @@ Tool: knowledge_feedback(document_id: str, query: str, helpfulness: bool, user_i
   Реализация: WP-184 Ф3
 ```
 
-### digital-twin-mcp → WP-175
+### digital-twin-mcp → WP-175 (исторически), WP-253 (актуально)
+
+> **Эволюция контракта:**
+> - **WP-175 (30 мар 2026):** Был Python stdio-сервис `tailor-mcp` с tool `get_tailor_context`. Архивирован 2026-05-06 (WP-222 Ф1) — нет production-потребителей.
+> - **WP-253 (актуально):** `digital-twin-mcp` = Cloudflare Worker на `https://twin.aisystant.com/mcp`, читает `indicators.digital_twins` + `indicators.calculated_profile` (Память.Derived) с RLS.
+
+**Текущие tools digital-twin-mcp:**
 
 ```
-Tool: get_tailor_context(user_id: str) → TailorContext
-  Возвращает: diagnostic_profile, learning_history, current_areas, suggested_depth
-  RLS: изолировано по user_id
-  Latency: < 500ms (кэш, обновляется R28)
+Tool: dt_read_digital_twin(path: str) → DigitalTwinNode
+  Возвращает: фрагмент Памяти.Derived (профиль, индикаторы, цели) по пути.
+  RLS: изолировано по user_id из X-User-Id (Gateway из Ory JWT).
+  Доступ: через Gateway (https://mcp.aisystant.com/) или прямой (https://twin.aisystant.com/mcp).
+
+Tool: dt_write_digital_twin(path: str, data: any) → void
+  Пишет в `indicators.digital_twins` (для legacy bot-writer'ов).
+  Будущее: отказ от прямой записи в пользу events через event-gateway (WP-253 Ф9.x).
 ```
+
+**Контракт `tailor_context`** (что Портной читает) теперь — формат-объект (PD.SPEC.001 §2). Способ получения:
+- **Текущий носитель Портного** (render-pilot-guides.py): прямой psycopg2 → `indicators` schema, **не** через MCP
+- **Будущий носитель Портного** (ИИ-агент после WP-150 Ф6): через `dt_read_digital_twin` + `personal_search` + `knowledge_search` от MCP Gateway
 
 ### personal-knowledge-mcp → WP-187
 
