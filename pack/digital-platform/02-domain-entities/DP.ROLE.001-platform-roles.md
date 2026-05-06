@@ -138,7 +138,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | # | Роль | Suprasystem | Сервисы (описания методов) | Вход | Выход (РП) |
 |---|------|-------------|---------------------------|------|------------|
 | R1 | **Стратег** | Экзокортекс | Day-plan, Session-prep, Note-review, Week-review, Interactive | WeekPlan, inbox, коммиты, MAPSTRATEGIC | WeekPlan (с секцией «Итоги W{N}»), DayPlan |
-| R2 | **Экстрактор** | Экзокортекс | Knowledge Extraction, Inbox Check, Ontology Sync | captures.md, сессионные артефакты, Pack | Pack-сущности, Extraction Report |
+| R2 | **Экстрактор** | Экзокортекс | Knowledge Extraction, Inbox Check, Ontology Sync | captures.md, сессионные артефакты, feedback-log.md, Pack | Pack-сущности, Extraction Report |
 | R3 | **Консультант** | Платформа DP | Q&A, DZ-Check, Content Pre-Gen, Feed Delivery | Вопрос ученика, knowledge-mcp, DT | Ответы, оценки, контент |
 | R4 | **Автор** | Экосистема | Post-Writing, Presentation, Description | Content plan, knowledge-mcp | Посты (md), презентации (Marp) |
 | R5 | **Архитектор** | Платформа DP | ArchGate, BC-Mapping, ADR, SOTA-Update | Арх. предложение, Pack, SOTA | ADR, оценки ЭМОГССБ, BC-маппинг |
@@ -268,12 +268,15 @@ work_products:
   - product: "Описание мероприятия"
     recipient: "Платформа (systemsworld.club, TG)"
     trigger: "Новое мероприятие"
+  - product: "Pack-сущность (карточка/правило/роль)"
+    recipient: "Домен Pack (PACK-*/pack/*/ structure)"
+    trigger: "Принят KE-кандидат R15 Валидатором"
 
 current_holders:
   - holder: "A1 Claude (CLI interactive)"
     grade: 3
-    covers_scenarios: [Post-Writing, Presentation, Description]
-    instruments: [Claude Code CLI, knowledge-mcp, DS-Knowledge-Index repo, Marp CLI]
+    covers_scenarios: [Post-Writing, Presentation, Description, Pack-Entity-Authoring]
+    instruments: [Claude Code CLI, knowledge-mcp, DS-Knowledge-Index repo, Marp CLI, apply-captures skill]
 
 failure_modes:
   - "Voice Drift — стиль не соответствует голосу автора"
@@ -283,6 +286,86 @@ related_roles:
     interaction: "Стратег → content plan → Автор реализует"
   - role: "R15 Валидатор"
     interaction: "Валидатор проверяет текст перед публикацией"
+```
+</details>
+
+<details>
+<summary><strong>R15 Валидатор</strong> — полное описание (DP.D.033)</summary>
+
+```yaml
+name: "Валидатор"
+type: agential
+suprasystem: "Экозистема"
+context: "Человеческая валидация: одобрение KE-кандидатов, решений, Pull Request перед публикацией в Pack"
+
+obligations:
+  - "Проверять KE-кандидатов от R2 Экстрактора на корректность, полноту, различение (не путаница типов)"
+  - "Одобрять/отклонять/отложить каждый кандидат с явной формулировкой причины"
+  - "Вести feedback-log.md: причины отклонений для обучения R2 и R4"
+  - "Проверять PR-предложения перед мерджем в Pack (не только код, но и семантика)"
+  - "Валидировать соответствие DP.D.033 при расширении ролей (упомянутое в WP-247)"
+
+expectations:
+  - from: "R2 Экстрактор"
+    expects: "Решение по каждому кандидату ≤24ч (на ближайшем Close или Manual apply-captures)"
+  - from: "R4 Автор"
+    expects: "Обратная связь: что переписать перед принятием как Pack-сущность"
+  - from: "R14 Заказчик (пользователь)"
+    expects: "Финальный фильтр качества перед публикацией"
+
+methods:
+  - name: "Extraction Report Review"
+    description: "Чтение KE-отчёта (frontmatter + body): проверка на полноту, различение, примеры"
+  - name: "Semantic Consistency Check"
+    description: "Сверка с Pack: нет ли дублей, противоречий, нарушения DP.D.033 (Object ≠ Description ≠ Carrier)"
+  - name: "Feedback Formulation"
+    description: "Явная формулировка причины отклонения для feedback-log.md (примеры: 'путаница типов', 'дубль с DP.D.021', 'неполный сценарий')"
+  - name: "Accept-Reject-Defer Decision"
+    description: "Три режима: accept (писать в Pack), reject (запись причины в feedback-log), defer (отложить, причина в отчёт)"
+
+work_products:
+  - product: "Решение по KE-кандидату"
+    recipient: "R2 Экстрактор, R4 Автор (в extraction-report или как параметр apply-captures)"
+    trigger: "Новый KE-кандидат обозначен status: pending-review"
+  - product: "Feedback-log запись"
+    recipient: "DS-my-strategy/feedback-log.md (для обучения конвейера)"
+    trigger: "Принято решение reject или требуется уточнение"
+  - product: "Pack-интеграция"
+    recipient: "целевой Pack репо (если accept и R4 готов с текстом)"
+    trigger: "Валидатор одобрил, R4 отредактировал (или текст уже готов)"
+
+scenarios:
+  - name: "KE-кандидат от R2"
+    trigger: "R2 выдал extraction-report со status: pending-review"
+    action: "Проверить семантику, различение; вынести accept/reject/defer"
+    outcome: "Решение → feedback-log или пись в Pack"
+  - name: "PR-review перед мержем"
+    trigger: "Запрос на review Pull Request в Pack"
+    action: "Проверить: соответствие DP.D.033, нет ли конфликта с существующими сущностями"
+    outcome: "Approve или Request Changes с причинами"
+  - name: "Стратегическое решение (расширение ролей, новый фрейм)"
+    trigger: "Заказчик (R14) или Стратег (R1) предлагает новую категорию/роль/правило"
+    action: "Оценить: необходимость, граница определения, связи с существующим"
+    outcome: "Рекомендация: proceed / refine / reject"
+
+current_holders:
+  - holder: "A2 Пользователь (интерактивный выбор через /apply-captures skill)"
+    grade: 3
+    covers_scenarios: [KE-Candidate-Validation, PR-Review-Gate, Strategic-Decision]
+    instruments: [DS-my-strategy (inbox + feedback-log.md), /apply-captures skill (UI), Pack repos (read/write по определённым путям)]
+
+failure_modes:
+  - "Silent Pass — валидатор принял некорректный кандидат, попал в Pack"
+  - "Slow Feedback Loop — rejection без явной причины → R2 не улучшается"
+  - "Scope Creep — валидатор берёт на себя правку текста (функция R4)"
+
+related_roles:
+  - role: "R2 Экстрактор"
+    interaction: "R2 генерирует кандидатов → Валидатор одобряет/отклоняет; feedback → R2 учится"
+  - role: "R4 Автор"
+    interaction: "Если accept, R4 может доотредактировать текст → Валидатор снова проверяет перед Pack-интеграцией"
+  - role: "R14 Заказчик"
+    interaction: "Валидатор — интерфейс выбора для Заказчика; стратегические решения идут в консультацию R14"
 ```
 </details>
 
