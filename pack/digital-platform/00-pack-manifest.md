@@ -69,6 +69,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.007 | Intervention Loop (Петля интервенции) | M | Метод замыкания цикла действие-измерение-обновление для AI-агентов на LLM-платформе: зондирование реальности, фиксация невязки, обновление модели. Компенсирует отсутствие world model | draft |
 | DP.M.008 | Культура работы IWE (Work Culture) | M | Культура работы IWE: 14 элементов в трёх разрезах — протоколы (формализованные последовательности), навыки (нарабатываемые по ситуации), форматы (стандарты оформления). #12 ТО = поддержание текущего состояния. #14 Эволюция = развитие системы. Реализация — в DS/FMT, инварианты — здесь | active |
 | DP.M.009 | Расширяемость шаблонных систем (Template Extensibility) | M | Метод проектирования расширяемости в системах с платформенным шаблоном и пользовательскими инстансами. Три паттерна (drop-in, overlay, 3-way merge), критерии выбора, протокол обновления с обнаружением противоречий | draft |
+| DP.M.010 | Управление жизненным циклом рабочего продукта | M | Метод гарантирует консистентность РП-объекта во всех хранилищах IWE на протяжении всего цикла: создание → активная сессия → закрытие → архивация. Единственная роль координации — Регистратор РП (DP.ROLE.037). | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -101,6 +102,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.034 | Rewards Projector | ROLE | Роль проектора баллов: читает learning.domain_event по LISTEN/NOTIFY, применяет reference.reward_rules, пишет в rewards.point_balances идемпотентно через cursor | draft |
 | DP.ROLE.035 | Platform Observer | ROLE | Роль наблюдателя за здоровьем платформы — оркеструет Better Stack (external observability owner), AIST Bot (TG-алерты команде + автопостинг канал), Neon `health.internal_metrics` (узкая projection для JOIN с business). | draft |
 | DP.ROLE.036 | Коннектор клуба | ROLE | Носитель потока данных systemsworld.club (Discourse) → Neon. Read-only ingest активности участников через webhook + polling backfill, с lazy-резолвом discourse_user_id ↔ ory_identity_id после ORY-SSO. | draft |
+| DP.ROLE.037 | Регистратор РП | ROLE | Координатор целостности: гарантирует, что статус любого РП одинаков во всех 5 хранилищах IWE. Не исполняет работу по РП — исполняет работу ПО МЕТАДАННЫМ РП. | active |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -137,6 +139,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.029 | Терминологический процесс IWE | SC | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
 | DP.SC.031 | Personal Read Api | SC | — | draft |
 | DP.SC.032 | Personal Data View Audit | SC | — | draft |
+| DP.SC.033 | Целостность жизненного цикла РП | SC | Стратег получает гарантию: статус любого РП одинаков во всех 5 хранилищах IWE в течение ≤5 минут после любого изменения. Нарушение = drift, обнаруживается автоматически. | active |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | SC | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | SC | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | SC | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |

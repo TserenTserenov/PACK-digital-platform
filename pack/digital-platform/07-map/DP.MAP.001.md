@@ -27,20 +27,20 @@ generated: true
 | Failure Modes (FM) | 14 |
 | IWE (IWE) | 4 |
 | KR (KR) | 1 |
-| Methods (M) | 9 |
+| Methods (M) | 10 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 17 |
+| ROLE (ROLE) | 18 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 63 |
+| SC (SC) | 64 |
 | SoTA Annotations (SOTA) | 21 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **196** |
+| **Total** | **199** |
 
 ## Distinctions
 
@@ -77,6 +77,7 @@ generated: true
 | DP.M.007 | Intervention Loop (Петля интервенции) | Метод замыкания цикла действие-измерение-обновление для AI-агентов на LLM-платформе: зондирование реальности, фиксация невязки, обновление модели. Компенсирует отсутствие world model | draft |
 | DP.M.008 | Культура работы IWE (Work Culture) | Культура работы IWE: 14 элементов в трёх разрезах — протоколы (формализованные последовательности), навыки (нарабатываемые по ситуации), форматы (стандарты оформления). #12 ТО = поддержание текущего состояния. #14 Эволюция = развитие системы. Реализация — в DS/FMT, инварианты — здесь | active |
 | DP.M.009 | Расширяемость шаблонных систем (Template Extensibility) | Метод проектирования расширяемости в системах с платформенным шаблоном и пользовательскими инстансами. Три паттерна (drop-in, overlay, 3-way merge), критерии выбора, протокол обновления с обнаружением противоречий | draft |
+| DP.M.010 | Управление жизненным циклом рабочего продукта | Метод гарантирует консистентность РП-объекта во всех хранилищах IWE на протяжении всего цикла: создание → активная сессия → закрытие → архивация. Единственная роль координации — Регистратор РП (DP.ROLE.037). | active |
 
 ## Work Products
 
@@ -274,6 +275,7 @@ generated: true
 | DP.ROLE.034 | Rewards Projector | Роль проектора баллов: читает learning.domain_event по LISTEN/NOTIFY, применяет reference.reward_rules, пишет в rewards.point_balances идемпотентно через cursor | draft |
 | DP.ROLE.035 | Platform Observer | Роль наблюдателя за здоровьем платформы — оркеструет Better Stack (external observability owner), AIST Bot (TG-алерты команде + автопостинг канал), Neon `health.internal_metrics` (узкая projection для JOIN с business). | draft |
 | DP.ROLE.036 | Коннектор клуба | Носитель потока данных systemsworld.club (Discourse) → Neon. Read-only ingest активности участников через webhook + polling backfill, с lazy-резолвом discourse_user_id ↔ ory_identity_id после ORY-SSO. | draft |
+| DP.ROLE.037 | Регистратор РП | Координатор целостности: гарантирует, что статус любого РП одинаков во всех 5 хранилищах IWE. Не исполняет работу по РП — исполняет работу ПО МЕТАДАННЫМ РП. | active |
 
 ### RUNBOOK
 
@@ -320,6 +322,7 @@ generated: true
 | DP.SC.029 | Терминологический процесс IWE | Автор понятия получает верифицированный перевод name_ru/name_en и сопоставление с FPF-корнем при вводе нового понятия в Pack | draft |
 | DP.SC.031 | Personal Read Api | — | draft |
 | DP.SC.032 | Personal Data View Audit | — | draft |
+| DP.SC.033 | Целостность жизненного цикла РП | Стратег получает гарантию: статус любого РП одинаков во всех 5 хранилищах IWE в течение ≤5 минут после любого изменения. Нарушение = drift, обнаруживается автоматически. | active |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
