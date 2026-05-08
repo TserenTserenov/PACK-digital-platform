@@ -1,6 +1,8 @@
 ---
 id: DP.ROLE.037
 name: Регистратор РП
+name_ru: Регистратор РП
+name_en: WP Registrar
 type: role-description
 status: active
 valid_from: 2026-05-08

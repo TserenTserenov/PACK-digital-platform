@@ -1,6 +1,8 @@
 ---
 id: DP.SC.033
 name: Целостность жизненного цикла РП
+name_ru: Целостность жизненного цикла РП
+name_en: Work Product Lifecycle Integrity
 type: sc
 status: active
 layer: L4-Personal
