@@ -5,7 +5,7 @@ type: distinction
 status: active
 summary: "Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = user-owned Git, Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral."
 created: 2026-04-22
-updated: 2026-04-22
+updated: 2026-05-08
 valid_from: 2026-04-22
 trust:
   F: 4
@@ -100,6 +100,7 @@ tags: [persona, memory, projection, user-model, writer-owner, distinction]
 - **Mem0:** structured user attributes vs raw memories — Персона vs Память.Observed.
 - **LangMem (LangChain):** semantic (факты = Персона), episodic (события = Observed), procedural (паттерны = Derived).
 - **Anthropic Memory tool (Claude Files):** user-editable memory blocks — поддержка Персоны.
+- **Google opensource memory layer (2026-04):** SQLite + LLM-консолидация полезного контекста во времени вместо vector-DB stack. Близко к Mem0 (structured attributes), отличается storage backend; заявленное преимущество — low-cost long-term memory без отдельной vector-DB инфраструктуры. Прецедент в пользу JSONB/SQLite-подхода для MVP вместо ранней миграции на vector-DB вендора.
 
 ## 9. Downstream
 

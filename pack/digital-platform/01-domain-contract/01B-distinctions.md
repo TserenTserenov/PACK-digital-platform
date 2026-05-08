@@ -714,6 +714,24 @@
 
 ---
 
+### DP.D.054: Context Engineering ≠ Prompt Engineering
+
+| Аспект | Prompt Engineering | Context Engineering |
+|--------|-------------------|---------------------|
+| **Суть** | Что **сказать** модели | Что **дать** модели |
+| **Артефакты** | Instruction text, examples, templates | Tools, memory files, retrieval, constraints |
+| **Цель** | Improve output quality | Enable task completion |
+| **Пример** | «Think step-by-step» | MEMORY.md + Bash tool + PACK index + RAG |
+| **Слой** | Микро (формулировка) | Макро (информационная среда) |
+
+**Почему важно:** PE оптимизирует формулировку запроса; CE проектирует информационную среду вокруг модели. PE без CE = промпт без контекста (галлюцинации, узкое видение). CE без PE = богатая среда без точного запроса (агент тонет в шуме).
+
+**Связь:** DP.SOTA.002 (Context Engineering как дисциплина) описывает *стратегии CE* (Write/Select/Compress/Isolate). DP.D.054 фиксирует *границу с PE*. AS.SOTA.006 Layer 2 описывает *эволюцию контекста* (ACE = self-evolving CE).
+
+**Источник:** Context Engineering framework (Anthropic, 2026); WSCI Framework (Panat, 2026).
+
+---
+
 ## Применение различений
 
 При работе с платформой проверяйте:
