@@ -58,6 +58,12 @@ wp: WP-150 Ф6
 - Lock collision → MCP `tool_call_error` с payload `{holder: "kimikode", file: "src/foo.py", acquired_at: "..."}`.
 - Сетевой fail к внешним MCP (Aisystant MCP) при routing-through → fallback: peer-агент получает `mcp_upstream_unavailable`, может работать с local-only tool'ами.
 
+**Безопасность (раскрытие для потребителя):**
+- Local Gateway = trust boundary **одного пользователя**. Между peer-агентом и Gateway нет аутентификации — доверие на уровне ОС (filesystem perms для сокета / loopback-bind для TCP).
+- **MITM при upstream-proxy:** если peer-агент через Gateway вызывает upstream tool (например, `knowledge_search` на Aisystant MCP), Gateway видит credentials (OAuth токены и т.п.) peer-агента в открытом виде. Это **сознательный дизайн** внутри trust boundary одного пользователя; не использовать Local Gateway в окружении, где Gateway-процесс не контролируется владельцем workspace.
+- **PII в логах:** Gateway пишет в лог только `tool_name + agent_id + duration`, не содержимое аргументов/ответов.
+- **Tier-фильтрация:** не Local Gateway (это про single-user); tier — в upstream (DP.ROLE.038).
+
 ## Свидетельства (критерий приёмки)
 
 **Данные** (что фактически существует):
@@ -90,9 +96,9 @@ wp: WP-150 Ф6
 
 | Свидетельство | Источник |
 |--------------|---------|
-| Лог Gateway процесса (stdout) | `~/.iwe-local-gateway.log` |
-| Метрика `gateway_tool_call_count{agent, tool}` | Внутренний metrics endpoint |
-| Метрика `gateway_lock_collision_total{file, holders}` | Внутренний metrics endpoint |
+| Лог Gateway процесса | `~/.iwe/gateway.log` (структурированный JSONL, append-only) |
+| Метрика `gateway_tool_call_count{agent, tool}` | `gateway_metrics` MCP tool (in-process) или `~/.iwe/gateway-metrics.json` (sampling 1s) |
+| Метрика `gateway_lock_collision_total{file, holders}` | то же |
 
 ## Реализующие сервисы
 
@@ -132,7 +138,7 @@ Claude рефакторит `src/auth.py`, Kimikode пишет тесты в `te
 
 Пилот хочет добавить Aider (новый peer-агент) в сессию. Действия:
 1. Запускает Aider с конфигом `gateway_url=...`
-2. Aider вызывает `tools/list` → видит allowlist (configured platform-side в `gateway-config.yaml`)
+2. Aider вызывает `tools/list` → видит allowlist (configured platform-side в `~/.iwe/gateway-config.yaml`)
 3. Claude и Kimikode продолжают работу без перезапуска
 
 ## Связь с другими обещаниями

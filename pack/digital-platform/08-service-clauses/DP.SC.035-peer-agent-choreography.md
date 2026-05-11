@@ -12,6 +12,7 @@ created: 2026-05-11
 updated: 2026-05-11
 related:
   realizes: [DP.IWE.005]
+  extends: [DP.SC.034]
   uses: [DP.SC.034]
   role: DP.ROLE.039
 wp: WP-150 Ф7

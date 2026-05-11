@@ -95,11 +95,11 @@ Local Gateway отвечает только за **транспорт и lock**.
 
 ## 7. Безопасность (для §Б ArchGate чеклиста)
 
-- **Транспорт:** Unix socket с permissions `0600` (rw только владельцу). TCP localhost — допустим только с loopback-bind.
-- **PII:** Local Gateway не пишет PII в свой лог (логирует только tool name + agent + duration). Если upstream-proxy к Aisystant MCP — PII остаётся в upstream, Local Gateway не сохраняет ответ.
-- **Authentication:** между peer-агентами и Gateway — отсутствует (доверие filesystem). Между Gateway и upstream — agent's credentials передаются прозрачно (Gateway = MITM по дизайну, но в trusted boundary одного пользователя).
+- **Трастовая граница:** Local Gateway доверяет всем процессам в trust boundary одного пользователя (single-user workspace). Доступ ограничен механизмами ОС (filesystem permissions для сокета / loopback-bind для TCP — конкретный механизм см. §9 Q1).
+- **PII:** Local Gateway не пишет PII в свой лог (логирует только tool name + agent_id + duration). Если upstream-proxy к Aisystant MCP — PII остаётся в upstream, Local Gateway не сохраняет ответ.
+- **Authentication:** между peer-агентами и Gateway — отсутствует (доверие на уровне ОС). Между Gateway и upstream — agent's credentials передаются прозрачно (Gateway = MITM **по дизайну** внутри trust boundary одного пользователя; см. DP.SC.034 §Безопасность для уточнения disclosure для потребителя).
 - **Tier-фильтрация:** не Local Gateway (это про single-user). Tier — в upstream (DP.ROLE.038 MCP Tool Consumer).
-- **STRIDE quick:** Spoofing — нет (filesystem trust). Tampering — нет (in-memory state). Repudiation — лог tool-вызовов. DoS — TTL на lock + max-concurrent-agents config. Disclosure — perms 0600. Elevation — не применимо.
+- **STRIDE quick:** Spoofing — нет (ОС trust). Tampering — нет (in-memory state). Repudiation — лог tool-вызовов. DoS — TTL на lock + max-concurrent-agents config. Disclosure — ограничено механизмами ОС (см. §9 Q1). Elevation — не применимо.
 
 ## 8. Связанные документы
 
@@ -112,7 +112,8 @@ Local Gateway отвечает только за **транспорт и lock**.
 
 ## 9. Открытые вопросы (для реализации)
 
-1. Implementation language: Node.js (как gateway-mcp) или Go/Rust для in-process speed? — рекомендация Node.js для консистентности с другими MCP реализациями.
-2. Discovery механизм auto-start: VS Code extension hook vs launchd plist vs PATH-shim? — отдельная сессия после первой ручной интеграции.
-3. Config schema: где живёт `gateway-config.yaml` (allowlist per agent identity)? — `~/.iwe/gateway-config.yaml`, шаблон в `FMT-exocortex-template`.
-4. Telemetry: писать ли метрики в файл / отправлять в platform? — локально в `~/.iwe/gateway.log`, опционально через capture-bus.
+1. **Transport mechanism:** Unix socket (`0600` perms, rw владельцу) vs TCP localhost (loopback-bind) vs named pipe? — рекомендация для MVP: Unix socket (нет конфликта портов; права через filesystem). На Windows — named pipe или TCP loopback. Решение зафиксировать в первой реализации.
+2. **Implementation language:** Node.js (как gateway-mcp) или Go/Rust для in-process speed? — рекомендация Node.js для консистентности с другими MCP реализациями.
+3. **Discovery механизм auto-start:** VS Code extension hook vs launchd plist vs PATH-shim? — отдельная сессия после первой ручной интеграции.
+4. **Config schema:** где живёт `~/.iwe/gateway-config.yaml` (allowlist per agent identity)? — путь `~/.iwe/gateway-config.yaml`, шаблон в `FMT-exocortex-template`.
+5. **Telemetry:** писать ли метрики в файл / отправлять в platform? — локально в `~/.iwe/gateway.log`, опционально через capture-bus.
