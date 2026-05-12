@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 20 |
+| ROLE (ROLE) | 21 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 68 |
+| SC (SC) | 69 |
 | SoTA Annotations (SOTA) | 21 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **206** |
+| **Total** | **208** |
 
 ## Distinctions
 
@@ -279,6 +279,7 @@ generated: true
 | DP.ROLE.037 | Регистратор РП | Координатор целостности: гарантирует, что статус любого РП одинаков во всех 5 хранилищах IWE. Не исполняет работу по РП — исполняет работу ПО МЕТАДАННЫМ РП. | active |
 | DP.ROLE.038 | MCP Tool Consumer | Посредник между LLM-клиентом (бот) и платформенными MCP-серверами: загружает актуальный список tool через discovery (tools/list), кэширует с TTL, фильтрует по tier, передаёт в Claude API без hardcoded списков в коде. | draft |
 | DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в VS Code multi-agent сессии: подключается к Local Gateway, заявляет focus в peer-status, acquire lock перед write, sync через git sequential commits, escalates архитектурные разногласия к пилоту (не решает unilateral). Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
+| DP.ROLE.040 | OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE) | Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process. | draft |
 
 ### RUNBOOK
 
@@ -359,6 +360,7 @@ generated: true
 | DP.SC.127 | Редактор контента | Автор получает топ-3 черновика для работы и сигналы о готовых постах в Day Open | draft |
 | DP.SC.128 | Ingest активности клуба (Discourse) | Платформа получает события активности участников клуба systemsworld.club для расчёта баллов и аналитики | draft |
 | DP.SC.129 | Generic MCP Tool Discovery (бот → платформенные MCP) | Бот получает актуальный список tool из платформенных MCP при старте и периодически, без hardcoded списков в коде | draft |
+| DP.SC.130 | OAuth Gateway (единая точка OAuth для всех каналов IWE) | Web/VS Code/Bot пилот получает доступ к внешним OAuth-провайдерам (GitHub App, Linear, Twin, Google Calendar, WakaTime, Ory) через единый endpoint с dual identity (telegram_user_id ИЛИ ory-session) | draft |
 
 ### SYS
 

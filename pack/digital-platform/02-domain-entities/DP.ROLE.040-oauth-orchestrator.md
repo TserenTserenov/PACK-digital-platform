@@ -1,0 +1,135 @@
+---
+id: DP.ROLE.040
+name: OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE)
+type: role-description
+status: draft
+valid_from: 2026-05-12
+summary: "Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process."
+related:
+  specializes: [U.RoleAssignment]
+  realizes: [DP.SC.130]
+  uses:
+    - DP.SC.025   # capture-bus (failure logging)
+    - DP.SC.130   # OAuth Gateway SC
+created: 2026-05-12
+updated: 2026-05-12
+wp: WP-305 Ф1
+---
+
+# OAuth Orchestrator (DP.ROLE.040)
+
+<!-- see DP.SC.130, WP-305 Ф1 -->
+
+> **Kind:** Service role (роль сервиса в L2 платформенном слое, реализуется как CF Worker).
+> **Owner Role:** Platform Architect (Дмитрий Церенцеренов) — на этапе bootstrap; в будущем — DP.ROLE.012 Стратег + DevOps.
+
+## 1. Миссия
+
+Быть **единой точкой OAuth-flows** для всех каналов IWE (web-лендинг, VS Code/Claude Code, Telegram-бот). Принимать identity из трёх источников (Ory session, telegram_user_id, github_username), управлять state-token lifecycle (issue → verify → consume), координировать token exchange с внешними провайдерами, хранить access/refresh tokens encrypted-at-rest.
+
+**Граница:**
+- НЕ хранит бизнес-логику конкретного провайдера (например, не разбирает GitHub Issues — это другой сервис).
+- НЕ обрабатывает webhook от провайдеров (это `gateway-mcp` или `aist_bot.oauth_server.py:/webhook/github/workbook`).
+- НЕ создаёт identity (это Ory Hydra) — только разрешает её.
+- НЕ зависит от bot process (standalone CF Worker, deploy/test независимо).
+
+## 2. Обязанности
+
+| Обязанность | Метод | Триггер |
+|-------------|-------|---------|
+| Issue state-token | HMAC-SHA256(payload, server_secret) + nonce + TTL 10min | `GET /auth/{provider}/setup` |
+| Verify state-token | Check signature + nonce uniqueness in Neon | `GET /auth/{provider}/callback` |
+| Identity resolution | Ory JWT verify (JWKS) > dt_tokens.chat_id lookup > github_username lookup | На каждом setup/callback |
+| Token exchange | POST к token endpoint провайдера (по OAuth 2.0 RFC 6749) | После успешного callback |
+| Token storage | INSERT/UPDATE в `oauth_gateway.tokens` (Fernet encrypted) | После token exchange |
+| Token refresh | Periodic refresh per provider TTL (cron) | До истечения access_token |
+| Identity-mapping records | UPSERT `knowledge.github_connections` для GitHub App / аналогичные таблицы для других providers | После install/connect |
+| Bot-channel proxy | Принимать state-token с `chat_id` от бота, обрабатывать как legacy flow | `GET /auth/github_app/setup?state=<bot-signed>` |
+| Failure logging | Через DP.SC.025 capture-bus | На каждый fail (Ory unavailable, GitHub 5xx, state replay) |
+
+## 3. Полномочия
+
+- **Читает** Ory JWKS для local JWT verification (без call к Hydra на каждом запросе).
+- **Читает** `knowledge.github_installations`, `dt_tokens` (Railway-local through MCP) для identity resolution.
+- **Пишет** в `oauth_gateway.tokens` (own schema) — Fernet ciphertext.
+- **Пишет** в `oauth_gateway.state_tokens` — issued nonces для replay-detection.
+- **Пишет** в `knowledge.github_connections` — для GitHub App flow.
+- **Вызывает** GitHub App / Linear / Twin / Google Cal / WakaTime / Ory token endpoints (server-to-server).
+- **Не вызывает** bot process API (loose coupling). Bot обращается к gateway, не наоборот.
+- **Не пишет** в `users` / `digital_twins` (это bot's domain — gateway возвращает callback-redirect, дальше отвечает bot).
+
+## 4. Границы роли
+
+| Делает | НЕ делает |
+|--------|-----------|
+| OAuth 2.0 flow orchestration | Не парсит контент провайдеров (Issues, repos, calendar events) |
+| Identity resolution из трёх источников | Не создаёт identity (Ory это делает) |
+| State-token lifecycle | Не хранит длительные session cookies (это Ory) |
+| Token storage + refresh | Не использует токены для бизнес-операций (это сервисы потребители) |
+| Bot-channel proxy (legacy) | Не дублирует bot's user_events / engagement logic |
+| Capture-bus error reporting | Не отправляет TG-уведомления (это bot's responsibility) |
+
+## 5. Артефакты
+
+**Входы:**
+- HTTP запросы от web-лендинга / VS Code skill / бота
+- Ory JWT в session cookie ИЛИ bot-signed state-token
+- Provider OAuth callbacks с `code` + `state`
+- JWKS от Ory (cached)
+
+**Выходы:**
+- HTTP 302 redirects к провайдерам (setup phase)
+- HTTP 302 redirects к callback URI потребителя (success phase)
+- Rows в `oauth_gateway.tokens` (encrypted)
+- Rows в `oauth_gateway.state_tokens` (для replay detection)
+- Rows в `knowledge.github_connections` (для GitHub App)
+- Capture-bus events для failures
+
+## 6. Носители (carriers)
+
+**Инстанс роли (на 2026-05-12):**
+
+| Инстанс | Стэк | Deployment | Owner |
+|---------|------|------------|-------|
+| **`DS-oauth-gateway`** (CF Worker) | TypeScript, Hono framework, @neondatabase/serverless, jose (JWT), zod | `oauth.aisystant.com` (Cloudflare) | Platform Architect |
+
+**Прецеденты для аналогии (что переиспользуем):**
+- `DS-MCP/gateway-mcp` — Ory JWKS verify, GitHub App install flow, Hydra token hook
+- `DS-MCP/personal-knowledge-mcp` — CF Worker bootstrap pattern, OAuth registration
+- `aist_bot_newarchitecture/oauth_server.py` — 6 client modules (Linear, Twin, GitHub, Google Cal, WakaTime, Ory) — портируем по одному
+
+## 7. Метрики
+
+- `oauth_orchestrator_setup_total{provider, source, identity_type}` — incoming requests
+- `oauth_orchestrator_callback_total{provider, status}` — `status` ∈ {success, state_invalid, state_replay, token_exchange_fail}
+- `oauth_orchestrator_token_refresh_total{provider, status}` — periodic refreshes
+- `oauth_orchestrator_identity_resolution_latency_ms{type}` — `type` ∈ {ory_jwks, dt_tokens, github_username}
+- `oauth_orchestrator_state_token_age_seconds{status}` — distribution до consume
+- `oauth_orchestrator_active_tokens{provider}` — gauge live токенов в БД
+
+## 8. Связи
+
+- **Реализует:** [DP.SC.130](../08-service-clauses/DP.SC.130-oauth-gateway.md)
+- **Использует:** [DP.SC.025](../08-service-clauses/DP.SC.025-capture-bus.md) (capture-bus)
+- **Координируется с:** DP.ROLE.038 MCP Tool Consumer (через VS Code skill `/connect-guide`)
+- **Координируется с:** R21 Publisher (бот) — proxy-flow для legacy Telegram пилотов
+- **Не подчиняется:** ни одной роли (L2 standalone сервис)
+- **WP:** WP-305 Ф1
+
+## 9. Различение vs другие роли
+
+| Роль | Отличие от OAuth Orchestrator |
+|------|--------------------------------|
+| **gateway-mcp** (DS-MCP) | gateway-mcp — это MCP-router и knowledge access control. OAuth flows там есть (Ory + GitHub App), но в ArchGate W20 решено вынести OAuth в отдельный сервис для DDD separation. После Ф5 gateway-mcp вызывает oauth-gateway для token resolution, не сам обслуживает OAuth. |
+| **DP.ROLE.038 MCP Tool Consumer** | MCP Tool Consumer работает с tools на стороне LLM-клиента. OAuth Orchestrator — сервис, к которому обращается клиент за идентичностью. |
+| **R21 Publisher (бот)** | Publisher отправляет user-facing сообщения через TG. OAuth Orchestrator работает на уровне HTTP redirects, не TG-каналом. После Ф4 бот вызывает gateway, не наоборот. |
+| **Ory Hydra (внешний)** | Hydra = Authorization Server (issues identity + session). Orchestrator = Resource Coordinator (consumes identity для bridging внешних OAuth-провайдеров). |
+
+## 10. Открытые вопросы (для реализации)
+
+1. **Storage schema name:** `oauth_gateway` отдельный schema в Neon ИЛИ переиспользуем `knowledge` (где github_connections)? Рекомендация: отдельный, для clean RLS scope.
+2. **Token refresh frequency:** poll-based cron (раз в час, обновляет тех, у кого TTL < 30 мин) ИЛИ on-demand (refresh при первом 401 от провайдера)? Гибрид: on-demand + safety net cron раз в день.
+3. **Bot's state-token HMAC secret:** общий с gateway (shared CF env) ИЛИ separate signing key с verify-by-gateway? Рекомендация: shared (KISS), при компрометации — rotate обе стороны.
+4. **Migration strategy для 5 остальных OAuth (Ф5):** все сразу или по одному провайдеру? Рекомендация: GitHub App в Ф2-Ф4, остальные — по мере того как бот сужается до Marathon-only (отдельный РП).
+5. **Identity-collision handling (Сценарий 4 SC.130):** UPDATE/INSERT logic — где live? В сервисе (атомарно через WHERE clause) или в DB constraint? Constraint лучше.
+6. **Bot proxy degradation:** если oauth-gateway недоступен → бот возвращает «service temporarily unavailable» (текущее) или fallback на legacy oauth_server.py (если ещё не удалён)? Рекомендация: fallback в течение migration window (Ф4-Ф5), потом удалить.
