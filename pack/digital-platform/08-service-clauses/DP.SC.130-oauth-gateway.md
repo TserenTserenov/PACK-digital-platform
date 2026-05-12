@@ -19,10 +19,17 @@ related:
 # [DP.SC.130] OAuth Gateway
 
 <!--
-  WP-305 ArchGate (12 мая 2026): Вариант B — новый репо DS-oauth-gateway (CF Worker).
+  WP-305 Ф1 ArchGate (12 мая 2026):
+  - ADR-IWE-015 (изначально): Вариант B — отдельный репо DS-oauth-gateway
+  - ADR-IWE-016 (revision, 12 мая после independent review): Вариант A-lite —
+    модуль `gateway-mcp/src/oauth/` + CF custom domain `oauth.aisystant.com`
+    (alias на тот же gateway-mcp Worker). Carrier пересмотрен; обещание
+    остаётся неизменным. Триггеры extraction в отдельный Worker —
+    см. ADR-IWE-016 §3.
+
   Решает: oauth_server.py в боте требует telegram_user_id → web-канал C
-  (system-school.ru/iwe) технически не работает без бота. Нужен Ory-direct flow
-  с dual identity.
+  (system-school.ru/iwe) технически не работает без бота. Нужен Ory-direct
+  flow с dual identity.
 -->
 
 ## Правило (инвариант)
@@ -76,8 +83,8 @@ HTTP-сервис `oauth.aisystant.com` с endpoints:
 | Endpoint `/auth/github_app/setup` принимает оба режима identity | `curl 'oauth.aisystant.com/auth/github_app/setup?telegram_user_id=X'` → 302 redirect; `curl --cookie 'ory_session=...' 'oauth.aisystant.com/auth/github_app/setup'` → 302 redirect |
 | `github_connections.user_uuid` заполнено для web-flow | После web-onboarding: `SELECT user_uuid, chat_id FROM knowledge.github_connections WHERE user_uuid='<ory-uuid>'` → row exists, `chat_id IS NULL` |
 | State-token не reuse-able | Второй callback с тем же state → 400 `{"error": "state_already_used"}` |
-| OAuth tokens encrypted at-rest | `SELECT pg_typeof(access_token) FROM oauth_gateway.tokens` → `bytea` (Fernet ciphertext), не plain TEXT |
-| Bot's oauth_server.py больше не хранит свою копию client secret для GitHub App | `grep GITHUB_APP_PRIVATE_KEY aist_bot_newarchitecture/` → 0 матчей |
+| `oauth.aisystant.com` обслуживается тем же Worker, что и `mcp.aisystant.com` | `curl https://oauth.aisystant.com/.well-known/oauth-protected-resource` и `curl https://mcp.aisystant.com/.well-known/oauth-protected-resource` отдают идентичный JSON (один Worker, два custom domain) |
+| `gateway-mcp/src/oauth/` модуль не размывается по `index.ts` | `grep -r "github_app_setup\|github_app_callback" gateway-mcp/src/` → все matches в `src/oauth/` (кроме одной строки регистрации в index.ts) |
 
 **Контекст:**
 

@@ -87,16 +87,28 @@ wp: WP-305 Ф1
 
 ## 6. Носители (carriers)
 
-**Инстанс роли (на 2026-05-12):**
+**Инстанс роли (на 2026-05-12, после ADR-IWE-016 revision):**
 
 | Инстанс | Стэк | Deployment | Owner |
 |---------|------|------------|-------|
-| **`DS-oauth-gateway`** (CF Worker) | TypeScript, Hono framework, @neondatabase/serverless, jose (JWT), zod | `oauth.aisystant.com` (Cloudflare) | Platform Architect |
+| **`gateway-mcp/src/oauth/`** модуль | TypeScript, в составе CF Worker `gateway-mcp` | `oauth.aisystant.com` (custom domain alias на gateway-mcp Worker) | Platform Architect |
 
-**Прецеденты для аналогии (что переиспользуем):**
-- `DS-MCP/gateway-mcp` — Ory JWKS verify, GitHub App install flow, Hydra token hook
-- `DS-MCP/personal-knowledge-mcp` — CF Worker bootstrap pattern, OAuth registration
-- `aist_bot_newarchitecture/oauth_server.py` — 6 client modules (Linear, Twin, GitHub, Google Cal, WakaTime, Ory) — портируем по одному
+**История решения:**
+- 12 мая Ф1 ArchGate (ADR-IWE-015): принят Вариант B (отдельный репо `DS-oauth-gateway`)
+- 12 мая через ~2h independent review (Opus subagent): обнаружено premature decomposition
+- 12 мая ADR-IWE-016 supersedes 15: carrier пересмотрен на A-lite (модуль в gateway-mcp)
+
+**Прецеденты переиспользования (внутри gateway-mcp):**
+- `handleOAuthAuthorize` / `handleOAuthCallback` — Ory authorization code flow с JWKS verify
+- `handleGitHubInstall` / `handleGitHubCreateRepo` / `handleGitHubRepoCallback` — существующий GitHub App pattern
+- `encryptCode` / `decryptCode` — code encryption (для state-token аналогичный механизм)
+- Hydra token hook (`/hydra-hook/token`) — для subscription gate
+
+**Триггеры extraction в отдельный CF Worker (ADR-IWE-016 §3):**
+1. >100 OAuth setup/день в течение 2+ недель
+2. Security incident: компрометация gateway-mcp Worker
+3. Второй tenant OAuth (корпоративные клиенты с своим Ory)
+4. `gateway-mcp/src/index.ts` > 5000 LOC
 
 ## 7. Метрики
 
