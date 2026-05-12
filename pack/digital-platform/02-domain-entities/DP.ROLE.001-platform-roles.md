@@ -147,6 +147,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | R22 | **Оркестратор** | Система персонального развития | Orchestration Dispatch, Rhythm Adaptation | ЦД (состояние, engagement), config | Решение о составе цикла на день |
 | R27 | **Портной** | Система персонального развития | Portion Assembly | Программа, ЦД (профиль, история, стиль), ячейки | Персональная дневная порция |
 | R28 | **Профилировщик** | Система персонального развития | DT Profile Calculation, DT Profile Sync | 2_collected (engagement), learning_history (BKT) | 3_derived в digital_twins (ступень, mastery, gaps, агентность) |
+| R29 | **Артефактор** | Экзокортекс | Stage Decomposition, Gap Detection | РП-контекст, формулировка задачи | Этапная карта (md-блок в WP-context, ≤4 этапа, I/O + чеклисты) |
 
 > **R1, R2** — полное описание роли: `DS-ai-systems/strategist/system.yaml`, `DS-ai-systems/extractor/system.yaml`
 >
