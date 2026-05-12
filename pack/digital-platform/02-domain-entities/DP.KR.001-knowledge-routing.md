@@ -228,9 +228,15 @@ DS (instrument/governance/surface) ← производное (код, план�
 
 ## 7. Операциональная шпаргалка (L3)
 
-`memory/repo-type-rules.md` остаётся как **L3-шпаргалка** — компактная версия для загрузки в контекст агента. Source-of-truth маршрутизации — этот документ (DP.KR.001).
+`memory/repo-type-rules.md` — **L3-шпаргалка** для агентных routing-решений. Компактна, доступна всем IWE (в FMT). Загружается только при miss в routing-vocab.md.
 
-При расхождении repo-type-rules.md и DP.KR.001 — побеждает DP.KR.001 (Pack > memory/).
+`memory/routing-vocab.md` — **L0 fast-path**: 30+ фраз → путь, ~5 сек. Загружается первой.
+
+**Разграничение:**
+- **Routing-решение** (операционное, куда положить файл): routing-vocab.md → repo-type-rules.md → repo CLAUDE.md. DP.KR.001 не нужен.
+- **Обновление карты** (редактирование правил): только через DP.KR.001 как source-of-truth → затем синхронизировать repo-type-rules.md.
+
+При расхождении repo-type-rules.md и DP.KR.001 — побеждает DP.KR.001 (Pack > memory/). Но для операционного routing это различие не возникает: обновление карты = отдельный акт работы.
 
 ## 8. Известные пробелы
 
