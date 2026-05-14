@@ -21,26 +21,26 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 20 |
+| Distinctions (D) | 21 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 21 |
+| Failure Modes (FM) | 26 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 25 |
+| Methods (M) | 29 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 21 |
+| ROLE (ROLE) | 22 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 69 |
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **234** |
+| **Total** | **245** |
 
 ## Distinctions
 
@@ -66,6 +66,7 @@ generated: true
 | DP.D.054 | Dashboard Audience Projections | — | active |
 | DP.D.055 | Домен vs Тема | — | active |
 | DP.D.056 | IWE Слои и портируемость | — | active |
+| DP.D.057 | Routing-решение ≠ Обновление карты маршрутизации | — | active |
 
 ## Methods
 
@@ -96,6 +97,10 @@ generated: true
 | DP.M.023 | Chaining nightly tasks через фиксированный offset | Зависимые ночные задачи (producer → consumer) запускаются с фиксированным N-минутным offset вместо явной зависимости After=/ExecStartPost. Устойчив к задержкам producer'а. | active |
 | DP.M.024 | Fallback-поле для NULL в темпоральных расчётах с legacy-данными | — | draft |
 | DP.M.025 | Волновое развёртывание (Wave Rollout) | — | draft |
+| DP.M.026 | git-fork-push-pattern | — | active |
+| DP.M.027 | 12-factor Matrix для инвентаризации production deployment | Метод систематической инвентаризации всех production deployment units через матрицу F1-F12. Позволяет обнаруживать системные дефекты (например, floating deps у всех Python-сервисов) за один проход по стеку. | active |
+| DP.M.028 | Stateless Worker — PostgresStorage + CursorCache + batched-flush | — | active |
+| DP.M.029 | Cross-verification CRITICAL-флагов автоматического аудита | — | active |
 
 ## Work Products
 
@@ -142,6 +147,11 @@ generated: true
 | DP.FM.019 | L3 Identity Leak (Утечка авторской идентичности в шаблон) | §9 (авторское) FMT-шаблона содержит конкретные имена/ID/пути пилота вместо {{PLACEHOLDER}} — при обновлении шаблона через update.sh эти данные распространяются на всех пользователей. | active |
 | DP.FM.020 | Gateway SC без security disclosure для upstream credentials | SC для Gateway-компонента с upstream-proxy не содержит явного раздела «Безопасность» с MITM-disclosure. Потребитель не знает, что Gateway видит его OAuth-токены при proxying. Нарушение принципа informed consent в security архитектуре. | active |
 | DP.FM.021 | Zero-slot blocks min aggregation | — | — |
+| DP.FM.022 | systemd-minimal-path | — | active |
+| DP.FM.023 | service-user-credentials-path | — | active |
+| DP.FM.024 | git-pull-in-production — слияние build/release/run в агентах и launchd | — | active |
+| DP.FM.025 | Монорепо с независимыми сервисами — нарушение 12-factor F1 | — | active |
+| DP.FM.026 | .env в git history — утечка secrets + обязательные шаги ликвидации | — | active |
 
 ## SoTA Annotations
 
@@ -305,6 +315,7 @@ generated: true
 | DP.ROLE.037 | Регистратор РП | Координатор целостности: гарантирует, что статус любого РП одинаков во всех 5 хранилищах IWE. Не исполняет работу по РП — исполняет работу ПО МЕТАДАННЫМ РП. | active |
 | DP.ROLE.038 | MCP Tool Consumer | Посредник между LLM-клиентом (бот) и платформенными MCP-серверами: загружает актуальный список tool через discovery (tools/list), кэширует с TTL, фильтрует по tier, передаёт в Claude API без hardcoded списков в коде. | draft |
 | DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в VS Code multi-agent сессии: подключается к Local Gateway, заявляет focus в peer-status, acquire lock перед write, sync через git sequential commits, escalates архитектурные разногласия к пилоту (не решает unilateral). Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
+| DP.ROLE.040 | R29 Артефактор | — | active |
 | DP.ROLE.040 | OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE) | Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process. | draft |
 
 ### RUNBOOK
@@ -400,10 +411,12 @@ generated: true
 - Missing `summary`: DP.D.054 (DP.D.054-dashboard-audience-projections.md)
 - Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
 - Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
+- Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
+- Missing `summary`: DP.ROLE.040 (DP.ROLE.040-artifactor.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
@@ -413,10 +426,18 @@ generated: true
 - Missing `summary`: DP.M.022 (DP.M.022-cache-safe-personal-dashboard.md)
 - Missing `summary`: DP.M.024 (DP.M.024-legacy-temporal-fallback.md)
 - Missing `summary`: DP.M.025 (DP.M.025-wave-rollout.md)
+- Missing `summary`: DP.M.026 (DP.M.026-git-fork-push-pattern.md)
+- Missing `summary`: DP.M.028 (DP.M.028-stateless-worker-cursor-pattern.md)
+- Missing `summary`: DP.M.029 (DP.M.029-audit-critical-cross-verify.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
 - Missing `summary`: DP.FM.021 (DP.FM.021-zero-slot-blocks-min-aggregation.md)
+- Missing `summary`: DP.FM.022 (DP.FM.022-systemd-minimal-path.md)
+- Missing `summary`: DP.FM.023 (DP.FM.023-service-user-credentials-path.md)
+- Missing `summary`: DP.FM.024 (DP.FM.024-git-pull-in-production.md)
+- Missing `summary`: DP.FM.025 (DP.FM.025-monorepo-multisvc-f1-violation.md)
+- Missing `summary`: DP.FM.026 (DP.FM.026-env-git-history-leak.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
