@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 22 |
+| ROLE (ROLE) | 23 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 69 |
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **267** |
+| **Total** | **268** |
 
 ## Distinctions
 
@@ -339,6 +339,7 @@ generated: true
 | DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в VS Code multi-agent сессии: подключается к Local Gateway, заявляет focus в peer-status, acquire lock перед write, sync через git sequential commits, escalates архитектурные разногласия к пилоту (не решает unilateral). Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
 | DP.ROLE.040 | R29 Артефактор | — | active |
 | DP.ROLE.040 | OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE) | Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process. | draft |
+| DP.ROLE.041 | Аттестатор | Роль автоматического вычислителя ступени Ученика: читает события из Activity Hub, считает 5 характеристик по двум осям (Мастерство × Мировоззрение), сравнивает с нормативной матрицей и записывает переход в learning.stage_transitions. Запускает downstream: обновление digital_twins, уведомление пилоту, триггер Портному. | draft |
 
 ### RUNBOOK
 
