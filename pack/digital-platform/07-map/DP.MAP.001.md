@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 19 |
+| Distinctions (D) | 20 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 20 |
+| Failure Modes (FM) | 21 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 20 |
+| Methods (M) | 25 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **227** |
+| **Total** | **234** |
 
 ## Distinctions
 
@@ -63,6 +63,7 @@ generated: true
 | DP.D.050 | Роли Созидателя | 5 ролей Созидателя (Ученик, Интеллектуал, Профессионал, Исследователь, Просветитель). Каждый человек выполняет все 5 одновременно. Внутри каждой роли — ступени мастерства. Основа траектории персонального развития. | active |
 | DP.D.052 | Различение: Персона / Память / Контекст | Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = user-owned Git, Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. | active |
 | DP.D.053 | Problem Task Workflow | — | active |
+| DP.D.054 | Dashboard Audience Projections | — | active |
 | DP.D.055 | Домен vs Тема | — | active |
 | DP.D.056 | IWE Слои и портируемость | — | active |
 
@@ -90,6 +91,11 @@ generated: true
 | DP.M.018 | External Data Fallback Hierarchy | — | active |
 | DP.M.019 | Промоция скрипта из авторского IWE в платформенный шаблон (L3→L1) | 7-шаговый процесс перевода скрипта из авторского IWE (L3) в платформенный шаблон FMT (L1): проверка коллизий, параметризация, smoke-test в 3 кейсах, обновление манифеста, коммит feat: promote. | draft |
 | DP.M.020 | Паттерн необязательной зависимости скрипта через params.yaml | Паттерн проектирования shell-скриптов с опциональными внешними зависимостями: ключ в params.yaml с дефолтом '' (пустая строка), graceful skip при пустом значении, warning+exit 1 при несуществующем пути. Три обязательных smoke-кейса. | draft |
+| DP.M.021 | GitHub App Platform Integration | — | — |
+| DP.M.022 | Cache-safe Personal Dashboard (снапшот + daily sync) | — | — |
+| DP.M.023 | Chaining nightly tasks через фиксированный offset | Зависимые ночные задачи (producer → consumer) запускаются с фиксированным N-минутным offset вместо явной зависимости After=/ExecStartPost. Устойчив к задержкам producer'а. | active |
+| DP.M.024 | Fallback-поле для NULL в темпоральных расчётах с legacy-данными | — | draft |
+| DP.M.025 | Волновое развёртывание (Wave Rollout) | — | draft |
 
 ## Work Products
 
@@ -135,6 +141,7 @@ generated: true
 | DP.FM.018 | Markdown Display-маркеры в data-полях (Markdown Markers in Data Fields) | Поля Markdown-таблиц содержат display-разметку (**bold**, ~~strike~~), корректную для рендеринга, но ломающую downstream text-processing (sed, awk, jq, commit messages). | active |
 | DP.FM.019 | L3 Identity Leak (Утечка авторской идентичности в шаблон) | §9 (авторское) FMT-шаблона содержит конкретные имена/ID/пути пилота вместо {{PLACEHOLDER}} — при обновлении шаблона через update.sh эти данные распространяются на всех пользователей. | active |
 | DP.FM.020 | Gateway SC без security disclosure для upstream credentials | SC для Gateway-компонента с upstream-proxy не содержит явного раздела «Безопасность» с MITM-disclosure. Потребитель не знает, что Gateway видит его OAuth-токены при proxying. Нарушение принципа informed consent в security архитектуре. | active |
+| DP.FM.021 | Zero-slot blocks min aggregation | — | — |
 
 ## SoTA Annotations
 
@@ -390,6 +397,7 @@ generated: true
 ## Warnings
 
 - Missing `summary`: DP.D.053 (DP.D.053-problem-task-workflow.md)
+- Missing `summary`: DP.D.054 (DP.D.054-dashboard-audience-projections.md)
 - Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
 - Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
@@ -401,9 +409,14 @@ generated: true
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
 - Missing `summary`: DP.M.016 (DP.M.016-pack-domain-maturity-diagnostics.md)
 - Missing `summary`: DP.M.018 (DP.M.018-external-data-fallback-hierarchy.md)
+- Missing `summary`: DP.M.021 (DP.M.021-github-app-platform-integration.md)
+- Missing `summary`: DP.M.022 (DP.M.022-cache-safe-personal-dashboard.md)
+- Missing `summary`: DP.M.024 (DP.M.024-legacy-temporal-fallback.md)
+- Missing `summary`: DP.M.025 (DP.M.025-wave-rollout.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
+- Missing `summary`: DP.FM.021 (DP.FM.021-zero-slot-blocks-min-aggregation.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
