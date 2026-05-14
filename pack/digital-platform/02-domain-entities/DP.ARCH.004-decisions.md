@@ -90,6 +90,40 @@ related:
 
 ---
 
+## ADR-004 — Secrets: отдельная БД vs persona-схема vs объединение с payment_registry (2026-05-14, ретроспективно)
+
+**Контекст.** 4 мая 2026 в рамках WP-253-C ("GitHub connections restore — UX регрессия") была срочно создана БД `secrets` на Neon для хранения OAuth-токенов (`ory_tokens`, `github_connections`, `dt_tokens`, `google_calendar`, `oauth_pending_state`). Срок ~4-6h, обоснование — «existing users без GitHub после cutover». ADR не оформлен, DP.ARCH.004 patch v2.5 запланирован в WP-253-action-plan-comprehensive §8 (pending, 0.5h), но не сделан. WP-228 Ф31 (14 мая) обнаружил drift между документом (15 БД) и реальностью (17 БД на Neon, включая `secrets` и системную `postgres`).
+
+**Рассмотренные варианты:**
+- (a) Отдельная БД `secrets` как 4-я special БД (status quo, формализация).
+- (b) Объединить с `persona` (#1) — таблицы `persona.oauth_tokens`, `persona.github_connections` и т.д.
+- (c) Объединить с `payment_registry` в общий vault для compliance-критичных данных.
+- (d) Оставить как есть, без формализации (принять drift).
+
+**Критичные характеристики ЭМОГССБ:** Безопасность, Эволюционируемость, Обслуживаемость.
+
+**Вердикт:** (a) — отдельная БД `secrets` как 4-я special БД (формализация status quo).
+
+**Обоснование:**
+- **Безопасность.** OAuth-токены = `payment_credentials`-класс по B7.3 (строже PII). Компрометация `persona` (содержит профили, предпочтения, captures — широкий blast radius) не должна давать доступ к OAuth-токенам всех пользователей через все сервисы (Ory Hydra, GitHub, Google Calendar). Изоляция в отдельной БД с собственным ролью `secrets_writer` (только эта БД) узкоразит blast radius. Вариант (b) расширяет поверхность атаки persona → отбракован.
+- **Эволюционируемость.** OAuth-providers — growing surface (Microsoft, Notion, Linear, etc. в roadmap). Добавление нового провайдера в `secrets` = одна миграция в отдельной БД с независимым lifecycle. В persona — миграция массивной БД пользователей. Вариант (b) связывает ритм OAuth-эволюции с persona-миграциями → отбракован.
+- **Обслуживаемость.** Audit-trail для `secrets` (OAuth rotation policy, expiry alerts) отличается от audit-trail для `payment_registry` (PCI DSS quarterly review). Объединение в один vault (вариант c) смешивает разные compliance regimes → отбракован.
+- Вариант (d) отбракован: drift между Pack и реальностью ломает Обслуживаемость — будущий разработчик не понимает почему БД есть, при дочерней миграции (Microsoft/Notion) повторно поднимется тот же вопрос.
+
+**Это применение того же паттерна, что ADR не нужен для `payment_registry`** (формализован в DP.ARCH.004 §1 v2.3 22 апр): «vault для compliance-критичных данных, изолированный от entity-БД по B7.3». `payment_registry` = PCI vault (карты), `secrets` = OAuth vault (токены). Разные классы данных, один паттерн изоляции.
+
+**Последствия:**
+- DP.ARCH.004 строка 23: «12 entity + 3 special = 15 БД» → «12 entity + 4 special = 16 БД».
+- DP.ARCH.004 строка 28 (таблица §1): добавить `secrets` в строку «4 special (operational support)»: «secrets (OAuth tokens — ory_tokens, github_connections, dt_tokens, google_calendar, oauth_pending_state; отдельная БД по B7.3 — OAuth-credentials строже PII)».
+- DP.ARCH.004 §3 + §10.10: упомянуть `secrets` как применение паттерна «vault для compliance-критичных данных» (наряду с `payment_registry`).
+- B7.3 secrets inventory: добавить таблицы БД `secrets` в `B7.3.1-l2-data-classification-map.md`.
+- Версия документа: `v2.4.1` → `v2.5`. supersedes: «DP.ARCH.004 v2.4.1 (26 апр 2026) — 3 special БД».
+- Writers/readers `secrets` уже описаны в `WP-253-bot-data-migration-plan.md` §B.2.
+
+**Открытый вопрос (вне scope ADR-004):** план WP-244 «убрать metabase + health» (DP.ARCH.004 строки 1620-1622) не выполнен, обе БД активно используются. Решение по WP-244 — отдельный ADR.
+
+---
+
 ## Как пополнять этот журнал
 
 При каждом новом архитектурном решении в DP.ARCH.004 (через АрхГейт):

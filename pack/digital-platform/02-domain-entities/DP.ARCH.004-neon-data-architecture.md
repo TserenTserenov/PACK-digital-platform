@@ -1,11 +1,11 @@
 ---
 id: DP.ARCH.004
-version: v2.4.1
+version: v2.5
 name: Архитектура данных Neon (Database-per-BoundedContext)
 type: domain-entity
 status: active
-valid_from: 2026-04-26
-supersedes: "DP.ARCH.004 v2.3 (24 апр 2026) — Ф29 потомки (WP-234..241, Link-маршрутизация)"
+valid_from: 2026-05-14
+supersedes: "DP.ARCH.004 v2.4.1 (26 апр 2026) — 3 special БД; ADR-004 (14 мая 2026) добавил secrets как 4-ю special"
 summary: "12 баз данных Neon по принципу database-per-BoundedContext. Сводная таблица, карта, ERD по каждой БД, связи, потоки, реестр физ.объектов с маркерами О/С/Р/К, revenue-sharing механика (контракты/сплиты/выплаты), points-ledger (event-sourcing) + эмиссионный отчёт, верификация по чеклистам SPF.SPEC.005, замечаниям Андрея Д1-Д12 и категориям WP-257."
 related:
   specializes: [U.System]
@@ -20,12 +20,12 @@ decision_source: "Встречи ИТ 8 и 10 (14 апр, 21 апр 2026); ре�
 
 **Стратегия реализации:** документ описывает целевое состояние **новой архитектуры платформы** (BC-aligned, database-per-BC, микросервисная, EDA). Реализация поэтапная: **IWE — пилот новой архитектуры** (строится сразу на 12 БД); **ШСМ работает на старой архитектуре** (монолит LMS Aisystant) и **постепенно мигрирует на новую** после стабилизации IWE. В процессе миграции лучшие архитектурные паттерны LMS (наставничество, прохождения, ДЗ-ответы, формальная квалификация) переносятся в новую арх — см. §3.6 «Источник паттернов» и §3.13. В короткий срок LMS остаётся legacy-источником истории ШСМ с read-only bridges в `#6 / #12 / #3 / #2`.
 
-**Полный физический инвентарь Neon prod (29 апр 2026, после WP-268 DROP platform):** 12 entity-БД + 3 special-БД = **15 БД** (плюс `postgres` system + 2 templates = 18 строк в `\l`, не считаются).
+**Полный физический инвентарь Neon prod (14 мая 2026, после ADR-004 + WP-228 Ф31):** 12 entity-БД + 4 special-БД = **16 БД** (плюс `postgres` system + 2 templates = 19 строк в `\l`, не считаются). Drift между документом v2.4.1 и реальностью (БД `secrets` создана 4 мая через WP-253-C, не была формализована) закрыт ADR-004 от 14 мая.
 
 | Категория | БД | Принцип |
 |---|---|---|
 | **12 entity (BC-aligned, §3)** | persona, journal, payment, subscription, indicators, learning, knowledge, reference, publication, community, lead, rewards | database-per-BoundedContext |
-| **3 special (operational support)** | health (observability — internal_metrics, error_logs, ANTHROPIC_STATUS), metabase (admin-tool metadata, paused), payment_registry (autopay tokens, отдельная БД по B7.3 — payment_credentials строже PII) | Не доменные сущности; параллельно entity-уровню (§10.10 admin/state-tools placement) |
+| **4 special (operational support)** | health (observability — request_traces, error_logs, user_sessions, graph_usage_events; writers: aist_bot, activity-hub, event-gateway, knowledge-mcp; readers: Metabase), metabase (BI metastore — Railway инстанс `metabase-production-a4f6.up.railway.app` читает 16 Neon-источников), payment_registry (PCI vault — saved_payment_tool токены ЮKassa, отдельная БД по B7.3 — payment_credentials строже PII), secrets (OAuth vault — ory_tokens, github_connections, dt_tokens, google_calendar, oauth_pending_state; ADR-004 14 мая — изоляция OAuth от persona) | Не доменные сущности; параллельно entity-уровню (§10.10 admin/state-tools placement). Два vault-БД (payment_registry, secrets) — один паттерн «compliance-критичные данные изолированы по B7.3» |
 
 **Дополнительные state-БД вне Neon (Railway PG cluster `peaceful-vision/Postgres`):**
 
@@ -1917,6 +1917,30 @@ LMS Aisystant — монолит **старой архитектуры**, на �
 
 
 **Не применять для:** entity-БД из 12 BC (persona, journal, payment, …) — для них Neon-стэк остаётся source-of-truth по принципу database-per-BoundedContext.
+
+### 10.12. Vault-БД: compliance-критичные данные изолированы по B7.3 (паттерн)
+
+> **Решение Tseren от 14 мая 2026 (ADR-004 в `DP.ARCH.004-decisions.md`, ретроспективная формализация).** Compliance-критичные данные (`payment_credentials` класса по B7.3 — строже PII) выделены в отдельные БД-vault на том же Neon-проекте, что и entity-БД, но с изолированной ролью писателя и собственным lifecycle миграций.
+
+**Паттерн:** vault-БД содержит таблицы только одного класса compliance, отделяется от entity-БД для сужения blast radius при компрометации. Writer — выделенный сервис (engine), который единственный имеет роль `<vault>_writer`. Readers — entity-сервисы получают только маскированные view (без `*_encrypted bytea`).
+
+**Применённые случаи:**
+
+| Vault-БД | Класс данных | Writer (single) | Readers (через view) | Compliance regime | Решение |
+|---|---|---|---|---|---|
+| `payment_registry` | PCI tokens (карты ЮKassa) — `saved_payment_tool.provider_token_encrypted bytea`, `autopay_credential` | payment-engine (планово) + `etl-finance-bulk.py` (initial load) | subscription-service (через masked view) | PCI DSS quarterly review | DP.ARCH.004 §1 v2.3 (22 апр 2026) |
+| `secrets` | OAuth tokens (Ory, GitHub, Google) — `ory_tokens`, `github_connections`, `dt_tokens`, `google_calendar`, `oauth_pending_state` | aist_bot + gateway-mcp (через WP-253-C, 4 мая) | knowledge-mcp, IWE-clients (через token refresh service) | OAuth rotation policy (expiry alerts) | ADR-004 (14 мая 2026) |
+
+**Когда выделять в vault (триггеры):**
+1. Класс данных по B7.3 = `payment_credentials` или выше (encrypted tokens, secrets).
+2. Blast radius при компрометации entity-БД (например persona) недопустимо широкий.
+3. Audit-trail требования отличаются от entity-БД (квартальный audit для PCI vs rotation для OAuth).
+4. Lifecycle миграций развязан с entity (добавление OAuth-провайдеров не должно блокировать миграции persona).
+
+**Когда НЕ выделять в vault:**
+- Данные класса PII (email, имя) — остаются в entity-БД (`persona`).
+- Финансовые события без credentials (`payment.payment_received`, amounts/status/refs) — остаются в entity-БД.
+- Аудит-логи действий пользователя (`journal.event`) — entity-уровень.
 
 **Принципы покрытия:** OwnerIntegrity (Directus owns свои metadata, нет внешних writers), DDD Strategic SOTA.001 (BC изолирован — separate DB engine, separate ownership), DP.D.049 (State file ≠ Лог: state-файлы рядом с исполнителем).
 
