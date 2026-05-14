@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 17 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 14 |
+| Failure Modes (FM) | 15 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 11 |
+| Methods (M) | 13 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **210** |
+| **Total** | **213** |
 
 ## Distinctions
 
@@ -79,6 +79,8 @@ generated: true
 | DP.M.009 | Расширяемость шаблонных систем (Template Extensibility) | Метод проектирования расширяемости в системах с платформенным шаблоном и пользовательскими инстансами. Три паттерна (drop-in, overlay, 3-way merge), критерии выбора, протокол обновления с обнаружением противоречий | draft |
 | DP.M.010 | Управление жизненным циклом рабочего продукта | Метод гарантирует консистентность РП-объекта во всех хранилищах IWE на протяжении всего цикла: создание → активная сессия → закрытие → архивация. Единственная роль координации — Регистратор РП (DP.ROLE.037). | active |
 | DP.M.011 | Агрегация captures из множества источников | Единый inbox-файл (captures.md) наполняется автоматически из 4 каналов с маркерами источника для идемпотентной обработки Экстрактором | draft |
+| DP.M.012 | Machine-Check Postcondition | — | active |
+| DP.M.013 | Security Audit Cadence | Метод управления аудитом безопасности платформы через три уровня периодичности: event-driven (каждое архитектурное решение, ~0 ₽), weekly light-check (2 мин, ~0 ₽), daily automated deep-scan (systemd-timer + subagent с context isolation, ~$1.5/день). Архетип применим к любой platform с security-требованиями. | active |
 
 ## Work Products
 
@@ -118,6 +120,7 @@ generated: true
 | DP.FM.012 | Lexical Deduplication (Lossful Ontology Merge) | ИИ-агент при запросе 'убери дубли' выполняет лексическую нормализацию (совпадение слов/имён) вместо онтологической унификации (совпадение сущностей). Результат: семантически разные концепты сливаются в один, различения теряются без следа. | active |
 | DP.FM.013 | Conservative Rewrite Failure (Смысловая контаминация при перефразировании) | При пересказе, переводе формата или summary ИИ-агент добавляет новые предположения и термины, которых не было в исходнике. Граница между 'перевыражением той же вещи' и 'переинтерпретацией с сочинительством' не контролируется. | active |
 | DP.FM.014 | Legacy Port Jump (Прыжок в новый дизайн без проверки legacy) | При замене legacy-компонента (миграция из внешней системы, старой кодовой базы, LMS) агент прыгает сразу в проектирование нового дизайна, не выяснив как работает существующий механизм. Результат — перерасход часов в 3-5 раз или потеря рабочего решения. | active |
+| DP.FM.015 | False-Positive Capture Detection (grep vs awk) | — | active |
 
 ## SoTA Annotations
 
@@ -377,7 +380,9 @@ generated: true
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
+- Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
+- Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
