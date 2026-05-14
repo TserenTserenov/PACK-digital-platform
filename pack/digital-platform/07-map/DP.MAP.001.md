@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 22 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 30 |
-| IWE (IWE) | 5 |
+| Failure Modes (FM) | 32 |
+| IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 36 |
+| Methods (M) | 41 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **257** |
+| **Total** | **265** |
 
 ## Distinctions
 
@@ -109,6 +109,11 @@ generated: true
 | DP.M.034 | ArchGate Operational Backing Check | Метод проверки качества ArchGate-профиля ЭМОГССБ: профиль силён, когда backed операционными данными; слаб, когда строится на paper comparison. 3 диагностических признака слабого профиля + финализирующий вопрос. | active |
 | DP.M.035 | Явные триггеры извлечения модуля в сервис | При выборе 'модуль внутри монолита/Worker' вместо 'отдельный микросервис' — немедленно задокументировать измеримые триггеры обратного extraction. 4 типа триггеров. Без явных триггеров решение становится вечным и пропускает правильный момент для review. | active |
 | DP.M.036 | Peer Agent Onboarding | — | draft |
+| DP.M.037 | Personal Guide Lifecycle | — | draft |
+| DP.M.038 | Идемпотентное распределение скиллов при рендере | Паттерн: при каждом рендере персонального руководства агент идемпотентно копирует набор скиллов в .claude/skills/ целевого репо. Идемпотентность: копировать только при отсутствии файла или изменении checksum. Цель: обеспечить channel-parity — доступность скиллов в browser-канале без VS Code. | active |
+| DP.M.039 | Manifest Version Release Gate (Проверка версии manifest перед релизом) | Pre-release детектор: версия в manifest.json должна совпадать с версией в CHANGELOG.md. Ловит забытый запуск generate-manifest.sh перед релизом. | draft |
+| DP.M.040 | Progress Counter N/M для batch-операций CLI (CLI Batch Progress UX) | Вывод прогресс-строки (N/M) в теле batch-цикла в shell-скриптах предотвращает иллюзию зависания при длинных операциях. Порог: >10 итераций или >5 сек. | draft |
+| DP.M.041 | Posttooluse Hook Derived Sync | — | draft |
 
 ## Work Products
 
@@ -164,6 +169,8 @@ generated: true
 | DP.FM.028 | Event Coverage Gap — новый модуль без аудита эмиссии событий | При добавлении нового workflow-модуля не проводится аудит event coverage: модуль доставляет пользовательские действия без эмиссии domain_event. Downstream системы (stage_evaluator, activity hub) видят пустой stream — активность пользователя не учитывается. | active |
 | DP.FM.029 | Cross-Platform Path Leak (Утечка платформо-специфичных путей) | В конфигурации или коде кросс-платформенного инструмента прописан платформо-специфичный путь (macOS /Users/... slug, Windows C:\...). На целевой платформе (Linux/сервер) путь не существует, инструмент молча выдаёт WARN и продолжает работу — без явной ошибки. | active |
 | DP.FM.030 | Compliance Matrix Narrative Drift (дрейф нарратива от ячеек матрицы) | При инкрементальном заполнении compliance-матрицы нарратив-секция обновляется реже ячеек таблицы. Числа в тексте расходятся с реальными counts — drift обнаруживается только при независимом review. | active |
+| DP.FM.031 | Hardcoded Os Path | — | active |
+| DP.FM.032 | Repair-Pass Stale-Hash Blind Spot (Слепое пятно устаревшего файла при repair-pass) | Repair-pass проверяет только отсутствие файла (! -f), но не его актуальность (hash vs source). Если файл существует, но содержимое расходится с FMT-source, он остаётся без обновления. Silent stale-регрессия. | draft |
 
 ## SoTA Annotations
 
@@ -258,6 +265,7 @@ generated: true
 | DP.IWE.003 | Gateway-архитектура IWE | — | active |
 | DP.IWE.004 | Интерфейсы IWE — различения клиентов | — | active |
 | DP.IWE.005 | Local MCP Gateway (in-process multi-agent layer) | — | draft |
+| DP.IWE.006 | Personal Guide Channels | — | draft |
 
 ### KR
 
@@ -429,6 +437,7 @@ generated: true
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
+- Missing `summary`: DP.IWE.006 (DP.IWE.006-personal-guide-channels.md)
 - Missing `summary`: DP.ROLE.040 (DP.ROLE.040-artifactor.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
@@ -443,6 +452,8 @@ generated: true
 - Missing `summary`: DP.M.028 (DP.M.028-stateless-worker-cursor-pattern.md)
 - Missing `summary`: DP.M.029 (DP.M.029-audit-critical-cross-verify.md)
 - Missing `summary`: DP.M.036 (DP.M.036-peer-agent-onboarding.md)
+- Missing `summary`: DP.M.037 (DP.M.037-personal-guide-lifecycle.md)
+- Missing `summary`: DP.M.041 (DP.M.041-posttooluse-hook-derived-sync.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -452,6 +463,7 @@ generated: true
 - Missing `summary`: DP.FM.024 (DP.FM.024-git-pull-in-production.md)
 - Missing `summary`: DP.FM.025 (DP.FM.025-monorepo-multisvc-f1-violation.md)
 - Missing `summary`: DP.FM.026 (DP.FM.026-env-git-history-leak.md)
+- Missing `summary`: DP.FM.031 (DP.FM.031-hardcoded-os-path.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
