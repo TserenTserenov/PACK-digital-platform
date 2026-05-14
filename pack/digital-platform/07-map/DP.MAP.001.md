@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 19 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 16 |
+| Failure Modes (FM) | 20 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 16 |
+| Methods (M) | 20 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **219** |
+| **Total** | **227** |
 
 ## Distinctions
 
@@ -86,6 +86,10 @@ generated: true
 | DP.M.014 | Evaluator Worker | — | draft |
 | DP.M.015 | Четырёхслойная каскадная зависимость в activity-based геймификации | — | draft |
 | DP.M.016 | Диагностика зрелости домена (3 вопроса) | — | active |
+| DP.M.017 | Runtime Tool Discovery через JSON-RPC | LLM-клиент строит список tool в runtime через tools/list JSON-RPC с TTL-кэшем (15 мин) и fallback на last-known-good при недоступности сервера. Hardcoded список tool = антипаттерн. | draft |
+| DP.M.018 | External Data Fallback Hierarchy | — | active |
+| DP.M.019 | Промоция скрипта из авторского IWE в платформенный шаблон (L3→L1) | 7-шаговый процесс перевода скрипта из авторского IWE (L3) в платформенный шаблон FMT (L1): проверка коллизий, параметризация, smoke-test в 3 кейсах, обновление манифеста, коммит feat: promote. | draft |
+| DP.M.020 | Паттерн необязательной зависимости скрипта через params.yaml | Паттерн проектирования shell-скриптов с опциональными внешними зависимостями: ключ в params.yaml с дефолтом '' (пустая строка), graceful skip при пустом значении, warning+exit 1 при несуществующем пути. Три обязательных smoke-кейса. | draft |
 
 ## Work Products
 
@@ -127,6 +131,10 @@ generated: true
 | DP.FM.014 | Legacy Port Jump (Прыжок в новый дизайн без проверки legacy) | При замене legacy-компонента (миграция из внешней системы, старой кодовой базы, LMS) агент прыгает сразу в проектирование нового дизайна, не выяснив как работает существующий механизм. Результат — перерасход часов в 3-5 раз или потеря рабочего решения. | active |
 | DP.FM.015 | False-Positive Capture Detection (grep vs awk) | — | active |
 | DP.FM.016 | Decay конфигурационных путей | — | active |
+| DP.FM.017 | Asymmetric Env Cleanup (Асимметричная очистка env-переменных) | Smoke-test устанавливает несколько env-переменных с эфемерными путями (/tmp/iwe-smoke-*), но cleanup сбрасывает не все → ночные/non-interactive запуски падают с path-ошибками. | active |
+| DP.FM.018 | Markdown Display-маркеры в data-полях (Markdown Markers in Data Fields) | Поля Markdown-таблиц содержат display-разметку (**bold**, ~~strike~~), корректную для рендеринга, но ломающую downstream text-processing (sed, awk, jq, commit messages). | active |
+| DP.FM.019 | L3 Identity Leak (Утечка авторской идентичности в шаблон) | §9 (авторское) FMT-шаблона содержит конкретные имена/ID/пути пилота вместо {{PLACEHOLDER}} — при обновлении шаблона через update.sh эти данные распространяются на всех пользователей. | active |
+| DP.FM.020 | Gateway SC без security disclosure для upstream credentials | SC для Gateway-компонента с upstream-proxy не содержит явного раздела «Безопасность» с MITM-disclosure. Потребитель не знает, что Gateway видит его OAuth-токены при proxying. Нарушение принципа informed consent в security архитектуре. | active |
 
 ## SoTA Annotations
 
@@ -392,6 +400,7 @@ generated: true
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
 - Missing `summary`: DP.M.016 (DP.M.016-pack-domain-maturity-diagnostics.md)
+- Missing `summary`: DP.M.018 (DP.M.018-external-data-fallback-hierarchy.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
