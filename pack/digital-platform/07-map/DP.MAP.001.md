@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 22 |
+| Distinctions (D) | 23 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 32 |
 | IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 41 |
+| Methods (M) | 42 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **265** |
+| **Total** | **267** |
 
 ## Distinctions
 
@@ -68,6 +68,7 @@ generated: true
 | DP.D.056 | IWE Слои и портируемость | — | active |
 | DP.D.057 | Routing-решение ≠ Обновление карты маршрутизации | — | active |
 | DP.D.058 | Service Clause (Обещание) ≠ Carrier (Носитель реализации) | — | active |
+| DP.D.059 | Три класса хранения credentials при ротации | — | active |
 
 ## Methods
 
@@ -114,6 +115,7 @@ generated: true
 | DP.M.039 | Manifest Version Release Gate (Проверка версии manifest перед релизом) | Pre-release детектор: версия в manifest.json должна совпадать с версией в CHANGELOG.md. Ловит забытый запуск generate-manifest.sh перед релизом. | draft |
 | DP.M.040 | Progress Counter N/M для batch-операций CLI (CLI Batch Progress UX) | Вывод прогресс-строки (N/M) в теле batch-цикла в shell-скриптах предотвращает иллюзию зависания при длинных операциях. Порог: >10 итераций или >5 сек. | draft |
 | DP.M.041 | Posttooluse Hook Derived Sync | — | draft |
+| DP.M.042 | Platform Audit Multilens | Поэтапная ревизия production-платформы: 12-factor (уровень 0) → SRE/SLO (1) → Well-Architected (2) → Team Topologies (3) → TOGAF (4) → DORA (5) → LLMOps (6) | active |
 
 ## Work Products
 
@@ -433,6 +435,7 @@ generated: true
 - Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
 - Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
 - Missing `summary`: DP.D.058 (DP.D.058-service-clause-vs-carrier.md)
+- Missing `summary`: DP.D.059 (DP.D.059-three-classes-credentials-storage.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
