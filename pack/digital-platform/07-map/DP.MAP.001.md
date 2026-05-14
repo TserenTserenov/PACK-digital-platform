@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 21 |
+| Distinctions (D) | 22 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 26 |
+| Failure Modes (FM) | 30 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 29 |
+| Methods (M) | 36 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **245** |
+| **Total** | **257** |
 
 ## Distinctions
 
@@ -67,6 +67,7 @@ generated: true
 | DP.D.055 | Домен vs Тема | — | active |
 | DP.D.056 | IWE Слои и портируемость | — | active |
 | DP.D.057 | Routing-решение ≠ Обновление карты маршрутизации | — | active |
+| DP.D.058 | Service Clause (Обещание) ≠ Carrier (Носитель реализации) | — | active |
 
 ## Methods
 
@@ -101,6 +102,13 @@ generated: true
 | DP.M.027 | 12-factor Matrix для инвентаризации production deployment | Метод систематической инвентаризации всех production deployment units через матрицу F1-F12. Позволяет обнаруживать системные дефекты (например, floating deps у всех Python-сервисов) за один проход по стеку. | active |
 | DP.M.028 | Stateless Worker — PostgresStorage + CursorCache + batched-flush | — | active |
 | DP.M.029 | Cross-verification CRITICAL-флагов автоматического аудита | — | active |
+| DP.M.030 | F9 Disposability — двухкомпонентный паттерн worker | Для 12-factor F9 (Disposability) в event-driven workers нужны два независимых механизма: (1) SIGTERM handler для graceful shutdown, (2) cursor-based idempotency для crash safety. Только их комбинация даёт полный F9. | active |
+| DP.M.031 | Reusable Flow Export — экспортируемая функция для множественных точек входа | Функция UI-flow (consent, onboarding, активация) оформляется как reusable export из своего модуля, а не как inline-код в одном handler. Позволяет нескольким entry points (deep-link, команда, кнопка, QR-код, UTM-параметр) делегировать единой реализации без дублирования. | active |
+| DP.M.032 | Предпочтение MD-формата для плотного LLM-контекста | MD-формат на 26% короче HTML при одинаковой точности распознавания Haiku. Рекомендация: использовать MD для плотного структурированного контекста агента; таблицы — исследовать отдельно. | active |
+| DP.M.033 | Matrix-CI по конфигурационному параметру шаблона | CI-пайплайн для шаблонов запускается с матрицей значений ключевого конфигурационного параметра. Немедленно выявляет hardcoded константы, которые не проявляются у автора с дефолтным именем. | active |
+| DP.M.034 | ArchGate Operational Backing Check | Метод проверки качества ArchGate-профиля ЭМОГССБ: профиль силён, когда backed операционными данными; слаб, когда строится на paper comparison. 3 диагностических признака слабого профиля + финализирующий вопрос. | active |
+| DP.M.035 | Явные триггеры извлечения модуля в сервис | При выборе 'модуль внутри монолита/Worker' вместо 'отдельный микросервис' — немедленно задокументировать измеримые триггеры обратного extraction. 4 типа триггеров. Без явных триггеров решение становится вечным и пропускает правильный момент для review. | active |
+| DP.M.036 | Peer Agent Onboarding | — | draft |
 
 ## Work Products
 
@@ -152,6 +160,10 @@ generated: true
 | DP.FM.024 | git-pull-in-production — слияние build/release/run в агентах и launchd | — | active |
 | DP.FM.025 | Монорепо с независимыми сервисами — нарушение 12-factor F1 | — | active |
 | DP.FM.026 | .env в git history — утечка secrets + обязательные шаги ликвидации | — | active |
+| DP.FM.027 | Railway Missing Auto-Deploy (Ручной деплой без git-интеграции) | Railway-проект развёртывается вручную (кнопкой), а не через git-webhook. Признак: отсутствие RAILWAY_GIT_* env-переменных и reason='deploy'/'redeploy' вместо 'github_push' в deployments API. Следствие: код в git не соответствует задеплоенному без явного ручного действия. | active |
+| DP.FM.028 | Event Coverage Gap — новый модуль без аудита эмиссии событий | При добавлении нового workflow-модуля не проводится аудит event coverage: модуль доставляет пользовательские действия без эмиссии domain_event. Downstream системы (stage_evaluator, activity hub) видят пустой stream — активность пользователя не учитывается. | active |
+| DP.FM.029 | Cross-Platform Path Leak (Утечка платформо-специфичных путей) | В конфигурации или коде кросс-платформенного инструмента прописан платформо-специфичный путь (macOS /Users/... slug, Windows C:\...). На целевой платформе (Linux/сервер) путь не существует, инструмент молча выдаёт WARN и продолжает работу — без явной ошибки. | active |
+| DP.FM.030 | Compliance Matrix Narrative Drift (дрейф нарратива от ячеек матрицы) | При инкрементальном заполнении compliance-матрицы нарратив-секция обновляется реже ячеек таблицы. Числа в тексте расходятся с реальными counts — drift обнаруживается только при независимом review. | active |
 
 ## SoTA Annotations
 
@@ -412,6 +424,7 @@ generated: true
 - Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
 - Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
 - Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
+- Missing `summary`: DP.D.058 (DP.D.058-service-clause-vs-carrier.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
@@ -429,6 +442,7 @@ generated: true
 - Missing `summary`: DP.M.026 (DP.M.026-git-fork-push-pattern.md)
 - Missing `summary`: DP.M.028 (DP.M.028-stateless-worker-cursor-pattern.md)
 - Missing `summary`: DP.M.029 (DP.M.029-audit-critical-cross-verify.md)
+- Missing `summary`: DP.M.036 (DP.M.036-peer-agent-onboarding.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
