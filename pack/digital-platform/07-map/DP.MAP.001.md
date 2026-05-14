@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 17 |
+| Distinctions (D) | 19 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 15 |
+| Failure Modes (FM) | 16 |
 | IWE (IWE) | 5 |
 | KR (KR) | 1 |
-| Methods (M) | 13 |
+| Methods (M) | 16 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **213** |
+| **Total** | **219** |
 
 ## Distinctions
 
@@ -63,6 +63,8 @@ generated: true
 | DP.D.050 | Роли Созидателя | 5 ролей Созидателя (Ученик, Интеллектуал, Профессионал, Исследователь, Просветитель). Каждый человек выполняет все 5 одновременно. Внутри каждой роли — ступени мастерства. Основа траектории персонального развития. | active |
 | DP.D.052 | Различение: Персона / Память / Контекст | Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = user-owned Git, Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. | active |
 | DP.D.053 | Problem Task Workflow | — | active |
+| DP.D.055 | Домен vs Тема | — | active |
+| DP.D.056 | IWE Слои и портируемость | — | active |
 
 ## Methods
 
@@ -81,6 +83,9 @@ generated: true
 | DP.M.011 | Агрегация captures из множества источников | Единый inbox-файл (captures.md) наполняется автоматически из 4 каналов с маркерами источника для идемпотентной обработки Экстрактором | draft |
 | DP.M.012 | Machine-Check Postcondition | — | active |
 | DP.M.013 | Security Audit Cadence | Метод управления аудитом безопасности платформы через три уровня периодичности: event-driven (каждое архитектурное решение, ~0 ₽), weekly light-check (2 мин, ~0 ₽), daily automated deep-scan (systemd-timer + subagent с context isolation, ~$1.5/день). Архетип применим к любой platform с security-требованиями. | active |
+| DP.M.014 | Evaluator Worker | — | draft |
+| DP.M.015 | Четырёхслойная каскадная зависимость в activity-based геймификации | — | draft |
+| DP.M.016 | Диагностика зрелости домена (3 вопроса) | — | active |
 
 ## Work Products
 
@@ -121,6 +126,7 @@ generated: true
 | DP.FM.013 | Conservative Rewrite Failure (Смысловая контаминация при перефразировании) | При пересказе, переводе формата или summary ИИ-агент добавляет новые предположения и термины, которых не было в исходнике. Граница между 'перевыражением той же вещи' и 'переинтерпретацией с сочинительством' не контролируется. | active |
 | DP.FM.014 | Legacy Port Jump (Прыжок в новый дизайн без проверки legacy) | При замене legacy-компонента (миграция из внешней системы, старой кодовой базы, LMS) агент прыгает сразу в проектирование нового дизайна, не выяснив как работает существующий механизм. Результат — перерасход часов в 3-5 раз или потеря рабочего решения. | active |
 | DP.FM.015 | False-Positive Capture Detection (grep vs awk) | — | active |
+| DP.FM.016 | Decay конфигурационных путей | — | active |
 
 ## SoTA Annotations
 
@@ -376,13 +382,19 @@ generated: true
 ## Warnings
 
 - Missing `summary`: DP.D.053 (DP.D.053-problem-task-workflow.md)
+- Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
+- Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
+- Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
+- Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
+- Missing `summary`: DP.M.016 (DP.M.016-pack-domain-maturity-diagnostics.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
+- Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)

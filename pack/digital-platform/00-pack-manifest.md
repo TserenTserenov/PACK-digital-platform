@@ -39,6 +39,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.050 | Роли Созидателя | D | 5 ролей Созидателя (Ученик, Интеллектуал, Профессионал, Исследователь, Просветитель). Каждый человек выполняет все 5 одновременно. Внутри каждой роли — ступени мастерства. Основа траектории персонального развития. | active |
 | DP.D.052 | Различение: Персона / Память / Контекст | D | Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = user-owned Git, Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. | active |
 | DP.D.053 | Problem Task Workflow | D | — | active |
+| DP.D.055 | Домен vs Тема | D | — | active |
+| DP.D.056 | IWE Слои и портируемость | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121). Реализация: база platform, схема points. | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -56,6 +58,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.013 | Conservative Rewrite Failure (Смысловая контаминация при перефразировании) | FM | При пересказе, переводе формата или summary ИИ-агент добавляет новые предположения и термины, которых не было в исходнике. Граница между 'перевыражением той же вещи' и 'переинтерпретацией с сочинительством' не контролируется. | active |
 | DP.FM.014 | Legacy Port Jump (Прыжок в новый дизайн без проверки legacy) | FM | При замене legacy-компонента (миграция из внешней системы, старой кодовой базы, LMS) агент прыгает сразу в проектирование нового дизайна, не выяснив как работает существующий механизм. Результат — перерасход часов в 3-5 раз или потеря рабочего решения. | active |
 | DP.FM.015 | False-Positive Capture Detection (grep vs awk) | FM | — | active |
+| DP.FM.016 | Decay конфигурационных путей | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -75,6 +78,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.011 | Агрегация captures из множества источников | M | Единый inbox-файл (captures.md) наполняется автоматически из 4 каналов с маркерами источника для идемпотентной обработки Экстрактором | draft |
 | DP.M.012 | Machine-Check Postcondition | M | — | active |
 | DP.M.013 | Security Audit Cadence | M | Метод управления аудитом безопасности платформы через три уровня периодичности: event-driven (каждое архитектурное решение, ~0 ₽), weekly light-check (2 мин, ~0 ₽), daily automated deep-scan (systemd-timer + subagent с context isolation, ~$1.5/день). Архетип применим к любой platform с security-требованиями. | active |
+| DP.M.014 | Evaluator Worker | M | — | draft |
+| DP.M.015 | Четырёхслойная каскадная зависимость в activity-based геймификации | M | — | draft |
+| DP.M.016 | Диагностика зрелости домена (3 вопроса) | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
