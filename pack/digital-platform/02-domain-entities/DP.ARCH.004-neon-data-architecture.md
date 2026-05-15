@@ -1,11 +1,11 @@
 ---
 id: DP.ARCH.004
-version: v2.5
+version: v2.6
 name: Архитектура данных Neon (Database-per-BoundedContext)
 type: domain-entity
 status: active
-valid_from: 2026-05-14
-supersedes: "DP.ARCH.004 v2.4.1 (26 апр 2026) — 3 special БД; ADR-004 (14 мая 2026) добавил secrets как 4-ю special"
+valid_from: 2026-05-15
+supersedes: "DP.ARCH.004 v2.5 (14 мая 2026) — 16 БД (12+4 special); v2.6 добавляет §3.14 маркер Т (event ingestion tables)"
 summary: "12 баз данных Neon по принципу database-per-BoundedContext. Сводная таблица, карта, ERD по каждой БД, связи, потоки, реестр физ.объектов с маркерами О/С/Р/К, revenue-sharing механика (контракты/сплиты/выплаты), points-ledger (event-sourcing) + эмиссионный отчёт, верификация по чеклистам SPF.SPEC.005, замечаниям Андрея Д1-Д12 и категориям WP-257."
 related:
   specializes: [U.System]
@@ -802,6 +802,8 @@ erDiagram
 
 **Legacy source:** таблицы `COURSE_PROGRESS`, `WORKBOOK`, `ANSWER` во время миграции читают из LMS Aisystant через bridge (`coursepassing`/`taskanswer`), до WP-254 Ф5.
 
+**Technical tables (маркер Т):** `domain_event` и `security_reject_log` физически живут в этой БД, но не являются learning-доменными объектами — см. §3.14 для описания и мотива размещения.
+
 ### 3.7 #7 knowledge — Знание-платформы
 
 **Категория WP-257:** Platform-knowledge (projection). **Writer:** knowledge-mcp индексатор (читает платформенные Pack Git-репо и эмбеддит). **Owner:** Neon (как проекция Git).
@@ -1415,6 +1417,31 @@ erDiagram
 ---
 
 <details>
+<summary><b>3.14 Технические артефакты event ingestion (cross-DB, маркер Т)</b></summary>
+
+**Категория:** Технические/инфраструктурные (маркер **Т**) — не доменные объекты. **Writer:** event-gateway. **Owner:** платформа (не domain-BC).
+
+**Назначение:** обслуживают событийный поток между источниками и projection-workers. Физически размещены в БД `learning` (MVP-greenfield WP-253 — исторически первый writer); после P2 кандидаты на перенос в отдельную infrastructure-БД (если появятся кросс-BC writers).
+
+**Маркер Т отличается от О/С/Р/К:** не физ.объект предметной области, не проекция, не роль, не справочник. Это транспортный слой EDA — таблицы существуют для доставки событий, не для хранения бизнес-истории.
+
+| Таблица | Назначение | Инвариант |
+|---|---|---|
+| `domain_event` | Envelope для всех событий из всех источников (event-gateway пишет сюда, projection-workers LISTEN/POLL) | `UNIQUE(source, external_id)` — idempotency ключ; не удаляется, только APPEND |
+| `security_reject_log` | Журнал отбитых событий (PII detected, unknown source, schema violation) | INSERT-only, аудит-цепочка, не очищается автоматически |
+
+**Почему в `#6 learning`, а не в отдельной БД (решение WP-228 Ф35, ArchGate Вариант B PASS):**
+- БД `learning` исторически первый домен, для которого event-gateway начал писать события.
+- Migration cost = нулевой (DDL уже на проде в `learning`).
+- LISTEN/NOTIFY cross-DB в Postgres не работает нативно → перенос потребовал бы polling или Logical Replication.
+- Семантика `domain_event` — инфраструктурная, но физически принадлежит учётке Neon `learning`.
+- Ссылку на эти таблицы при навигации по §3.6 learning см. «Technical tables» ниже.
+
+</details>
+
+---
+
+<details>
 <summary><b>4. Связи между БД (межкластерные)</b></summary>
 
 | Связь | От (БД.Объект) | К (БД.Объект) | Кратность | Тип | Комментарий |
@@ -2000,5 +2027,7 @@ LMS Aisystant — монолит **старой архитектуры**, на �
 | v2.3 | 24 апр 2026 | Ф29 восстановлена секция § 11.1 «Потомки (WP-234..241, маршрутизация)» — справочная таблица замечание→parent-РП для аудита при реопене WP-228; решение Link (child-WP) без Fold подтверждено субагент-ревью |
 | **v2.4** | **26 апр 2026** | **§10.7.1 Mutual read-only LMS↔Neon transition (WP-268): двунаправленный read-only без cross-write; Neon → LMS read-only views (платежи, гранты, квалификации) + LMS → Neon Bridge polling; снимается source-of-truth dilemma transition period; LMS coexist-уют с Neon неограниченно долго; ban на cross-write остаётся БЛОКИРУЮЩИМ инвариантом** |
 | **v2.4.1** | **28 апр 2026** | **§3.4 + §1 + §6 + §7 терминологический apply: `GRANT` → `contract`, `GRANT_HISTORY` → `contract_event` (исторический термин «грант» сохранён как синоним для читаемости). Drift между Pack ER и реальным DDL `mvp/009-subscription-schema.sql` устранён. Триггер: WP-246 verify-субагент 28 апр обнаружил расхождение Pack ↔ код, блокирует Ф1.5 порт payment-receiver. Patch не меняет границы BC, инварианты, кратности — только имена canonical-таблиц.** |
+| **v2.5** | **14 мая 2026** | **ADR-004: `secrets` как 4-я special БД (OAuth vault — ory_tokens, github_connections, dt_tokens, google_calendar). §10.12 vault-паттерн (PCI + OAuth = один паттерн compliance-изоляции по B7.3). Полный инвентарь 12 entity + 4 special = 16 «наших» + `postgres` системная = 17 физических. Гармонизация цифр 16/17 (Ф34). Grafana datasources покрыли 16 Neon-БД.** |
+| **v2.6** | **15 мая 2026** | **§3.14 Технические артефакты event ingestion (маркер Т) — WP-228 Ф35: `domain_event` (envelope, UNIQUE source+external_id, idempotency) + `security_reject_log` (журнал отбитых PII/schema-violation событий). Мотив размещения в `learning` задокументирован. Cross-ref §3.6 learning → §3.14. ArchGate Вариант B PASS (WP-228 Ф28-prep).** |
 
 </details>
