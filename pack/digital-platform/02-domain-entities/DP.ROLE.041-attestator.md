@@ -79,7 +79,7 @@ wp: WP-310
 | Код | Характеристика | Показатель | Откуда события | Тип |
 |---|---|---|---|---|
 | **bh.sys** | Систематичность | `self_dev_days_per_week` | `SELF_DEV_EVENT_TYPES`: lesson_completed, knowledge_extracted, pack_updated, iwe_session, day_open/close, week/month_plan_closed, strategy_session_completed | обязательная — ноль блокирует ступень |
-| **bh.inv** | Инвестированное время | `avg_hours_per_week` | `slot_logged.hours` + `lesson_completed.duration_minutes/60` | обязательная — ноль блокирует ступень |
+| **bh.inv** | Инвестированное время | `avg_hours_per_week` | `slot_logged.hours` (4 source: active, self_report_backfill, self_report_daily, self_report_weekly) + `lesson_completed.duration_minutes/60` | обязательная — ноль блокирует ступень |
 | **bh.met** | Методичность мышления | `methodical_events_per_month` | lesson_completed, knowledge_extracted, pack_updated, qualification_granted | компенсаторная |
 | **bh.scl** | Масштабность | `scale_score` | wp_completed × actual_hours (фиксированный вес в MVP) | информационная |
 | **bh.stb** | Устойчивость | `max_gap_days` | максимальный разрыв без SELF_DEV-события за учётный период | gate |
@@ -213,6 +213,7 @@ stage_transitions INSERT (Аттестатор)
 6. **Downstream не реализован:** после записи stage_transitions ничего не происходит — Ф2-Ф3 WP-310 (✅ реализовано 14 мая, Ф2-Ф3).
 7. **bh.scl без actual_hours.** Поле реального времени по wp_completed отсутствует — используется фиксированный вес. Тикет: WP-214 Ф11. (WP-310 Ф11, добавлено 2026-05-15)
 8. **bh.stb gate не реализован в rcs-collector.** Нет запроса max_gap в stage_evaluator.py. Добавить в Ф10+ WP-310. (WP-310 Ф10, добавлено 2026-05-15)
+9. **Self-report без верификации (Ф13).** В MVP пилот заявляет учебное время сам — нет проверки на завышение. Защитный фактор: симулятор Ф12 показывает bottleneck, не «достижение». Будущее: модель доверия (`confidence: measured | estimated`) с весом.
 
 ---
 
