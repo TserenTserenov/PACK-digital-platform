@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 23 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 69 |
+| SC (SC) | 70 |
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **268** |
+| **Total** | **269** |
 
 ## Distinctions
 
@@ -339,7 +339,7 @@ generated: true
 | DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в VS Code multi-agent сессии: подключается к Local Gateway, заявляет focus в peer-status, acquire lock перед write, sync через git sequential commits, escalates архитектурные разногласия к пилоту (не решает unilateral). Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
 | DP.ROLE.040 | R29 Артефактор | — | active |
 | DP.ROLE.040 | OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE) | Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process. | draft |
-| DP.ROLE.041 | Аттестатор | Роль автоматического вычислителя ступени Ученика: читает события из Activity Hub, считает 5 характеристик по двум осям (Мастерство × Мировоззрение), сравнивает с нормативной матрицей и записывает переход в learning.stage_transitions. Запускает downstream: обновление digital_twins, уведомление пилоту, триггер Портному. | draft |
+| DP.ROLE.041 | Аттестатор | Роль автоматического вычислителя ступени Ученика: читает события из Activity Hub, считает 7 bh-характеристик (bh.sys/inv/met/awr/agn/scl/stb) по двум осям (Мастерство × Мировоззрение), сравнивает с нормативной матрицей и записывает bh-сигнал в learning.stage_transitions. Итоговую ступень фиксирует двойной gate: bh-сигнал Аттестатора + cp-подтверждение Диагноста (MIM.R.009). Болид-онтология: Аттестатор измеряет Пилота, не всего Созидателя. | draft |
 
 ### RUNBOOK
 
@@ -421,6 +421,7 @@ generated: true
 | DP.SC.128 | Ingest активности клуба (Discourse) | Платформа получает события активности участников клуба systemsworld.club для расчёта баллов и аналитики | draft |
 | DP.SC.129 | Generic MCP Tool Discovery (бот → платформенные MCP) | Бот получает актуальный список tool из платформенных MCP при старте и периодически, без hardcoded списков в коде | draft |
 | DP.SC.130 | OAuth Gateway (единая точка OAuth для всех каналов IWE) | Web/VS Code/Bot пилот получает доступ к внешним OAuth-провайдерам (GitHub App, Linear, Twin, Google Calendar, WakaTime, Ory) через единый endpoint с dual identity (telegram_user_id ИЛИ ory-session) | draft |
+| DP.SC.131 | Автопроцесс резервного копирования данных IWE | — | — |
 
 ### SYS
 
@@ -478,6 +479,7 @@ generated: true
 - Missing `summary`: DP.SC.027 (DP.SC.027-repo-touch-gate.md)
 - Missing `summary`: DP.SC.031 (DP.SC.031-personal-read-api.md)
 - Missing `summary`: DP.SC.032 (DP.SC.032-personal-data-view-audit.md)
+- Missing `summary`: DP.SC.131 (DP.SC.131-backup-process.md)
 
 ---
 
