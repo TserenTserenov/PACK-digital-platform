@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 43 |
 | IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 57 |
+| Methods (M) | 59 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **310** |
+| **Total** | **312** |
 
 ## Distinctions
 
@@ -138,6 +138,8 @@ generated: true
 | DP.M.055 | Config SoT Triplet (Python source + SQL generator + validator) | — | active |
 | DP.M.056 | IntegrationGate Applicability Test | Тест применимости IntegrationGate-каркаса (Service Clause → сценарии → роль → реализация) за пределы код-сервисов: применим к любому repeatable workflow с явным потребителем и измеримым инвариантом — документационные конвейеры, курсовые пайплайны, процессы публикации | active |
 | DP.M.057 | A/B-оценка альтернативного ML-компонента | — | active |
+| DP.M.058 | Гейт создания нового Pack при доменных кандидатах без дома | При knowledge extraction с внешнего источника: универсальные кандидаты → существующие PD-Pack'и сразу; доменные кандидаты без существующего Pack'а — defer all-together как extraction-report до single decision point /pack-new vs /pack-extend. Защищает от fragmentation доменной онтологии по чужим Pack'ам. | active |
+| DP.M.059 | Триада артефактов закрытия фазы РП | Закрытие фазы РП ≠ закрытие РП ≠ открытие нового РП. Полнота закрытия фазы достигается коммитом из трёх артефактов: (1) inbox-context update с дельтой artifacts фазы; (2) cross-link на смежные РП при наличии триггеров; (3) side-artifact (extraction-report, decision log) при наличии extraction-работы. Тест полноты — обратимость через 6 месяцев. | active |
 
 ## Work Products
 

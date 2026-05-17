@@ -47,3 +47,37 @@ related:
 - Реализует: DP.M.001 (Извлечение знаний) — sub-метод этапа «Intake»
 - Операционализируется: DP.AISYS.013 (Inbox-Check Service Clause)
 - Контекст: WP-247 Ф-MULTI-SOURCE.1-5 (решение 2026-05-08)
+
+## 6. Routing-правило: session-internal vs external-source
+
+Captures приходят из двух классов источников. Канал доставки и инвариант «один файл» применяются по-разному.
+
+| Класс источника | Происхождение | Канал | Артефакт-приёмник |
+|-----------------|---------------|-------|-------------------|
+| **Session-internal** | Claude писал в сессии (transcript, git diff) | один из 4 feeders §3 | `inbox/captures.md` (###-блок) |
+| **External-source** | Claude читал внешний артефакт (видео, PDF, статья, семинар, разговор) | прямая запись | `inbox/extraction-reports/<date>-<source>.md` напрямую |
+
+### 6.1. Тест классификации
+
+«Можно ли извлечь paragraph кандидата из git log session-периода?»
+
+- **Да** → session-internal → captures.md.
+- **Нет** (источник вне git, медиа, разговор, внешний документ) → external-source → extraction-report напрямую.
+
+### 6.2. Почему external-source минует captures.md
+
+- Внешний источник обычно даёт десятки кандидатов сразу → раздувание captures.md (1500+ строк) без структуры.
+- Метаданные источника (file path, время записи, автор, контекст) теряются как ###-блоки.
+- Verdict-механизм (`pending-review` / `accepted` / `rejected` / `deferred`) встроен во frontmatter extraction-report, не воспроизводится в captures.md.
+
+### 6.3. Унификация downstream-pipeline
+
+Оба маршрута сходятся в R15 (`/apply-captures`):
+- session-internal: captures.md → inbox-check → extraction-report → apply.
+- external-source: extraction-report напрямую → apply.
+
+R15 не различает источник на этапе applying — frontmatter `source: ...` сохраняет провенанс.
+
+### 6.4. Пример
+
+WP-242 Ф-Семинар-Агроскина (17 мая 2026): транскрипт `FinanceSeminar160526.mp4.txt` (external) → `inbox/extraction-reports/2026-05-17-agroskin-seminar.md` с 13 кандидатами + frontmatter `source: external-seminar`, `source_files: [...]`. Не fed через captures.md.
