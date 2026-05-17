@@ -5,20 +5,20 @@ type: sc
 status: draft
 layer: L2-Platform
 summary: "Точная идемпотентная проекция из learning.domain_event в rewards.point_balances по reference.reward_rules через LISTEN/NOTIFY"
-consumer: Читатели баланса баллов — бот (/balance), gateway-mcp (/twin), Метабаза, будущий UI
+consumer: Читатели баланса баллов — бот (`/points`), gateway-mcp (`/twin`), Метабаза, будущий UI
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-05-17
 related:
-  realizes: [WP-253]
-  uses: [DP.ARCH.004, DP.SC.020]
-  source: "WP-253 Ф9.3 MVP-greenfield — IntegrationGate для projection-worker"
+  realizes: [WP-121, WP-311]
+  uses: [DP.ARCH.004, DP.SC.020, DP.ECON.001]
+  source: "WP-253 Ф9.3 MVP-greenfield — IntegrationGate для projection-worker; WP-311 Ф0a актуализация 17 мая (consumer /balance → /points, realizes WP-121+WP-311)"
 ---
 
 # DP.SC.122 — Rewards Projection
 
 ## Обещание
 
-**Кому:** читателям баланса баллов пользователей — бот (команда `/balance`), gateway-mcp инструмент `/twin`, Метабаза (BI), будущий Web UI.
+**Кому:** читателям баланса баллов пользователей — бот (команда `/points`), gateway-mcp инструмент `/twin`, Метабаза (BI), будущий Web UI.
 
 **Зачем:** до этого баллы считались в двух местах — legacy `payment-registry.points_*` и экспериментальный скилл-handler. Расхождение между ними = споры «сколько у меня баллов на самом деле». Нужен **единственный источник истины** — пересчёт из событий по опубликованным правилам.
 
@@ -96,10 +96,22 @@ event-gateway (DP.ROLE.032) ─── INSERT learning.domain_event
 | Атомарная tx (balance + cursor) | Не обрабатывает achievement (Phase 2 — отдельный projection) |
 | Cache rules 60s | Не пишет rules (read-only для reference) |
 
+## История исполнителей (2026)
+
+| Период | Исполнитель | Состояние |
+|--------|-------------|-----------|
+| 24 апр — 17 мая | `rewards-projection-worker` (legacy, Python+asyncpg+LISTEN/NOTIFY на Railway) | Decommissioned 17 мая после backfill 100% (WP-121 Ф-Close, WP-311 Ф3.5) |
+| с 8 мая (overlap) → текущий | `multi-domain-projection-worker` (WP-307 W3, polling-cursor multi-projection) | Production. Realtime + новый источник истины для cursor |
+
+**Семантика проекции не изменилась.** Изменился способ доставки (LISTEN/NOTIFY → polling-cursor) и зона ответственности (один воркер на 1 БД → один воркер на N доменов). См. также DP.ROLE.034.
+
 ## Related
 
 - **Роль:** [DP.ROLE.034 Rewards Projector](../02-domain-entities/DP.ROLE.034-rewards-projector.md)
+- **Доменная модель:** [DP.ECON.001 Points Engine](../02-domain-entities/DP.ECON.001-points-engine.md) — формула, инварианты, потоки
 - **Писатель событий:** [DP.SC.020 Event Ingest](./DP.SC.020-event-ingest.md) (event-gateway)
-- **Реализация:** `DS-IT-systems/rewards-projection-worker/` (Python 3.11+ asyncpg, Railway)
+- **Реализация (current):** `DS-IT-systems/multi-domain-projection-worker/` (Python 3.11+ asyncpg, Railway, polling-cursor)
+- **Реализация (legacy, decommission'd 17 мая):** `DS-IT-systems/rewards-projection-worker/`
+- **Расчётная функция:** `rewards.compute_effective_amount()` PG-функция (миграция 205-rewards-compute-effective-amount.sql)
 - **Карта БД:** DP.ARCH.004 v2.3 §3.12 (reader `learning.domain_event`, writer `rewards.point_balances`, writer `rewards.processed_events`)
-- **Родительский РП:** WP-253 Ф9 MVP-greenfield
+- **Родительский РП:** WP-121 (правила и Neon-импл), WP-311 (realtime emitter + smoke wave-1+)

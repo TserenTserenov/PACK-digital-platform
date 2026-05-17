@@ -4,7 +4,7 @@ name: Rewards Projector
 type: role-description
 status: draft
 valid_from: 2026-04-24
-summary: "Роль проектора баллов: читает learning.domain_event по LISTEN/NOTIFY, применяет reference.reward_rules, пишет в rewards.point_balances идемпотентно через cursor"
+summary: "Роль проектора баллов: читает learning.domain_event, применяет reference.reward_rules через compute_effective_amount, пишет в rewards.point_balances идемпотентно через cursor"
 related:
   specializes: [U.RoleAssignment]
   component_of: [DP.ROLE.001]
@@ -12,14 +12,16 @@ related:
   uses:
     - DP.ARCH.004
     - DP.SC.020
+    - DP.ECON.001
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-05-17
 ---
 
 # Rewards Projector (DP.ROLE.034)
 
 > **Kind:** Infrastructure Role (инфраструктурная роль — проекция, не домен).
 > **Owner Role:** Платформенная команда (source-of-truth — карта БД DP.ARCH.004 §3.12).
+> **Current executor (с 8 мая 2026):** `multi-domain-projection-worker` (polling-cursor, multi-projection). Legacy `rewards-projection-worker` (LISTEN/NOTIFY single-projection) decommission'd 17 мая 2026 после backfill 100% (WP-311 Ф-Close).
 
 ## 1. Миссия
 
@@ -59,8 +61,18 @@ updated: 2026-04-24
 
 | Исполнитель | Когда | Режим |
 |-------------|-------|-------|
-| **rewards-projection-worker** (Python 3.11+ asyncpg) | Prod. MVP до полного cut-over | Railway long-running service, 24/7 |
+| **multi-domain-projection-worker** (Python 3.11+ asyncpg, polling-cursor) | Production (current) с 8 мая 2026 | Railway long-running service, 24/7. Polling cursor multi-projection (rewards/payment/learning/persona/subscription/indicators). Cursor в `learning.processed_events` по `projection_name`. |
+| ~~rewards-projection-worker~~ (Python 3.11+ asyncpg, LISTEN/NOTIFY) | ~~24 апр — 17 мая 2026~~ | **Decommission'd 17 мая** после backfill 100% (WP-311 Ф-Close). Cursor в `rewards.processed_events.point_balances`. |
 | Human (разработчик) | Разовый rebuild projection после incident | CLI `python runner.py replay` |
+
+### Изменение механизма доставки (8 мая 2026)
+
+Legacy LISTEN/NOTIFY → polling-cursor. Причины:
+1. **Сетевой LISTEN не выживал** при Neon-pooler (PgBouncer transaction-mode маскировал FATAL как transient — см. `feedback_neon_pooler_listen_notify.md`).
+2. **Multi-projection** в одном воркере: вместо N процессов с N подключениями — один процесс с per-projection cursor (`learning.processed_events.projection_name`).
+3. **Backfill = polling** по определению — единый механизм для realtime и catch-up.
+
+Семантика проекции (Section 2 Обязанности) не изменилась. Изменилась доставка.
 
 ## 6. Связи
 
@@ -86,7 +98,11 @@ updated: 2026-04-24
 ## 8. Reference
 
 - **Обещание:** [DP.SC.122 Rewards Projection](../08-service-clauses/DP.SC.122-rewards-projection.md)
+- **Доменная модель:** [DP.ECON.001 Points Engine](./DP.ECON.001-points-engine.md) §1.5 (формула v2)
 - **Писатель событий:** [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.020-event-ingest.md) / [DP.ROLE.032 Event Ingester](./DP.ROLE.032-event-ingester.md)
-- **Карта БД:** DP.ARCH.004 v2.3 §3.12 (writer `rewards.point_balances` + `rewards.processed_events` = rewards-projection-worker)
-- **Реализация:** `DS-IT-systems/rewards-projection-worker/` (Python 3.11+, asyncpg, LISTEN/NOTIFY)
-- **Родительский РП:** WP-253 Ф9.3 MVP-greenfield
+- **Карта БД (current):** `learning.processed_events` (writer: multi-domain-projection-worker, per-projection cursor), `rewards.point_balances` (writer: тот же воркер), `rewards.applied_events` (writer: `rewards.compute_effective_amount()` PG-функция)
+- **Карта БД (legacy, decommission'd 17 мая):** `rewards.processed_events.point_balances` (cursor) — rewards-projection-worker (DS-IT-systems/rewards-projection-worker/)
+- **Реализация (current):** `DS-IT-systems/multi-domain-projection-worker/` (Python 3.11+, asyncpg, polling-cursor)
+- **Реализация (legacy):** `DS-IT-systems/rewards-projection-worker/` — repo сохраняется как архив, не deployed
+- **Расчётная функция:** `rewards.compute_effective_amount()` PG-функция (миграция 205-rewards-compute-effective-amount.sql)
+- **Родительский РП:** WP-121 (правила + Neon impl), WP-311 (realtime emitter + wave-1 smoke), WP-307 W3 (split multi-domain)

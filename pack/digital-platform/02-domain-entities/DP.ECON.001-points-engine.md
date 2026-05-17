@@ -3,25 +3,79 @@ id: DP.ECON.001
 name: Points Engine — движок начисления баллов
 type: domain-entity
 status: draft
-summary: "Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121). Реализация: база platform, схема points."
+summary: "Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon)."
 created: 2026-04-13
-updated: 2026-04-13
+updated: 2026-05-17
 related:
-  realizes: [DP.SC.105]
-  uses: [DP.ARCH.006, DP.SYS.001]
-  source: "WP-121 Ф0 калибровка 9 апр 2026, WP-121 Ф1 миграции 13 апр 2026"
+  realizes: [DP.SC.105, DP.SC.122]
+  uses: [DP.ARCH.004, DP.ARCH.006, DP.SYS.001]
+  source: "WP-121 Ф0 калибровка 9 апр 2026, Ф1 миграции 13 апр, Ф2 v2 PL/pgSQL 8 мая; WP-311 Ф0b обновление 17 мая (current v2 model)"
 tags: [points, contribution-economy, gamification, billing]
 ---
 
 # [DP.ECON.001] Points Engine — движок начисления баллов
 
-> **Обещание потребителю:** DP.SC.105 — Экономика вклада.
-> **Реализация:** база `platform`, схема `points` (миграция 010-points-schema.sql, WP-121 Ф1, 13 апр 2026).
-> **Калибровка:** WP-121 Ф0, 9 апр 2026 — 66 934 events, 102 users, целевой payout 20.4%.
+> **Обещания потребителям:** [DP.SC.105 Экономика вклада](../08-service-clauses/DP.SC.105-reputation-economy.md) (бизнес-смысл), [DP.SC.122 Rewards Projection](../08-service-clauses/DP.SC.122-rewards-projection.md) (техническое обещание потребителям balance).
+> **Текущая реализация (v2):** Neon БД `rewards`, PG-функция `rewards.compute_effective_amount()` (миграция [`205-rewards-compute-effective-amount.sql`](../../../../DS-IT-systems/neon-migrations/mvp/205-rewards-compute-effective-amount.sql), WP-121 Ф2 v2, 8 мая 2026). Roll-out: SC.122 закрыт по latency 24 апр; backfill завершён 17 мая (WP-121 Ф-Close).
+> **Калибровка v1:** WP-121 Ф0, 9 апр 2026 — 66 934 events, 102 users, целевой payout 20.4%.
+
+---
+
+## 0. Версионирование модели
+
+| Версия | Что | Когда | Где |
+|--------|-----|-------|-----|
+| **v1** | `Base × ActionType × Streak × Qualification × daily_cap`. БД `platform` схема `points`. Категории `time/wp/quality/platform/condition/none`. 8 квалификаций. | 13 апр 2026 (WP-121 Ф1) — **архивирована, не deployed** | §§2-12 ниже (исторический baseline калибровки) |
+| **v2 (текущая)** | `base × dom × qual × streak`, capped by `min(dom_cap, qual_cap) − today_total`. БД `rewards` (Neon). Активити-домены `learning/practice/work`. Для уровня 4 (Ученик) множитель = stage 1-5; для уровней 5-11 — qualification_multipliers. Streak: COUNT(DISTINCT DATE day_plan_closed) за 7 дней / 7 × 0.5 + 1.0, capped 1.5. | 8 мая 2026 (WP-121 Ф2 v2) — production | §1.5 ниже |
+
+**Расхождения v1 → v2 (что переехало):**
+- `point_rules` → `reward_rules` (Neon, schema `reference`)
+- `point_transactions` → `applied_events` (Neon, schema `rewards`)
+- `point_balances` остаётся, но в схеме `rewards`
+- `ActionType` (×1/×2/×3/×5 через category) → `dom` (×1/×3/×5 через `activity_domain_multipliers`)
+- Квалификация: 8 степеней МИМ остаются, но теперь дополнены student_stage 1-5 для уровня 4 (Ученик) — единая шкала уч.прогресса
+- Идемпотентность: `UNIQUE(event_id)` в `point_transactions` → `PK applied_events.event_id`
+- Проекция: монолитная `calculate_points()` → split на `compute_effective_amount()` (расчёт) + `multi-domain-projection-worker` (доставка из `learning.domain_event`)
+
+---
+
+## 1.5. Формула v2 (current production)
+
+```
+effective = LEAST(base × dom_mult × qual_mult × streak_mult, daily_cap_remaining)
+where:
+  base               = reward_rules.amount (lookup by trigger_event + match_condition <@ payload)
+  dom_mult           = activity_domain_multipliers.multiplier
+                       domain ∈ {learning, practice, work}
+                       resolve: _event_type_to_domain(event_type) OR repo_domain_map[payload.repo]
+  qual_mult          = student_stage_multipliers.multiplier (если level=4)
+                       OR qualification_multipliers.multiplier (level 5-11)
+                       fallback: 0.5 + 0.2 × level (для level 1-3)
+  streak_mult        = LEAST(1.0 + days/7 × 0.5, 1.5), GREATEST(_, 1.0)
+                       days = COUNT(DISTINCT DATE day_plan_closed events за 7д до ingested_at)
+                       только если reward_rules.streak_eligible
+  daily_cap          = LEAST(dom_cap, qual_cap)  -- более жёсткий
+  daily_cap_remaining = GREATEST(0, daily_cap − SUM(applied_events.effective WHERE DATE = today))
+
+  cap_truncated = (effective < raw)  -- audit-флаг
+```
+
+**Источник правды:** [`205-rewards-compute-effective-amount.sql`](../../../../DS-IT-systems/neon-migrations/mvp/205-rewards-compute-effective-amount.sql) (PL/pgSQL, lines 174-325).
+
+**Текущее состояние данных (state 16 мая, последний probe):**
+- `reference.reward_rules`: 40 enabled triggers (35 типов событий за 7 дней)
+- `rewards.point_balances`: 3889 accounts, 4.18M points total
+- `rewards.applied_events`: журнал начислений с разложением (audit: base/dom/qual/streak/cap_truncated)
+- Cursor (multi-domain): `learning.processed_events.rewards-projection.last_event_id` = 646043 (lag ~18 events)
+- Cursor (legacy backfill): `rewards.processed_events.point_balances` = 631679 (97.6%) — decommission'd 17 мая
+
+**Что осталось:** 20 мая final smoke wave-1 (WP-188 Ф4.5 + WP-311 Ф5).
 
 ---
 
 ## 1. Ключевое различение
+
+> ⚠️ **Секции 1-12 ниже = v1 (исторический baseline калибровки).** Текущая production-формула — §1.5 выше. Cекции v1 сохранены: (а) для калибровочных коэффициентов (payout 20.4%, B-сценарий со streak); (б) как baseline для будущих ревизий. Имена таблиц `point_rules`/`point_transactions` в v1-тексте = НЕ актуальные имена БД (они в v2 → `reward_rules`/`applied_events`, schema `rewards` в Neon).
 
 **Баллы = вычисляемая проекция**, а не хранимое состояние.
 
