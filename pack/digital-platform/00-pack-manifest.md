@@ -255,6 +255,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.038 | Agent Replay | SC | — | draft |
 | DP.SC.039 | Multipath | SC | — | draft |
 | DP.SC.040 | Pattern Miner | SC | — | draft |
+| DP.SC.041 | Индикатор мультипликатора IWE в характеристике мастерства | SC | Потребители (Аттестатор, Навигатор, Metabase) получают в digital_twins.data['3_derived']['3_2_mastery'] четыре числа: multiplier_auto, multiplier_manual, multiplier_drift, multiplier_7d_avg. Расхождение — сигнал, не ошибка. | active |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | SC | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | SC | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | SC | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -295,6 +296,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.137 | Rewards Analytics (аналитика начислений и прогноз скидок для команды) | SC | Команда (R5 CRM/админ платформы) видит динамику начислений баллов, активные балансы по сегментам пилотов и ожидаемую нагрузку на платформу от конвертации баллов в скидки — без SQL, через Метабазу. | draft |
 | DP.SC.138 | Rewards Rules Simulation Lab (симулятор «что если» для калибровки правил) | SC | R2 Архитектор правил может за 5 минут получить ответ «что бы получили пилоты при таком наборе правил» — без деплоя, на исторических данных. Калибровка перед выкаткой. | draft |
 | DP.SC.139 | IWE Stage Controller | SC | Опт-инный пилот ежедневно получает корректирующий нудж (TG или enqueue в персональное руководство) по своей двумерной стадии мастерства IWE — cp.iwe × cp.cre — в соответствии с маркером связи со ступенью Ученика | draft |
+| DP.SC.140 | Club Action Catalog | SC | — | active |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 32 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 82 |
+| SC (SC) | 84 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **327** |
+| **Total** | **329** |
 
 ## Distinctions
 
@@ -440,6 +440,7 @@ generated: true
 | DP.SC.038 | Agent Replay | — | draft |
 | DP.SC.039 | Multipath | — | draft |
 | DP.SC.040 | Pattern Miner | — | draft |
+| DP.SC.041 | Индикатор мультипликатора IWE в характеристике мастерства | Потребители (Аттестатор, Навигатор, Metabase) получают в digital_twins.data['3_derived']['3_2_mastery'] четыре числа: multiplier_auto, multiplier_manual, multiplier_drift, multiplier_7d_avg. Расхождение — сигнал, не ошибка. | active |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -480,6 +481,7 @@ generated: true
 | DP.SC.137 | Rewards Analytics (аналитика начислений и прогноз скидок для команды) | Команда (R5 CRM/админ платформы) видит динамику начислений баллов, активные балансы по сегментам пилотов и ожидаемую нагрузку на платформу от конвертации баллов в скидки — без SQL, через Метабазу. | draft |
 | DP.SC.138 | Rewards Rules Simulation Lab (симулятор «что если» для калибровки правил) | R2 Архитектор правил может за 5 минут получить ответ «что бы получили пилоты при таком наборе правил» — без деплоя, на исторических данных. Калибровка перед выкаткой. | draft |
 | DP.SC.139 | IWE Stage Controller | Опт-инный пилот ежедневно получает корректирующий нудж (TG или enqueue в персональное руководство) по своей двумерной стадии мастерства IWE — cp.iwe × cp.cre — в соответствии с маркером связи со ступенью Ученика | draft |
+| DP.SC.140 | Club Action Catalog | — | active |
 
 ### SYS
 
@@ -566,6 +568,7 @@ generated: true
 - Missing `summary`: DP.SC.039 (DP.SC.039-multipath.md)
 - Missing `summary`: DP.SC.040 (DP.SC.040-pattern-miner.md)
 - Missing `summary`: DP.SC.131 (DP.SC.131-backup-process.md)
+- Missing `summary`: DP.SC.140 (DP.SC.140-club-action-catalog.md)
 
 ---
 
