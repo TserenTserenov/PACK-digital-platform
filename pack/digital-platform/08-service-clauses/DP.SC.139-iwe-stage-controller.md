@@ -76,8 +76,8 @@ wp: WP-326
 
 | Критерий | Как проверить |
 |----------|--------------|
-| Каждый opt-in пилот обработан в сутки | `SELECT account_id FROM learning.nudge_journal WHERE sent_at::date = CURRENT_DATE GROUP BY 1` совпадает с opt-in списком |
-| Cool-down 3 дня: одинаковый content_hash не повторяется | `SELECT account_id, content_hash, COUNT(*) FROM learning.nudge_journal WHERE sent_at > NOW() - INTERVAL '3 days' GROUP BY 1,2 HAVING COUNT(*) > 1` → пусто |
+| Каждый opt-in пилот обработан в сутки | `SELECT account_id FROM learning.nudge_journal WHERE occurred_at::date = CURRENT_DATE GROUP BY 1` совпадает с opt-in списком |
+| Cool-down 3 дня: одинаковый content_hash не повторяется | `SELECT account_id, content_hash, COUNT(*) FROM learning.nudge_journal WHERE occurred_at > NOW() - INTERVAL '3 days' GROUP BY 1,2 HAVING COUNT(*) > 1` → пусто |
 | TG-нудж зафиксирован в `domain_event` | `SELECT * FROM domain_event WHERE event_type = 'iwe_stage_nudge_sent' AND payload->>'account_id' = '...'` |
 | Render enqueued (для сложных шагов) | `SELECT * FROM learning.guide_render_queue WHERE account_id = '...' AND trigger_kind = 'iwe_stage_controller'` |
 
@@ -183,3 +183,4 @@ wp: WP-326
 |--------|------|-----------|-----|
 | 0.1 | 2026-05-17 | Первичная фиксация контракта | WP-326 |
 | 0.2 | 2026-05-17 | Триггер 06:00 → 05:30 МСК (выровнено с systemd timer; обоснование: координация с Аттестатором 04:35 и render-pilot-guides 06:00) | WP-326 |
+| 0.3 | 2026-05-17 | SQL-приёмочные запросы: `sent_at` → `occurred_at` (выравнивание с миграцией 219 — колонка называется `occurred_at`, не `sent_at`) | WP-326 |

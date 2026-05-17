@@ -21,6 +21,7 @@ related:
     - Портной (DP.ROLE.027 / WP-149) — получает render-задачи через guide_render_queue
 created: 2026-05-17
 updated: 2026-05-17
+version: v0.2
 wp: WP-326
 ---
 
@@ -49,7 +50,7 @@ wp: WP-326
 
 | # | Обязанность | Артефакт-следствие |
 |---|-------------|---------------------|
-| 3.1 | Ежедневный обход всех опт-инных пилотов | Запуск systemd timer 06:00 МСК |
+| 3.1 | Ежедневный обход всех опт-инных пилотов | Запуск systemd timer 05:30 МСК |
 | 3.2 | Чтение текущей ступени Ученика (последняя `stage_transitions`) | в памяти процесса |
 | 3.3 | Чтение текущего cp-профиля (последний валидный `cp_assessments`) | в памяти процесса |
 | 3.4 | Применение детерминированной gap-логики по маркеру FORM.089 §6.3 | в памяти процесса |
@@ -116,7 +117,7 @@ Lock освобождается автоматически при заверше
 | Компонент | Где | Триггер |
 |-----------|-----|---------|
 | Скрипт `iwe-stage-controller.py` | tsekh-1 (NixOS), путь `~/iwe-server/scripts/` | manual + systemd timer |
-| systemd timer `iwe-stage-controller.timer` | NixOS configuration.nix | `OnCalendar=*-*-* 06:00:00 Europe/Moscow` |
+| systemd timer `iwe-stage-controller.timer` | NixOS configuration.nix | `OnCalendar=*-*-* 05:30:00 Europe/Moscow` |
 | systemd service `iwe-stage-controller.service` | NixOS configuration.nix | Запускается timer-ом |
 | Таблица `learning.nudge_journal` | Neon `learning` DB | Создаётся миграцией WP-326 Ф3 |
 | Очередь `learning.guide_render_queue` | Neon `learning` DB | Уже существует (WP-149) |
@@ -130,3 +131,4 @@ Lock освобождается автоматически при заверше
 | Версия | Дата | Изменение | WP |
 |--------|------|-----------|-----|
 | 0.1 | 2026-05-17 | Первичная фиксация роли | WP-326 |
+| 0.2 | 2026-05-17 | Триггер 06:00 → 05:30 МСК (синхронизация с DP.SC.139 v0.2 и реальным systemd timer) | WP-326 |
