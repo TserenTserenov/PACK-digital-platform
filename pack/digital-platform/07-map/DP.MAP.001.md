@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 28 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 78 |
+| SC (SC) | 82 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **319** |
+| **Total** | **323** |
 
 ## Distinctions
 
@@ -432,6 +432,10 @@ generated: true
 | DP.SC.034 | Local MCP Gateway для multi-agent VS Code | Peer-агент (Claude Code, Kimikode и т.п.) в одной VS Code сессии получает гарантию: tool-вызовы маршрутизируются через единую точку, конфликт записи в один файл предотвращается pessimistic-lock'ом, новый агент подключается без правки кода других агентов. | draft |
 | DP.SC.035 | Peer-agent choreography (turn-based координация) | Пилот получает гарантию: два+ peer-агента (Claude Code + Kimikode и др.) в одной VS Code сессии работают параллельно над разными файлами без дублирования и race-condition. Координация — turn-based через lock API Local Gateway + git sequential commits для sync. | draft |
 | DP.SC.036 | Knowledge Routing Gate — маршрутизация артефактов в IWE | Агент получает канонический путь размещения для любого нового артефакта до выполнения Write, используя каскад vocab → DP.KR.001 → repo CLAUDE.md | draft |
+| DP.SC.037 | Agent Trace | — | draft |
+| DP.SC.038 | Agent Replay | — | draft |
+| DP.SC.039 | Multipath | — | draft |
+| DP.SC.040 | Pattern Miner | — | draft |
 | DP.SC.101 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
@@ -553,6 +557,10 @@ generated: true
 - Missing `summary`: DP.SC.027 (DP.SC.027-repo-touch-gate.md)
 - Missing `summary`: DP.SC.031 (DP.SC.031-personal-read-api.md)
 - Missing `summary`: DP.SC.032 (DP.SC.032-personal-data-view-audit.md)
+- Missing `summary`: DP.SC.037 (DP.SC.037-agent-trace.md)
+- Missing `summary`: DP.SC.038 (DP.SC.038-agent-replay.md)
+- Missing `summary`: DP.SC.039 (DP.SC.039-multipath.md)
+- Missing `summary`: DP.SC.040 (DP.SC.040-pattern-miner.md)
 - Missing `summary`: DP.SC.131 (DP.SC.131-backup-process.md)
 
 ---

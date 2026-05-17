@@ -1,0 +1,153 @@
+---
+id: DP.SC.039
+title: "Параллельный запуск нескольких путей (multi-path / best-of-N)"
+status: draft
+layer: L4-Personal
+audience: [R1 Стратег, R5 Архитектор, R23 Аудитор, TBD R32 Координатор путей]
+created: 2026-05-17
+updated: 2026-05-17
+links: [WP-295, DP.SOTA.022, DP.SC.037, DP.M.005]
+related:
+  extends: []
+  realizes: []  # Ф3 WP-295
+  uses: [DP.SOTA.022, DP.SC.037, DP.M.005]
+---
+
+# DP.SC.039 — Параллельный запуск нескольких путей
+
+> **Положение:** SC.037 пишет trace, SC.038 восстанавливает прошлое, SC.039 распараллеливает будущее. На open-loop задачах N агентов с разными гипотезами окупают N×compute через выбор лучшего по критериям. На closed-loop/trivial — не применяется (best-of-1 дешевле).
+
+## Обещание
+
+**Кому:** R1 Стратег — на архитектурных решениях и творческих артефактах. R5 Архитектор — на проектных дилеммах. Артефактор (WP-291) — на формулировках РП (3 варианта → выбор). Любой агент-инициатор open-loop задачи.
+
+**Зачем:** Гипотеза-аргумент из [DP.SOTA.022](../06-sota/DP.SOTA.022-agent-trace-replay-multipath.md) §2: best-of-N с дешёвой автоматической верификацией — отраслевой консенсус 2024-2026 (AlphaCode, ToT, o1/o3, DeepSeek-R1). У IWE на open-loop задачах **нет** дешёвой автоматической верификации (нет unit-тестов для архитектурных решений), поэтому селектор = LLM-as-Judge с принципами (Constitutional AI pattern). ЭМОГССБ уже является «конституцией» IWE — прямое использование. Без multi-path: один путь, один результат, нет сравнения — невозможно отличить «хороший выбор» от «единственный найденный».
+
+**Что получит потребитель:**
+
+- **Skill `/multi-path "<задача>" --n 3 --selector archgate --budget 5000tokens`** — запуск N кандидатов параллельно с budget guard.
+- **N trace-веток** в `agent_trace.fork_session` — каждый путь имеет собственный trace; даже отброшенные сохраняются для pattern miner.
+- **Аргумент выбора** — судья выдаёт structured output: pairwise-сравнения каждой пары + итоговый ranking + обоснование по принципам.
+- **Лучший результат** — артефакт топ-1 после Reflexion-loop (один цикл self-critique + revision).
+- **Сравнительный отчёт** — таблица «кандидат / выбор судьи / комментарий» для аудита решения.
+- **Pricing-aware policy** — прозрачное ценовое объявление до запуска. Превышение budget → terminate runaway-кандидата.
+
+**Критерий приёмки:**
+
+1. Skill `/multi-path` запускается на open-loop задаче с N=3, возвращает 3 кандидата + ranking от судьи + выбор.
+2. Гетерогенность моделей: возможен запуск Opus + Sonnet + Sonnet/другой-seed. Селектор — отдельная модель (Haiku или Sonnet с принципами).
+3. Budget guard срабатывает до N×compute (token-cap per кандидат + global limit).
+4. Selector использует pairwise-сравнения, не batch-ranking. Order randomization обязателен.
+5. Trace всех N путей записан в `agent_trace.fork_session` с `selector_decision` — даже проигравшие сохранены.
+6. На closed-loop / trivial задачах skill отказывает с явным сообщением «multi-path не применяется к verification_class=closed-loop, использовать single-path».
+
+## Инварианты
+
+1. **Только open-loop / problem-framing.** Скилл отказывает на trivial / closed-loop. Проверка по WP-context `verification_class`. Этот инвариант снимает 75% риска не окупиться N×compute.
+2. **N=3 база, не N=10.** Default = 3. Расширение до N=5 — explicit flag `--n 5`. N>5 — требует подтверждения пользователя. Источник: Inference Scaling Laws (ICLR 2025) — выполаживание после 3-5 на open-задачах без verifier.
+3. **Гетерогенность кандидатов > клоны.** Default policy: первый кандидат — основная модель сессии (Opus), второй — Sonnet, третий — Sonnet с другим seed/темпом. Override через `--models opus,sonnet,sonnet`. Источник: A-HMAD 2025 (+4-6 п.п. над клонами).
+4. **Селектор pairwise + permutation randomization.** Запрещён batch-ranking. Каждая пара сравнивается дважды с randomized order (мититация position bias ≥10% accuracy shift из survey LLM-as-Judge 2024).
+5. **Cluster-then-pick для похожих кандидатов.** Если 2+ кандидата сошлись на похожем решении (similarity > порога) — судить между кластерами, не между всеми отдельно. Источник: AlphaCode-pattern.
+6. **Reflexion-loop поверх top-1.** После выбора лучшего — один цикл self-critique по принципам ЭМОГССБ + revision. Дёшево, прирост подтверждён (HumanEval 80%→91%).
+7. **Budget guard обязателен.** Token-cap per task + early-stop при кластеризации первых 3 кандидатов (если согласны — не запускать остальные). Без этого — reward-hacking на больших N.
+8. **Все trace сохраняются.** Проигравшие кандидаты не удаляются — это материал для pattern miner (DP.SC.040). Source-of-truth = `agent_trace.fork_session`.
+9. **Judge не self-evaluates.** Запрещён сценарий «один из кандидатов = судья». Selector — отдельная роль (R23 Аудитор по умолчанию, ensemble для критических решений).
+10. **Принципы судьи декларированы.** Selector получает явный список принципов (ЭМОГССБ + контекст задачи), не «выбери лучший». Иначе self-enhancement bias +5-7%.
+
+## Negative guarantees
+
+- **НЕ применяется к простым QA и closed-loop с однозначным ответом.** Single-path с verifier дешевле. См. DP.SOTA.022 §«Что НЕ брать» (ICLR 2025 MAD blogpost).
+- **НЕ заменяет ArchGate.** Multi-path даёт N вариантов и ranking, но финальное решение архитектора — отдельный gate ([DP.M.005](../03-methods/DP.M.005-archgate.md) ЭМОГССБ). Скилл может быть встроен в ArchGate как механизм генерации альтернатив.
+- **НЕ гарантирует, что результат лучше single-path.** На простых задачах N×compute сжигается впустую (этим живут негативные кейсы MAD). Выбор «применять или нет» — у инициатора, скилл только исполняет.
+- **НЕ агрегирует через usredneniyе.** Никакого «mean of scores». Только pairwise + ranking. Naive majority vote применим только к дискретным ответам — этот скилл для open-ended артефактов.
+- **НЕ покрывает sequential reflection** (Reflexion как отдельный механизм — поверх, но в скилл встроен только финальный single self-critique).
+
+## Режимы отказа
+
+| Отказ | Симптом | Обнаружение | Восстановление |
+|-------|---------|-------------|----------------|
+| **Budget guard сорван** | Token usage > N × budget | Live monitor + early termination | Refund? Логировать в capture_log; адаптировать budget на следующий запуск |
+| **Selector не выбрал (tie)** | Pairwise дают равный ranking | Возврат explicit «human-decision required» | Передать R1 для финального выбора (не silent winner) |
+| **Position bias не митигирован** | Test: swap order → answer flips | Periodic audit с known-tied кандидатами | Verify randomization seed; ensemble of 3 judges |
+| **Все N кандидатов кластеризовались** | Cluster-then-pick видит 1 кластер | Возврат «no real alternatives — N=1 was enough» | Сигнал: задача была closed-loop, не open-loop |
+| **Один кандидат запустился, другие упали** | Trace 1 ≠ trace 3 в fork_session | Capture_log детектор | Retry failed candidates или отчёт с partial results |
+
+## Сценарии использования
+
+### SC.039.1 — ArchGate с 3 архитектурными альтернативами (primary)
+
+**Триггер:** R1 на ArchGate видит дилемму «подход A или B?». Хочет третий вариант для разнообразия.
+
+**Потребитель:** R1 Стратег.
+
+**Владелец:** TBD R32 Координатор путей (skill `/multi-path` + spawner + selector).
+
+**Шаги:**
+1. R1: `/multi-path "Architecture for X — propose 3 alternatives" --n 3 --selector archgate --budget 5000`.
+2. Координатор spawn'ит: Opus («классический подход»), Sonnet («экспериментальный»), Sonnet/другой-seed («компромисс»).
+3. Каждый кандидат пишет архитектурный документ + проходит self-ArchGate ЭМОГССБ.
+4. Селектор (Haiku с принципами ЭМОГССБ) делает pairwise-сравнения + ranking + обоснование.
+5. Лучший идёт через Reflexion-loop: один цикл self-critique по слабым местам + revision.
+6. Финал: артефакт + сравнительный отчёт + trace всех N путей в fork_session.
+
+**Время отклика:** ≤30 мин на 3 пути open-loop (зависит от длины задачи). Latency не критична — open-loop по природе.
+
+**Ожидаемый результат:** R1 получает 3 проработанных варианта + аргументированное ranking + рекомендацию. Принимает финальное решение.
+
+**Симптом пропуска:** Все 3 кандидата выдали один и тот же подход → задача была closed-loop, multi-path не применим.
+
+### SC.039.2 — Артефактор: 3 формулировки РП (синергия с WP-291)
+
+**Триггер:** Создание сложного РП через [WP-291] Артефактор — нужны варианты формулировки.
+
+**Потребитель:** WP-291 Артефактор (как inner-loop), R1 как финальный селектор.
+
+**Владелец:** TBD R32 + R29 Артефактор.
+
+**Шаги:**
+1. Артефактор зовёт `/multi-path "Сформулировать РП для X" --n 3 --selector lightweight`.
+2. Каждый кандидат выдаёт: название + verification_class + декомпозиция фаз + связки с активными РП.
+3. Селектор оценивает по 3 критериям: ясность артефакта, реалистичность бюджета, связки с экосистемой.
+4. Лучший показывается R1 + 2 альтернативы как fallback.
+
+**Время:** ≤10 мин на 3 формулировки.
+
+**Ожидаемый результат:** R1 видит финальную формулировку + 2 запасных. Принимает или возвращает на доработку.
+
+### SC.039.3 — Творческий артефакт: 3 структуры поста / deck'а
+
+**Триггер:** Подготовка поста для Knowledge Index, deck'а для Hour-Talk.
+
+**Потребитель:** R1 (автор) + R25 Рецензент (селектор).
+
+**Владелец:** TBD R32 + R25.
+
+**Шаги:**
+1. R1: `/multi-path "Структура поста о X для habr/club/telegram" --n 3 --selector reviewer`.
+2. 3 кандидата с разными подходами к нарративу.
+3. R25 Рецензент выбирает по: ясность, ритм, попадание в аудиторию канала.
+4. R1 финализирует выбранную структуру.
+
+**Время:** ≤15 мин на 3 структуры.
+
+**Ожидаемый результат:** Структура поста принята до написания основного текста — экономит итерации.
+
+## Реализующие сервисы (план Ф3 WP-295)
+
+| Сервис | Роль | Триггер | Путь |
+|--------|------|---------|------|
+| S-TBD-multipath-coordinator | TBD R32 Координатор путей | skill `/multi-path` | `~/IWE/.claude/skills/multi-path/SKILL.md` + helpers |
+| S-TBD-spawner | TBD R32 | inner-loop | Task tool API (parallel sub-agents) |
+| S-TBD-selector | R23 Аудитор / R25 Рецензент | inner-loop | LLM-as-Judge pairwise + randomization |
+| S-TBD-budget-guard | TBD R32 | inner-loop | Token counter + circuit breaker |
+
+## Связь с другими обещаниями
+
+- **Uses:** [DP.SOTA.022](../06-sota/DP.SOTA.022-agent-trace-replay-multipath.md) §2 (multi-path / best-of-N паттерны), [DP.SC.037](DP.SC.037-agent-trace.md) (все пути пишутся как trace branches), [DP.M.005](../03-methods/DP.M.005-archgate.md) (ЭМОГССБ как «конституция» селектора).
+- **Feeds:** ArchGate (3 альтернативы на входе), WP-291 (Артефактор — 3 формулировки), Knowledge Index (3 структуры поста), [DP.SC.040](DP.SC.040-pattern-miner.md) (отброшенные пути — материал для майнера).
+- **Related:** WP-203 (Оркестратор) — multi-path coordinator — частный случай оркестратора; WP-150 (multi-agent architecture) — multi-path один из сценариев.
+- **Potentially-conflicts:** WP-203, если решит свой spawner. Решение на ArchGate Ф0.5: skill `/multi-path` — отдельный сервис, WP-203 может его использовать.
+
+---
+
+**Статус:** draft, 17 мая 2026. Реализация: Ф3 WP-295 (~12h). Требует: SC.037 в проде (для trace форков), отдельный IntegrationGate для R32 Координатора путей (Ф0.4).
