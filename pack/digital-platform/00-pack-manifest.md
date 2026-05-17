@@ -156,6 +156,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.050 | Env I Isolation | M | — | active |
 | DP.M.051 | Spawned Wp From Phase | M | — | active |
 | DP.M.052 | Dt Write Api Browser Channel | M | — | active |
+| DP.M.053 | Pack как SoT нормативов: код = зеркало | M | — | active |
+| DP.M.054 | Targeted backfill via dedicated queue for cursor-workers | M | — | active |
+| DP.M.055 | Config SoT Triplet (Python source + SQL generator + validator) | M | — | active |
+| DP.M.056 | IntegrationGate Applicability Test | M | Тест применимости IntegrationGate-каркаса (Service Clause → сценарии → роль → реализация) за пределы код-сервисов: применим к любому repeatable workflow с явным потребителем и измеримым инвариантом — документационные конвейеры, курсовые пайплайны, процессы публикации | active |
+| DP.M.057 | A/B-оценка альтернативного ML-компонента | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

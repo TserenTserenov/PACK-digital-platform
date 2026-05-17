@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 43 |
 | IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 52 |
+| Methods (M) | 57 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **303** |
+| **Total** | **308** |
 
 ## Distinctions
 
@@ -133,6 +133,11 @@ generated: true
 | DP.M.050 | Env I Isolation | — | active |
 | DP.M.051 | Spawned Wp From Phase | — | active |
 | DP.M.052 | Dt Write Api Browser Channel | — | active |
+| DP.M.053 | Pack как SoT нормативов: код = зеркало | — | active |
+| DP.M.054 | Targeted backfill via dedicated queue for cursor-workers | — | active |
+| DP.M.055 | Config SoT Triplet (Python source + SQL generator + validator) | — | active |
+| DP.M.056 | IntegrationGate Applicability Test | Тест применимости IntegrationGate-каркаса (Service Clause → сценарии → роль → реализация) за пределы код-сервисов: применим к любому repeatable workflow с явным потребителем и измеримым инвариантом — документационные конвейеры, курсовые пайплайны, процессы публикации | active |
+| DP.M.057 | A/B-оценка альтернативного ML-компонента | — | active |
 
 ## Work Products
 
@@ -507,6 +512,10 @@ generated: true
 - Missing `summary`: DP.M.050 (DP.M.050-env-i-isolation.md)
 - Missing `summary`: DP.M.051 (DP.M.051-spawned-wp-from-phase.md)
 - Missing `summary`: DP.M.052 (DP.M.052-dt-write-api-browser-channel.md)
+- Missing `summary`: DP.M.053 (DP.M.053-pack-sot-code-mirror.md)
+- Missing `summary`: DP.M.054 (DP.M.054-targeted-backfill-via-queue.md)
+- Missing `summary`: DP.M.055 (DP.M.055-config-sot-triplet.md)
+- Missing `summary`: DP.M.057 (DP.M.057-ml-component-ab-evaluation.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
