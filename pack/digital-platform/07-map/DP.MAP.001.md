@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 43 |
 | IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 59 |
+| Methods (M) | 60 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **317** |
+| **Total** | **318** |
 
 ## Distinctions
 
@@ -140,6 +140,7 @@ generated: true
 | DP.M.057 | A/B-оценка альтернативного ML-компонента | — | active |
 | DP.M.058 | Гейт создания нового Pack при доменных кандидатах без дома | При knowledge extraction с внешнего источника: универсальные кандидаты → существующие PD-Pack'и сразу; доменные кандидаты без существующего Pack'а — defer all-together как extraction-report до single decision point /pack-new vs /pack-extend. Защищает от fragmentation доменной онтологии по чужим Pack'ам. | active |
 | DP.M.059 | Триада артефактов закрытия фазы РП | Закрытие фазы РП ≠ закрытие РП ≠ открытие нового РП. Полнота закрытия фазы достигается коммитом из трёх артефактов: (1) inbox-context update с дельтой artifacts фазы; (2) cross-link на смежные РП при наличии триггеров; (3) side-artifact (extraction-report, decision log) при наличии extraction-работы. Тест полноты — обратимость через 6 месяцев. | active |
+| DP.M.060 | Атомарные ВДВ-шаги | — | active |
 
 ## Work Products
 
@@ -525,6 +526,7 @@ generated: true
 - Missing `summary`: DP.M.054 (DP.M.054-targeted-backfill-via-queue.md)
 - Missing `summary`: DP.M.055 (DP.M.055-config-sot-triplet.md)
 - Missing `summary`: DP.M.057 (DP.M.057-ml-component-ab-evaluation.md)
+- Missing `summary`: DP.M.060 (DP.M.060-atomic-vdv-step.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
