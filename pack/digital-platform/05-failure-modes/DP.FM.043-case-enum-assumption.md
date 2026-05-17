@@ -1,0 +1,41 @@
+---
+id: DP.FM.043
+title: "CASE по enum-полю: предположение о значениях без SELECT DISTINCT"
+type: failure-mode
+pack: PACK-digital-platform
+domain: digital-platform
+tags: [sql, enum, case-expression, data-validation, silent-fail, indexing-assumption]
+valid_from: 2026-05-16
+status: draft
+schema_version: 1
+---
+
+# DP.FM.043 — CASE по enum-полю: предположение о значениях без SELECT DISTINCT
+
+## Описание
+
+Написание CASE-выражения по enum/status-полю с предположением о диапазоне значений без предварительной проверки фактических данных в БД. Типичная ошибка при несоответствии конвенций: Python-код (0-indexed) vs данные в БД (1-indexed).
+
+## Проявление
+
+Все CASE-ветки возвращают NULL или NULL-значение ELSE. Никаких ошибок. Данные выглядят структурно корректными.
+
+Конкретный случай: поле `to_stage` хранилось как `{1,2,3,4}` (1-indexed), CASE писался с `WHEN 0 THEN 'Случайный' WHEN 1 THEN 'Практикующий'...` (0-indexed). Все 9 переходов stage → NULL. Реальные данные wave-1: `SELECT DISTINCT to_stage → {1,2,3,4}`.
+
+## Корневая причина
+
+Предположение о значениях enum из кода, а не из данных. Отсутствие pre-flight проверки фактического множества значений перед написанием маппинга.
+
+## Профилактика
+
+Перед написанием CASE по любому enum/status-полю из внешней БД:
+
+```sql
+SELECT DISTINCT <поле> FROM <таблица> ORDER BY 1;
+```
+
+Только после проверки — писать маппинг.
+
+## Источник
+
+WP-310 session-transcript 2026-05-16 + git diff (2325ff40, metabase_attestator_dashboard.py).

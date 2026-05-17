@@ -45,6 +45,13 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.057 | Routing-решение ≠ Обновление карты маршрутизации | D | — | active |
 | DP.D.058 | Service Clause (Обещание) ≠ Carrier (Носитель реализации) | D | — | active |
 | DP.D.059 | Три класса хранения credentials при ротации | D | — | active |
+| DP.D.060 | Entity-БД vs Special-БД: изолированный threat model и независимый lifecycle | D | — | active |
+| DP.D.061 | Neon Db Count Layers | D | — | active |
+| DP.D.062 | Потребитель SC — роль, не канал | D | — | active |
+| DP.D.063 | Платформа-инициированные vs потребитель-инициированные уведомления | D | — | active |
+| DP.D.064 | То же обещание ≠ Другое обещание (scope-дискриминатор при закрытии РП) | D | — | active |
+| DP.D.065 | Ortho-различение: специализация-по-содержимому ≠ атрибут-применимый-к-любому | D | — | active |
+| DP.D.066 | Чертёж (планирующий артефакт) ≠ Стройка (реализационный артефакт) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121). Реализация: база platform, схема points. | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -79,6 +86,17 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.030 | Compliance Matrix Narrative Drift (дрейф нарратива от ячеек матрицы) | FM | При инкрементальном заполнении compliance-матрицы нарратив-секция обновляется реже ячеек таблицы. Числа в тексте расходятся с реальными counts — drift обнаруживается только при независимом review. | active |
 | DP.FM.031 | Hardcoded Os Path | FM | — | active |
 | DP.FM.032 | Repair-Pass Stale-Hash Blind Spot (Слепое пятно устаревшего файла при repair-pass) | FM | Repair-pass проверяет только отсутствие файла (! -f), но не его актуальность (hash vs source). Если файл существует, но содержимое расходится с FMT-source, он остаётся без обновления. Silent stale-регрессия. | draft |
+| DP.FM.033 | Bash arithmetic increment под set -e (Bash Arithmetic Increment Under set -e) | FM | Конструкция `((var++))` возвращает exit code 1 при var=0 (post-increment) — под `set -e` вызывает тихий abort скрипта без сообщения об ошибке. | active |
+| DP.FM.034 | Pack-шифры в теле текста руководства | FM | — | active |
+| DP.FM.035 | CI live-config patch — iteration debt от хрупких примитивов | FM | — | active |
+| DP.FM.036 | WakaTime Measurement Scope Bias (Систематическое завышение через трекер без доменного scope) | FM | Системный трекер активности (WakaTime, IDE session, GitHub commits) измеряет все репо без фильтра по домену. При использовании как прокси «инвестиций в X» — систематическое завышение в 3-5×. | draft |
+| DP.FM.037 | Парсинг состояния по заголовку шаблона vs значению из frontmatter (Markdown Header Presence vs Frontmatter Value State Detection) | FM | Детектор состояния использует `grep` по заголовку секции (`### 🔴 Critical`), который присутствует в шаблоне всегда — false-positive при пустой секции. Состояние должно парситься из значения в YAML frontmatter, а не из наличия заголовка. | active |
+| DP.FM.038 | Silent-Pass Validator on Missing Input (Валидатор зеленеет на отсутствующем входе) | FM | Валидатор на отсутствующем или пустом входе возвращает exit 0 (нечего нарушать), создавая false-green в CI/pre-commit. Опечатка в пути или несостоявшийся checkout → нулевая проверка → ложно-положительный сигнал. | draft |
+| DP.FM.039 | Zero-Data Phase Cold Start (Нулевые значения при запуске нового metric pipeline) | FM | Новый metric pipeline после запуска видит ноль у всех пользователей — исторические данные ещё не накоплены в новом формате. Без human-fallback система выдаёт «нет активности» → неверные показатели с первого дня. | draft |
+| DP.FM.040 | Silent-Null Parser on Unknown Syntax (Парсер молча возвращает null) | FM | Парсер ad-hoc форматов возвращает '' / null на не распознанный синтаксис вместо exception. На пустых данных тесты зелёные; слепая зона активируется когда поле начинают заполнять — все записи проходят валидацию пустыми. | draft |
+| DP.FM.041 | Dedup Slice False Positive | FM | — | active |
+| DP.FM.042 | Same Schema Neon Dbs | FM | — | draft |
+| DP.FM.043 | Case Enum Assumption | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -128,6 +146,16 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.040 | Progress Counter N/M для batch-операций CLI (CLI Batch Progress UX) | M | Вывод прогресс-строки (N/M) в теле batch-цикла в shell-скриптах предотвращает иллюзию зависания при длинных операциях. Порог: >10 итераций или >5 сек. | draft |
 | DP.M.041 | Posttooluse Hook Derived Sync | M | — | draft |
 | DP.M.042 | Platform Audit Multilens | M | Поэтапная ревизия production-платформы: 12-factor (уровень 0) → SRE/SLO (1) → Well-Architected (2) → Team Topologies (3) → TOGAF (4) → DORA (5) → LLMOps (6) | active |
+| DP.M.043 | Жизненный цикл генерируемых артефактов: явный archive-шаг с retention-окном | M | — | active |
+| DP.M.044 | Extractor Yesterday Step | M | Extractor Yesterday — паттерн замыкания knowledge pipeline: Day Open явно включает просмотр captures экстрактора за вчера как обязательный шаг до начала новой работы. Без этого шага captures попадают в inbox, но не в фокус сессии. | active |
+| DP.M.045 | Три оси Service Clause автоматизированного процесса | M | — | active |
+| DP.M.046 | Keyset pagination для projection-worker | M | — | active |
+| DP.M.047 | Стресс-тест бэкапа через restore | M | — | active |
+| DP.M.048 | Дисциплина scope-решений при закрытии РП | M | Метод определяет, когда смежная работа, обнаруженная при реализации или закрытии РП, должна стать фазой текущего РП, а когда — отдельным РП. Основан на дискриминаторе обещания DP.D.064. | active |
+| DP.M.049 | Lean Frontmatter Pilot | M | Двухфазная схема frontmatter / DSL: фаза 1 (пилот) — минимальный набор полей, фаза 2 (после фиксации структуры) — расширение через миграцию в отдельный artifact (concept-graph YAML, schema-registry). Избегает 2-3 переделок за пилот. | active |
+| DP.M.050 | Env I Isolation | M | — | active |
+| DP.M.051 | Spawned Wp From Phase | M | — | active |
+| DP.M.052 | Dt Write Api Browser Channel | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -283,4 +311,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.014 | Validation Report | WP | Отчёт валидации: проверка шаблона экзокортекса (S24) или Pack-сущности (S38) на соответствие стандарту | draft |
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-16*
+> *Auto-generated by `generate-map.py` on 2026-05-17*

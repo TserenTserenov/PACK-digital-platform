@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-16
-last_updated: 2026-05-16
+created: 2026-05-17
+last_updated: 2026-05-17
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-16. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-17. Do not edit manually.
 
 ---
 
@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 23 |
+| Distinctions (D) | 30 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 32 |
+| Failure Modes (FM) | 43 |
 | IWE (IWE) | 6 |
 | KR (KR) | 1 |
-| Methods (M) | 42 |
+| Methods (M) | 52 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 22 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **275** |
+| **Total** | **303** |
 
 ## Distinctions
 
@@ -69,6 +69,13 @@ generated: true
 | DP.D.057 | Routing-решение ≠ Обновление карты маршрутизации | — | active |
 | DP.D.058 | Service Clause (Обещание) ≠ Carrier (Носитель реализации) | — | active |
 | DP.D.059 | Три класса хранения credentials при ротации | — | active |
+| DP.D.060 | Entity-БД vs Special-БД: изолированный threat model и независимый lifecycle | — | active |
+| DP.D.061 | Neon Db Count Layers | — | active |
+| DP.D.062 | Потребитель SC — роль, не канал | — | active |
+| DP.D.063 | Платформа-инициированные vs потребитель-инициированные уведомления | — | active |
+| DP.D.064 | То же обещание ≠ Другое обещание (scope-дискриминатор при закрытии РП) | — | active |
+| DP.D.065 | Ortho-различение: специализация-по-содержимому ≠ атрибут-применимый-к-любому | — | active |
+| DP.D.066 | Чертёж (планирующий артефакт) ≠ Стройка (реализационный артефакт) | — | active |
 
 ## Methods
 
@@ -116,6 +123,16 @@ generated: true
 | DP.M.040 | Progress Counter N/M для batch-операций CLI (CLI Batch Progress UX) | Вывод прогресс-строки (N/M) в теле batch-цикла в shell-скриптах предотвращает иллюзию зависания при длинных операциях. Порог: >10 итераций или >5 сек. | draft |
 | DP.M.041 | Posttooluse Hook Derived Sync | — | draft |
 | DP.M.042 | Platform Audit Multilens | Поэтапная ревизия production-платформы: 12-factor (уровень 0) → SRE/SLO (1) → Well-Architected (2) → Team Topologies (3) → TOGAF (4) → DORA (5) → LLMOps (6) | active |
+| DP.M.043 | Жизненный цикл генерируемых артефактов: явный archive-шаг с retention-окном | — | active |
+| DP.M.044 | Extractor Yesterday Step | Extractor Yesterday — паттерн замыкания knowledge pipeline: Day Open явно включает просмотр captures экстрактора за вчера как обязательный шаг до начала новой работы. Без этого шага captures попадают в inbox, но не в фокус сессии. | active |
+| DP.M.045 | Три оси Service Clause автоматизированного процесса | — | active |
+| DP.M.046 | Keyset pagination для projection-worker | — | active |
+| DP.M.047 | Стресс-тест бэкапа через restore | — | active |
+| DP.M.048 | Дисциплина scope-решений при закрытии РП | Метод определяет, когда смежная работа, обнаруженная при реализации или закрытии РП, должна стать фазой текущего РП, а когда — отдельным РП. Основан на дискриминаторе обещания DP.D.064. | active |
+| DP.M.049 | Lean Frontmatter Pilot | Двухфазная схема frontmatter / DSL: фаза 1 (пилот) — минимальный набор полей, фаза 2 (после фиксации структуры) — расширение через миграцию в отдельный artifact (concept-graph YAML, schema-registry). Избегает 2-3 переделок за пилот. | active |
+| DP.M.050 | Env I Isolation | — | active |
+| DP.M.051 | Spawned Wp From Phase | — | active |
+| DP.M.052 | Dt Write Api Browser Channel | — | active |
 
 ## Work Products
 
@@ -173,6 +190,17 @@ generated: true
 | DP.FM.030 | Compliance Matrix Narrative Drift (дрейф нарратива от ячеек матрицы) | При инкрементальном заполнении compliance-матрицы нарратив-секция обновляется реже ячеек таблицы. Числа в тексте расходятся с реальными counts — drift обнаруживается только при независимом review. | active |
 | DP.FM.031 | Hardcoded Os Path | — | active |
 | DP.FM.032 | Repair-Pass Stale-Hash Blind Spot (Слепое пятно устаревшего файла при repair-pass) | Repair-pass проверяет только отсутствие файла (! -f), но не его актуальность (hash vs source). Если файл существует, но содержимое расходится с FMT-source, он остаётся без обновления. Silent stale-регрессия. | draft |
+| DP.FM.033 | Bash arithmetic increment под set -e (Bash Arithmetic Increment Under set -e) | Конструкция `((var++))` возвращает exit code 1 при var=0 (post-increment) — под `set -e` вызывает тихий abort скрипта без сообщения об ошибке. | active |
+| DP.FM.034 | Pack-шифры в теле текста руководства | — | active |
+| DP.FM.035 | CI live-config patch — iteration debt от хрупких примитивов | — | active |
+| DP.FM.036 | WakaTime Measurement Scope Bias (Систематическое завышение через трекер без доменного scope) | Системный трекер активности (WakaTime, IDE session, GitHub commits) измеряет все репо без фильтра по домену. При использовании как прокси «инвестиций в X» — систематическое завышение в 3-5×. | draft |
+| DP.FM.037 | Парсинг состояния по заголовку шаблона vs значению из frontmatter (Markdown Header Presence vs Frontmatter Value State Detection) | Детектор состояния использует `grep` по заголовку секции (`### 🔴 Critical`), который присутствует в шаблоне всегда — false-positive при пустой секции. Состояние должно парситься из значения в YAML frontmatter, а не из наличия заголовка. | active |
+| DP.FM.038 | Silent-Pass Validator on Missing Input (Валидатор зеленеет на отсутствующем входе) | Валидатор на отсутствующем или пустом входе возвращает exit 0 (нечего нарушать), создавая false-green в CI/pre-commit. Опечатка в пути или несостоявшийся checkout → нулевая проверка → ложно-положительный сигнал. | draft |
+| DP.FM.039 | Zero-Data Phase Cold Start (Нулевые значения при запуске нового metric pipeline) | Новый metric pipeline после запуска видит ноль у всех пользователей — исторические данные ещё не накоплены в новом формате. Без human-fallback система выдаёт «нет активности» → неверные показатели с первого дня. | draft |
+| DP.FM.040 | Silent-Null Parser on Unknown Syntax (Парсер молча возвращает null) | Парсер ad-hoc форматов возвращает '' / null на не распознанный синтаксис вместо exception. На пустых данных тесты зелёные; слепая зона активируется когда поле начинают заполнять — все записи проходят валидацию пустыми. | draft |
+| DP.FM.041 | Dedup Slice False Positive | — | active |
+| DP.FM.042 | Same Schema Neon Dbs | — | draft |
+| DP.FM.043 | Case Enum Assumption | — | draft |
 
 ## SoTA Annotations
 
@@ -444,6 +472,13 @@ generated: true
 - Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
 - Missing `summary`: DP.D.058 (DP.D.058-service-clause-vs-carrier.md)
 - Missing `summary`: DP.D.059 (DP.D.059-three-classes-credentials-storage.md)
+- Missing `summary`: DP.D.060 (DP.D.060-entity-db-vs-special-db.md)
+- Missing `summary`: DP.D.061 (DP.D.061-neon-db-count-layers.md)
+- Missing `summary`: DP.D.062 (DP.D.062-sc-consumer-is-role-not-channel.md)
+- Missing `summary`: DP.D.063 (DP.D.063-platform-vs-consumer-notifications.md)
+- Missing `summary`: DP.D.064 (DP.D.064-same-vs-different-promise-wp-branch.md)
+- Missing `summary`: DP.D.065 (DP.D.065-orthogonal-distinctions.md)
+- Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
@@ -465,6 +500,13 @@ generated: true
 - Missing `summary`: DP.M.036 (DP.M.036-peer-agent-onboarding.md)
 - Missing `summary`: DP.M.037 (DP.M.037-personal-guide-lifecycle.md)
 - Missing `summary`: DP.M.041 (DP.M.041-posttooluse-hook-derived-sync.md)
+- Missing `summary`: DP.M.043 (DP.M.043-artifact-lifecycle-archive.md)
+- Missing `summary`: DP.M.045 (DP.M.045-automation-sc-three-axes.md)
+- Missing `summary`: DP.M.046 (DP.M.046-keyset-pagination.md)
+- Missing `summary`: DP.M.047 (DP.M.047-backup-stress-test.md)
+- Missing `summary`: DP.M.050 (DP.M.050-env-i-isolation.md)
+- Missing `summary`: DP.M.051 (DP.M.051-spawned-wp-from-phase.md)
+- Missing `summary`: DP.M.052 (DP.M.052-dt-write-api-browser-channel.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -475,6 +517,11 @@ generated: true
 - Missing `summary`: DP.FM.025 (DP.FM.025-monorepo-multisvc-f1-violation.md)
 - Missing `summary`: DP.FM.026 (DP.FM.026-env-git-history-leak.md)
 - Missing `summary`: DP.FM.031 (DP.FM.031-hardcoded-os-path.md)
+- Missing `summary`: DP.FM.034 (DP.FM.034-pack-ciphers-in-guide-text.md)
+- Missing `summary`: DP.FM.035 (DP.FM.035-ci-live-config-patch.md)
+- Missing `summary`: DP.FM.041 (DP.FM.041-dedup-slice-false-positive.md)
+- Missing `summary`: DP.FM.042 (DP.FM.042-same-schema-neon-dbs.md)
+- Missing `summary`: DP.FM.043 (DP.FM.043-case-enum-assumption.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -489,4 +536,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-16*
+*Generated by `scripts/generate-map.py` on 2026-05-17*
