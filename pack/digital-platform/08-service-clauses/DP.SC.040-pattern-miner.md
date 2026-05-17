@@ -3,7 +3,7 @@ id: DP.SC.040
 title: "Кандидаты правил из паттернов trace (pattern miner)"
 status: draft
 layer: L4-Personal
-audience: [R1 Стратег, R5 Архитектор, R15 Применитель захватов, TBD R33 Старатель паттернов]
+audience: [R1 Стратег, R5 Архитектор, R15 Применитель захватов, DP.ROLE.050 R33 Старатель паттернов]
 created: 2026-05-17
 updated: 2026-05-17
 links: [WP-295, DP.SOTA.022, DP.SC.037, WP-272, DP.SC.024]
@@ -39,7 +39,7 @@ related:
 1. Pattern miner запускается на еженедельной основе (Week Close R-вопросник или cron); генерирует ≥1 кандидата за неделю работы агента (если 0 — alert «trace data not flowing»).
 2. Каждый кандидат содержит: примеры trace_id, частоту, severity, frontmatter draft AR.NNN, cross-correlation с produced_artifacts.
 3. Триггерный алерт на N≥3 одинаковых ошибках срабатывает в течение ≤24h после третьего инцидента.
-4. R15 на apply-captures обрабатывает кандидатов через стандартный extraction-report flow ([DP.SC.024](DP.SC.024-iwe-maintenance.md) тоже на R-вопроснике).
+4. R15 на apply-captures обрабатывает кандидатов через стандартный extraction-report flow ([DP.SC.024](DP.SC.024-iwe-maintenance.md) тоже на R-вопроснике). **Формат:** `pattern-miner-W{N}.md` пишется как extraction-report-совместимый документ — обязательный frontmatter `status: pending-review` + `capture_source: pattern_miner` + `capture_method: trace_clustering` + список `candidates` (массив draft AR.NNN с собственными frontmatter). R15 читает этот файл через тот же flow, что и обычные extraction-reports (apply-captures skill), отдельный workflow не требуется.
 5. Audit-log accept/reject/defer ведётся с обоснованием — материал для калибровки.
 
 ## Инварианты
@@ -79,7 +79,7 @@ related:
 
 **Потребитель:** R1 Стратег (читает отчёт).
 
-**Владелец:** TBD R33 Старатель паттернов (генерация отчёта).
+**Владелец:** DP.ROLE.050 R33 Старатель паттернов (генерация отчёта).
 
 **Шаги:**
 1. Cron / Week Close skill вызывает `iwe miner weekly --week W{N}`.
@@ -139,7 +139,7 @@ related:
 
 | Сервис | Роль | Триггер | Путь |
 |--------|------|---------|------|
-| S-TBD-pattern-miner | TBD R33 Старатель паттернов | weekly cron + manual | `scripts/trace-pattern-miner.py` |
+| S-TBD-pattern-miner | DP.ROLE.050 R33 Старатель паттернов | weekly cron + manual | `scripts/trace-pattern-miner.py` |
 | S-TBD-rapid-cluster-alerter | TBD R33 + alerter | continuous (cron 6h) | rule в alerter config |
 | S-TBD-miner-audit | TBD R33 | monthly | `iwe miner audit` CLI |
 | S-TBD-retrieval-api | TBD R30 Архивариус + R33 | OnSessionStart + miner | shared (DP.SC.037 §retrieval) |

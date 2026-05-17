@@ -3,7 +3,7 @@ id: DP.SC.037
 title: "Журнал решений ИИ-агентов (agent trace store)"
 status: draft
 layer: L4-Personal
-audience: [R1 Стратег, R5 Архитектор, R6 Кодировщик, TBD R30 Архивариус решений]
+audience: [R1 Стратег, R5 Архитектор, R6 Кодировщик, DP.ROLE.047 R30 Архивариус решений]
 created: 2026-05-17
 updated: 2026-05-17
 links: [WP-295, DP.SOTA.022, DP.SOTA.015, DP.SC.025, DP.M.060]
@@ -50,6 +50,7 @@ related:
 5. **Crypto-shredding для PII.** Поля payload с потенциальной PII (email, telegram_id, имена) шифруются per-subject ключом. Удаление ключа = «забвение» под GDPR (совместимо с B7.3 PII-блокером ArchGate).
 6. **Writer не блокирует.** Любая ошибка записи → exit 0, лог в capture_log, продолжение работы агента. NDJSON пишется атомарно (append-only on filesystem).
 7. **Атомарный шаг = атом trace.** Принцип [DP.M.060](../03-methods/DP.M.060-atomic-vdv-step.md): один шаг = одно решение = одна запись `decision`. Не группировать несколько решений в один event.
+8. **Источники недетерминизма фиксируются явно** в payload каждого `decision` event: LLM sampling params (`model`, `temperature`, `top_p`, `seed`), `timestamp` с миллисекундной точностью, `random_values` (если детерминированный seed агента не покрывает), `external_api_responses` (кешированные ответы вызванных tool'ов). Без этого SC.038 (replay) не сможет детерминированно восстановить состояние — fork даст другой результат не из-за «другой ветки», а из-за технического шума. Источник: [DP.SOTA.022](../06-sota/DP.SOTA.022-agent-trace-replay-multipath.md) §«Применимо к WP-295» п.3 (fork-replay через checkpoint + reseed недетерминизма).
 
 ## Negative guarantees (что НЕ покрывает)
 
@@ -77,7 +78,7 @@ related:
 
 **Потребитель:** R1 Стратег (через CLI), pattern miner (DP.SC.040), replay engine (DP.SC.038).
 
-**Владелец:** TBD R30 Архивариус решений (writer hook + projection rules).
+**Владелец:** DP.ROLE.047 R30 Архивариус решений (writer hook + projection rules).
 
 **Шаги:**
 1. Stop hook вызывает `~/IWE/.claude/hooks/agent-trace-recorder.sh`.
@@ -98,7 +99,7 @@ related:
 
 **Потребитель:** Сам агент Claude (контекст обогащается на старте).
 
-**Владелец:** TBD R30 Архивариус решений (retrieval API).
+**Владелец:** DP.ROLE.047 R30 Архивариус решений (retrieval API).
 
 **Шаги:**
 1. OnSessionStart hook вызывает `iwe trace search --task "<query>" --limit 3`.
@@ -148,4 +149,4 @@ related:
 
 ---
 
-**Статус:** draft, 17 мая 2026. Реализация: Ф1 WP-295 (~12-14h). Требует: (1) ArchGate Ф0.5 (закрыть 4 открытых вопроса DP.SOTA.022), (2) регистрации TBD R30 Архивариус решений в DP.ROLE.001 (Ф0.4), (3) миграции БД (схема `agent_trace` в `learning`).
+**Статус:** draft, 17 мая 2026. Реализация: Ф1 WP-295 (~12-14h). Требует: (1) ArchGate Ф0.5 (закрыть 4 открытых вопроса DP.SOTA.022), (2) регистрации DP.ROLE.047 R30 Архивариус решений в DP.ROLE.001 (Ф0.4), (3) миграции БД (схема `agent_trace` в `learning`).

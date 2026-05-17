@@ -3,7 +3,7 @@ id: DP.SC.039
 title: "Параллельный запуск нескольких путей (multi-path / best-of-N)"
 status: draft
 layer: L4-Personal
-audience: [R1 Стратег, R5 Архитектор, R23 Аудитор, TBD R32 Координатор путей]
+audience: [R1 Стратег, R5 Архитектор, R23 Аудитор, R25 Рецензент, DP.ROLE.049 R32 Координатор путей]
 created: 2026-05-17
 updated: 2026-05-17
 links: [WP-295, DP.SOTA.022, DP.SC.037, DP.M.005]
@@ -80,7 +80,7 @@ related:
 
 **Потребитель:** R1 Стратег.
 
-**Владелец:** TBD R32 Координатор путей (skill `/multi-path` + spawner + selector).
+**Владелец:** DP.ROLE.049 R32 Координатор путей (skill `/multi-path` + spawner + selector).
 
 **Шаги:**
 1. R1: `/multi-path "Architecture for X — propose 3 alternatives" --n 3 --selector archgate --budget 5000`.
@@ -136,7 +136,7 @@ related:
 
 | Сервис | Роль | Триггер | Путь |
 |--------|------|---------|------|
-| S-TBD-multipath-coordinator | TBD R32 Координатор путей | skill `/multi-path` | `~/IWE/.claude/skills/multi-path/SKILL.md` + helpers |
+| S-TBD-multipath-coordinator | DP.ROLE.049 R32 Координатор путей | skill `/multi-path` | `~/IWE/.claude/skills/multi-path/SKILL.md` + helpers |
 | S-TBD-spawner | TBD R32 | inner-loop | Task tool API (parallel sub-agents) |
 | S-TBD-selector | R23 Аудитор / R25 Рецензент | inner-loop | LLM-as-Judge pairwise + randomization |
 | S-TBD-budget-guard | TBD R32 | inner-loop | Token counter + circuit breaker |

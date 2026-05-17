@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 28 |
+| ROLE (ROLE) | 32 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 82 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **323** |
+| **Total** | **327** |
 
 ## Distinctions
 
@@ -382,6 +382,10 @@ generated: true
 | DP.ROLE.044 | Notification Dispatcher | Транспортный слой исходящих уведомлений платформы: принимает запросы от любых потребителей (пользователь, агент, воркер), ставит в очередь, доставляет в Telegram exactly-once, подтверждает статус. | draft |
 | DP.ROLE.045 | Agent Task Dispatcher | Координатор очереди агентных задач IWE: читает inbox/agent/tasks/, запускает через подходящий канал (CCR / systemd / local), фиксирует lifecycle и audit-trail. | draft |
 | DP.ROLE.046 | IWE Stage Controller | Ежедневный фоновый контролёр-диспетчер двумерной стадии мастерства IWE (cp.iwe × cp.cre): обходит опт-инов, сравнивает фактический профиль с маркером связи со ступенью Ученика (FORM.089 §6.3), отправляет TG-нудж для простых шагов или enqueue render для сложного материала. | draft |
+| DP.ROLE.047 | Trace Recorder (Архивариус решений) | Записывает рассуждения LLM-агента (гипотезы, выбор, обоснование) в append-only журнал. Single source of truth для retrieval, replay, pattern mining. Не блокирует hot path. | draft |
+| DP.ROLE.048 | Replay Engine (Машина повторов) | Восстанавливает состояние агента на момент T из trace + событий, создаёт fork-сессию. Детерминированное воспроизведение через checkpoint + reseed. Read-only по исходному trace. | draft |
+| DP.ROLE.049 | Path Coordinator (Координатор путей) | Разворачивает N кандидатов параллельно на open-loop задачах с разными моделями/seed, координирует селектор, обеспечивает budget guard и сохранение всех путей в trace для последующего анализа. | draft |
+| DP.ROLE.050 | Pattern Miner (Старатель паттернов) | Кластеризует trace'ы за период по (trace_features, outcome_features) join, формирует кандидатов AR.NNN с примерами, помечает status: pending-review. Никогда не создаёт правила автоматически. | draft |
 
 ### RUNBOOK
 

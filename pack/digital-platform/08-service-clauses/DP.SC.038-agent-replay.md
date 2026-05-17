@@ -3,7 +3,7 @@ id: DP.SC.038
 title: "Повтор сессий ИИ-агента с форком (agent replay)"
 status: draft
 layer: L4-Personal
-audience: [R1 Стратег, R5 Архитектор, TBD R31 Машина повторов]
+audience: [R1 Стратег, R5 Архитектор, DP.ROLE.048 R31 Машина повторов]
 created: 2026-05-17
 updated: 2026-05-17
 links: [WP-295, DP.SOTA.022, DP.SC.037, WP-253]
@@ -74,7 +74,7 @@ related:
 
 **Потребитель:** R1 Стратег.
 
-**Владелец:** TBD R31 Машина повторов (CLI + восстановление).
+**Владелец:** DP.ROLE.048 R31 Машина повторов (CLI + восстановление).
 
 **Шаги:**
 1. R1 находит event_id ArchGate-решения через `iwe trace search "ArchGate WP-N"`.
@@ -96,7 +96,7 @@ related:
 
 **Потребитель:** R5 Архитектор (debug).
 
-**Владелец:** TBD R31 Машина повторов.
+**Владелец:** DP.ROLE.048 R31 Машина повторов.
 
 **Шаги:**
 1. `iwe trace search "user-complaint-keyword"` → находит сессию.
@@ -131,7 +131,7 @@ related:
 
 | Сервис | Роль | Триггер | Путь |
 |--------|------|---------|------|
-| S-TBD-replay-engine | TBD R31 Машина повторов | CLI | `iwe replay`, библиотека restore_context() |
+| S-TBD-replay-engine | DP.ROLE.048 R31 Машина повторов | CLI | `iwe replay`, библиотека restore_context() |
 | S-TBD-snapshot-writer | TBD R30 Архивариус + R31 | каждые 20-50 решений | `~/IWE/.claude/lib/snapshot_writer.sh` |
 | S-TBD-trace-tree-cli | TBD R31 | CLI | `iwe trace tree <session-id>` |
 
