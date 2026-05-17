@@ -33,7 +33,7 @@ created: 2026-05-17
 |-------------|-------|---------|
 | Расчёт доступной скидки | `available_discount(account_id, requested_amount_rub)` → возвращает `{copilka_pts, ceiling_pts, discount_pts, discount_rub, qualification}` | UI чекаута запрашивает |
 | Резерв баллов | `reserve_burn(account_id, payment_id, points)` → INSERT redeemed_events(status='reserved') + decrement available (SELECT FOR UPDATE) | Пилот применил скидку, ДО `YooKassa.create_payment` |
-| Подтверждение резерва | `confirm_burn(payment_id)` → UPDATE status='confirmed' + INSERT learning.domain_event(type='points_redeemed') | webhook `payment.succeeded` |
+| Подтверждение резерва | `confirm_burn(payment_id)` → UPDATE status='confirmed' + `post_event(type='points_redeemed')` через event-gateway | webhook `payment.succeeded` / TG `successful_payment` |
 | Откат резерва | `rollback_burn(payment_id, reason)` → UPDATE status='rolled_back' + emit reverse event | webhook `payment.canceled` ИЛИ cron timeout 30 мин |
 | Очистка истёкших резервов | `rollback_expired_reservations()` → находит `status='reserved' AND reserved_at < now() - 30min` → rollback каждого | Cron каждые 5 мин |
 | Идемпотентность | UNIQUE constraint на `payment_id` в redeemed_events. INSERT ... ON CONFLICT DO NOTHING на повторных вызовах | Всегда |
@@ -42,11 +42,12 @@ created: 2026-05-17
 ## 3. Полномочия
 
 - **Пишет** в `rewards.redeemed_events` — единственный writer этой таблицы (OwnerIntegrity).
-- **Пишет** в `learning.domain_event` события типа `points_redeemed` (negative reward) и `points_burn_rolled_back` (reverse).
+- **Эмитирует** события `points_redeemed` / `points_burn_rolled_back` / `points_redeem_late_webhook` **через event-gateway** (`helpers/dual_write.post_event()`), а НЕ direct INSERT в `learning.domain_event`. Соответствие [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.020-event-ingest.md): writer learning.domain_event = только [DP.ROLE.032 Event Ingester](DP.ROLE.032-event-ingester.md). Любой эмиттер событий → через единый endpoint event-gateway.
 - **Читает** `rewards.point_balances` (через SELECT FOR UPDATE для расчёта доступности).
 - **Читает** `reference.qualification_multipliers` через FDW `_foreign_reference` (для daily_cap и множителей).
 - **Читает** `indicators.calculated_profile.qualification_level` через FDW `_foreign_indicators` (для определения степени МИМ пилота).
 - **НЕ пишет** в `point_balances` — это только projection-worker'а (DP.ROLE.034) задача.
+- **НЕ пишет** в `learning.domain_event` напрямую — только через event-gateway client.
 
 ## 4. Границы роли
 
@@ -84,8 +85,8 @@ created: 2026-05-17
 
 ## 7. Measurable health
 
-- **Reserve latency p95** (UI кнопка → reserved INSERT) — SLO ≤200ms
-- **Confirm latency p95** (payment.succeeded webhook → confirmed) — SLO ≤500ms
+- **Reserve latency p95** (UI кнопка → reserved INSERT) — SLO ≤400ms (Neon-pooler TLS handshake + SELECT FOR UPDATE + INSERT + commit)
+- **Confirm latency p95** (payment.succeeded webhook → confirmed + event-gateway POST) — SLO ≤600ms
 - **Idempotency violations** (попытки повторного INSERT с тем же payment_id) — alert при >0 в день (правильно блокируются UNIQUE)
 - **Expired reservations rate** (rolled_back vs confirmed) — норма <10%; alert при >20% (UX проблема)
 - **Balance invariant** (`point_balances.balance >= 0`) — alert при rollback'е CHECK constraint

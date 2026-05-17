@@ -54,11 +54,11 @@ related:
 
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
-| 1 | Участник с копилкой 6000 ₽-эквивалентом (685000 баллов, ст. Реформатор ×4.0, потолок 700/день) выбирает урок 100 ₽ | Участник | Бот |
-| 2 | Видит: «Доступно: 100 ₽ скидки из 114 баллов» | Участник | Burn-эмиттер |
+| 1 | Участник со ст. Реформатор ×4.0 (потолок 700 баллов/день, копилка 6857 баллов) выбирает урок 100 ₽ | Участник | Бот |
+| 2 | Видит: «Доступно: 100 ₽ скидки из 114 баллов» (`114 × 0.875 = 100 ₽`) | Участник | Burn-эмиттер |
 | 3 | Применяет полную скидку | Участник | Бот |
-| 4 | `reserve_burn` 114 баллов | Burn-эмиттер | Neon |
-| 5 | НЕ создаётся ЮКасса-платёж (amount = 0). Сразу `confirm_burn` + bot выдаёт доступ. | Бот | — |
+| 4 | Генерируется `payment_id = "zero_" + uuid4()` (нет внешнего платежа). `reserve_burn` 114 баллов с `payment_source='zero_payment'` | Burn-эмиттер | Neon |
+| 5 | НЕ создаётся ЮКасса-платёж (amount = 0). Сразу `confirm_burn(payment_id)` + bot выдаёт доступ. | Бот | — |
 
 ### Сценарий 3: Отмена оплаты (rollback резерва)
 
@@ -71,6 +71,36 @@ related:
 | 5 | Projection-worker видит reverse → восстанавливает баланс | DP.ROLE.034 | Neon |
 
 **Альтернатива:** webhook `payment.canceled` от ЮКассы → immediate rollback (вместо ожидания 30 мин).
+
+### Сценарий 4: Оплата TG Stars (provisional ID pattern)
+
+> TG Stars не выдаёт `payment_id` ДО оплаты — `telegram_payment_charge_id` доступен только в handler'е `successful_payment`. Поэтому для Stars используется provisional-ID (=`invoice_payload`) с UPDATE при received.
+
+| # | Шаг | Кто | Сервис |
+|---|-----|-----|--------|
+| 1 | Участник выбирает семинар (цена 100 ⭐), решает применить баллы | Участник | Бот |
+| 2 | Видит: «Доступно: 12 ⭐ скидки из 140 баллов» | Участник | Burn-эмиттер |
+| 3 | Применяет — бот генерирует `payload = "burn_" + uuid4()` (provisional ID) и вызывает `reserve_burn(account_id, payment_id=payload, points=140, payment_source='tg_stars')` | Burn-эмиттер | Neon |
+| 4 | Бот отправляет `send_invoice(prices=88 ⭐, invoice_payload=payload)` | Бот | TG Payments |
+| 5 | Участник оплачивает 88 ⭐ | Участник | TG |
+| 6 | Handler `successful_payment` получает `payment.telegram_payment_charge_id`. Вызывает `confirm_burn_with_charge_id(provisional_id=payload, charge_id=...)` — обновляет `payment_id` в redeemed_events на charge_id, статус → 'confirmed' | Burn-эмиттер | Neon |
+
+**Особенность:** PK в redeemed_events может меняться (provisional_id → charge_id). Решение: `payment_id` остаётся `payload` (UUID), а `charge_id` идёт в `metadata` jsonb для аудита. Это сохраняет PK-инвариант и одновременно связь с TG payment.
+
+### Сценарий 5: Late webhook after rollback (dead-letter)
+
+> Edge case: оплата прошла, но webhook задержался >30 мин → cron откатил резерв. Затем ЮКасса повторила webhook. Деньги списаны, баллы вернулись пилоту = unfair gain. Требует ручного разрешения.
+
+| # | Шаг | Кто | Сервис |
+|---|-----|-----|--------|
+| 1 | reserve_burn (status='reserved') | Burn-эмиттер | Neon |
+| 2 | Пилот оплачивает в ЮКассе, но webhook задерживается (сеть/timeout) | Участник | ЮКасса |
+| 3 | Cron `rollback_expired_reservations` через 30 мин: status → 'rolled_back' | Burn-эмиттер | Neon |
+| 4 | ЮКасса повторяет `payment.succeeded` (через час) | ЮКасса | webhook |
+| 5 | `confirm_burn` обнаруживает `status='rolled_back'` → НЕ confirm. Эмитирует event `points_redeem_late_webhook` через event-gateway → alert admin (Telegram канал) | Burn-эмиттер | event-gateway |
+| 6 | Admin решает: либо ручной refund ЮКассы (вернуть деньги пилоту), либо ручной burn (списать баллы как полагается) | Admin через Directus | Manual SQL audit-logged |
+
+**Защита:** Frequency cron каждые 5 мин (не 30) снижает риск, но не устраняет. Стандартный SLA ЮКассы — webhook в течение 30 мин, выбран соответствующий timeout. При учащении late-webhook'ов (>1% от total) — увеличить таймаут до 60 мин.
 
 ## Реализующая роль
 
