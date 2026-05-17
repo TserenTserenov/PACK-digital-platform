@@ -129,9 +129,9 @@ wp: WP-326
 | # | Шаг | Кто | Действие |
 |---|-----|-----|----------|
 | 1-2 | Same as Сценарий A | | |
-| 3 | Пилот Y: ст.3, cp.iwe=2, cp.cre=0. Маркер ст.3: (3, 1) → gap по обеим осям | DP.ROLE.046 | Сравнение с `_IWE_MARKER_BY_STAGE` (FORM.089 §6.3) |
-| 4 | Cool-down: за 3 дня уже был нудж `gap_iwe_2_to_3`? | DP.ROLE.046 | `SELECT FROM nudge_journal WHERE content_hash = sha256(...)` |
-| 5 | Нет → нудж: «Ты Пользователь-2, рекомендуется Пользователь-3. Сегодня — сделай Day Close вечером.» | DP.ROLE.046 → DP.SC.134 | TG |
+| 3 | Пилот Y: ст.3 (Систематический), cp.iwe=2, cp.cre=0. Маркер ст.3 = (3, 1) → имя стадии «Пользователь-3 + Разработчик-1». Gap по обеим осям. | DP.ROLE.046 | Сравнение с `_IWE_MARKER_BY_STAGE` (FORM.089 §6.3) и `iwe_master_stage_label(stage)` |
+| 4 | Cool-down: за 3 дня уже был нудж по этому gap? | DP.ROLE.046 | `SELECT FROM nudge_journal WHERE content_hash = sha256(account_id\|cp.iwe\|2→3)` |
+| 5 | Нет → нудж: «Стадия мастерства IWE на твоей ступени: Пользователь-3 + Разработчик-1. Сейчас факт cp.iwe=2, ожидание 3. Сегодня — один шаг: сделай Day Close вечером.» | DP.ROLE.046 → DP.SC.134 | TG |
 | 6 | Запись `nudge_journal` (state=`gap_iwe`, content_hash=`sha256(account_id+ось+gap)`) | DP.ROLE.046 | INSERT |
 
 ## Сценарий C: gap по сложной оси (cp.cre = 0, нужен контент)
@@ -143,7 +143,7 @@ wp: WP-326
 | 4 | Cool-down по `start_creation_axis` за 3 дня | DP.ROLE.046 | |
 | 5 | Нет → enqueue render: `guide_render_queue` с mode=weekly, trigger_kind=`iwe_stage_controller`, payload={target_axis: 'cp.cre', target_stage: 'Разработчик-1'} | DP.ROLE.046 | INSERT в guide_render_queue |
 | 6 | Запись `nudge_journal` (state=`render_enqueued`, content_hash=`sha256(account_id+axis+marker)`) | DP.ROLE.046 | INSERT |
-| 7 | Опционально: краткий preview TG-нудж: «Сегодня Портной соберёт раздел про создание среды» | DP.ROLE.046 → DP.SC.134 | TG (опционально, по конфигу) |
+| 7 | Параллельно: preview TG-нудж: «Стадия мастерства IWE сегодня обновляется: {имя стадии}. Портной соберёт раздел про освоение оси создания…» | DP.ROLE.046 → DP.SC.134 | TG (best-effort, не блокирует enqueue) |
 
 ## Различение «простой шаг» vs «сложный материал»
 

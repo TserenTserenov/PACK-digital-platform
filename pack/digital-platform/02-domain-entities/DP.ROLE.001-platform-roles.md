@@ -718,6 +718,11 @@ grade: 2+
 | R21 | **Публикатор** | Экосистема | Daily Scan, Scheduled Publish, Manual Publish, Comment Check | DS-Knowledge-Index (status=ready), scheduled_publications | Опубликованные посты, расписание, уведомления |
 | R29 | **Детектор** | Экзокортекс (L4 harness) | Capture Dispatch, Pattern Detection, Incident Emission | Harness JSON (tool_name, file_path, cwd, hook_event), DP.FM.010 каталог | Event JSON в incident-log целевого репо (OwnerIntegrity), capture_log.jsonl |
 | R30 | **Контекст-менеджер** | Экзокортекс (L4 Personal) | Repo Context Loading, Mandatory-Load Resolution, Context Scope Guard | Путь файла → репо, `<repo>/CLAUDE.md`, блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» | Загруженный репо-контекст (правила + указанные файлы), или сигнал P3 при нарушении |
+| R41 | **Аттестатор** | Система персонального развития | Activity Hub Scan, bh-Calculation, Stage Transition Detection | learning.domain_event, w_reflections, iwe-actions-catalog | learning.stage_transitions (ступень), bh-сигнал (auto) |
+| R42 | **Диагност** | Система персонального развития | CAT Dialogue (≤5 Q), cp-Profile Assessment, Background Invalidation Monitor | Ответы пилота, bh-прокси Аттестатора, активность | learning.cp_assessments (cp-профиль + bottleneck + skip_to_stage), сигналы активным ролям |
+| R43 | **Лаборант** | Система персонального развития | Scenario Simulation, Pilot-mode Output | Профиль + паттерн поведения, Scenario.run() | DataFrame траектории, прогноз ступеней |
+| R44 | **Notification Dispatcher** | Платформа DP | TG Delivery, Idempotency, Scheduling | Запрос от MCP/бота/воркера (`ory_user_id`, `text`, `schedule_at`) | TG-сообщение пилоту, `reminders.id`, `notification_log` |
+| R45 | **Agent Task Dispatcher** | Экзокортекс | Inbox Polling, Task Routing, Lifecycle Tracking | `inbox/agent/tasks/*.md`, статусы | Запуск задачи через канал (CCR/systemd/local), audit-trail |
 | R46 | **IWE Stage Controller** | Система персонального развития | Daily Scan, Marker Comparison, Cool-down Check, Channel Selection (TG/render) | tracking_consent (opt-in), stage_transitions, cp_assessments, nudge_journal | nudge_journal (решение), guide_render_queue (enqueue), TG-нудж через DP.SC.134 |
 
 > **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
