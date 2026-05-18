@@ -42,7 +42,7 @@ created: 2026-05-17
 ## 3. Полномочия
 
 - **Пишет** в `rewards.redeemed_events` — единственный writer этой таблицы (OwnerIntegrity).
-- **Эмитирует** события `points_redeemed` / `points_burn_rolled_back` / `points_redeem_late_webhook` **через event-gateway** (`helpers/dual_write.post_event()`), а НЕ direct INSERT в `learning.domain_event`. Соответствие [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.020-event-ingest.md): writer learning.domain_event = только [DP.ROLE.032 Event Ingester](DP.ROLE.032-event-ingester.md). Любой эмиттер событий → через единый endpoint event-gateway.
+- **Эмитирует** события `points_redeemed` / `points_burn_rolled_back` / `points_redeem_late_webhook` **через event-gateway** (`helpers/dual_write.post_event()`), а НЕ direct INSERT в `learning.domain_event`. Соответствие [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.044-event-ingest.md): writer learning.domain_event = только [DP.ROLE.032 Event Ingester](DP.ROLE.032-event-ingester.md). Любой эмиттер событий → через единый endpoint event-gateway.
 - **Читает** `rewards.point_balances` (через SELECT FOR UPDATE для расчёта доступности).
 - **Читает** `reference.qualification_multipliers` через FDW `_foreign_reference` (для daily_cap и множителей).
 - **Читает** `indicators.calculated_profile.qualification_level` через FDW `_foreign_indicators` (для определения степени МИМ пилота).

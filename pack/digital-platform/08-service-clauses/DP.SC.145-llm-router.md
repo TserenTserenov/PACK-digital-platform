@@ -1,5 +1,5 @@
 ---
-id: DP.SC.124
+id: DP.SC.145
 title: LLM Router — выбор модели и автоматический фоллбэк
 domain: DP.IWE
 created: 2026-04-30
@@ -8,7 +8,7 @@ related_wp: [200]
 note: Реализация через WP-200 (LLM Proxy Service) в рамках зонтика WP-150
 ---
 
-# DP.SC.124: LLM Router
+# DP.SC.145: LLM Router
 
 ## Обещание
 

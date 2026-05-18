@@ -1,5 +1,5 @@
 ---
-id: DP.SC.019
+id: DP.SC.043
 name: Обновление экзокортекса
 type: sc
 status: draft

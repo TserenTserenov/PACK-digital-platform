@@ -1,5 +1,5 @@
 ---
-id: DP.SC.020
+id: DP.SC.044
 name: Event Ingest (единый приёмник доменных событий)
 type: sc
 status: draft

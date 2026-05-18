@@ -1,5 +1,5 @@
 ---
-id: DP.SOTA.016
+id: DP.SOTA.023
 name: Инженерная семиотика — мировой опыт
 type: sota
 status: active

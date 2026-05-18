@@ -1,5 +1,5 @@
 ---
-id: DP.SC.101
+id: DP.SC.143
 name: LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant)
 type: sc
 status: draft-not-delivered

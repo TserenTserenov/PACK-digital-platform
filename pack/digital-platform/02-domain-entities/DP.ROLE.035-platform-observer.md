@@ -116,7 +116,7 @@ updated: 2026-04-25
 
 ## 8. Reference
 
-- **Обещания (2):** [DP.SC.123 Platform Observability](../08-service-clauses/DP.SC.123-platform-observability.md) (internal, для команды) + [DP.SC.124 User-Facing Platform Health](../08-service-clauses/DP.SC.124-user-facing-platform-health.md) (public, для пользователей).
+- **Обещания (2):** [DP.SC.123 Platform Observability](../08-service-clauses/DP.SC.123-platform-observability.md) (internal, для команды) + [DP.SC.124 User-Facing Platform Health](../08-service-clauses/DP.SC.144-user-facing-platform-health.md) (public, для пользователей).
 - **Карта БД:** DP.ARCH.004 v2.3 §3.8 (схема `health` минимизируется до `internal_metrics` после ArchGate; перенос в отдельную DB #8 — после P0/P1).
 - **Реализация (после ArchGate β):**
   - **Better Stack instance** (SaaS, https://betterstack.com) — owner external observability data + status page + alerting. Аккаунт настраивается в Ф2.

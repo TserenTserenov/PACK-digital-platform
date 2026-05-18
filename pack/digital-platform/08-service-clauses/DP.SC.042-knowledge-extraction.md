@@ -1,5 +1,5 @@
 ---
-id: DP.SC.004
+id: DP.SC.042
 name: Извлечение знаний в Pack
 type: sc
 status: active

@@ -1,5 +1,5 @@
 ---
-id: DP.ROADMAP.001-A
+id: DP.ROADMAP.002
 name: Neon MVP-greenfield (infra-first, старт 24 апр)
 type: roadmap-variant
 status: in_progress

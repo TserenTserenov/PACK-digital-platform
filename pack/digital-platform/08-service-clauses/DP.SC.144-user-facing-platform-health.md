@@ -1,5 +1,5 @@
 ---
-id: DP.SC.124
+id: DP.SC.144
 name: User-Facing Platform Health (информирование пользователей о здоровье платформы)
 type: sc
 status: draft

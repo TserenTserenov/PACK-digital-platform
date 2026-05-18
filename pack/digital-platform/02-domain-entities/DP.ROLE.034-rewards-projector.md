@@ -99,7 +99,7 @@ Legacy LISTEN/NOTIFY → polling-cursor. Причины:
 
 - **Обещание:** [DP.SC.122 Rewards Projection](../08-service-clauses/DP.SC.122-rewards-projection.md)
 - **Доменная модель:** [DP.ECON.001 Points Engine](./DP.ECON.001-points-engine.md) §1.5 (формула v2)
-- **Писатель событий:** [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.020-event-ingest.md) / [DP.ROLE.032 Event Ingester](./DP.ROLE.032-event-ingester.md)
+- **Писатель событий:** [DP.SC.020 Event Ingest](../08-service-clauses/DP.SC.044-event-ingest.md) / [DP.ROLE.032 Event Ingester](./DP.ROLE.032-event-ingester.md)
 - **Карта БД (current):** `learning.processed_events` (writer: multi-domain-projection-worker, per-projection cursor), `rewards.point_balances` (writer: тот же воркер), `rewards.applied_events` (writer: `rewards.compute_effective_amount()` PG-функция)
 - **Карта БД (legacy, decommission'd 17 мая):** `rewards.processed_events.point_balances` (cursor) — rewards-projection-worker (DS-IT-systems/rewards-projection-worker/)
 - **Реализация (current):** `DS-IT-systems/multi-domain-projection-worker/` (Python 3.11+, asyncpg, polling-cursor)

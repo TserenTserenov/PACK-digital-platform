@@ -81,5 +81,5 @@ wp: WP-299
 
 - [PD.FORM.104](../../../../../PACK-personal/pack/personal-development/02-domain-entities/formalizations/PD.FORM.104-iwe-multiplier.md) — определение мультипликатора (что меряем)
 - [DP.FM.036](../05-failure-modes/DP.FM.036-wakatime-coding-time-bias.md) — почему WakaTime подходит для учётного времени (применимость уточнена)
-- [DP.SC.020](./DP.SC.020-event-ingest.md) — приём событий `coding_time`, `wp_completed`, `day_close`
+- [DP.SC.020](./DP.SC.044-event-ingest.md) — приём событий `coding_time`, `wp_completed`, `day_close`
 - [WP-299](../../../../../DS-my-strategy/inbox/WP-299-time-accounting-system.md) — родительский РП

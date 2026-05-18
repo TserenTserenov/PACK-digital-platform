@@ -1,5 +1,5 @@
 ---
-id: DP.SC.125
+id: DP.SC.146
 title: "Secret Drift Detector — сканер инсталляций секрета по всем слоям инфраструктуры"
 domain: DP.IWE
 subdomain: security
@@ -15,7 +15,7 @@ realized_by:
   - inventory: DS-ecosystem-development/C.IT-Platform/C2.IT-Platform/C2.2.Architecture/security-posture.md §6 Secret Inventory
 ---
 
-# DP.SC.125: Secret Drift Detector
+# DP.SC.146: Secret Drift Detector
 
 ## Обещание (Promise)
 

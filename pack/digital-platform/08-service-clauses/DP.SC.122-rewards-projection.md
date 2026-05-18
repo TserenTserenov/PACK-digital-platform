@@ -109,7 +109,7 @@ event-gateway (DP.ROLE.032) ─── INSERT learning.domain_event
 
 - **Роль:** [DP.ROLE.034 Rewards Projector](../02-domain-entities/DP.ROLE.034-rewards-projector.md)
 - **Доменная модель:** [DP.ECON.001 Points Engine](../02-domain-entities/DP.ECON.001-points-engine.md) — формула, инварианты, потоки
-- **Писатель событий:** [DP.SC.020 Event Ingest](./DP.SC.020-event-ingest.md) (event-gateway)
+- **Писатель событий:** [DP.SC.020 Event Ingest](./DP.SC.044-event-ingest.md) (event-gateway)
 - **Реализация (current):** `DS-IT-systems/multi-domain-projection-worker/` (Python 3.11+ asyncpg, Railway, polling-cursor)
 - **Реализация (legacy, decommission'd 17 мая):** `DS-IT-systems/rewards-projection-worker/`
 - **Расчётная функция:** `rewards.compute_effective_amount()` PG-функция (миграция 205-rewards-compute-effective-amount.sql)

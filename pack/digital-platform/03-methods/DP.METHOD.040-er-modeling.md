@@ -143,4 +143,4 @@ FK в таблице на стороне N. Без промежуточных т
 - Источник замечания: ИТ-встреча 19 апр 2026, Андрей.
 - Различения: `.claude/rules/distinctions.md` AUTHOR (ER ≠ Физ.схема; Объект ≠ Отношение).
 - Применение: `DP.ARCH.004-neon-data-architecture.md` §4.0 и §5 (переделка в WP-228 Ф8-Ф9).
-- Решения: `DP.ARCH.004-decisions.md` ADR-003.
+- Решения: `DP.ARCH.009-decisions.md` ADR-003.
