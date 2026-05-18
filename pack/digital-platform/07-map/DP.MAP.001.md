@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-17
-last_updated: 2026-05-17
+created: 2026-05-18
+last_updated: 2026-05-18
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-17. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-18. Do not edit manually.
 
 ---
 
@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 30 |
+| Distinctions (D) | 34 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 43 |
-| IWE (IWE) | 6 |
+| Failure Modes (FM) | 44 |
+| IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 60 |
+| Methods (M) | 82 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **331** |
+| **Total** | **359** |
 
 ## Distinctions
 
@@ -76,6 +76,10 @@ generated: true
 | DP.D.064 | То же обещание ≠ Другое обещание (scope-дискриминатор при закрытии РП) | — | active |
 | DP.D.065 | Ortho-различение: специализация-по-содержимому ≠ атрибут-применимый-к-любому | — | active |
 | DP.D.066 | Чертёж (планирующий артефакт) ≠ Стройка (реализационный артефакт) | — | active |
+| DP.D.067 | Card ≠ Append-only Event (Aggregate-card vs Event-stream в event sourcing) | — | active |
+| DP.D.068 | Discovered-WP vs Discoverer-WP — owner-routing бага из post-hoc audit'а | — | active |
+| DP.D.069 | Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП | — | active |
+| DP.D.070 | Артефакт-режим ≠ артефакт | — | active |
 
 ## Methods
 
@@ -141,6 +145,28 @@ generated: true
 | DP.M.058 | Гейт создания нового Pack при доменных кандидатах без дома | При knowledge extraction с внешнего источника: универсальные кандидаты → существующие PD-Pack'и сразу; доменные кандидаты без существующего Pack'а — defer all-together как extraction-report до single decision point /pack-new vs /pack-extend. Защищает от fragmentation доменной онтологии по чужим Pack'ам. | active |
 | DP.M.059 | Триада артефактов закрытия фазы РП | Закрытие фазы РП ≠ закрытие РП ≠ открытие нового РП. Полнота закрытия фазы достигается коммитом из трёх артефактов: (1) inbox-context update с дельтой artifacts фазы; (2) cross-link на смежные РП при наличии триггеров; (3) side-artifact (extraction-report, decision log) при наличии extraction-работы. Тест полноты — обратимость через 6 месяцев. | active |
 | DP.M.060 | Атомарные ВДВ-шаги | — | active |
+| DP.M.061 | Детекция bottleneck-shift после устранения tech-блокера | После устранения tech-блокера bottleneck не исчезает, а смещается в operational/usage/поведенческий слой. Без переоценки карты направлений рисуют «зелёное» при низком conversion в целевое поведение. Тест: «N дней после снятия блокера — какие пилоты/users изменили поведение?» Если <50% — новый bottleneck в operational/usage, не tech. Анти-паттерн: продолжать наращивать tech-функционал когда operational gap не закрыт (инфляция Inventory без Throughput). | active |
+| DP.M.062 | Bridge-backfill через shared identifier при blocked identity-provider | При cross-system identity-миграции, когда new identity-provider (ORY, OAuth, SSO) недоступен или unblocked-deploy откладывается — не блокировать миграцию полностью. Искать существующий shared identifier (id, present в обеих БД: legacy + new) и проводить linking через него. Покрытие partial + weekly retry для непокрытых. Тест: «есть ли поле, присутствующее в обеих системах?» Да → backfill через него. | active |
+| DP.M.063 | Triple-deploy + URL-derived basename для tool promotion | Инструмент, работающий в авторском IWE + FMT-шаблоне (для других пилотов) + DS-репо — требует 3-х синхронизированных копий. Pattern: (1) одна реализация (Python, не bash), (2) три target-локации с симметричными именами, (3) FMT-версия обезличена через `_repo_basename` из git remote URL вместо hardcoded имени. Тест обезличивания: «если установить шаблон в репо с другим именем — скрипт сам подхватит правильное basename?» Да → корректное обезличивание. | active |
+| DP.M.064 | Manual smoke + analogous-pattern coverage как substitute полной автоматизации | Когда full-automation smoke заблокирован внешним фактором (scheduling, deploy infrastructure, vendor bug) — DoD фазы можно закрыть не пустым deferral, а зачётом manual smoke + analogous-pattern coverage. Тест применимости: «можно ли доказать, что execution-path работает, через два независимых способа использования, оба не зависящие от заблокированного компонента?» Да → architecture validation done, automation defer как отдельная фаза. | active |
+| DP.M.065 | 4 условия легитимации temporal-derivation routing | Routing через изменяемую Карту (routing_key → path) — temporal fallback, по умолчанию FAIL conjunctive screening ЭМОГССБ по Стабильности. НО: при выполнении всех 4 условий одновременно паттерн становится допустимым: (1) нет override; (2) total pure derivation (каждый kind → ровно один target, нет default/wildcard); (3) freeze-at-assignment (path материализуется в task при pending→assigned); (4) раздельная Карта от справочника. Если хотя бы одно не выполнено → temporal fallback → FAIL. | active |
+| DP.M.066 | Multi-round verifier с сужающимся scope | — | active |
+| DP.M.067 | Two-pass review — subagent + self-revisit | — | active |
+| DP.M.068 | Scope-creep corrective quad — 4 действия в один fix-pass | — | active |
+| DP.M.069 | Multi-scenario Service Clause — одно обещание, N delivery-сценариев | — | active |
+| DP.M.070 | Двухфазный тест гипотезы (baseline → parameterized) | — | active |
+| DP.M.071 | Pre-implementation smoke | — | active |
+| DP.M.072 | Split-transaction для late-webhook с CHECK constraint | — | active |
+| DP.M.073 | Pause-before-fix для воркеров с downstream notifications | — | active |
+| DP.M.074 | Provisional payment_id для late-binding payment APIs | — | active |
+| DP.M.075 | No-op heartbeat для детекции silent-fail в scheduled workflow | — | active |
+| DP.M.076 | Migration flag (default WARN → opt-in FAIL) для постепенной валидации | — | active |
+| DP.M.077 | Common-prefix compression в output путей и циклов | — | active |
+| DP.M.078 | Многоточечная propagation нового архитектурного правила | — | active |
+| DP.M.079 | Pack-watcher cross-repo trigger | Push-trigger из Pack-репо (SoT) в downstream-репо через GitHub Actions repository_dispatch. Заменяет polling-cron на push-on-change. Применим к Pack→curriculum, Pack→personal-guide regen, Pack→reward_rules sync. | emerging |
+| DP.M.080 | Composite indicator — взвешенная сумма провайдеров | — | active |
+| DP.M.081 | PII Gate через синтетику — bypass для research-фаз | — | active |
+| DP.M.082 | WP scope boundary через DP.SC interfaces | — | active |
 
 ## Work Products
 
@@ -209,6 +235,7 @@ generated: true
 | DP.FM.041 | Dedup Slice False Positive | — | active |
 | DP.FM.042 | Same Schema Neon Dbs | — | draft |
 | DP.FM.043 | Case Enum Assumption | — | draft |
+| DP.FM.044 | Retroactive Backfill Regime Mismatch | — | draft |
 
 ## SoTA Annotations
 
@@ -305,6 +332,7 @@ generated: true
 | DP.IWE.004 | Интерфейсы IWE — различения клиентов | — | active |
 | DP.IWE.005 | Local MCP Gateway (in-process multi-agent layer) | — | draft |
 | DP.IWE.006 | Personal Guide Channels | — | draft |
+| DP.IWE.007 | 5 природ IWE (Five Natures of IWE) | Пять UX-природ IWE — чем IWE является для пилота: Наставник (ведёт по траектории развития), Мастерская (среда ежедневной работы), Со-творец (ко-эволюция мастера и среды), Аватар (узел сети сопроизводителей), Железный человек (костюм-расширитель, делающий пилота сверхчеловеком). Дополняет 5 архитектурных видов DP.IWE.001 (ISO 42010) — другая онтологическая ось: природы про «чем IWE является для пилота», виды архитектуры про «как описывать IWE». Источники: пост club-126 (4 мая 2026), посты TG 675 + 679 + 143, уточнение пилота 2026-05-18 (+5-я природа). | draft |
 
 ### KR
 
@@ -508,6 +536,10 @@ generated: true
 - Missing `summary`: DP.D.065 (DP.D.065-orthogonal-distinctions.md)
 - Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
 - Missing `summary`: DP.ARCH.004-decisions (DP.ARCH.004-decisions.md)
+- Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
+- Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
+- Missing `summary`: DP.D.069 (DP.D.069-doc-wp-vs-impl-wp.md)
+- Missing `summary`: DP.D.070 (DP.D.070-artifact-vs-artifact-mode.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -540,6 +572,22 @@ generated: true
 - Missing `summary`: DP.M.055 (DP.M.055-config-sot-triplet.md)
 - Missing `summary`: DP.M.057 (DP.M.057-ml-component-ab-evaluation.md)
 - Missing `summary`: DP.M.060 (DP.M.060-atomic-vdv-step.md)
+- Missing `summary`: DP.M.066 (DP.M.066-multi-round-verifier.md)
+- Missing `summary`: DP.M.067 (DP.M.067-two-pass-review-subagent-self.md)
+- Missing `summary`: DP.M.068 (DP.M.068-scope-creep-corrective-quad.md)
+- Missing `summary`: DP.M.069 (DP.M.069-multi-scenario-service-clause.md)
+- Missing `summary`: DP.M.070 (DP.M.070-two-phase-hypothesis-test.md)
+- Missing `summary`: DP.M.071 (DP.M.071-pre-implementation-smoke.md)
+- Missing `summary`: DP.M.072 (DP.M.072-split-transaction-late-webhook.md)
+- Missing `summary`: DP.M.073 (DP.M.073-pause-before-fix-controllers.md)
+- Missing `summary`: DP.M.074 (DP.M.074-provisional-payment-id.md)
+- Missing `summary`: DP.M.075 (DP.M.075-no-op-heartbeat.md)
+- Missing `summary`: DP.M.076 (DP.M.076-migration-flag-warn-fail.md)
+- Missing `summary`: DP.M.077 (DP.M.077-common-prefix-compression.md)
+- Missing `summary`: DP.M.078 (DP.M.078-architectural-rule-propagation.md)
+- Missing `summary`: DP.M.080 (DP.M.080-composite-indicator-weighted-providers.md)
+- Missing `summary`: DP.M.081 (DP.M.081-pii-gate-synthetic-bypass.md)
+- Missing `summary`: DP.M.082 (DP.M.082-wp-scope-boundary-via-sc-interfaces.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -555,6 +603,7 @@ generated: true
 - Missing `summary`: DP.FM.041 (DP.FM.041-dedup-slice-false-positive.md)
 - Missing `summary`: DP.FM.042 (DP.FM.042-same-schema-neon-dbs.md)
 - Missing `summary`: DP.FM.043 (DP.FM.043-case-enum-assumption.md)
+- Missing `summary`: DP.FM.044 (DP.FM.044-retroactive-backfill-regime-mismatch.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -574,4 +623,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-17*
+*Generated by `scripts/generate-map.py` on 2026-05-18*
