@@ -421,7 +421,7 @@ generated: true
 | DP.ROLE.049 | Path Coordinator (Координатор путей) | Разворачивает N кандидатов параллельно на open-loop задачах с разными моделями/seed, координирует селектор, обеспечивает budget guard и сохранение всех путей в trace для последующего анализа. | draft |
 | DP.ROLE.050 | Pattern Miner (Старатель паттернов) | Кластеризует trace'ы за период по (trace_features, outcome_features) join, формирует кандидатов AR.NNN с примерами, помечает status: pending-review. Никогда не создаёт правила автоматически. | draft |
 | DP.ROLE.051 | Points Redeemer (Burn-эмиттер баллов) | Роль burn-эмиттера: при чекауте резервирует баллы в rewards.redeemed_events; при webhook'е оплаты подтверждает или откатывает резерв; эмитирует event 'points_redeemed' для projection-worker. Не writer point_balances. | draft |
-| DP.ROLE.052 | Когнитивный прокси-аналитик | Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота через внешний memory-провайдер. Пишет ТОЛЬКО в cognitive-схему через scope guard. Не имеет доступа к stage, certificate или детерминированным характеристикам. | draft |
+| DP.ROLE.052 | Когнитивный прокси-аналитик | Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота. Результаты используются ТОЛЬКО для рекомендаций (Портной, Диагност) — не для расчёта stage/certificate. Пишет ТОЛЬКО в cognitive-схему через scope guard. | draft |
 | DP.ROLE.053 | R29 Артефактор | — | active |
 
 ### RUNBOOK
@@ -518,7 +518,7 @@ generated: true
 | DP.SC.139 | IWE Stage Controller | Опт-инный пилот ежедневно получает корректирующий нудж (TG или enqueue в персональное руководство) по своей двумерной стадии мастерства IWE — cp.iwe × cp.cre — в соответствии с маркером связи со ступенью Ученика | draft |
 | DP.SC.140 | Club Action Catalog | — | active |
 | DP.SC.141 | Зачёт баллов в оплату | Канал «Баллы» в Billing Module: участник применяет накопленные баллы как скидку к оплате сервиса (резерв-перед-оплатой, двухфазный коммит) | draft |
-| DP.SC.142 | Текстовый анализ косвенных характеристик (cp.wld / cp.agt / bh.awr) | Диагност/Портной/Аттестатор получают актуальные прокси cp.wld, cp.agt, bh.awr из текстового содержания пилота (рефлексии, captures, переписка) через изолированную cognitive-схему | draft |
+| DP.SC.142 | Текстовый анализ косвенных характеристик (cp.wld / cp.agt / bh.awr) | Портной и Диагност получают актуальные прокси cp.wld, cp.agt, bh.awr из текстового содержания пилота — ТОЛЬКО для рекомендаций. В расчёт stage/certificate не входят. | draft |
 | DP.SC.143 | LMS Subscription Webhook (Bridge-2 контракт с LMS Aisystant) | Контракт endpoint'а на стороне LMS Aisystant для приёма подписок от нашего payment-receiver. Артефакт для передачи Диме. | draft-not-delivered |
 | DP.SC.144 | User-Facing Platform Health (информирование пользователей о здоровье платформы) | Public status page (status.aisystant.ru) с composite uptime «по девяткам» (формат 99.847%), real-time информирование пользователей об инцидентах через email/RSS subscriptions + TG-канал @aisystant_status. Реализуется через Better Stack SaaS. | draft |
 | DP.SC.145 | Llm Router | — | active |

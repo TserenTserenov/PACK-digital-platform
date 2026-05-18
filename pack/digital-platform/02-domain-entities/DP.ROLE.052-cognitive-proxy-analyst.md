@@ -5,7 +5,7 @@ alias: R35
 type: role-description
 status: draft
 valid_from: 2026-05-18
-summary: "Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота через внешний memory-провайдер. Пишет ТОЛЬКО в cognitive-схему через scope guard. Не имеет доступа к stage, certificate или детерминированным характеристикам."
+summary: "Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота. Результаты используются ТОЛЬКО для рекомендаций (Портной, Диагност) — не для расчёта stage/certificate. Пишет ТОЛЬКО в cognitive-схему через scope guard."
 related:
   specializes: [U.RoleAssignment]
   component_of: [DP.ROLE.001]
@@ -15,9 +15,8 @@ related:
     - DP.SC.020      # w_reflection_submitted события
     - DP.SC.135      # Agent Inbox — пакетные задачи анализа
   downstream_consumers:
-    - DP.ROLE.041    # Аттестатор — читает cognitive через proxy_reader
-    - DP.ROLE.009    # Портной — читает cognitive через proxy_reader
-    - MIM.R.009      # Диагност — читает cognitive через proxy_reader
+    - DP.ROLE.009    # Портной — читает cognitive для рекомендаций (не stage)
+    - MIM.R.009      # Диагност — читает cognitive для уточнения профиля (не stage)
 created: 2026-05-18
 updated: 2026-05-18
 wp: WP-316
@@ -38,7 +37,7 @@ wp: WP-316
 
 Аналогия: врач-диагност, у которого есть анализы крови (детерминированные данные) и данные из интервью с пациентом (текстовый анализ). Оба источника независимы, оба вносят вклад в диагноз — но врач не ставит диагноз **только** по интервью.
 
-**Граница:** R35 не имеет доступа к cp.rhy, cp.skl, cp.iwe, cp.int, stage, certificate. Запись в `learning.cognitive` изолирована от `learning` основной схемы. Аттестатор читает результат через `cognitive_proxy_reader` (read-only).
+**Граница:** R35 не имеет доступа к cp.rhy, cp.skl, cp.iwe, cp.int, stage, certificate. Запись в `learning.cognitive` изолирована от `learning` основной схемы. Результаты используются ТОЛЬКО для рекомендаций Портного и Диагноста — не для расчёта stage или certificate.
 
 ---
 
@@ -69,7 +68,7 @@ wp: WP-316
 | Получить инференцию | cp.wld ∈ [0,5], cp.agt ∈ [0,5], bh.awr ∈ [0,5] + confidence score |
 | Проверить scope guard | Убедиться что полученные ключи ∈ {cp.wld, cp.agt, bh.awr} — иначе drop |
 | Записать в cognitive-схему | `INSERT INTO learning.cognitive (ory_identity, characteristic, value, weight, source, provider, updated_at)` |
-| Обновить cp_assessments через merge | Аттестатор объединяет cognitive + activity каналы по правилу w_honcho ∈ [0.1, 0.3] |
+| Сохранить в cognitive-схему | `learning.cognitive` — изолированная схема; Портной и Диагност читают напрямую через cognitive_proxy_reader |
 | Логировать провенанс | source='text_analysis', provider='<name>', session_id, content_hash |
 
 ---
