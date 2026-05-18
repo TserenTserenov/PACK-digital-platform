@@ -17,6 +17,7 @@ related:
   downstream_consumers:
     - DP.ROLE.009    # Портной — читает cognitive для рекомендаций (не stage)
     - MIM.R.009      # Диагност — читает cognitive для уточнения профиля (не stage)
+    - MIM.R.007      # Навигатор — читает cognitive brief для персонализации ответа в диалоге
 created: 2026-05-18
 updated: 2026-05-18
 wp: WP-316
