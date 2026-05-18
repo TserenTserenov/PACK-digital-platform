@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 37 |
+| Distinctions (D) | 38 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 44 |
+| Failure Modes (FM) | 47 |
 | IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 85 |
+| Methods (M) | 92 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **370** |
+| **Total** | **381** |
 
 ## Distinctions
 
@@ -83,6 +83,7 @@ generated: true
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
+| DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | — | draft |
 
 ## Methods
 
@@ -173,6 +174,13 @@ generated: true
 | DP.M.083 | Batch frontmatter enum-validator (pre-commit) | — | active |
 | DP.M.084 | Batch-extraction pipeline из большого корпуса | — | active |
 | DP.M.085 | Онбординг пилота: Персональное руководство | — | active |
+| DP.M.087 | SECRETS.md как обязательный артефакт перед deploy на новый хост | — | active |
+| DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | — | active |
+| DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | — | draft |
+| DP.M.090 | Mutation Testing для CI Enforcement Guards в Pack-репо | — | draft |
+| DP.M.091 | Scope Guard — enforcement Parliament-модели через enum + schema isolation | — | active |
+| DP.M.092 | Инфра-артефакт как шаг create-flow, не отдельная задача | — | active |
+| DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | — | active |
 
 ## Work Products
 
@@ -242,6 +250,9 @@ generated: true
 | DP.FM.042 | Same Schema Neon Dbs | — | draft |
 | DP.FM.043 | Case Enum Assumption | — | draft |
 | DP.FM.044 | Retroactive Backfill Regime Mismatch | — | draft |
+| DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | — | active |
+| DP.FM.047 | Third-party LLM PII vendor gate blocking production | — | draft |
+| DP.FM.048 | CF Bot Fight Mode blocks Python XHR but not curl | — | active |
 
 ## SoTA Annotations
 
