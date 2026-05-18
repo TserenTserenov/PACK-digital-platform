@@ -20,14 +20,14 @@ generated: true
 | AISYS (AISYS) | 4 |
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
-| CONCEPT (CONCEPT) | 2 |
-| Distinctions (D) | 34 |
+| CONCEPT (CONCEPT) | 3 |
+| Distinctions (D) | 37 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 44 |
 | IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 82 |
+| Methods (M) | 84 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **359** |
+| **Total** | **365** |
 
 ## Distinctions
 
@@ -80,6 +80,9 @@ generated: true
 | DP.D.068 | Discovered-WP vs Discoverer-WP — owner-routing бага из post-hoc audit'а | — | active |
 | DP.D.069 | Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП | — | active |
 | DP.D.070 | Артефакт-режим ≠ артефакт | — | active |
+| DP.D.071 | Декларированный bounded context ≠ Фактический bounded context | — | active |
+| DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | — | active |
+| DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | — | active |
 
 ## Methods
 
@@ -167,6 +170,8 @@ generated: true
 | DP.M.080 | Composite indicator — взвешенная сумма провайдеров | — | active |
 | DP.M.081 | PII Gate через синтетику — bypass для research-фаз | — | active |
 | DP.M.082 | WP scope boundary через DP.SC interfaces | — | active |
+| DP.M.083 | Batch frontmatter enum-validator (pre-commit) | — | active |
+| DP.M.084 | Batch-extraction pipeline из большого корпуса | — | active |
 
 ## Work Products
 
@@ -309,6 +314,7 @@ generated: true
 |----|------|---------|--------|
 | DP.CONCEPT.001 | Концепция платформы | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
 | DP.CONCEPT.003 | Адаптивная персонализация | Принцип и механизм платформы: адаптируется под человека через три слоя — персонализацию, индивидуализацию и адаптивность | active |
+| DP.CONCEPT.004 | Three Layers Ai Work | 3 слоя работы с ИИ: разовый запрос (нет контекста) → роль и инструкция (постоянный системный контекст) → накопленная среда (история решений, документы, проекты). Переход между слоями определяется объёмом переданного контекста, а не моделью или промпт-техникой | draft |
 
 ### ECON
 
@@ -540,6 +546,9 @@ generated: true
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
 - Missing `summary`: DP.D.069 (DP.D.069-doc-wp-vs-impl-wp.md)
 - Missing `summary`: DP.D.070 (DP.D.070-artifact-vs-artifact-mode.md)
+- Missing `summary`: DP.D.071 (DP.D.071-declared-vs-actual-bounded-context.md)
+- Missing `summary`: DP.D.072 (DP.D.072-format-spec-vs-format-checklist.md)
+- Missing `summary`: DP.D.073 (DP.D.073-storefront-vs-internal-platform.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -588,6 +597,8 @@ generated: true
 - Missing `summary`: DP.M.080 (DP.M.080-composite-indicator-weighted-providers.md)
 - Missing `summary`: DP.M.081 (DP.M.081-pii-gate-synthetic-bypass.md)
 - Missing `summary`: DP.M.082 (DP.M.082-wp-scope-boundary-via-sc-interfaces.md)
+- Missing `summary`: DP.M.083 (DP.M.083-batch-frontmatter-enum-validator.md)
+- Missing `summary`: DP.M.084 (DP.M.084-batch-extraction-pipeline.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)

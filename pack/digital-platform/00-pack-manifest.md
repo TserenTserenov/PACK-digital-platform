@@ -22,6 +22,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ASSIST.001 | ИИ-ассистенты (superseded) | ASSIST | Объединены с DP.ROLE.001 — различие агент/ассистент сохранено как характеристика | superseded |
 | DP.CONCEPT.001 | Концепция платформы | CONCEPT | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
 | DP.CONCEPT.003 | Адаптивная персонализация | CONCEPT | Принцип и механизм платформы: адаптируется под человека через три слоя — персонализацию, индивидуализацию и адаптивность | active |
+| DP.CONCEPT.004 | Three Layers Ai Work | CONCEPT | 3 слоя работы с ИИ: разовый запрос (нет контекста) → роль и инструкция (постоянный системный контекст) → накопленная среда (история решений, документы, проекты). Переход между слоями определяется объёмом переданного контекста, а не моделью или промпт-техникой | draft |
 | DP.D.025 | Harness ≠ Agent | D | Harness (упряжь/обвязка) определяет результат больше, чем мощность агента/модели | active |
 | DP.D.027 | Content Budget Model (3 оси) | D | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | D | Данные пользователя растут с тиром платформы: T0 без Ory (telegram_id) → T1 с Ory (UUID) → T2 минимальная персонализация (профиль + история) → T3 цифровой двойник (ИИ знает контекст) → T4 личный контекст + ИИ-агенты (со-мыслитель). Ортогональные оси: TM (наставник), TA (администратор), TD (разработчик) | active |
@@ -56,6 +57,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.068 | Discovered-WP vs Discoverer-WP — owner-routing бага из post-hoc audit'а | D | — | active |
 | DP.D.069 | Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП | D | — | active |
 | DP.D.070 | Артефакт-режим ≠ артефакт | D | — | active |
+| DP.D.071 | Декларированный bounded context ≠ Фактический bounded context | D | — | active |
+| DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | D | — | active |
+| DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -192,6 +196,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.080 | Composite indicator — взвешенная сумма провайдеров | M | — | active |
 | DP.M.081 | PII Gate через синтетику — bypass для research-фаз | M | — | active |
 | DP.M.082 | WP scope boundary через DP.SC interfaces | M | — | active |
+| DP.M.083 | Batch frontmatter enum-validator (pre-commit) | M | — | active |
+| DP.M.084 | Batch-extraction pipeline из большого корпуса | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
