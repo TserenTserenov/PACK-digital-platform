@@ -1,0 +1,69 @@
+---
+id: DP.M.061
+name: Детекция bottleneck-shift после устранения tech-блокера
+name_ru: Детекция bottleneck-shift после устранения tech-блокера
+name_en: Bottleneck-Shift Detection After Tech-Blocker Removal
+type: method
+status: active
+summary: "После устранения tech-блокера bottleneck не исчезает, а смещается в operational/usage/поведенческий слой. Без переоценки карты направлений рисуют «зелёное» при низком conversion в целевое поведение. Тест: «N дней после снятия блокера — какие пилоты/users изменили поведение?» Если <50% — новый bottleneck в operational/usage, не tech. Анти-паттерн: продолжать наращивать tech-функционал когда operational gap не закрыт (инфляция Inventory без Throughput)."
+created: 2026-05-17
+trust:
+  F: 3
+  G: domain
+  R: 0.80
+epistemic_stage: emerging
+related:
+  uses: []
+  references: []
+  realized_by: []
+tags: [bottleneck, rollout, adoption, diagnostics, throughput, layered-blockers]
+wp: WP-250
+---
+
+# Детекция bottleneck-shift после устранения tech-блокера (DP.M.061)
+
+## 1. Контекст
+
+Bottleneck в multi-layer rollout/launch/debug никогда не «исчезает» после устранения. Он **раскрывает следующий слой**:
+
+| Слой | Сигнал | Пример (WP-250 v8→v9) |
+|------|--------|------------------------|
+| Tech | Provisioning, API errors, deploy fail | opt-in 0→9 ✅ (снят) |
+| Operational | Setup-шаги не выполнены | 5-6 пилотов не сделали `/personal-guide-start` |
+| Usage | Активация есть, но нет ежедневной работы | bh.sys низкий, 8/9 на ст.0-1 |
+| Поведенческий | Привычка не сформировалась | Conversion в целевое поведение <50% за N дней |
+
+## 2. Правило детекции
+
+После снятия tech-блокера ОБЯЗАТЕЛЬНО переоценить bottleneck ДО продолжения капитальных работ. Маркер «зелёная карта направлений» (все направления ≥30%, среднее ~80%) без переоценки = **false-green**.
+
+## 3. Тест применимости
+
+«Снят tech-блокер — какие пилоты/users изменили поведение в течение N дней?» (где N = 1-2 недели для adoption-сценариев, 1-3 дня для daily-rituals)
+
+- **≥50%** — bottleneck действительно был tech, можно продолжать наращивать tech-функционал
+- **<50%** — новый bottleneck в operational/usage, переключиться на removal этого слоя ДО tech-инвестиций
+
+## 4. Анти-паттерн
+
+| Анти-паттерн | Симптом | Лечение |
+|--------------|---------|---------|
+| **Продолжать наращивать tech после снятия блокера** | Инфляция Inventory (фичи) без Throughput (adoption) | Переоценка по §3 ДО следующего sprint'а |
+| **Считать «зелёную карту» успехом** | Все направления ≥30%, но conversion <10% | Добавить conversion-метрику в карту |
+| **Открывать новые tech-РП когда operational gap не закрыт** | Бюджет уходит в фичи, которые никто не использует | Заморозить tech-РП, открыть operational-removal РП |
+
+## 5. Применимость
+
+- **Multi-layer rollout/launch** — wave-rollout, product launch с multi-step adoption
+- **Plan-карты направлений** — переоценка карт после критического milestone
+- **Debug-итерации** — после снятия одной причины ошибки проверить, что error-rate реально упал, а не сместился в другой клиент
+- **IntegrationGate (3)→(4)** — после реализации обещания проверить, что обещание реально работает у потребителя, а не только в smoke-test
+
+## 6. Связь с другими методами/различениями
+
+- **«Inventory ≠ Progress»** (`distinctions.md`) — этот метод даёт операциональную процедуру: как избежать инфляции Inventory после tech-milestone
+- **`lessons_consent_does_not_imply_activity.md`** (12 мая) — частный случай: opt-in (consent) ≠ activity; усилитель того же паттерна
+
+## 7. Пример (WP-250, 17 мая 2026)
+
+Карта v8 → v9: opt-in 0→9 ✅ (главный tech-блокер v8 снят, перевыполнено). Без bottleneck-shift detection: все 9 направлений ≥30%, среднее ~80% — карта «зелёная». С детекцией: 5-6 пилотов не активировали репо, 8/9 на ст.0-1 → critical блокеры v9 переключились в operational/поведенческий слой. Решение: переориентировать следующий sprint на removal operational-слоя (активация репо + первое целевое действие), не на tech-фичи.

@@ -52,10 +52,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.064 | То же обещание ≠ Другое обещание (scope-дискриминатор при закрытии РП) | D | — | active |
 | DP.D.065 | Ortho-различение: специализация-по-содержимому ≠ атрибут-применимый-к-любому | D | — | active |
 | DP.D.066 | Чертёж (планирующий артефакт) ≠ Стройка (реализационный артефакт) | D | — | active |
-| DP.D.067 | Card ≠ Append-only Event (Aggregate-card vs Event-stream в event sourcing) | D | — | active |
-| DP.D.068 | Discovered-WP vs Discoverer-WP — owner-routing бага из post-hoc audit'а | D | — | active |
-| DP.D.069 | Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП | D | — | active |
-| DP.D.070 | Артефакт-режим ≠ артефакт | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -101,14 +97,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.041 | Dedup Slice False Positive | FM | — | active |
 | DP.FM.042 | Same Schema Neon Dbs | FM | — | draft |
 | DP.FM.043 | Case Enum Assumption | FM | — | draft |
-| DP.FM.044 | Retroactive Backfill Regime Mismatch | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
 | DP.IWE.004 | Интерфейсы IWE — различения клиентов | IWE | — | active |
 | DP.IWE.005 | Local MCP Gateway (in-process multi-agent layer) | IWE | — | draft |
 | DP.IWE.006 | Personal Guide Channels | IWE | — | draft |
-| DP.IWE.007 | 5 природ IWE (Five Natures of IWE) | IWE | Пять UX-природ IWE — чем IWE является для пилота: Наставник (ведёт по траектории развития), Мастерская (среда ежедневной работы), Со-творец (ко-эволюция мастера и среды), Аватар (узел сети сопроизводителей), Железный человек (костюм-расширитель, делающий пилота сверхчеловеком). Дополняет 5 архитектурных видов DP.IWE.001 (ISO 42010) — другая онтологическая ось: природы про «чем IWE является для пилота», виды архитектуры про «как описывать IWE». Источники: пост club-126 (4 мая 2026), посты TG 675 + 679 + 143, уточнение пилота 2026-05-18 (+5-я природа). | draft |
 | DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности и DS docs/ через обнаружение, классификацию, двойной routing и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
@@ -170,28 +164,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.058 | Гейт создания нового Pack при доменных кандидатах без дома | M | При knowledge extraction с внешнего источника: универсальные кандидаты → существующие PD-Pack'и сразу; доменные кандидаты без существующего Pack'а — defer all-together как extraction-report до single decision point /pack-new vs /pack-extend. Защищает от fragmentation доменной онтологии по чужим Pack'ам. | active |
 | DP.M.059 | Триада артефактов закрытия фазы РП | M | Закрытие фазы РП ≠ закрытие РП ≠ открытие нового РП. Полнота закрытия фазы достигается коммитом из трёх артефактов: (1) inbox-context update с дельтой artifacts фазы; (2) cross-link на смежные РП при наличии триггеров; (3) side-artifact (extraction-report, decision log) при наличии extraction-работы. Тест полноты — обратимость через 6 месяцев. | active |
 | DP.M.060 | Атомарные ВДВ-шаги | M | — | active |
-| DP.M.061 | Детекция bottleneck-shift после устранения tech-блокера | M | После устранения tech-блокера bottleneck не исчезает, а смещается в operational/usage/поведенческий слой. Без переоценки карты направлений рисуют «зелёное» при низком conversion в целевое поведение. Тест: «N дней после снятия блокера — какие пилоты/users изменили поведение?» Если <50% — новый bottleneck в operational/usage, не tech. Анти-паттерн: продолжать наращивать tech-функционал когда operational gap не закрыт (инфляция Inventory без Throughput). | active |
-| DP.M.062 | Bridge-backfill через shared identifier при blocked identity-provider | M | При cross-system identity-миграции, когда new identity-provider (ORY, OAuth, SSO) недоступен или unblocked-deploy откладывается — не блокировать миграцию полностью. Искать существующий shared identifier (id, present в обеих БД: legacy + new) и проводить linking через него. Покрытие partial + weekly retry для непокрытых. Тест: «есть ли поле, присутствующее в обеих системах?» Да → backfill через него. | active |
-| DP.M.063 | Triple-deploy + URL-derived basename для tool promotion | M | Инструмент, работающий в авторском IWE + FMT-шаблоне (для других пилотов) + DS-репо — требует 3-х синхронизированных копий. Pattern: (1) одна реализация (Python, не bash), (2) три target-локации с симметричными именами, (3) FMT-версия обезличена через `_repo_basename` из git remote URL вместо hardcoded имени. Тест обезличивания: «если установить шаблон в репо с другим именем — скрипт сам подхватит правильное basename?» Да → корректное обезличивание. | active |
-| DP.M.064 | Manual smoke + analogous-pattern coverage как substitute полной автоматизации | M | Когда full-automation smoke заблокирован внешним фактором (scheduling, deploy infrastructure, vendor bug) — DoD фазы можно закрыть не пустым deferral, а зачётом manual smoke + analogous-pattern coverage. Тест применимости: «можно ли доказать, что execution-path работает, через два независимых способа использования, оба не зависящие от заблокированного компонента?» Да → architecture validation done, automation defer как отдельная фаза. | active |
-| DP.M.065 | 4 условия легитимации temporal-derivation routing | M | Routing через изменяемую Карту (routing_key → path) — temporal fallback, по умолчанию FAIL conjunctive screening ЭМОГССБ по Стабильности. НО: при выполнении всех 4 условий одновременно паттерн становится допустимым: (1) нет override; (2) total pure derivation (каждый kind → ровно один target, нет default/wildcard); (3) freeze-at-assignment (path материализуется в task при pending→assigned); (4) раздельная Карта от справочника. Если хотя бы одно не выполнено → temporal fallback → FAIL. | active |
-| DP.M.066 | Multi-round verifier с сужающимся scope | M | — | active |
-| DP.M.067 | Two-pass review — subagent + self-revisit | M | — | active |
-| DP.M.068 | Scope-creep corrective quad — 4 действия в один fix-pass | M | — | active |
-| DP.M.069 | Multi-scenario Service Clause — одно обещание, N delivery-сценариев | M | — | active |
-| DP.M.070 | Двухфазный тест гипотезы (baseline → parameterized) | M | — | active |
-| DP.M.071 | Pre-implementation smoke | M | — | active |
-| DP.M.072 | Split-transaction для late-webhook с CHECK constraint | M | — | active |
-| DP.M.073 | Pause-before-fix для воркеров с downstream notifications | M | — | active |
-| DP.M.074 | Provisional payment_id для late-binding payment APIs | M | — | active |
-| DP.M.075 | No-op heartbeat для детекции silent-fail в scheduled workflow | M | — | active |
-| DP.M.076 | Migration flag (default WARN → opt-in FAIL) для постепенной валидации | M | — | active |
-| DP.M.077 | Common-prefix compression в output путей и циклов | M | — | active |
-| DP.M.078 | Многоточечная propagation нового архитектурного правила | M | — | active |
-| DP.M.079 | Pack-watcher cross-repo trigger | M | Push-trigger из Pack-репо (SoT) в downstream-репо через GitHub Actions repository_dispatch. Заменяет polling-cron на push-on-change. Применим к Pack→curriculum, Pack→personal-guide regen, Pack→reward_rules sync. | emerging |
-| DP.M.080 | Composite indicator — взвешенная сумма провайдеров | M | — | active |
-| DP.M.081 | PII Gate через синтетику — bypass для research-фаз | M | — | active |
-| DP.M.082 | WP scope boundary через DP.SC interfaces | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -367,4 +339,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.014 | Validation Report | WP | Отчёт валидации: проверка шаблона экзокортекса (S24) или Pack-сущности (S38) на соответствие стандарту | draft |
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-18*
+> *Auto-generated by `generate-map.py` on 2026-05-17*
