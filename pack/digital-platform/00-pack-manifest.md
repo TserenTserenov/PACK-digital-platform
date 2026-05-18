@@ -246,6 +246,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.049 | Path Coordinator (Координатор путей) | ROLE | Разворачивает N кандидатов параллельно на open-loop задачах с разными моделями/seed, координирует селектор, обеспечивает budget guard и сохранение всех путей в trace для последующего анализа. | draft |
 | DP.ROLE.050 | Pattern Miner (Старатель паттернов) | ROLE | Кластеризует trace'ы за период по (trace_features, outcome_features) join, формирует кандидатов AR.NNN с примерами, помечает status: pending-review. Никогда не создаёт правила автоматически. | draft |
 | DP.ROLE.051 | Points Redeemer (Burn-эмиттер баллов) | ROLE | Роль burn-эмиттера: при чекауте резервирует баллы в rewards.redeemed_events; при webhook'е оплаты подтверждает или откатывает резерв; эмитирует event 'points_redeemed' для projection-worker. Не writer point_balances. | draft |
+| DP.ROLE.052 | Когнитивный прокси-аналитик | ROLE | Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота через внешний memory-провайдер. Пишет ТОЛЬКО в cognitive-схему через scope guard. Не имеет доступа к stage, certificate или детерминированным характеристикам. | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -333,6 +334,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.139 | IWE Stage Controller | SC | Опт-инный пилот ежедневно получает корректирующий нудж (TG или enqueue в персональное руководство) по своей двумерной стадии мастерства IWE — cp.iwe × cp.cre — в соответствии с маркером связи со ступенью Ученика | draft |
 | DP.SC.140 | Club Action Catalog | SC | — | active |
 | DP.SC.141 | Зачёт баллов в оплату | SC | Канал «Баллы» в Billing Module: участник применяет накопленные баллы как скидку к оплате сервиса (резерв-перед-оплатой, двухфазный коммит) | draft |
+| DP.SC.142 | Текстовый анализ косвенных характеристик (cp.wld / cp.agt / bh.awr) | SC | Диагност/Портной/Аттестатор получают актуальные прокси cp.wld, cp.agt, bh.awr из текстового содержания пилота (рефлексии, captures, переписка) через изолированную cognitive-схему | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

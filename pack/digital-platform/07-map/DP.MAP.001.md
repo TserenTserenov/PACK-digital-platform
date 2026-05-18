@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 33 |
+| ROLE (ROLE) | 34 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 85 |
+| SC (SC) | 86 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **365** |
+| **Total** | **367** |
 
 ## Distinctions
 
@@ -421,6 +421,7 @@ generated: true
 | DP.ROLE.049 | Path Coordinator (Координатор путей) | Разворачивает N кандидатов параллельно на open-loop задачах с разными моделями/seed, координирует селектор, обеспечивает budget guard и сохранение всех путей в trace для последующего анализа. | draft |
 | DP.ROLE.050 | Pattern Miner (Старатель паттернов) | Кластеризует trace'ы за период по (trace_features, outcome_features) join, формирует кандидатов AR.NNN с примерами, помечает status: pending-review. Никогда не создаёт правила автоматически. | draft |
 | DP.ROLE.051 | Points Redeemer (Burn-эмиттер баллов) | Роль burn-эмиттера: при чекауте резервирует баллы в rewards.redeemed_events; при webhook'е оплаты подтверждает или откатывает резерв; эмитирует event 'points_redeemed' для projection-worker. Не writer point_balances. | draft |
+| DP.ROLE.052 | Когнитивный прокси-аналитик | Извлекает косвенные характеристики (cp.wld, cp.agt, bh.awr) из текстового содержания пилота через внешний memory-провайдер. Пишет ТОЛЬКО в cognitive-схему через scope guard. Не имеет доступа к stage, certificate или детерминированным характеристикам. | draft |
 
 ### RUNBOOK
 
@@ -518,6 +519,7 @@ generated: true
 | DP.SC.139 | IWE Stage Controller | Опт-инный пилот ежедневно получает корректирующий нудж (TG или enqueue в персональное руководство) по своей двумерной стадии мастерства IWE — cp.iwe × cp.cre — в соответствии с маркером связи со ступенью Ученика | draft |
 | DP.SC.140 | Club Action Catalog | — | active |
 | DP.SC.141 | Зачёт баллов в оплату | Канал «Баллы» в Billing Module: участник применяет накопленные баллы как скидку к оплате сервиса (резерв-перед-оплатой, двухфазный коммит) | draft |
+| DP.SC.142 | Текстовый анализ косвенных характеристик (cp.wld / cp.agt / bh.awr) | Диагност/Портной/Аттестатор получают актуальные прокси cp.wld, cp.agt, bh.awr из текстового содержания пилота (рефлексии, captures, переписка) через изолированную cognitive-схему | draft |
 
 ### SYS
 
