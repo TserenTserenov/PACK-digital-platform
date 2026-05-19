@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-18
-last_updated: 2026-05-18
+created: 2026-05-19
+last_updated: 2026-05-19
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-18. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-19. Do not edit manually.
 
 ---
 
@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 47 |
 | IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 92 |
+| Methods (M) | 93 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 34 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 88 |
+| SC (SC) | 89 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **381** |
+| **Total** | **383** |
 
 ## Distinctions
 
@@ -83,7 +83,7 @@ generated: true
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
-| DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | — | draft |
+| DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 
 ## Methods
 
@@ -175,12 +175,13 @@ generated: true
 | DP.M.084 | Batch-extraction pipeline из большого корпуса | — | active |
 | DP.M.085 | Онбординг пилота: Персональное руководство | — | active |
 | DP.M.087 | SECRETS.md как обязательный артефакт перед deploy на новый хост | — | active |
-| DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | — | active |
+| DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | Двухуровневая защита Pack-инвариантов: pre-commit hook = быстрый локальный fail; GitHub Action = серверный enforcement при push/PR. Агентские коммиты (--no-verify, headless) покрываются только CI-слоем. | active |
 | DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | — | draft |
 | DP.M.090 | Mutation Testing для CI Enforcement Guards в Pack-репо | — | draft |
 | DP.M.091 | Scope Guard — enforcement Parliament-модели через enum + schema isolation | — | active |
-| DP.M.092 | Инфра-артефакт как шаг create-flow, не отдельная задача | — | active |
+| DP.M.092 | Infra Artifact As Create Flow Step | — | active |
 | DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | — | active |
+| DP.M.094 | Dual-signal enforcement gate для ритуального перехода | — | active |
 
 ## Work Products
 
@@ -250,9 +251,9 @@ generated: true
 | DP.FM.042 | Same Schema Neon Dbs | — | draft |
 | DP.FM.043 | Case Enum Assumption | — | draft |
 | DP.FM.044 | Retroactive Backfill Regime Mismatch | — | draft |
-| DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | — | active |
-| DP.FM.047 | Third-party LLM PII vendor gate blocking production | — | draft |
-| DP.FM.048 | CF Bot Fight Mode blocks Python XHR but not curl | — | active |
+| DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
+| DP.FM.047 | Third Party Pii Vendor Gate | — | draft |
+| DP.FM.048 | Cf Bot Fight Mode Xhr Block | — | active |
 
 ## SoTA Annotations
 
@@ -534,6 +535,7 @@ generated: true
 | DP.SC.144 | User-Facing Platform Health (информирование пользователей о здоровье платформы) | Public status page (status.aisystant.ru) с composite uptime «по девяткам» (формат 99.847%), real-time информирование пользователей об инцидентах через email/RSS subscriptions + TG-канал @aisystant_status. Реализуется через Better Stack SaaS. | draft |
 | DP.SC.145 | Llm Router | — | active |
 | DP.SC.146 | Secret Drift Detector | — | active |
+| DP.SC.147 | Агрегирующий пайплайн cognitive brief | Навигатор (MIM.R.007) перед ответом читает агрегированный brief из выходов Оркестратора, Портного, activity_log и Cognitive Proxy. Без text_analysis consent — только детерминированные поля. | draft |
 
 ### SYS
 
@@ -616,6 +618,13 @@ generated: true
 - Missing `summary`: DP.M.083 (DP.M.083-batch-frontmatter-enum-validator.md)
 - Missing `summary`: DP.M.084 (DP.M.084-batch-extraction-pipeline.md)
 - Missing `summary`: DP.M.085 (DP.M.085-personal-guide-onboarding.md)
+- Missing `summary`: DP.M.087 (DP.M.087-secrets-map-pre-deploy.md)
+- Missing `summary`: DP.M.089 (DP.M.089-f0-cost-baseline-llm-optimization.md)
+- Missing `summary`: DP.M.090 (DP.M.090-ci-guard-mutation-testing.md)
+- Missing `summary`: DP.M.091 (DP.M.091-scope-guard-parliament-enforcement.md)
+- Missing `summary`: DP.M.092 (DP.M.092-infra-artifact-as-create-flow-step.md)
+- Missing `summary`: DP.M.093 (DP.M.093-ci-artifact-in-create-flow.md)
+- Missing `summary`: DP.M.094 (DP.M.094-dual-signal-ritual-gate.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -632,6 +641,8 @@ generated: true
 - Missing `summary`: DP.FM.042 (DP.FM.042-same-schema-neon-dbs.md)
 - Missing `summary`: DP.FM.043 (DP.FM.043-case-enum-assumption.md)
 - Missing `summary`: DP.FM.044 (DP.FM.044-retroactive-backfill-regime-mismatch.md)
+- Missing `summary`: DP.FM.047 (DP.FM.047-third-party-pii-vendor-gate.md)
+- Missing `summary`: DP.FM.048 (DP.FM.048-cf-bot-fight-mode-xhr-block.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -653,4 +664,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-18*
+*Generated by `scripts/generate-map.py` on 2026-05-19*

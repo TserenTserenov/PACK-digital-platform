@@ -60,6 +60,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | D | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | D | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | D | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
+| DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | D | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -106,6 +107,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.042 | Same Schema Neon Dbs | FM | — | draft |
 | DP.FM.043 | Case Enum Assumption | FM | — | draft |
 | DP.FM.044 | Retroactive Backfill Regime Mismatch | FM | — | draft |
+| DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | FM | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
+| DP.FM.047 | Third Party Pii Vendor Gate | FM | — | draft |
+| DP.FM.048 | Cf Bot Fight Mode Xhr Block | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -199,6 +203,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.083 | Batch frontmatter enum-validator (pre-commit) | M | — | active |
 | DP.M.084 | Batch-extraction pipeline из большого корпуса | M | — | active |
 | DP.M.085 | Онбординг пилота: Персональное руководство | M | — | active |
+| DP.M.087 | SECRETS.md как обязательный артефакт перед deploy на новый хост | M | — | active |
+| DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | M | Двухуровневая защита Pack-инвариантов: pre-commit hook = быстрый локальный fail; GitHub Action = серверный enforcement при push/PR. Агентские коммиты (--no-verify, headless) покрываются только CI-слоем. | active |
+| DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | M | — | draft |
+| DP.M.090 | Mutation Testing для CI Enforcement Guards в Pack-репо | M | — | draft |
+| DP.M.091 | Scope Guard — enforcement Parliament-модели через enum + schema isolation | M | — | active |
+| DP.M.092 | Infra Artifact As Create Flow Step | M | — | active |
+| DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | M | — | active |
+| DP.M.094 | Dual-signal enforcement gate для ритуального перехода | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -338,6 +350,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.144 | User-Facing Platform Health (информирование пользователей о здоровье платформы) | SC | Public status page (status.aisystant.ru) с composite uptime «по девяткам» (формат 99.847%), real-time информирование пользователей об инцидентах через email/RSS subscriptions + TG-канал @aisystant_status. Реализуется через Better Stack SaaS. | draft |
 | DP.SC.145 | Llm Router | SC | — | active |
 | DP.SC.146 | Secret Drift Detector | SC | — | active |
+| DP.SC.147 | Агрегирующий пайплайн cognitive brief | SC | Навигатор (MIM.R.007) перед ответом читает агрегированный brief из выходов Оркестратора, Портного, activity_log и Cognitive Proxy. Без text_analysis consent — только детерминированные поля. | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
@@ -378,4 +391,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.014 | Validation Report | WP | Отчёт валидации: проверка шаблона экзокортекса (S24) или Pack-сущности (S38) на соответствие стандарту | draft |
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-18*
+> *Auto-generated by `generate-map.py` on 2026-05-19*
