@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 34 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 90 |
+| SC (SC) | 91 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **384** |
+| **Total** | **385** |
 
 ## Distinctions
 
@@ -537,6 +537,7 @@ generated: true
 | DP.SC.146 | Secret Drift Detector | — | active |
 | DP.SC.147 | Агрегирующий пайплайн cognitive brief | Навигатор (MIM.R.007) перед ответом читает агрегированный brief из выходов Оркестратора, Портного, activity_log и Cognitive Proxy. Без text_analysis consent — только детерминированные поля. | draft |
 | DP.SC.148 | Pack Graph Freshness | Pack-граф (concept_graph_nodes + edges) обновляется автоматически при push в Pack-репо и проверяется daily heartbeat + drift detector | draft |
+| DP.SC.149 | Ретроспективный майнинг корпуса в PACK-rhetoric | Автор или агент получает пакет карточек иллюстраций из произвольного корпуса (клуб, руководства, книги) в формате RHE.FORM.001 при указании источника и фильтра тропа | active |
 
 ### SYS
 

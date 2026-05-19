@@ -17,6 +17,8 @@ related:
   specializes: [U.System]
   uses: [DP.M.001]
   produces: [DP.WP.001]
+  methods: [М-RM]
+  sc: [DP.SC.042, DP.SC.149]
 ---
 
 # Знание-Экстрактор (Knowledge Extractor)
@@ -96,6 +98,7 @@ related:
 | 8 | Изменилась ontology.md | Синхронизация онтологий | Claude / git hook | Ontology Sync |
 | 9 | Периодический аудит | Ревизия Pack'ов | launchd (ежемесячно) | Knowledge Audit |
 | 10 | KE записал в Pack | Переиндексация изменённых источников | Claude (Close) | **Selective Reindex** |
+| **11** | **Ночной scheduler / on-demand** | **Майнинг корпуса → PACK-rhetoric** | **launchd (02:00) / команда** | **М-RM (Corpus Mining)** |
 
 > **Исключение #1:** Мелкие правила (1-3 строки, одобрены пользователем) — Claude записывает напрямую в CLAUDE.md или memory/, **без вызова Экстрактора**. Это единственный сценарий, который обходит KE. Обоснование: overhead формализации > ценность для правила в 1-3 строки.
 
@@ -205,6 +208,40 @@ inbox/captures.md → KE формализует pending записи → Extract
 ```
 Pack ontology изменилась → KE сравнивает с мастером → Sync Report → Одобрение → Обновление мастера + downstream
 ```
+
+### 4.9. М-RM: Corpus Mining → PACK-rhetoric (ретроспективный майнинг)
+
+> **Добавлен WP-340 Ф4, 2026-05-19. SC: DP.SC.149.**
+
+**Триггер:** Ночной scheduler (02:00 МСК, launchd/systemd) или команда `/extract-illustrations <source>`
+**Вызывающий:** launchd (batch) / Claude в сессии (on-demand)
+**Routing target:** PACK-rhetoric → `illustrations/{type}/` (active) или `illustrations/pending/` (draft)
+
+**Метод М-RM отличается от стандартного KE:**
+
+| Аспект | Стандартный KE | М-RM (Corpus Mining) |
+|--------|---------------|----------------------|
+| Источник | Текущая сессия, inbox | Накопленный корпус (клуб, руководства, книги) |
+| Цель | Pack-сущности (методы, роли, различения) | Карточки иллюстраций RHE.FORM.001 |
+| Routing | По bounded context каждого Pack | Всегда → PACK-rhetoric |
+| Критерий качества | КЕ-валидация SPF | RHE.FORM.002 (structural_core + breaks_when) |
+| Ограничение | Нет | Анонимизация: без личных имён, без PII (B7.3) |
+| quality_score | Не применяется | Из engagement-сигнала (≥5 реакций) или ручной оценки |
+
+**Поток:**
+
+```
+Corpus source → paginate / scan → candidates extraction →
+RHE.FORM.002 validation → quality_score →
+active (≥0.6) → illustrations/{type}/
+draft (<0.6 / validation fail) → illustrations/pending/
+checkpoint → следующая итерация
+```
+
+**Ограничения (инварианты М-RM):**
+- PII-gate обязателен: никаких имён, telegram_id, биографических данных в `source_text`
+- LLM-самооценка quality_score — только как черновик; финальный score ставит человек или engagement-метрика
+- Частичный сбой → checkpoint, не потеря прогресса
 
 ### 4.8. Selective Reindex (переиндексация после экстракции)
 
