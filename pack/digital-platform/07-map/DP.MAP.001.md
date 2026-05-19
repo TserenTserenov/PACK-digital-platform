@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 34 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 89 |
+| SC (SC) | 90 |
 | SoTA Annotations (SOTA) | 23 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 15 |
-| **Total** | **383** |
+| **Total** | **384** |
 
 ## Distinctions
 
@@ -536,6 +536,7 @@ generated: true
 | DP.SC.145 | Llm Router | — | active |
 | DP.SC.146 | Secret Drift Detector | — | active |
 | DP.SC.147 | Агрегирующий пайплайн cognitive brief | Навигатор (MIM.R.007) перед ответом читает агрегированный brief из выходов Оркестратора, Портного, activity_log и Cognitive Proxy. Без text_analysis consent — только детерминированные поля. | draft |
+| DP.SC.148 | Pack Graph Freshness | Pack-граф (concept_graph_nodes + edges) обновляется автоматически при push в Pack-репо и проверяется daily heartbeat + drift detector | draft |
 
 ### SYS
 
