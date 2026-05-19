@@ -147,6 +147,10 @@ DS (instrument/governance/surface) ← производное (код, план�
 
 ### 5.5. Что куда в DS-ecosystem-development (экосистемный хаб)
 
+**Канонический remote:** `https://github.com/aisystant/DS-ecosystem-development.git` (upstream организации `aisystant`).
+
+**Запрет на изменения в личном форке:** Рабочий клон в `~/IWE/DS-ecosystem-development/` должен иметь `origin` → `aisystant/DS-ecosystem-development`. Личный форк (`TserenTserenov/DS-ecosystem-development`) не используется для записи — только для чтения/резервного клонирования. Все коммиты и пуши — только в основной репозиторий `aisystant/DS-ecosystem-development`.
+
 | Директория | Что содержит | Lifecycle |
 |------------|-------------|-----------|
 | 0.OPS/0.9.Inbox/ | Материалы к обсуждению (повестки, предложения, архитектурные варианты) | Обсудили → решения в ADR/Pack → архив |
