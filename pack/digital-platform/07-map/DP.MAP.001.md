@@ -37,10 +37,10 @@ generated: true
 | ROLE (ROLE) | 36 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 93 |
-| SoTA Annotations (SOTA) | 23 |
+| SoTA Annotations (SOTA) | 25 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **391** |
+| **Total** | **393** |
 
 ## Distinctions
 
@@ -284,6 +284,8 @@ generated: true
 | DP.SOTA.021 | State-Based Management vs Task-List Management | Управление через отслеживание состояний значимых объектов даёт измеримый эффект в системах с быстрой динамикой; task-list режим работает только при медленной реальности. Тест темпо-адекватности — критерий выбора. | active |
 | DP.SOTA.022 | Agent Trace, Replay & Multi-Path Execution | SOTA-обзор архитектурных паттернов для журнала решений LLM-агентов, повтора (replay) и параллельного многопутевого исполнения (multi-path / best-of-N). Дополняет DP.SOTA.015 (telemetry layer) — этот документ про rationale layer. | draft |
 | DP.SOTA.023 | Инженерная семиотика — мировой опыт | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
+| DP.SOTA.024 | BORO Methodology — Fundamental Particles & Fruitful Patterns | SOTA-аннотация методологии BORO (Business Objects Re-Engineering for Re-Use, Partridge): фундаментальные онтологические частицы и гипотеза о межпроектной fruitfulness паттернов. trust: hypothesis. | active |
+| DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
 
 ## Maps
 
