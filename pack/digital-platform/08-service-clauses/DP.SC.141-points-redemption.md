@@ -34,7 +34,7 @@ related:
 - В истории видит каждое списание **бонусов** с привязкой к payment_id
 
 **Критерий приёмки:**
-1. Пилот когорты-1 при чекауте семинара видит сумму скидки из баллов и может её применить
+1. Пилот когорты-1 при чекауте семинара видит сумму скидки из бонусов и может её применить
 2. После оплаты копилка уменьшается на потраченное; история сохраняется в `rewards.redeemed_events`
 3. Двухфазный коммит работает: reserve → confirm (succeeded) ИЛИ reserve → rollback (canceled / timeout 30 мин)
 4. Потолок по квалификации работает по 8 степеням МИМ (Ученик ×1.0 → Общественный деятель ×5.0); fallback на «ученик» для NULL или уровней 9-11
@@ -62,7 +62,7 @@ related:
 | 1 | Участник со ст. Реформатор ×4.0 (потолок 700 баллов/день, копилка 6857 бонусов) выбирает урок 100 ₽ | Участник | Бот |
 | 2 | Видит: «Доступно: 100 ₽ скидки из 114 бонусов» (`114 × 0.875 = 100 ₽`) | Участник | Burn-эмиттер |
 | 3 | Применяет полную скидку | Участник | Бот |
-| 4 | Генерируется `payment_id = "zero_" + uuid4()` (нет внешнего платежа). `reserve_burn` 114 баллов с `payment_source='zero_payment'` | Burn-эмиттер | Neon |
+| 4 | Генерируется `payment_id = "zero_" + uuid4()` (нет внешнего платежа). `reserve_burn` 114 бонусов с `payment_source='zero_payment'` | Burn-эмиттер | Neon |
 | 5 | НЕ создаётся ЮКасса-платёж (amount = 0). Сразу `confirm_burn(payment_id)` + bot выдаёт доступ. | Бот | — |
 
 ### Сценарий 3: Отмена оплаты (rollback резерва)
@@ -83,8 +83,8 @@ related:
 
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
-| 1 | Участник выбирает семинар (цена 100 ⭐), решает применить баллы | Участник | Бот |
-| 2 | Видит: «Доступно: 12 ⭐ скидки из 140 баллов» | Участник | Burn-эмиттер |
+| 1 | Участник выбирает семинар (цена 100 ⭐), решает применить бонусы | Участник | Бот |
+| 2 | Видит: «Доступно: 12 ⭐ скидки из 140 бонусов» | Участник | Burn-эмиттер |
 | 3 | Применяет — бот генерирует `payload = "burn_" + uuid4()` (provisional ID) и вызывает `reserve_burn(account_id, payment_id=payload, points=140, payment_source='tg_stars')` | Burn-эмиттер | Neon |
 | 4 | Бот отправляет `send_invoice(prices=88 ⭐, invoice_payload=payload)` | Бот | TG Payments |
 | 5 | Участник оплачивает 88 ⭐ | Участник | TG |
@@ -118,7 +118,7 @@ related:
 | Файл | Что делать | Точка |
 |------|-----------|-------|
 | `db/queries/redeem.py` (NEW) | Skeleton: `available_discount()`, `reserve_burn()`, `confirm_burn()`, `rollback_burn()` | новый модуль |
-| `handlers/workshop.py:160-180` | Перед `yk.create_payment` — UI «применить баллы?» → `reserve_burn` | extend pay_rub |
+| `handlers/workshop.py:160-180` | Перед `yk.create_payment` — UI «применить бонусы?» → `reserve_burn` | extend pay_rub |
 | `handlers/showcase.py:330-360` | Аналогично для seminar.price_rub | extend pay_rub |
 | `oauth_server.py:1003-1008` | После `process_*_yookassa_webhook` (succeeded) → `confirm_burn(payment_id)` | extend webhook handler |
 | `core/scheduler.py` | Cron `rollback_expired_reservations()` каждые 5 мин | новая job |
