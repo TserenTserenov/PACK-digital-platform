@@ -110,7 +110,7 @@ wp: WP-313
 |----------|--------------|
 | 3 артефакта на выходе | Output content в чате: System Card + Constraint Brief + Stage Dependency Map присутствуют |
 | Trichotomy + class заданы | grep `trichotomy:` AND `class:` в Constraint Brief |
-| Stage Map без дат/часов | grep `date\|hour\|day` в Stage Map — должно быть 0 |
+| Stage Map без дат/часов | `grep -E '\b(due\|start\|end\|hours?\|days?_required\|deadline):' <stage-map>` — должно быть 0 матчей (точные имена полей, не подстрока). |
 | External-зависимости явные | grep `external_deps:` в Stage Map; если есть external — указан target |
 | Calibration record создан | `ls DS-my-strategy/inbox/bottleneck-pick-runs/<date>-*.yaml` после применения |
 | SC-first порядок выполнен | В System Card есть `promises` section до Constraint Brief |
