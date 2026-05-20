@@ -27,6 +27,8 @@ updated: 2026-05-17
 
 Держать `rewards.point_balances` как **точную проекцию** `learning.domain_event` через `reference.reward_rules` — идемпотентно, с гарантией catch-up после downtime, без дрифта относительно источника.
 
+> **Архит. TODO (~2h, отдельный WP после WP-327 Этапа 4):** добавить колонку `earned_total` в `point_balances`. Сейчас `points` = earned − spent (убывает при использовании бонусов). После добавления: `points` → текущий бонусный баланс; `earned_total` → никогда не убывает = настоящие Баллы для лидерборда. Тогда `/balance` будет показывать два числа: «Баллы (заработано всего): N» + «Бонусы (доступно к оплате): M».
+
 ## 2. Обязанности
 
 | Обязанность | Метод | Триггер |
@@ -81,7 +83,7 @@ Legacy LISTEN/NOTIFY → polling-cursor. Причины:
 - **Admin через Directus** — пишет `reference.reward_rules` (read-only для Projector).
 
 **Выход (поставщик обещаний другим ролям):**
-- **Бот команда `/balance`** — SELECT `rewards.point_balances.points`.
+- **Бот команда `/points`** — два числа: `rewards.point_balances.points` (текущий баланс, бонусы) + вычисляемые бонусы `min(points, Σ(days_at_qual_i × cap_i))`. После добавления `earned_total` — также показывать earned_total (баллы).
 - **Gateway MCP `/twin`** — читает balance для Persona.snapshot.
 - **Metabase BI** — read-only на `point_balances` для дашбордов.
 - **Qualification Projector** (Phase 2, отдельная роль) — потенциально триггерится по balance milestones.
