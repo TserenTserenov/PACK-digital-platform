@@ -94,7 +94,7 @@ wp: WP-326
 
 | Роль | Что подтверждает |
 |------|-----------------|
-| DP.ROLE.046 IWE Stage Controller | Факт принятия решения (нудж/render/skip) и записи в nudge_journal |
+| DP.ROLE.046 Контролёр развития | Факт принятия решения (нудж/render/skip) и записи в nudge_journal |
 | DP.ROLE.044 Notification Dispatcher | Факт доставки TG-нуджа |
 | DP.ROLE.041 Аттестатор | Источник `learning.stage_transitions` (ступень) |
 | DP.ROLE.042 Диагност | Источник `learning.cp_assessments` (cp-профиль) |
