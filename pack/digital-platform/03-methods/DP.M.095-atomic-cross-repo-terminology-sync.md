@@ -1,0 +1,52 @@
+---
+id: DP.M.095
+name: Atomic cross-repo terminology sync
+kind: Method
+status: active
+created: 2026-05-20
+sources:
+  - 8 commits 2026-05-20 12:30-13:25 (DS-Knowledge-Index, DS-ecosystem-development, DS-marathon-v2, DS-my-strategy, DS-principles-curriculum, PACK-digital-platform, PACK-personal, FMT-exocortex-template)
+  - commit message «6e44db07 docs: sync 5 natures IWE — Со-творец → Тамагочи, каноничный порядок природ»
+applies_to:
+  - rename канонической онтологии в Pack-SoT + N производных DS/посты/руководства
+---
+
+# DP.M.095: Atomic cross-repo terminology sync
+
+## Описание
+
+Терминологический rename в каноничной онтологии (Pack-as-SoT) обязан проходить через ВСЕ downstream-репо в одной сессии с одинаковым семантическим сообщением коммита. Иначе — terminology drift: пользователь встречает старый термин в одном канале (например, в посте клуба или руководстве пилота), новый — в другом (бот, MEMORY.md).
+
+## IPO
+
+**Input:**
+- Decision о rename в SoT (например, PACK-digital-platform DP.IWE.NNN: «Со-творец → Тамагочи»).
+- Список downstream-репо, потребляющих SoT (определяется через `grep -r <старый-термин> ~/IWE/`).
+
+**Process:**
+
+1. **Coverage-prep.** `grep -rn '<старый-термин>' ~/IWE/` по всем репо. Зафиксировать N репо, M файлов.
+2. **SoT-update.** Изменить каноничный документ в Pack (frontmatter + body + примеры).
+3. **Downstream-sync.** В одной сессии открыть каждое repo и применить замены с одним семантическим коммитом. Формат сообщения: `docs: sync <модель> — <старый> → <новый>, <причина>`.
+4. **Post-check.** Повторить `grep -rn '<старый-термин>' ~/IWE/`. Допустимо ≤K вхождений (исторические упоминания в архивах, feedback-log).
+
+**Output:**
+- N pushed коммитов (по одному на репо) с одинаковым семантическим сообщением.
+- 0 (или ≤K архивных) вхождений старого термина в активных артефактах.
+
+## Тест переноса
+
+«Может ли пользователь в любом канале (бот, посты, руководства, MEMORY) встретить старый термин через 24ч после rename?»
+
+- Да → sync не атомарна → terminology drift.
+- Нет → метод применён корректно.
+
+## Антипаттерн
+
+Rename только в SoT + «потом разнесём по downstream». На практике — не доходят руки 2–3 дня → 2–3 пользовательских контакта со старым термином → confusion + риск ре-introduction термина обратно.
+
+## Связи
+
+- DP.M.030 (Term Translation) — про межсистемный перевод понятий (разный bounded context), DP.M.095 — про rename внутри одной онтологии.
+- AR.215 (canonical-remote-org-repo) — правило источника, на котором базируется sync.
+- Прецедент: 2026-05-20 «5 природ IWE» rename через 8 репо.

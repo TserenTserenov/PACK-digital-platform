@@ -60,8 +60,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | D | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | D | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | D | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
+| DP.D.074 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | D | — | active |
 | DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | D | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 | DP.D.076 | Контролёр развития ≠ Оркестратор / Проводник / Навигатор / Оценщик / Аттестатор / Диагност | D | Контролёр развития (R46) — плановый фоновый сканер маркеров; не путать с шестью смежными ролями: Оркестратором (родитель), Проводником (FSM в боте), Навигатором (методология), Оценщиком (оценка ответа), Аттестатором (стадия по событиям), Диагностом (cp-профиль по запросу). Все шесть разделены по pace-слою, источнику истины и объекту внимания. | draft |
+| DP.D.076 | Ценностный язык ≠ Технический язык (в user-facing копии) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -111,6 +113,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | FM | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
 | DP.FM.047 | Third Party Pii Vendor Gate | FM | — | draft |
 | DP.FM.048 | Cf Bot Fight Mode Xhr Block | FM | — | active |
+| DP.FM.049 | Document-centric analysis yields false bottleneck | FM | — | active |
+| DP.FM.050 | Markdown Bold Regex Punctuation | FM | — | active |
+| DP.FM.051 | On Conflict Nullable Unique Incompleteness | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -212,6 +217,20 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.092 | Infra Artifact As Create Flow Step | M | — | active |
 | DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | M | — | active |
 | DP.M.094 | Dual-signal enforcement gate для ритуального перехода | M | — | active |
+| DP.M.095 | Atomic cross-repo terminology sync | M | — | active |
+| DP.M.096 | Выбор Property Graph vs Triple Store для доменной knowledge base с rich metadata | M | — | draft |
+| DP.M.097 | Completeness Gate: cross-check spec-множества vs impl-множества для детекции пропущенных случаев | M | — | draft |
+| DP.M.098 | Premise pain probe перед архитектурой автоматизации | M | — | draft |
+| DP.M.099 | Illustration as First-Class Pack Object | M | — | — |
+| DP.M.100 | Vocabulary Sufficiency Gate | M | — | — |
+| DP.M.101 | Семантическое версионирование для Docs-as-Code | M | Алгоритм автоматической классификации bump'ов для docs-as-code: git log от последнего тега → классификация коммитов по паттернам (feat→minor, fix→patch, BREAKING→major) → changelog entry + релиз. Применимо к любому документационному репо с conventional commits. | active |
+| DP.M.102 | Условный автоматический merge через метки PR и CI-гейт | M | PR с разрешённой меткой (hotfix, pilot-approved) + все CI-чеки зелёные → автоматический merge. Создаёт ускоренную полосу для срочных исправлений без обхода CI. Граница безопасности: только разрешённые labels + CI pass обязателен. | active |
+| DP.M.103 | Жизненный цикл создания доменного Pack (7 фаз) | M | Полный lifecycle создания нового Pack: Ф1 (онтология + SOTA) → Ф2 (различения) → Ф3.5 (extraction из корпуса) → Ф4 (IntegrationGate) → Ф5 (batch mining) → Ф7 (MAP + CHANGELOG + README + SPF 09-11). IntegrationGate до extraction = правильный порядок. SPF 09-11 = обязательное завершение. | active |
+| DP.M.104 | Cross-repo publication pipeline via workflow_dispatch + PR gate | M | Человеко-инициируемый кросс-репо pipeline: content-repo → publication-repo через параметризованный workflow_dispatch (guide_id, version) → генерация артефактов по шаблону → gh pr create в целевом репо. PR-гейт обеспечивает editorial review перед слиянием в публичное дерево. Применим для любого паттерна «источник контента → публичная витрина». | emerging |
+| DP.M.105 | workflow_call orchestration: единый entry point с разделёнными concerns в CI/CD | M | — | active |
+| DP.M.106 | Literature crosscheck при именовании Pack-сущностей | M | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
+| DP.M.107 | Role Rename Downstream Review | M | — | active |
+| DP.M.108 | Specializes Vs Parallel Roles | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -238,6 +257,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.012.SC.07 | 03 Update Priorities | ROLE | Изменение приоритетов на уровне дня/недели/месяца: определение типа изменения, каскадные эффекты, diff и коммит | draft |
 | DP.ROLE.012.SC.08 | 04 Add Workproduct | ROLE | Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план | draft |
 | DP.ROLE.012.SCENARIOS | 00 Scenarios Index | ROLE | Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных | draft |
+| DP.ROLE.022 | Оркестратор (Orchestrator) | ROLE | Координатор цикла персонального развития: решает ЧТО и КОГДА запускать, делегирует исполнение специализированным Контролёрам и операционным ролям. На уровне суперсистемы координирует Контролёров (DP.ROLE.046 и его специализации); ниже — взаимодействует с Портным, Навигатором, Диагностом, Аттестатором, Проводником. | draft |
 | DP.ROLE.031 | Терминолог | ROLE | Роль Терминолог отвечает за качество терминологии Pack: выбор переводов, онтологическое сопоставление с FPF, разрешение конфликтов имён. | draft |
 | DP.ROLE.032 | Event Ingester | ROLE | Роль единого приёмника доменных событий обучения от всех источников — гарантирует идемпотентность, валидацию и защиту от PII на входе в learning.domain_event | draft |
 | DP.ROLE.033 | Редактор контента | ROLE | Роль, читающая черновики автора и выдающая рекомендацию топ-3 в Day Open на основе актуальности и готовности. | draft |
@@ -383,6 +403,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.023 | Инженерная семиотика — мировой опыт | SOTA | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
 | DP.SOTA.024 | BORO Methodology — Fundamental Particles & Fruitful Patterns | SOTA | SOTA-аннотация методологии BORO (Business Objects Re-Engineering for Re-Use, Partridge): фундаментальные онтологические частицы и гипотеза о межпроектной fruitfulness паттернов. trust: hypothesis. | active |
 | DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
+| DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | SOTA | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
 | DP.WP.002 | Ubiquitous Language | WP | Единый язык домена: глоссарий терминов, прорастающий во все артефакты — код, UI, документацию, тикеты, планы | draft |

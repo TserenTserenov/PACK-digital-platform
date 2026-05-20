@@ -21,26 +21,26 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 39 |
+| Distinctions (D) | 41 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 47 |
+| Failure Modes (FM) | 50 |
 | IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 93 |
+| Methods (M) | 107 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 36 |
+| ROLE (ROLE) | 37 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 93 |
-| SoTA Annotations (SOTA) | 25 |
+| SoTA Annotations (SOTA) | 26 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **393** |
+| **Total** | **414** |
 
 ## Distinctions
 
@@ -83,8 +83,10 @@ generated: true
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
+| DP.D.074 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
 | DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 | DP.D.076 | Контролёр развития ≠ Оркестратор / Проводник / Навигатор / Оценщик / Аттестатор / Диагност | Контролёр развития (R46) — плановый фоновый сканер маркеров; не путать с шестью смежными ролями: Оркестратором (родитель), Проводником (FSM в боте), Навигатором (методология), Оценщиком (оценка ответа), Аттестатором (стадия по событиям), Диагностом (cp-профиль по запросу). Все шесть разделены по pace-слою, источнику истины и объекту внимания. | draft |
+| DP.D.076 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 
 ## Methods
 
@@ -183,6 +185,20 @@ generated: true
 | DP.M.092 | Infra Artifact As Create Flow Step | — | active |
 | DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | — | active |
 | DP.M.094 | Dual-signal enforcement gate для ритуального перехода | — | active |
+| DP.M.095 | Atomic cross-repo terminology sync | — | active |
+| DP.M.096 | Выбор Property Graph vs Triple Store для доменной knowledge base с rich metadata | — | draft |
+| DP.M.097 | Completeness Gate: cross-check spec-множества vs impl-множества для детекции пропущенных случаев | — | draft |
+| DP.M.098 | Premise pain probe перед архитектурой автоматизации | — | draft |
+| DP.M.099 | Illustration as First-Class Pack Object | — | — |
+| DP.M.100 | Vocabulary Sufficiency Gate | — | — |
+| DP.M.101 | Семантическое версионирование для Docs-as-Code | Алгоритм автоматической классификации bump'ов для docs-as-code: git log от последнего тега → классификация коммитов по паттернам (feat→minor, fix→patch, BREAKING→major) → changelog entry + релиз. Применимо к любому документационному репо с conventional commits. | active |
+| DP.M.102 | Условный автоматический merge через метки PR и CI-гейт | PR с разрешённой меткой (hotfix, pilot-approved) + все CI-чеки зелёные → автоматический merge. Создаёт ускоренную полосу для срочных исправлений без обхода CI. Граница безопасности: только разрешённые labels + CI pass обязателен. | active |
+| DP.M.103 | Жизненный цикл создания доменного Pack (7 фаз) | Полный lifecycle создания нового Pack: Ф1 (онтология + SOTA) → Ф2 (различения) → Ф3.5 (extraction из корпуса) → Ф4 (IntegrationGate) → Ф5 (batch mining) → Ф7 (MAP + CHANGELOG + README + SPF 09-11). IntegrationGate до extraction = правильный порядок. SPF 09-11 = обязательное завершение. | active |
+| DP.M.104 | Cross-repo publication pipeline via workflow_dispatch + PR gate | Человеко-инициируемый кросс-репо pipeline: content-repo → publication-repo через параметризованный workflow_dispatch (guide_id, version) → генерация артефактов по шаблону → gh pr create в целевом репо. PR-гейт обеспечивает editorial review перед слиянием в публичное дерево. Применим для любого паттерна «источник контента → публичная витрина». | emerging |
+| DP.M.105 | workflow_call orchestration: единый entry point с разделёнными concerns в CI/CD | — | active |
+| DP.M.106 | Literature crosscheck при именовании Pack-сущностей | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
+| DP.M.107 | Role Rename Downstream Review | — | active |
+| DP.M.108 | Specializes Vs Parallel Roles | — | active |
 
 ## Work Products
 
@@ -256,6 +272,9 @@ generated: true
 | DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
 | DP.FM.047 | Third Party Pii Vendor Gate | — | draft |
 | DP.FM.048 | Cf Bot Fight Mode Xhr Block | — | active |
+| DP.FM.049 | Document-centric analysis yields false bottleneck | — | active |
+| DP.FM.050 | Markdown Bold Regex Punctuation | — | active |
+| DP.FM.051 | On Conflict Nullable Unique Incompleteness | — | draft |
 
 ## SoTA Annotations
 
@@ -286,6 +305,7 @@ generated: true
 | DP.SOTA.023 | Инженерная семиотика — мировой опыт | SOTA по инженерной семиотике для Pack-архитектуры IWE: триада Пирса, ISO 15926 (Kinds/Owner Roles), DDD Ubiquitous Language, OWL/SKOS. Что берём, что отвергаем, матрица применимости. | active |
 | DP.SOTA.024 | BORO Methodology — Fundamental Particles & Fruitful Patterns | SOTA-аннотация методологии BORO (Business Objects Re-Engineering for Re-Use, Partridge): фундаментальные онтологические частицы и гипотеза о межпроектной fruitfulness паттернов. trust: hypothesis. | active |
 | DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
+| DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 
 ## Maps
 
@@ -416,6 +436,7 @@ generated: true
 | DP.ROLE.012.SC.07 | 03 Update Priorities | Изменение приоритетов на уровне дня/недели/месяца: определение типа изменения, каскадные эффекты, diff и коммит | draft |
 | DP.ROLE.012.SC.08 | 04 Add Workproduct | Добавление нового РП в план: сбор атрибутов, проверка бюджета, определение уровня размещения и коммит в план | draft |
 | DP.ROLE.012.SCENARIOS | 00 Scenarios Index | Индекс и навигация по 8 сценариям Стратега: 4 по расписанию и 4 по запросу, с временной сеткой и потоком данных | draft |
+| DP.ROLE.022 | Оркестратор (Orchestrator) | Координатор цикла персонального развития: решает ЧТО и КОГДА запускать, делегирует исполнение специализированным Контролёрам и операционным ролям. На уровне суперсистемы координирует Контролёров (DP.ROLE.046 и его специализации); ниже — взаимодействует с Портным, Навигатором, Диагностом, Аттестатором, Проводником. | draft |
 | DP.ROLE.031 | Терминолог | Роль Терминолог отвечает за качество терминологии Pack: выбор переводов, онтологическое сопоставление с FPF, разрешение конфликтов имён. | draft |
 | DP.ROLE.032 | Event Ingester | Роль единого приёмника доменных событий обучения от всех источников — гарантирует идемпотентность, валидацию и защиту от PII на входе в learning.domain_event | draft |
 | DP.ROLE.033 | Редактор контента | Роль, читающая черновики автора и выдающая рекомендацию топ-3 в Day Open на основе актуальности и готовности. | draft |
@@ -577,6 +598,8 @@ generated: true
 - Missing `summary`: DP.D.071 (DP.D.071-declared-vs-actual-bounded-context.md)
 - Missing `summary`: DP.D.072 (DP.D.072-format-spec-vs-format-checklist.md)
 - Missing `summary`: DP.D.073 (DP.D.073-storefront-vs-internal-platform.md)
+- Missing `summary`: DP.D.074 (DP.D.074-interface-vs-learning-onboarding.md)
+- Missing `summary`: DP.D.076 (DP.D.076-value-vs-technical-language.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -635,6 +658,15 @@ generated: true
 - Missing `summary`: DP.M.092 (DP.M.092-infra-artifact-as-create-flow-step.md)
 - Missing `summary`: DP.M.093 (DP.M.093-ci-artifact-in-create-flow.md)
 - Missing `summary`: DP.M.094 (DP.M.094-dual-signal-ritual-gate.md)
+- Missing `summary`: DP.M.095 (DP.M.095-atomic-cross-repo-terminology-sync.md)
+- Missing `summary`: DP.M.096 (DP.M.096-property-graph-vs-triple-store.md)
+- Missing `summary`: DP.M.097 (DP.M.097-lint-completeness-check.md)
+- Missing `summary`: DP.M.098 (DP.M.098-premise-pain-probe.md)
+- Missing `summary`: DP.M.099 (DP.M.099-illustration-as-pack-object.md)
+- Missing `summary`: DP.M.100 (DP.M.100-vocabulary-sufficiency-gate.md)
+- Missing `summary`: DP.M.105 (DP.M.105-workflow-call-orchestration.md)
+- Missing `summary`: DP.M.107 (DP.M.107-role-rename-downstream-review.md)
+- Missing `summary`: DP.M.108 (DP.M.108-specializes-vs-parallel-roles.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -653,6 +685,9 @@ generated: true
 - Missing `summary`: DP.FM.044 (DP.FM.044-retroactive-backfill-regime-mismatch.md)
 - Missing `summary`: DP.FM.047 (DP.FM.047-third-party-pii-vendor-gate.md)
 - Missing `summary`: DP.FM.048 (DP.FM.048-cf-bot-fight-mode-xhr-block.md)
+- Missing `summary`: DP.FM.049 (DP.FM.049-document-centric-bottleneck.md)
+- Missing `summary`: DP.FM.050 (DP.FM.050-markdown-bold-regex-punctuation.md)
+- Missing `summary`: DP.FM.051 (DP.FM.051-on-conflict-nullable-unique-incompleteness.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
