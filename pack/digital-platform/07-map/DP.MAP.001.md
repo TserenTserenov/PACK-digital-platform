@@ -83,10 +83,10 @@ generated: true
 | DP.D.072 | Спецификация формата ≠ Чеклист приёмки формата | — | active |
 | DP.D.073 | Внешняя витрина ≠ Внутренняя часть платформы (по жизненному циклу + аудитории, не по технослою) | — | active |
 | DP.D.074 | Трёхслойная модель MCP в IWE | Три категории MCP в IWE: платформенные (общее знание), персональные (знания пользователя), вендорские (внешние сервисы). Все платформенные — наши сервисы с RLS изоляцией. | draft |
-| DP.D.074 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
 | DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 | DP.D.076 | Контролёр развития ≠ Оркестратор / Проводник / Навигатор / Оценщик / Аттестатор / Диагност | Контролёр развития (R46) — плановый фоновый сканер маркеров; не путать с шестью смежными ролями: Оркестратором (родитель), Проводником (FSM в боте), Навигатором (методология), Оценщиком (оценка ответа), Аттестатором (стадия по событиям), Диагностом (cp-профиль по запросу). Все шесть разделены по pace-слою, источнику истины и объекту внимания. | draft |
-| DP.D.076 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
+| DP.D.077 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
+| DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 
 ## Methods
 
@@ -598,8 +598,8 @@ generated: true
 - Missing `summary`: DP.D.071 (DP.D.071-declared-vs-actual-bounded-context.md)
 - Missing `summary`: DP.D.072 (DP.D.072-format-spec-vs-format-checklist.md)
 - Missing `summary`: DP.D.073 (DP.D.073-storefront-vs-internal-platform.md)
-- Missing `summary`: DP.D.074 (DP.D.074-interface-vs-learning-onboarding.md)
-- Missing `summary`: DP.D.076 (DP.D.076-value-vs-technical-language.md)
+- Missing `summary`: DP.D.077 (DP.D.077-interface-vs-learning-onboarding.md)
+- Missing `summary`: DP.D.078 (DP.D.078-value-vs-technical-language.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
