@@ -723,7 +723,7 @@ grade: 2+
 | R43 | **Лаборант** | Система персонального развития | Scenario Simulation, Pilot-mode Output | Профиль + паттерн поведения, Scenario.run() | DataFrame траектории, прогноз ступеней |
 | R44 | **Notification Dispatcher** | Платформа DP | TG Delivery, Idempotency, Scheduling | Запрос от MCP/бота/воркера (`ory_user_id`, `text`, `schedule_at`) | TG-сообщение пилоту, `reminders.id`, `notification_log` |
 | R45 | **Agent Task Dispatcher** | Экзокортекс | Inbox Polling, Task Routing, Lifecycle Tracking | `inbox/agent/tasks/*.md`, статусы | Запуск задачи через канал (CCR/systemd/local), audit-trail |
-| R46 | **IWE Stage Controller** | Система персонального развития | Daily Scan, Marker Comparison, Cool-down Check, Channel Selection (TG/render) | tracking_consent (opt-in), stage_transitions, cp_assessments, nudge_journal | nudge_journal (решение), guide_render_queue (enqueue), TG-нудж через DP.SC.134 |
+| R46 | **Контролёр развития** | Система персонального развития | Daily Scan, Marker Comparison, Cool-down Check, Channel Selection (TG / render / Навигатор / Проводник / Диагност-напоминание). Specializes R22 Оркестратор. Бывш. «IWE Stage Controller» до 2026-05-20. Ось контроля параметризуется: развитие / квалификация / стиль / домен | tracking_consent (opt-in), stage_transitions, cp_assessments, nudge_journal | nudge_journal (решение), guide_render_queue (enqueue), TG-нудж через DP.SC.134, сигналы Навигатору/Проводнику/Диагносту по типу разрыва |
 
 > **R8-R12, R21** — полное описание роли: `DS-ai-systems/<system>/system.yaml` (synchronizer, setup, pulse, fixer, evaluator, publisher)
 
