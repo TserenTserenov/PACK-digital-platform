@@ -119,7 +119,7 @@ source: WP-337 направление-Ж (стратсессия 21 мая 2026)
 3. Регистрирует алиасы инструментов для Tool API (§A)
 
 **Адаптеры:**
-- `adapters/claude-code.md` — референсная реализация (Ж-Ф3, готово к написанию)
+- `DP.IWE.011-adapters/claude-code-adapter.md` — референсная реализация (Ж-Ф3, готово к написанию)
 - `adapters/hermes.md` — после Встречи 20 с Андреем (Ж-Ф4)
 - `adapters/bot.md` — по мере необходимости
 - `adapters/headless.md` — по мере необходимости
@@ -162,4 +162,4 @@ task_tracker.create([{content: "шаг 1", status: "pending"}])
 - **DP.SC.046** — runtime-цикл open→work→close (что IWE обещает пилоту; этот документ — что хост обещает IWE)
 - **DP.SC.019** — автономный cloud runtime (будущий хост на основе Hermes)
 - **WP-337 Ж-Ф1** — аудит зависимостей (`направление-Ж-ф1-audit.md`)
-- **WP-337 Ж-Ф3** — адаптер Claude Code (`adapters/claude-code.md`)
+- **WP-337 Ж-Ф3** — адаптер Claude Code (`DP.IWE.011-adapters/claude-code-adapter.md`)
