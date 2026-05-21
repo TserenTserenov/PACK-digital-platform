@@ -21,6 +21,20 @@ renamed_from: DP.M.038
 **Первичный онбординг (однократно):** Этапы 0 → 1 → 2 → 3 → 4.
 **Пересборка руководства (автоматически при смене ступени):** stage_transition_listener → Этап 3.
 
+## Два пути создания (T3a vs T3b)
+
+| | **Путь A — Sovereign (явный Гит)** | **Путь B — Managed (тайный Гит)** |
+|---|---|---|
+| **Когда выбирается** | Пилот говорит «веду сам» в Сообщении 7 | Пилот говорит «платформа ведёт» в Сообщении 7 |
+| **GitHub-аккаунт** | Нужен | Не нужен |
+| **Создание** | `/personal-guide-start` → `create_repository` → GitHub API | Система вызывает `create_managed_repo(pilot_uuid)` → org-App |
+| **Репо** | `github.com/<pilot>/personal-guide` | `github.com/aisystant/pg-{uuid8}` |
+| **Webhook** | Нужен (GitHub App install) | Не нужен (org-App уже имеет доступ) |
+| **Редактирование** | Пилот может редактировать файлы | Только чтение (дайджест + веб-страница) |
+| **Миграция** | — | T3a → T3b: возможна по запросу (WP-309 Ф9) |
+
+**Gate перед Этапом 0:** если пилот выбрал «платформа ведёт» → пропускаем Этапы 1-2 (создание репо + webhook) → сразу Этап 3 (доставка контента в managed-репо).
+
 ---
 
 ## Этап 0. Предусловия
@@ -28,18 +42,20 @@ renamed_from: DP.M.038
 | | |
 |---|---|
 | **Вход** | Новый пилот без аккаунта на платформе |
-| **Действие** | Пилот регистрируется на платформе → создаёт GitHub-аккаунт (если нет) → оформляет подписку → даёт согласие на обработку персональных данных → платформа связывает идентификаторы в `identity_map` |
-| **Выход** | 5 записей в Neon (`learning` DB): |
+| **Действие** | Пилот регистрируется на платформе → оформляет подписку → даёт согласие на обработку персональных данных → платформа связывает идентификаторы в `identity_map` |
+| **Выход** | Записи в Neon (`learning` DB): |
 
-| Артефакт | Физическое подтверждение | Таблица |
-|---|---|---|
-| Аккаунт платформы | Строка в `users` | `learning.users` |
-| GitHub-аккаунт | `github_login` заполнен | `learning.identity_map` |
-| Подписка | Строка активной подписки | `learning.subscriptions` / `contracts` |
-| Согласие на персданные | `opt_in=true, scope=stage_evaluation` | `learning.tracking_consent` |
-| Связка identity | `(ory_uuid, github_id, telegram_id)` | `learning.identity_map` |
+| Артефакт | Физическое подтверждение | Таблица | Sovereign | Managed |
+|---|---|---|---|---|
+| Аккаунт платформы | Строка в `users` | `learning.users` | ✅ | ✅ |
+| Подписка | Строка активной подписки | `learning.subscriptions` / `contracts` | ✅ | ✅ |
+| Согласие на персданные | `opt_in=true, scope=stage_evaluation` | `learning.tracking_consent` | ✅ | ✅ |
+| Связка identity | `(ory_uuid, github_id, telegram_id)` | `learning.identity_map` | ✅ | ✅ |
+| GitHub-аккаунт | `github_login` заполнен | `learning.identity_map` | ✅ | ❌ (не нужен) |
+| Managed-репо маппинг | `repo_name='pg-{uuid8}'` | `learning.pilot_repo_map` | ❌ | ✅ |
 
-**Gate:** все 5 записей существуют → Этап 1. Отсутствует любая → процесс останавливается.
+**Gate Sovereign:** все 5 записей + GitHub-аккаунт → Этап 1.  
+**Gate Managed:** 4 записи (без GitHub) + `pilot_repo_map` создан системой → сразу Этап 3.
 
 ---
 
