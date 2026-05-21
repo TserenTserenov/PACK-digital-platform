@@ -137,6 +137,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.IWE.010 | IWE Machine (Машина IWE) | IWE | — | draft |
 | DP.IWE.011 | IWE Runtime Host Contract | IWE | — | draft |
 | DP.IWE.011-adapter-claude-code | Claude Code Adapter for IWE Host Contract | IWE | — | active |
+| DP.IWE.011-adapter-headless | Headless Adapter for IWE Host Contract | IWE | — | active |
 | DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности и DS docs/ через обнаружение, классификацию, двойной routing и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
