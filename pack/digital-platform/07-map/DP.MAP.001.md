@@ -25,7 +25,7 @@ generated: true
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 58 |
-| IWE (IWE) | 10 |
+| IWE (IWE) | 12 |
 | KR (KR) | 1 |
 | Methods (M) | 121 |
 | Maps (MAP) | 2 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 26 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **447** |
+| **Total** | **449** |
 
 ## Distinctions
 
@@ -402,6 +402,8 @@ generated: true
 | DP.IWE.008 | BYOB (Bring Your Own Base) | — | draft |
 | DP.IWE.009 | IWE Perimeter (Контур IWE) | — | draft |
 | DP.IWE.010 | IWE Machine (Машина IWE) | — | draft |
+| DP.IWE.011 | IWE Runtime Host Contract | — | draft |
+| DP.IWE.011-adapter-claude-code | Claude Code Adapter for IWE Host Contract | — | active |
 
 ### KR
 
@@ -641,6 +643,8 @@ generated: true
 - Missing `summary`: DP.IWE.008 (DP.IWE.008-byob-principle.md)
 - Missing `summary`: DP.IWE.009 (DP.IWE.009-iwe-perimeter.md)
 - Missing `summary`: DP.IWE.010 (DP.IWE.010-iwe-machine.md)
+- Missing `summary`: DP.IWE.011-adapter-claude-code (claude-code-adapter.md)
+- Missing `summary`: DP.IWE.011 (DP.IWE.011-runtime-host-contract.md)
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-artifactor.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
