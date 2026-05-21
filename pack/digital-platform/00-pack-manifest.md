@@ -132,6 +132,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.IWE.005 | Local MCP Gateway (in-process multi-agent layer) | IWE | — | draft |
 | DP.IWE.006 | Personal Guide Channels | IWE | — | draft |
 | DP.IWE.007 | 5 природ IWE (Five Natures of IWE) | IWE | Пять UX-природ IWE — чем IWE является для пилота: Мастерская (среда ежедневной работы), Железный человек (костюм-расширитель), Аватар (узел сети сопроизводителей), Тамагочи (выращиваемый питомец, требующий ухода), Наставник (ведёт по траектории развития). Дополняет 5 архитектурных видов DP.IWE.001 (ISO 42010) — другая онтологическая ось: природы про «чем IWE является для пилота», виды архитектуры про «как описывать IWE». Порядок природ отражает приоритет: работа → жизнь → обучение. Источники: пост club-126 (4 мая 2026), посты TG 675 + 679 + 143, уточнение пилота 2026-05-18 (+5-я природа), уточнение пилота 2026-05-20 (Со-творец → Тамагочи, reorder). | draft |
+| DP.IWE.008 | BYOB (Bring Your Own Base) | IWE | — | draft |
+| DP.IWE.009 | IWE Perimeter (Контур IWE) | IWE | — | draft |
+| DP.IWE.010 | IWE Machine (Машина IWE) | IWE | — | draft |
 | DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности и DS docs/ через обнаружение, классификацию, двойной routing и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
@@ -251,6 +254,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.118 | Cohort Intake Survey Freeze | M | — | active |
 | DP.M.120 | Boundary Mapping Constant — single source граничного маппинга | M | — | active |
 | DP.M.121 | Universal Guide Phases F0 F6 | M | — | draft |
+| DP.M.122 | Security Culture (Pilot habits) | M | — | draft |
+| DP.M.123 | Backup (Pilot method) | M | — | draft |
+| DP.M.124 | Encryption (Pilot method) | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
