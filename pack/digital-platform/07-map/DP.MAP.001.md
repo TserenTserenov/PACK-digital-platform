@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 41 |
+| Distinctions (D) | 42 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 58 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 26 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **434** |
+| **Total** | **435** |
 
 ## Distinctions
 
@@ -86,6 +86,7 @@ generated: true
 | DP.D.075 | personal_search (семантический транспорт) ≠ Honcho (накопитель инференций) | personal_search — семантический доступ к источникам текста; Honcho — накопитель паттернов между запусками. В cognitive proxy pipeline: personal_search = транспорт, Honcho = память. | draft |
 | DP.D.076 | Контролёр развития ≠ Оркестратор / Проводник / Навигатор / Оценщик / Аттестатор / Диагност | Контролёр развития (R46) — плановый фоновый сканер маркеров; не путать с шестью смежными ролями: Оркестратором (родитель), Проводником (FSM в боте), Навигатором (методология), Оценщиком (оценка ответа), Аттестатором (стадия по событиям), Диагностом (cp-профиль по запросу). Все шесть разделены по pace-слою, источнику истины и объекту внимания. | draft |
 | DP.D.077 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
+| DP.D.078 | Smoke Technical Vs Processing Signal | — | active |
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 
 ## Methods
@@ -619,6 +620,7 @@ generated: true
 - Missing `summary`: DP.D.072 (DP.D.072-format-spec-vs-format-checklist.md)
 - Missing `summary`: DP.D.073 (DP.D.073-storefront-vs-internal-platform.md)
 - Missing `summary`: DP.D.077 (DP.D.077-interface-vs-learning-onboarding.md)
+- Missing `summary`: DP.D.078 (DP.D.078-smoke-technical-vs-processing-signal.md)
 - Missing `summary`: DP.D.078 (DP.D.078-value-vs-technical-language.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
