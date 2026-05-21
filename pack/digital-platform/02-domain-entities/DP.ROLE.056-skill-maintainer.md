@@ -1,6 +1,7 @@
 ---
 id: DP.ROLE.056
 name: R32 Мейнтейнер скиллов
+name_ru: Мейнтейнер скиллов
 name_en: Skill Maintainer
 type: role-description
 status: draft

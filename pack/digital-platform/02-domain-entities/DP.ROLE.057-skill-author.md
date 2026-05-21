@@ -1,6 +1,7 @@
 ---
 id: DP.ROLE.057
 name: R33 Автор скилла
+name_ru: Автор скилла
 name_en: Skill Author
 type: role-description
 status: draft

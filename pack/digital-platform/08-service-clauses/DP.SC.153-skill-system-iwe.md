@@ -1,6 +1,7 @@
 ---
 id: DP.SC.153
 name: Скилл-система IWE
+name_ru: Скилл-система IWE
 name_en: IWE Skill System
 type: sc
 status: draft
