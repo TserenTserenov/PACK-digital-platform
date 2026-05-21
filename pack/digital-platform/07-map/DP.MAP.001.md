@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 58 |
 | IWE (IWE) | 7 |
 | KR (KR) | 1 |
-| Methods (M) | 107 |
+| Methods (M) | 118 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 26 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **423** |
+| **Total** | **434** |
 
 ## Distinctions
 
@@ -199,6 +199,17 @@ generated: true
 | DP.M.106 | Literature crosscheck при именовании Pack-сущностей | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
 | DP.M.107 | Role Rename Downstream Review | — | active |
 | DP.M.108 | Specializes Vs Parallel Roles | — | active |
+| DP.M.110 | Декларативный словарь предикатов для nudge-движка | — | — |
+| DP.M.111 | Majority-vote детектор структурного drift | — | — |
+| DP.M.112 | run_skill() — headless dispatch скиллов через claude -p | — | draft |
+| DP.M.113 | Разделение earned_total и points в gamification схеме | — | draft |
+| DP.M.114 | Исторический cap бонусов: интеграл по истории квалификации | — | draft |
+| DP.M.115 | Конвейер руководств из Pack (Living Documentation CI/CD) | Pack = единый источник истины для N руководств. Изменение в Pack → автоматическая валидация структуры → оценка качества → сборка нового контента. Персонализация = дополнительный слой: разделы выбираются по ступени + bottleneck + домен пользователя. | active |
+| DP.M.116 | Решение о распределении captures по Pack (Вариант B > Вариант A) | При KE из нового источника: предпочтительно распределить по существующим Pack (Вариант B), а не создавать новый Pack (Вариант A). Вариант A оправдан только при: (1) принципиально новый домен, или (2) ≥30% сущностей не вписываются ни в один существующий Pack. | active |
+| DP.M.117 | Cohort Content As Declarative Json | — | active |
+| DP.M.118 | Cohort Intake Survey Freeze | — | active |
+| DP.M.120 | Boundary Mapping Constant — single source граничного маппинга | — | active |
+| DP.M.121 | Universal Guide Phases F0 F6 | — | draft |
 
 ## Work Products
 
@@ -676,6 +687,15 @@ generated: true
 - Missing `summary`: DP.M.105 (DP.M.105-workflow-call-orchestration.md)
 - Missing `summary`: DP.M.107 (DP.M.107-role-rename-downstream-review.md)
 - Missing `summary`: DP.M.108 (DP.M.108-specializes-vs-parallel-roles.md)
+- Missing `summary`: DP.M.110 (DP.M.110-declarative-nudge-markers.md)
+- Missing `summary`: DP.M.111 (DP.M.111-majority-vote-structure-drift-detector.md)
+- Missing `summary`: DP.M.112 (DP.M.112-run-skill-headless-dispatch.md)
+- Missing `summary`: DP.M.113 (DP.M.113-earned-total-vs-points-separation.md)
+- Missing `summary`: DP.M.114 (DP.M.114-historical-bonus-cap.md)
+- Missing `summary`: DP.M.117 (DP.M.117-cohort-content-as-declarative-json.md)
+- Missing `summary`: DP.M.118 (DP.M.118-cohort-intake-survey-freeze.md)
+- Missing `summary`: DP.M.120 (DP.M.120-boundary-mapping-constant.md)
+- Missing `summary`: DP.M.121 (DP.M.121-universal-guide-phases-f0-f6.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)

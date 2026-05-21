@@ -239,6 +239,17 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.106 | Literature crosscheck при именовании Pack-сущностей | M | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
 | DP.M.107 | Role Rename Downstream Review | M | — | active |
 | DP.M.108 | Specializes Vs Parallel Roles | M | — | active |
+| DP.M.110 | Декларативный словарь предикатов для nudge-движка | M | — | — |
+| DP.M.111 | Majority-vote детектор структурного drift | M | — | — |
+| DP.M.112 | run_skill() — headless dispatch скиллов через claude -p | M | — | draft |
+| DP.M.113 | Разделение earned_total и points в gamification схеме | M | — | draft |
+| DP.M.114 | Исторический cap бонусов: интеграл по истории квалификации | M | — | draft |
+| DP.M.115 | Конвейер руководств из Pack (Living Documentation CI/CD) | M | Pack = единый источник истины для N руководств. Изменение в Pack → автоматическая валидация структуры → оценка качества → сборка нового контента. Персонализация = дополнительный слой: разделы выбираются по ступени + bottleneck + домен пользователя. | active |
+| DP.M.116 | Решение о распределении captures по Pack (Вариант B > Вариант A) | M | При KE из нового источника: предпочтительно распределить по существующим Pack (Вариант B), а не создавать новый Pack (Вариант A). Вариант A оправдан только при: (1) принципиально новый домен, или (2) ≥30% сущностей не вписываются ни в один существующий Pack. | active |
+| DP.M.117 | Cohort Content As Declarative Json | M | — | active |
+| DP.M.118 | Cohort Intake Survey Freeze | M | — | active |
+| DP.M.120 | Boundary Mapping Constant — single source граничного маппинга | M | — | active |
+| DP.M.121 | Universal Guide Phases F0 F6 | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
