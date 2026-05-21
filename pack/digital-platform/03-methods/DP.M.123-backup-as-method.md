@@ -12,7 +12,7 @@ trust:
 epistemic_stage: emerging
 related:
   uses: [DP.IWE.008, DP.IWE.010]
-  realized_by: [DP.M.122]
+  part_of: [DP.M.122]
   distinct_from: [DP.M.047]
 tags: [backup, restore, byob, 3-2-1, recovery]
 wp: WP-333 Ф8

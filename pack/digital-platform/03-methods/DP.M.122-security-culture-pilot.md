@@ -11,7 +11,8 @@ trust:
   R: 0.7
 epistemic_stage: emerging
 related:
-  uses: [DP.IWE.009, DP.M.123, DP.M.124]
+  uses: [DP.IWE.009]
+  realized_by: [DP.M.123, DP.M.124]
   distinct_from: [DP.M.013]
   references: [DP.IWE.008]
 tags: [security, culture, habits, backup, encryption, 2fa, byob]

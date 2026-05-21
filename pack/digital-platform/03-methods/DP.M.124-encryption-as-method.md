@@ -12,7 +12,7 @@ trust:
 epistemic_stage: emerging
 related:
   uses: [DP.IWE.009]
-  realized_by: [DP.M.122]
+  part_of: [DP.M.122]
   distinct_from: [DP.M.087]
 tags: [encryption, security, privacy, secrets, byob]
 wp: WP-333 Ф8
