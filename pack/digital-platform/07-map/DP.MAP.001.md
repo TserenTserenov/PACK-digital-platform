@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 42 |
+| Distinctions (D) | 43 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 60 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **465** |
+| **Total** | **466** |
 
 ## Distinctions
 
@@ -88,6 +88,7 @@ generated: true
 | DP.D.077 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | — | active |
+| DP.D.080 | Control Vs Operation | — | active |
 
 ## Methods
 
@@ -652,6 +653,7 @@ generated: true
 - Missing `summary`: DP.D.077 (DP.D.077-interface-vs-learning-onboarding.md)
 - Missing `summary`: DP.D.078 (DP.D.078-value-vs-technical-language.md)
 - Missing `summary`: DP.D.079 (DP.D.079-smoke-technical-vs-processing-signal.md)
+- Missing `summary`: DP.D.080 (DP.D.080-control-vs-operation.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
