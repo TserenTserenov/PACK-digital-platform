@@ -26,7 +26,7 @@ generated: true
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 60 |
 | IWE (IWE) | 13 |
-| KR (KR) | 1 |
+| KR (KR) | 2 |
 | Methods (M) | 129 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **464** |
+| **Total** | **465** |
 
 ## Distinctions
 
@@ -422,6 +422,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.KR.001 | Маршрутизация знаний IWE | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
+| DP.KR.030 | Принцип триады учёт-доступ-аудит | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. Серия KR.030–039 зарезервирована под принципы этой триады. | draft |
 
 ### METHOD
 
