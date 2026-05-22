@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 60 |
 | IWE (IWE) | 13 |
 | KR (KR) | 1 |
-| Methods (M) | 127 |
+| Methods (M) | 129 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **461** |
+| **Total** | **463** |
 
 ## Distinctions
 
@@ -220,6 +220,8 @@ generated: true
 | DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | — | draft |
 | DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | — | — |
 | DP.M.142 | CI Setup Flag Mode Separation | — | draft |
+| DP.M.156 | Upgrade-Markers в Service Contract | — | — |
+| DP.M.157 | CI-чек покрытия манифеста дистрибутива | — | — |
 
 ## Work Products
 
@@ -739,6 +741,8 @@ generated: true
 - Missing `summary`: DP.M.140 (DP.M.140-forming-to-formalized-ontology-term-lifecycle.md)
 - Missing `summary`: DP.M.141 (DP.M.141-pack-refs-source-docs-ontology-anchor.md)
 - Missing `summary`: DP.M.142 (DP.M.142-ci-setup-flag-mode-separation.md)
+- Missing `summary`: DP.M.156 (DP.M.156-upgrade-markers-in-service-contract.md)
+- Missing `summary`: DP.M.157 (DP.M.157-manifest-coverage-ci-check.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)

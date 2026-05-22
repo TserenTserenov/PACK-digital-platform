@@ -268,6 +268,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | M | — | draft |
 | DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | M | — | — |
 | DP.M.142 | CI Setup Flag Mode Separation | M | — | draft |
+| DP.M.156 | Upgrade-Markers в Service Contract | M | — | — |
+| DP.M.157 | CI-чек покрытия манифеста дистрибутива | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
