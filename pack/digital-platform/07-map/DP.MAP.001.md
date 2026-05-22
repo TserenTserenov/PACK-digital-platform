@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 40 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 98 |
+| SC (SC) | 99 |
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **460** |
+| **Total** | **461** |
 
 ## Distinctions
 
@@ -613,6 +613,7 @@ generated: true
 | DP.SC.152 | Анализ ограничения ИТ-платформы (platform-bottleneck) | Стратег или CTO получает Constraint Brief с конкретной C2-подсистемой из MAP.002, где максимальное число failing SC, + Stage Dependency Map для устранения. Отличие от SC.045: target жёстко ограничен C2 ИТ-платформой, SC-scan идёт по MAP.002 (12 подсистем, SC.001-SC.151), не по произвольному конвейеру. | draft |
 | DP.SC.153 | Скилл-система IWE | Разработчик IWE получает: каталог всех скиллов с метаданными и графом зависимостей; конвейер создания (create-skill.sh → validate → promote); безопасное обновление через versioning без перезаписи L3-кастомизаций. | draft |
 | DP.SC.154 | Мульти-агентная диалоговая сессия | Пилот ставит задачу команде из 2+ peer-агентов разных вендоров; они многотурово обсуждают её, согласуют единый отчёт; любой может эскалировать к пилоту при принципиальном несогласии. | draft |
+| DP.SC.155 | Маршрут оснащения (Setup Journey) | Пилот R2 на T1 открывает /setup и получает актуальный дашборд прогресса по пути T1→T4: текущий тир, ступень мастерства, что подключено, следующий шаг с CTA. Дашборд читает свежие данные (tier_detector + cp_assessments + onboarding_state) через asyncio.gather. Guided flow проводит шаг за шагом без повторных нажатий (double-tap protection). Последнее CTA-действие пишет last_nudge_at — предотвращает дубль от onboarding_controller в течение 24h. | draft |
 
 ### SYS
 
