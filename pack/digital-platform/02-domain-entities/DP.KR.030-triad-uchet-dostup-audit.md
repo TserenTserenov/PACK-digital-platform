@@ -15,7 +15,7 @@ related:
   uses:
     - DP.D.080   # контроль vs операция
     - DP.ROLE.024  # Аудитор (конкретизация аудитной ветки триады)
-  componentOf: [DP.ROLE.001]
+  component_of: [DP.ROLE.001]
 tags: [triad-principle, triad-series-030-039, control-architecture, audit-independence]
 ---
 
