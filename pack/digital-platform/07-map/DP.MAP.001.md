@@ -88,7 +88,7 @@ generated: true
 | DP.D.077 | Interface Onboarding ≠ Learning Onboarding (по объекту обучения: интерфейс vs контент) | — | active |
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | — | active |
-| DP.D.080 | Control Vs Operation | — | active |
+| DP.D.080 | Контрольная роль ≠ Операционная роль | — | active |
 
 ## Methods
 
