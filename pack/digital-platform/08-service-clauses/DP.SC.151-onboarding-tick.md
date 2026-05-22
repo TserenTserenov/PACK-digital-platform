@@ -2,7 +2,7 @@
 id: DP.SC.151
 name: Контролёр развития (профиль Onboarding Tick)
 type: sc
-status: draft
+status: active
 layer: L2-Platform
 summary: "Опт-инный пилот R2 получает поведенческий нудж (TG или render-задача Портному) по очереди из 11 онбординговых сообщений (WP-343) + независимые upgrade-маркеры T1→T4 (WP-349: B-low/B-high/C/E). Сообщение приходит не по расписанию, а по реальному поведению пилота. Не более 1 нуджа в сутки. Следующее сообщение доставляется в течение 8h после срабатывания триггера."
 consumer: "Опт-инный пилот R2 (получатель нуджа), Портной DP.ROLE.027 (render-задачи), Проводник R13 (FSM апдейты)"
@@ -126,9 +126,24 @@ wp: [WP-346, WP-349]
 | `iwe-onboarding-controller.service` (NixOS) | systemd unit | через timer |
 | `iwe-onboarding-controller.timer` (NixOS) | systemd timer | OnCalendar |
 
+## Managed-канал (T3a, WP-309 Ф8)
+
+msg_7 запускает **двухтрековую доставку** персонального руководства:
+
+| Трек | Условие | Что происходит |
+|------|---------|---------------|
+| **T3a Managed** | Нет `user_sources` (sovereign-репо) И нет `pilot_repo_map` | `create_managed_repo()` → репо `aisystant/pg-{uuid8}` создаётся автоматически → нудж содержит ссылку `GUIDE_WEB_URL/guide/{uuid}?auto=1` |
+| **T3b Sovereign** | Есть `user_sources` (GitHub App установлен) | Нудж содержит `/personal-guide-start` |
+| **T3a уже создан** | Есть `pilot_repo_map` (managed) | Нудж содержит прямую ссылку `GUIDE_WEB_URL/guide/{uuid}` |
+
+**URL web-ридера:** `GUIDE_WEB_URL` env var на tsekh-1. Дефолт: `https://guide.system-school.ru`. Fallback (пока DNS не настроен): `https://web-production-1812d.up.railway.app`.
+
+**Инвариант:** managed-репо никогда не видно в GitHub пилота — хранится в org `aisystant`. Пилот читает через web-ридер. Миграция managed→sovereign при достижении ступени 3 — WP-309 Ф10+.
+
 ## История изменений
 
 | Версия | Дата | Изменение | WP |
 |--------|------|-----------|-----|
 | 0.1 | 2026-05-20 | Первичная фиксация контракта Onboarding Tick | WP-346 |
 | 0.2 | 2026-05-22 | UPGRADE_MARKERS B-low/B-high/C/E: независимые триггеры T1→T4; cp_stage из cp_assessments; приоритет sequential→upgrade | WP-349 |
+| 0.3 | 2026-05-22 | Managed-канал T3a: двухтрековая доставка msg_7 (create_managed_repo + web-reader URL); status → active | WP-309 Ф8 |
