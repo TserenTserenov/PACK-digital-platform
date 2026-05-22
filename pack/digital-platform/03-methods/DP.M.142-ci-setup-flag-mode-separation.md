@@ -1,0 +1,73 @@
+---
+id: DP.M.142
+name: "CI Setup Flag Mode Separation"
+name_ru: "Dual-mode setup script через SETUP_CI=1 флаг"
+type: method
+status: draft
+created: 2026-05-22
+trust:
+  F: 3
+  G: domain
+  R: 0.8
+epistemic_stage: established
+related:
+  uses: []
+  see_also: [DP.M.050, DP.M.088]
+tags: [ci, setup, scripting, prerequisites, dual-mode]
+wp: FMT-exocortex-template commit 16b468a
+---
+
+# Dual-mode Setup Script через SETUP_CI=1 (DP.M.142)
+
+## 1. Проблема
+
+Setup-скрипт (`setup.sh`) должен работать в двух контекстах:
+1. **Локальная установка** — полная инсталляция: проверка и установка CLI-зависимостей (claude, node, npm), платформенных компонентов, конфигов.
+2. **CI/CD runner** — GitHub Actions или аналог уже имеет CLI-инструменты в образе; повторная проверка/установка избыточна и ломает pipeline.
+
+## 2. Паттерн
+
+**Env-флаг разделяет режимы:**
+
+```bash
+if [[ "$SETUP_CI" != "1" ]]; then
+    # Проверить и установить CLI-prerequisites
+    check_claude_installed
+    check_node_npm
+    install_if_missing
+fi
+
+# Далее — платформенные компоненты (всегда)
+setup_hooks
+setup_config
+smoke_test
+```
+
+**Запуск:**
+- Локально: `bash setup.sh` (полная установка)
+- В CI: `SETUP_CI=1 bash setup.sh` (только платформенные компоненты)
+
+## 3. Три обязательных smoke-test кейса
+
+| Кейс | Условие | Ожидаемый результат |
+|------|---------|---------------------|
+| Локальный полный | `SETUP_CI` не задан | Проверка всех prerequisites |
+| CI-режим | `SETUP_CI=1` | Prerequisites пропущены, платформа настроена |
+| Отсутствие зависимости в CI | `SETUP_CI=1` + отсутствует нужный инструмент | Fail с явным сообщением (не silent) |
+
+## 4. Антипаттерны
+
+- **Два отдельных скрипта (`setup.sh` и `ci-setup.sh`)** — дублирование логики, drift неизбежен.
+- **Hardcoded проверка окружения** (`if [ -f /.dockerenv ]`) — хрупко, зависит от специфики runner.
+- **Пропуск всех проверок в CI** — маскирует отсутствие обязательных инструментов в образе.
+
+## 5. Условия применимости
+
+- Setup-скрипт используется и локально, и в CI.
+- CI-runner гарантированно имеет CLI-зависимости (они предустановлены в образе или кэшированы).
+- Платформенные компоненты (хуки, конфиги) нужны в обоих режимах.
+
+## 6. Связи
+
+- **DP.M.050** — env isolation для тестовых окружений (схожий паттерн, другой контекст: тест vs продакшен).
+- **DP.M.088** — CI pre-commit defence in depth (связанная CI-практика).

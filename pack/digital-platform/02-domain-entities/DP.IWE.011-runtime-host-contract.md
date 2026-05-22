@@ -101,8 +101,8 @@ source: WP-337 направление-Ж (стратсессия 21 мая 2026)
 | Компонент | Claude Code | Hermes (план) | Бот (TG) | Headless CLI |
 |-----------|-------------|---------------|----------|--------------|
 | Tool API | ✅ Нативно | 📋 Проектируется | ⚠️ Частично (нет fs.*) | ⚠️ Частично (нет skill.*) |
-| SESSION_START/END | ✅ Via hooks | 📋 В дизайне | ⚠️ Частичная эмуляция | ⚠️ Требует обёртки |
-| TOOL_EXECUTED | ✅ PostToolUse | 📋 В дизайне | ❌ Нет | ⚠️ Требует обёртки |
+| SESSION_START/END | ✅ Via hooks | 📋 В дизайне | ⚠️ Частичная эмуляция | ✅ Stop хук работает без обёртки |
+| TOOL_EXECUTED | ✅ PostToolUse | 📋 В дизайне | ❌ Нет | ✅ PostToolUse работает без обёртки |
 | IWE_RUNTIME | ✅ CC-адаптер | 📋 Hermes-адаптер | 📋 bot-адаптер | 📋 headless-адаптер |
 | AGENT_SESSION_ID | ✅ CC-адаптер | 📋 Hermes native | ⚠️ update_id как proxy | ✅ UUID генерируется |
 | Скиллы (invoke) | ✅ `/slash` | 📋 Аналог | ⚠️ Команды TG | ⚠️ Аргументы CLI |
@@ -163,3 +163,17 @@ task_tracker.create([{content: "шаг 1", status: "pending"}])
 - **DP.SC.019** — автономный cloud runtime (будущий хост на основе Hermes)
 - **WP-337 Ж-Ф1** — аудит зависимостей (`направление-Ж-ф1-audit.md`)
 - **WP-337 Ж-Ф3** — адаптер Claude Code (`DP.IWE.011-adapters/claude-code-adapter.md`)
+
+---
+
+## 8. Headless-режим (claude -p)
+
+**Ключевой инсайт:** хуки IWE (PostToolUse/Stop из settings.json) срабатывают при `claude -p` без изменений конфигурации. Headless-режим = полноценный runtime-хост по DP.IWE.011.
+
+**Практические следствия:**
+- `TOOL_EXECUTED` (PostToolUse) эмитируется в headless-режиме — хуки получают события штатно
+- `SESSION_END` (Stop) эмитируется при завершении `claude -p` — close-хуки выполняются
+- TaskTracker в headless реализуется через файловую систему (tasks/*.md) вместо встроенного TodoWrite
+- Scheduler в headless = внешний cron/launchd с параметром `due:` в task-файле
+
+**См. также:** DP.SOTA.028 (Claude CLI headless hook inheritance), DP.D.083 (Persistent TaskTracker ≠ Ephemeral TodoWrite).

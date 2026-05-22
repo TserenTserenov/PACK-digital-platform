@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-21
-last_updated: 2026-05-21
+created: 2026-05-22
+last_updated: 2026-05-22
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-21. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-22. Do not edit manually.
 
 ---
 
@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 42 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 58 |
+| Failure Modes (FM) | 60 |
 | IWE (IWE) | 13 |
 | KR (KR) | 1 |
-| Methods (M) | 121 |
+| Methods (M) | 127 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -37,10 +37,10 @@ generated: true
 | ROLE (ROLE) | 40 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 97 |
-| SoTA Annotations (SOTA) | 26 |
+| SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **450** |
+| **Total** | **459** |
 
 ## Distinctions
 
@@ -214,6 +214,12 @@ generated: true
 | DP.M.122 | Security Culture (Pilot habits) | — | draft |
 | DP.M.123 | Backup (Pilot method) | — | draft |
 | DP.M.124 | Encryption (Pilot method) | — | draft |
+| DP.M.137 | Auto-Trigger Subagent Review on First Subsection | — | active |
+| DP.M.138 | Dispatcher: синхронизация origin и идемпотентная запись результата после headless-агента | — | draft |
+| DP.M.139 | Lint-плейсхолдер как детектор онтологических пробелов Pack | — | draft |
+| DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | — | draft |
+| DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | — | — |
+| DP.M.142 | CI Setup Flag Mode Separation | — | draft |
 
 ## Work Products
 
@@ -298,6 +304,8 @@ generated: true
 | DP.FM.059 | Hook Command Relative Path | — | draft |
 | DP.FM.060 | Half Migration Manifest Runner Split | — | draft |
 | DP.FM.061 | Ci Optional Secret Hard Fail | — | draft |
+| DP.FM.070 | Dispatcher Git Reset Race Condition | — | active |
+| DP.FM.072 | Не-канонические формы понятий в introduces и pack_refs | — | — |
 
 ## SoTA Annotations
 
@@ -329,6 +337,7 @@ generated: true
 | DP.SOTA.024 | BORO Methodology — Fundamental Particles & Fruitful Patterns | SOTA-аннотация методологии BORO (Business Objects Re-Engineering for Re-Use, Partridge): фундаментальные онтологические частицы и гипотеза о межпроектной fruitfulness паттернов. trust: hypothesis. | active |
 | DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
 | DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
+| DP.SOTA.028 | Claude CLI headless hook inheritance — хуки из settings.json наследуются при `claude -p` | Lifecycle-хуки Claude Code (PostToolUse, Stop из .claude/settings.json) срабатывают при `claude -p` идентично интерактивному режиму. Headless-агент автоматически получает весь hook-слой (WakaTime, agent-trace-recorder, rule-engine) без дополнительного кода, при условии что CLAUDE_CONFIG_DIR / CLAUDE_PROJECT_DIR указаны. | draft |
 
 ## Maps
 
@@ -722,6 +731,12 @@ generated: true
 - Missing `summary`: DP.M.122 (DP.M.122-security-culture-pilot.md)
 - Missing `summary`: DP.M.123 (DP.M.123-backup-as-method.md)
 - Missing `summary`: DP.M.124 (DP.M.124-encryption-as-method.md)
+- Missing `summary`: DP.M.137 (DP.M.137-auto-trigger-subagent-review-first-subsection.md)
+- Missing `summary`: DP.M.138 (DP.M.138-dispatcher-origin-sync-after-headless-agent.md)
+- Missing `summary`: DP.M.139 (DP.M.139-lint-placeholder-as-ontology-gap-detector.md)
+- Missing `summary`: DP.M.140 (DP.M.140-forming-to-formalized-ontology-term-lifecycle.md)
+- Missing `summary`: DP.M.141 (DP.M.141-pack-refs-source-docs-ontology-anchor.md)
+- Missing `summary`: DP.M.142 (DP.M.142-ci-setup-flag-mode-separation.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -750,6 +765,8 @@ generated: true
 - Missing `summary`: DP.FM.059 (DP.FM.059-hook-command-relative-path.md)
 - Missing `summary`: DP.FM.060 (DP.FM.060-half-migration-manifest-runner-split.md)
 - Missing `summary`: DP.FM.061 (DP.FM.061-ci-optional-secret-hard-fail.md)
+- Missing `summary`: DP.FM.070 (DP.FM.070-dispatcher-git-reset-race-condition.md)
+- Missing `summary`: DP.FM.072 (DP.FM.072-canonical-form-introduces-pack-refs.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -771,4 +788,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-21*
+*Generated by `scripts/generate-map.py` on 2026-05-22*
