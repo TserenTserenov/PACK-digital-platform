@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 40 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 97 |
+| SC (SC) | 98 |
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **459** |
+| **Total** | **460** |
 
 ## Distinctions
 
@@ -484,7 +484,7 @@ generated: true
 | DP.ROLE.036 | Коннектор клуба | Носитель потока данных systemsworld.club (Discourse) → Neon. Read-only ingest активности участников через webhook + polling backfill, с lazy-резолвом discourse_user_id ↔ ory_identity_id после ORY-SSO. | draft |
 | DP.ROLE.037 | Регистратор РП | Координатор целостности: гарантирует, что статус любого РП одинаков во всех 5 хранилищах IWE. Не исполняет работу по РП — исполняет работу ПО МЕТАДАННЫМ РП. | active |
 | DP.ROLE.038 | MCP Tool Consumer | Посредник между LLM-клиентом (бот) и платформенными MCP-серверами: загружает актуальный список tool через discovery (tools/list), кэширует с TTL, фильтрует по tier, передаёт в Claude API без hardcoded списков в коде. | draft |
-| DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в VS Code multi-agent сессии: подключается к Local Gateway, заявляет focus в peer-status, acquire lock перед write, sync через git sequential commits, escalates архитектурные разногласия к пилоту (не решает unilateral). Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
+| DP.ROLE.039 | Peer Agent (равноправный peer-агент в multi-agent сессии) | Peer-агент в multi-agent IWE сессии: работает в одном из двух режимов — (A) workspace-координация через Local Gateway lock + peer-status, (B) conversational-сессия через журнал реплик с позициями писатель/напарник. Конкретные инстансы: Claude Code, Kimikode, Aider и т.п. | draft |
 | DP.ROLE.040 | OAuth Orchestrator (единая точка OAuth-flows для всех каналов IWE) | Сервис-роль: принимает OAuth setup/callback запросы от web/vscode/bot каналов, разрешает identity (Ory > telegram > github), управляет state-token lifecycle, координирует token exchange с провайдерами (GitHub App, Linear, Twin, Google Cal, WakaTime, Ory), хранит токены encrypted-at-rest в Neon. Не зависит от bot process. | draft |
 | DP.ROLE.041 | Аттестатор | Роль автоматического вычислителя ступени Ученика: читает события из Activity Hub, считает 7 bh-характеристик (bh.sys/inv/met/awr/agn/scl/stb) по двум осям (Мастерство × Мировоззрение), сравнивает с нормативной матрицей и записывает bh-сигнал в learning.stage_transitions. Итоговую ступень фиксирует двойной gate: bh-сигнал Аттестатора + cp-подтверждение Диагноста (MIM.R.009). Болид-онтология: Аттестатор измеряет Пилота, не всего Созидателя. | draft |
 | DP.ROLE.042 | Диагност (R28) | Роль диалоговой и фоновой диагностики ученика: проводит диалог ≤5 вопросов (три фазы), вычисляет cp-профиль (ступень + bottleneck + recommended_stream + skip_to_stage), сохраняет в learning.cp_assessments. В фоновом режиме — silent-monitoring сигналов инвалидации и подсказки активным ролям (Навигатор / Портной / Аттестатор). Реализует двойной gate FORM.089 §5.1 с Аттестатором. | draft |
@@ -612,6 +612,7 @@ generated: true
 | DP.SC.151 | Контролёр развития (профиль Onboarding Tick) | Опт-инный пилот R2 получает поведенческий нудж (TG или render-задача Портному) по очереди из 11 онбординговых сообщений (WP-343). Сообщение приходит не по расписанию, а по реальному поведению пилота. Не более 1 нуджа в сутки. Следующее сообщение доставляется в течение 8h после срабатывания триггера. | draft |
 | DP.SC.152 | Анализ ограничения ИТ-платформы (platform-bottleneck) | Стратег или CTO получает Constraint Brief с конкретной C2-подсистемой из MAP.002, где максимальное число failing SC, + Stage Dependency Map для устранения. Отличие от SC.045: target жёстко ограничен C2 ИТ-платформой, SC-scan идёт по MAP.002 (12 подсистем, SC.001-SC.151), не по произвольному конвейеру. | draft |
 | DP.SC.153 | Скилл-система IWE | Разработчик IWE получает: каталог всех скиллов с метаданными и графом зависимостей; конвейер создания (create-skill.sh → validate → promote); безопасное обновление через versioning без перезаписи L3-кастомизаций. | draft |
+| DP.SC.154 | Мульти-агентная диалоговая сессия | Пилот ставит задачу команде из 2+ peer-агентов разных вендоров; они многотурово обсуждают её, согласуют единый отчёт; любой может эскалировать к пилоту при принципиальном несогласии. | draft |
 
 ### SYS
 
