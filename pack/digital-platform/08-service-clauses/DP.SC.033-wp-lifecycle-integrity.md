@@ -28,6 +28,16 @@ wp: WP-297
 - MEMORY.md содержит ТОЛЬКО `in_progress` / `pending` РП.
 - Новый РП создаётся одновременно во всех 5 местах (атомарно или с немедленным ремонтом).
 - drift type A (zombie WP) обнаруживается каждый Day Open через `active-wp-sweep.sh`.
+- При архивации РП context-файл получает `status: archived` + `archived_at: YYYY-MM-DD`. Если в frontmatter нет поля `results_in` (ссылки на Pack/DS куда ушли результаты) — добавляется `results_not_captured: true` (TTL 7 дней, решается пилотом при Week Close).
+
+### Инвариант inbox-lifecycle (DP.M.008 элемент #12 ТО)
+
+Inbox — **транзитная зона**. Документы в `inbox/WP-N(/)` — временные handoff-материалы для исполнения РП. Финальные результаты РП (знания, решения, код) уходят в Pack или DS в процессе работы (через KE / apply-captures). После закрытия РП:
+1. Context-файл → `archive/wp-contexts/WP-N(/)` через `git mv`
+2. Pack/DS уже содержат результаты — проверяется по полю `results_in`
+3. Если `results_in` нет → флаг `results_not_captured: true`, рассматривается при Week Close
+
+Это правило формализует элемент **#12 ТО** (Техническое обслуживание) из DP.M.008.
 
 ## Обещание
 
