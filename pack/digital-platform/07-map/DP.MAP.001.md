@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-23
-last_updated: 2026-05-23
+created: 2026-05-24
+last_updated: 2026-05-24
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-23. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-24. Do not edit manually.
 
 ---
 
@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 43 |
+| Distinctions (D) | 49 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 60 |
+| Failure Modes (FM) | 68 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 129 |
+| Methods (M) | 149 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **469** |
+| **Total** | **503** |
 
 ## Distinctions
 
@@ -89,6 +89,12 @@ generated: true
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | — | active |
 | DP.D.080 | Контрольная роль ≠ Операционная роль | — | active |
+| DP.D.089 | Cascading failure ≠ Independent failures | — | active |
+| DP.D.090 | Structural smoke ≠ E2E smoke (по типу данных) | — | active |
+| DP.D.091 | Выровненные на boundary шкалы ≠ Параллельные с tandem-стыком | — | — |
+| DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | — | — |
+| DP.D.093 | Метка классификатора ≠ Источник ошибки | — | — |
+| DP.D.094 | Temporal correlation ≠ Causation | — | active |
 
 ## Methods
 
@@ -221,8 +227,28 @@ generated: true
 | DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | — | draft |
 | DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | — | — |
 | DP.M.142 | CI Setup Flag Mode Separation | — | draft |
+| DP.M.145 | Terminology replace — multi-pass verify through peer agent | — | draft |
+| DP.M.146 | Working-hypothesis marker with verification source | — | — |
+| DP.M.147 | Semantic-first / Performance-later layered integration | — | draft |
+| DP.M.148 | Audit cascade — обновление главного документа с прогоном связанных на drift | — | — |
+| DP.M.149 | Bearer == Shared Secret Backward-Compatible Auth Mode | — | draft |
+| DP.M.150 | Multi-Driver Compat via Duck-Typing of Connection API | — | draft |
+| DP.M.153 | Scaffold Fallback — Minimal Valid Document (не пустой файл) | Else-ветка guard-блока в cascaded scaffold-системе создаёт минимальный валидный документ (frontmatter + комментарий generated_by: fallback), а не пустой файл через touch. Downstream-парсеры получают рабочую оболочку, а не падают на отсутствующем YAML-блоке. | draft |
+| DP.M.154 | Embedded Python в bash — обязательные with-блоки (CPython-refcount-independence) | Embedded-Python сниппет в shell-скрипте для write-операций над manifest/config/state-файлами обязан использовать `with open(...) as f:` для каждого open. Безсонтекстный `json.dump(d, open(f, 'w'))` зависит от CPython refcount-driven __del__ — рискует partial-write на async/PyPy/exception. | draft |
+| DP.M.155 | Raw GitHub Distribution Model (raw-main delivery — коммит в main = production, version — info label не gate) | Модель доставки template-системы через raw.githubusercontent.com/<owner>/<repo>/main/<path>. Любой коммит в main немедленно доступен пользователям при следующем update.sh. Версия в manifest — информационная метка, не gate. Цена: pre-merge CI становится единственным защитным барьером. | draft |
 | DP.M.156 | Upgrade-Markers в Service Contract | — | — |
 | DP.M.157 | CI-чек покрытия манифеста дистрибутива | — | — |
+| DP.M.158 | Archgate Defer Pattern | — | — |
+| DP.M.159 | Скилл как единственная исполняемая точка входа | — | — |
+| DP.M.160 | Single point of degradation tracking | — | active |
+| DP.M.161 | Pack-зрелость как параметр оценки трудозатрат | — | active |
+| DP.M.162 | Adversarial Peer Review для методологических текстов | — | draft |
+| DP.M.163 | Checkpoint-протокол для отложенной финализации фазы РП | — | draft |
+| DP.M.164 | Base Group Replaces Domain Multiplier | Замена двойного кодирования ценности (domain_mult × base_group) на единственный base_group. Домен остаётся аналитическим атрибутом, не множителем в формуле начисления очков. | active |
+| DP.M.165 | Soft streak reset — плавное снижение вместо обнуления | — | active |
+| DP.M.166 | Referral-вознаграждение через ₽-кредит, не баллы | — | active |
+| DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | — | — |
+| DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | — | — |
 
 ## Work Products
 
@@ -309,6 +335,14 @@ generated: true
 | DP.FM.061 | Ci Optional Secret Hard Fail | — | draft |
 | DP.FM.070 | Dispatcher Git Reset Race Condition | — | active |
 | DP.FM.072 | Не-канонические формы понятий в introduces и pack_refs | — | — |
+| DP.FM.073 | Protocol Coverage Gap Mentioned Not Enforced | — | draft |
+| DP.FM.074 | State-machine callback handler without router wire-up = silent dead-end | — | — |
+| DP.FM.075 | deprecated-files-as-todo-tracker | Запись артефакта в `deprecated_files` до удаления всех зависимостей в коде — превращает список устаревших в TODO-трекер, что вызывает runtime-drift при следующем update. | draft |
+| DP.FM.077 | Overstated Validator Coverage in Documentation (Документация заявляет автоматическое покрытие, которое не выдержано) | Документация валидатора/линтера/детектора заявляет 'автоматически ловит этот класс ошибок' без указания scope. Реально детектор покрывает только subset (например, regex по конкретным путям). Пользователь полагается на автоматику для всего класса → дрейф проходит мимо. | draft |
+| DP.FM.078 | Ghost canonical pointer | — | active |
+| DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | — | active |
+| DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | — | — |
+| DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | — | — |
 
 ## SoTA Annotations
 
@@ -657,6 +691,12 @@ generated: true
 - Missing `summary`: DP.D.078 (DP.D.078-value-vs-technical-language.md)
 - Missing `summary`: DP.D.079 (DP.D.079-smoke-technical-vs-processing-signal.md)
 - Missing `summary`: DP.D.080 (DP.D.080-control-vs-operation.md)
+- Missing `summary`: DP.D.089 (DP.D.089-cascading-vs-independent-failure.md)
+- Missing `summary`: DP.D.090 (DP.D.090-structural-smoke-vs-e2e-smoke.md)
+- Missing `summary`: DP.D.091 (DP.D.091-aligned-boundary-vs-tandem-scales.md)
+- Missing `summary`: DP.D.092 (DP.D.092-rate-limit-vs-value.md)
+- Missing `summary`: DP.D.093 (DP.D.093-classifier-label-vs-source.md)
+- Missing `summary`: DP.D.094 (DP.D.094-temporal-correlation-vs-causation.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -748,8 +788,24 @@ generated: true
 - Missing `summary`: DP.M.140 (DP.M.140-forming-to-formalized-ontology-term-lifecycle.md)
 - Missing `summary`: DP.M.141 (DP.M.141-pack-refs-source-docs-ontology-anchor.md)
 - Missing `summary`: DP.M.142 (DP.M.142-ci-setup-flag-mode-separation.md)
+- Missing `summary`: DP.M.145 (DP.M.145-terminology-replace-multi-pass-verify.md)
+- Missing `summary`: DP.M.146 (DP.M.146-working-hypothesis-marker.md)
+- Missing `summary`: DP.M.147 (DP.M.147-semantic-first-performance-later.md)
+- Missing `summary`: DP.M.148 (DP.M.148-audit-cascade-related-documents.md)
+- Missing `summary`: DP.M.149 (DP.M.149-bearer-shared-secret-compat-auth-mode.md)
+- Missing `summary`: DP.M.150 (DP.M.150-multi-driver-compat-duck-typing.md)
 - Missing `summary`: DP.M.156 (DP.M.156-upgrade-markers-in-service-contract.md)
 - Missing `summary`: DP.M.157 (DP.M.157-manifest-coverage-ci-check.md)
+- Missing `summary`: DP.M.158 (DP.M.158-archgate-defer-pattern.md)
+- Missing `summary`: DP.M.159 (DP.M.159-skill-as-single-entry-point.md)
+- Missing `summary`: DP.M.160 (DP.M.160-single-point-degradation-tracking.md)
+- Missing `summary`: DP.M.161 (DP.M.161-pack-maturity-estimation-parameter.md)
+- Missing `summary`: DP.M.162 (DP.M.162-peer-adversarial-critique-methodology-guides.md)
+- Missing `summary`: DP.M.163 (DP.M.163-deferred-phase-finalization-checkpoint.md)
+- Missing `summary`: DP.M.165 (DP.M.165-soft-streak-reset.md)
+- Missing `summary`: DP.M.166 (DP.M.166-referral-credit-not-points.md)
+- Missing `summary`: DP.M.167 (DP.M.167-refinement-prompt-by-previous-length.md)
+- Missing `summary`: DP.M.168 (DP.M.168-post-deploy-regression-first-hypothesis.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -780,6 +836,12 @@ generated: true
 - Missing `summary`: DP.FM.061 (DP.FM.061-ci-optional-secret-hard-fail.md)
 - Missing `summary`: DP.FM.070 (DP.FM.070-dispatcher-git-reset-race-condition.md)
 - Missing `summary`: DP.FM.072 (DP.FM.072-canonical-form-introduces-pack-refs.md)
+- Missing `summary`: DP.FM.073 (DP.FM.073-protocol-coverage-gap-mentioned-not-enforced.md)
+- Missing `summary`: DP.FM.074 (DP.FM.074-sm-callback-router-missing.md)
+- Missing `summary`: DP.FM.078 (DP.FM.078-ghost-canonical-pointer.md)
+- Missing `summary`: DP.FM.079 (DP.FM.079-impact-group-as-multiplier.md)
+- Missing `summary`: DP.FM.080 (DP.FM.080-symptom-masks-multiple-defects.md)
+- Missing `summary`: DP.FM.081 (DP.FM.081-probe-double-count-degradation.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -801,4 +863,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-23*
+*Generated by `scripts/generate-map.py` on 2026-05-24*

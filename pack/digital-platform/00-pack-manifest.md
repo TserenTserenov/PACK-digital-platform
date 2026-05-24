@@ -66,6 +66,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | D | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | D | — | active |
 | DP.D.080 | Контрольная роль ≠ Операционная роль | D | — | active |
+| DP.D.089 | Cascading failure ≠ Independent failures | D | — | active |
+| DP.D.090 | Structural smoke ≠ E2E smoke (по типу данных) | D | — | active |
+| DP.D.091 | Выровненные на boundary шкалы ≠ Параллельные с tandem-стыком | D | — | — |
+| DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | D | — | — |
+| DP.D.093 | Метка классификатора ≠ Источник ошибки | D | — | — |
+| DP.D.094 | Temporal correlation ≠ Causation | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -128,6 +134,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.061 | Ci Optional Secret Hard Fail | FM | — | draft |
 | DP.FM.070 | Dispatcher Git Reset Race Condition | FM | — | active |
 | DP.FM.072 | Не-канонические формы понятий в introduces и pack_refs | FM | — | — |
+| DP.FM.073 | Protocol Coverage Gap Mentioned Not Enforced | FM | — | draft |
+| DP.FM.074 | State-machine callback handler without router wire-up = silent dead-end | FM | — | — |
+| DP.FM.075 | deprecated-files-as-todo-tracker | FM | Запись артефакта в `deprecated_files` до удаления всех зависимостей в коде — превращает список устаревших в TODO-трекер, что вызывает runtime-drift при следующем update. | draft |
+| DP.FM.077 | Overstated Validator Coverage in Documentation (Документация заявляет автоматическое покрытие, которое не выдержано) | FM | Документация валидатора/линтера/детектора заявляет 'автоматически ловит этот класс ошибок' без указания scope. Реально детектор покрывает только subset (например, regex по конкретным путям). Пользователь полагается на автоматику для всего класса → дрейф проходит мимо. | draft |
+| DP.FM.078 | Ghost canonical pointer | FM | — | active |
+| DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | FM | — | active |
+| DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | FM | — | — |
+| DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -270,8 +284,28 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | M | — | draft |
 | DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | M | — | — |
 | DP.M.142 | CI Setup Flag Mode Separation | M | — | draft |
+| DP.M.145 | Terminology replace — multi-pass verify through peer agent | M | — | draft |
+| DP.M.146 | Working-hypothesis marker with verification source | M | — | — |
+| DP.M.147 | Semantic-first / Performance-later layered integration | M | — | draft |
+| DP.M.148 | Audit cascade — обновление главного документа с прогоном связанных на drift | M | — | — |
+| DP.M.149 | Bearer == Shared Secret Backward-Compatible Auth Mode | M | — | draft |
+| DP.M.150 | Multi-Driver Compat via Duck-Typing of Connection API | M | — | draft |
+| DP.M.153 | Scaffold Fallback — Minimal Valid Document (не пустой файл) | M | Else-ветка guard-блока в cascaded scaffold-системе создаёт минимальный валидный документ (frontmatter + комментарий generated_by: fallback), а не пустой файл через touch. Downstream-парсеры получают рабочую оболочку, а не падают на отсутствующем YAML-блоке. | draft |
+| DP.M.154 | Embedded Python в bash — обязательные with-блоки (CPython-refcount-independence) | M | Embedded-Python сниппет в shell-скрипте для write-операций над manifest/config/state-файлами обязан использовать `with open(...) as f:` для каждого open. Безсонтекстный `json.dump(d, open(f, 'w'))` зависит от CPython refcount-driven __del__ — рискует partial-write на async/PyPy/exception. | draft |
+| DP.M.155 | Raw GitHub Distribution Model (raw-main delivery — коммит в main = production, version — info label не gate) | M | Модель доставки template-системы через raw.githubusercontent.com/<owner>/<repo>/main/<path>. Любой коммит в main немедленно доступен пользователям при следующем update.sh. Версия в manifest — информационная метка, не gate. Цена: pre-merge CI становится единственным защитным барьером. | draft |
 | DP.M.156 | Upgrade-Markers в Service Contract | M | — | — |
 | DP.M.157 | CI-чек покрытия манифеста дистрибутива | M | — | — |
+| DP.M.158 | Archgate Defer Pattern | M | — | — |
+| DP.M.159 | Скилл как единственная исполняемая точка входа | M | — | — |
+| DP.M.160 | Single point of degradation tracking | M | — | active |
+| DP.M.161 | Pack-зрелость как параметр оценки трудозатрат | M | — | active |
+| DP.M.162 | Adversarial Peer Review для методологических текстов | M | — | draft |
+| DP.M.163 | Checkpoint-протокол для отложенной финализации фазы РП | M | — | draft |
+| DP.M.164 | Base Group Replaces Domain Multiplier | M | Замена двойного кодирования ценности (domain_mult × base_group) на единственный base_group. Домен остаётся аналитическим атрибутом, не множителем в формуле начисления очков. | active |
+| DP.M.165 | Soft streak reset — плавное снижение вместо обнуления | M | — | active |
+| DP.M.166 | Referral-вознаграждение через ₽-кредит, не баллы | M | — | active |
+| DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | M | — | — |
+| DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -477,4 +511,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-23*
+> *Auto-generated by `generate-map.py` on 2026-05-24*

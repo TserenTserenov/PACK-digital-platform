@@ -857,3 +857,81 @@
 **Источник:** WP-224 Ф4 (2026-05-22). Standalone-файл: [DP.D.080-control-vs-operation.md](../02-domain-entities/DP.D.080-control-vs-operation.md). Применяется в DP.KR.030, DP.ROLE.024.
 
 **Контекст:** Выявлено при разработке направления З умбреллы WP-337 (2026-05-22). Расширяет [DP.ROLE.039 Peer Agent](../02-domain-entities/DP.ROLE.039-peer-agent.md): один peer может в разное время выступать в обоих режимах, но не одновременно для одной задачи.
+
+
+---
+id: DP.D.086
+name: "Дистрибутив-bundle ≠ Дистрибутив-coupling"
+type: distinction
+trust: established
+epistemic_stage: formalized
+source_wp: WP-337
+created: 2026-05-22
+---
+
+### DP.D.086: Дистрибутив-bundle ≠ Дистрибутив-coupling
+
+**Метафора «дистрибутив» несёт два разных смысла, которые путают при обсуждении архитектуры платформ:**
+
+| Смысл | Что фиксирует | Пример | Переносим? |
+|-------|--------------|--------|-----------|
+| **bundle** | набор согласованных компонентов + единый релиз + предсказуемые интерфейсы | Ubuntu, JVM, POSIX-окружение | Да |
+| **coupling** | жёсткая зависимость от одного ядра / провайдера | Ubuntu↔Linux kernel (на BSD не работает) | Нет, специфично |
+
+**Тест:** «работает ли при смене ядра / core-провайдера?»
+- Да → **bundle**-смысл.
+- Нет → **coupling**-смысл.
+
+**Применение к IWE:** IWE = portable runtime + Pack + host-адаптеры (см. [DP.IWE.011](../02-domain-entities/DP.IWE.011-host-adapter.md)). Bundle есть (согласованный набор скриптов, хуков, скиллов), coupling с одним LLM-ядром нет (Claude / GPT / локальные модели — через адаптер). Ближе к JVM (portable runtime) + POSIX (контракт хоста), чем к Ubuntu.
+
+**Применение в публичных материалах:** при использовании метафоры «дистрибутив» оговаривать, какой смысл имеется в виду. Без оговорки слушатель достраивает Linux-модель и приписывает coupling-семантику host-агностичному продукту. Случай 22 мая 2026: реакция Андрея на отчёт пилота показала это рассогласование (WP-337).
+
+**Связь:**
+- [DP.IWE.011](../02-domain-entities/DP.IWE.011-host-adapter.md) — host-адаптер как механизм избежания coupling
+- L3 `.claude/rules/distinctions.md` — авторская формулировка того же различения (более лаконичная)
+
+
+---
+
+### DP.D.087: OAuth pending state in-memory ≠ OAuth pending state externalized (БД)
+
+| Аспект | In-memory state | Externalized state (БД) |
+|--------|-----------------|-------------------------|
+| **Хранение** | Живой объект на инстансе сервера | Запись в общей БД (`oauth_pending_state`) |
+| **Инициатор authorize** | Только authorize-сервер | Любой клиент с доступом к БД |
+| **Масштабирование** | Требует sticky sessions | Горизонтальное без ограничений |
+| **Выживаемость** | Теряется при рестарте | Персистентен (TTL/cron cleanup) |
+| **Риск** | Нет race condition на state | Нужна транзакция на callback-match |
+| **Пример** | Session cookie на одном инстансе | `oauth_pending_state` в Neon + bot-generated link |
+
+**Тест выбора:** «Может ли OAuth-flow пережить рестарт authorize-сервера между шагами authorize и callback?»
+- Да → externalized (БД)
+- Нет → in-memory
+
+**Почему важно:** Externalized state позволяет боту инициировать OAuth-flow за пользователя (генерирует запись в БД, отдаёт ссылку в чат) и поддерживает горизонтальное масштабирование authorize-handler. Цена — race conditions при параллельных запросах и требование транзакционности при callback-match.
+
+**Контекст:** Выявлено при реализации LLM Proxy auth (WP-200 Ф7, 2026-05-22). Применимо ко всем multi-server OAuth-провайдерам и serverless-deployments authorize-эндпоинта.
+
+
+---
+
+### DP.D.088: `environment.d` (декларативный, persistent) ≠ `systemctl --user set-environment` (императивный, ephemeral)
+
+| Аспект | `~/.config/environment.d/*.conf` | `systemctl --user set-environment KEY=VALUE` |
+|--------|----------------------------------|----------------------------------------------|
+| **Момент применения** | При старте user-сессии (login/linger=yes) | Немедленно |
+| **Персистентность** | Между сессиями (файл на диске) | Теряется при logout/reboot |
+| **Существующие unit'ы** | НЕ видят переменную до перезапуска | Видят немедленно |
+| **Тип** | Декларативный (конфиг-файл) | Императивный (команда) |
+| **Проверка** | `cat /proc/$(pidof <agent>)/environ` | `systemctl --user show-environment` |
+
+**Правильный паттерн для headless-агента:**
+1. Записать в `environment.d` (персистентность между reboot)
+2. Выполнить `set-environment` (немедленный эффект без рестарта сессии)
+3. `daemon-reload + restart` затронутых unit-файлов
+
+**Тест применения:** «Переменная появилась в `systemctl --user show-environment`?» → `set-environment` отработал. «Появилась в `/proc/$(pidof <agent>)/environ`?» → unit перезапущен после загрузки `environment.d`.
+
+**Почему важно:** Только `set-environment` — потеря переменной после reboot. Только `environment.d` — новая переменная не видна до полного session restart. Для headless-агентов с `linger=yes` оба механизма обязательны.
+
+**Контекст:** Выявлено при деплое агентов на tsekh-1 (WP-200 Ф7, 2026-05-22). Применимо ко всем remote-headless deployments через user systemd.
