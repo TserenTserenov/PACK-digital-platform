@@ -542,7 +542,7 @@ generated: true
 | DP.ROLE.055 | Агент поддержки IWE | Носитель ответа на пилотские обращения через Chatwoot CE: маршрутизирует тикеты по теме (баг → разработчик, баллы → диспетчер, руководство → методист), отвечает в Chatwoot, эскалирует в Linear, поддерживает FAQ и Saved Replies. Граница: НЕ диагностирует архитектурные баги (это R6 Кодировщик), НЕ принимает продуктовые решения по фичреквестам (это Стратег R1 + пилот). | draft |
 | DP.ROLE.056 | R32 Мейнтейнер скиллов | Владеет каталогом скиллов IWE. Принимает решения о promote L3→L1, отвечает за обратную совместимость при обновлении L1-скиллов, управляет жизненным циклом скилла (active→experimental→deprecated). | draft |
 | DP.ROLE.057 | R33 Автор скилла | Создаёт новый скилл IWE через конвейер: create-skill.sh → SKILL.md v2 заполнить → validate-skill.sh → smoke-test → propose promote к Мейнтейнеру. Декларирует зависимости, выбирает layer (L1/L3), ссылается на DP.SC. | draft |
-| DP.ROLE.059 | R30 Маршрутизатор | — | draft |
+| DP.ROLE.059 | R30 Маршрутизатор | Единая точка маршрутизации задач IWE: получает запрос с routing-тегом, выбирает исполнителя из executor-catalog.yaml, не классифицирует самостоятельно — исполняет routing-решения WP Gate или Артефактора. | draft |
 
 ### RUNBOOK
 
@@ -710,7 +710,6 @@ generated: true
 - Missing `summary`: DP.IWE.011-adapter-headless (headless-adapter.md)
 - Missing `summary`: DP.IWE.011 (DP.IWE.011-runtime-host-contract.md)
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-artifactor.md)
-- Missing `summary`: DP.ROLE.059 (DP.ROLE.059-router.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)

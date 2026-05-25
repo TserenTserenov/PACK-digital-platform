@@ -1,12 +1,20 @@
 ---
 id: DP.ROLE.059
 name: R30 Маршрутизатор
+name_ru: R30 Маршрутизатор
+name_en: R30 Task Router
 type: role
 domain: DP
 status: draft
 valid_from: 2026-05-25
 source: WP-350, peer-session 2026-05-25-05-wp-350-role-router
 sc: DP.SC.159
+summary: "Единая точка маршрутизации задач IWE: получает запрос с routing-тегом, выбирает исполнителя из executor-catalog.yaml, не классифицирует самостоятельно — исполняет routing-решения WP Gate или Артефактора."
+related:
+  - DP.SC.159
+  - DP.ROLE.058
+  - DP.ROLE.045
+  - DP.ARCH.001
 ---
 
 # DP.ROLE.059 — R30 Маршрутизатор
