@@ -17,7 +17,7 @@ related:
     - DP.SOTA.022 §2              # multi-path/best-of-N паттерны
   downstream_consumers:
     - DP.ROLE.001 IWE Creator     # инициатор multi-path
-    - DP.ROLE.040 Artifactor      # 3 формулировки РП
+    - DP.ROLE.058 Артефактор      # 3 формулировки РП
     - DP.ROLE.005 Architect       # 3 архитектурных альтернативы
     - DP.ROLE.025 Reviewer        # 3 структуры поста/deck
 created: 2026-05-17
@@ -83,7 +83,7 @@ wp: WP-295
 ```
 Инициатор
 ├── DP.ROLE.001 IWE Creator (пилот) ← `/multi-path "..."`
-├── DP.ROLE.040 Artifactor          ← inner-loop при создании РП
+├── DP.ROLE.058 Артефактор          ← inner-loop при создании РП
 └── DP.ROLE.005 Architect           ← на ArchGate
         │
         ▼
@@ -134,7 +134,7 @@ Trace
 | DP.ROLE.048 Replay Engine | Sibling: multi-path = N независимых replay'ев от одной начальной точки. |
 | DP.ROLE.050 Pattern Miner | Downstream: использует trace проигравших кандидатов для обнаружения «классов плохих решений». |
 | R23 Аудитор / R25 Рецензент | Внутренние селекторы. Контракт: pairwise + permutation randomization. |
-| DP.ROLE.040 Artifactor | Главный inner-caller: при создании сложного РП = `/multi-path "формулировки"`. |
+| DP.ROLE.058 Артефактор | Главный inner-caller: при создании сложного РП = `/multi-path "формулировки"`. |
 | DP.ROLE.005 Architect | Caller: на ArchGate = `/multi-path "3 architectural alternatives"`. |
 | DP.ROLE.025 Reviewer | Caller + Selector: при подготовке поста = `/multi-path "структуры"`. |
 | WP-203 (Оркестратор) | Potentially-conflicts: WP-203 — общий оркестратор; multi-path coordinator — частный случай. На ArchGate Ф0.5: разделение — multi-path живёт в WP-295, WP-203 может его использовать. |
@@ -155,7 +155,7 @@ Trace
 /multi-path "Структура поста о Y" --n 3 --models opus,sonnet,sonnet --selector reviewer --budget 3000
 ```
 
-### Inner-loop (для Artifactor)
+### Inner-loop (для Артефактора)
 
 ```python
 formulations = multi_path(
