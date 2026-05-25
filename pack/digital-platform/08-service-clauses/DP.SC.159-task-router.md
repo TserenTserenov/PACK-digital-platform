@@ -30,9 +30,9 @@ wp: WP-350
 > Нарушение любого = провал SC.
 
 - **Маршрутизатор всегда первый.** Любой запрос через Opening проходит через Маршрутизатор — до вызова конкретного скилла, скрипта или LLM.
-- **Routing-tag обязателен перед lookup.** Если тег отсутствует — вызвать Артефактора-Постановщика (DP.ROLE.058) для структурирования. Loop ограничен 1 итерацией.
-- **Единственный исполнитель.** Маршрутизатор выбирает ровно одного исполнителя из executor-catalog.yaml. Параллельный routing запрещён.
-- **Нет автоматического retry.** При отказе исполнителя — зафиксировать EXEC_FAILED, вернуть ошибку вызывающему контексту.
+- **Routing-tag обязателен перед lookup.** Если тег отсутствует — вызвать Артефактора-Постановщика (DP.ROLE.058) для структурирования. Loop ограничен 1 итерацией. Реализация loop-guard находится в Opening-протоколе (protocol-open.md Шаг 0), не внутри route-task.sh.
+- **Единственный исполнитель.** Маршрутизатор выбирает ровно одного исполнителя из executor-catalog.yaml. Параллельный routing запрещён. При нескольких исполнителях с одним именем — first-match (порядок в каталоге).
+- **Нет автоматического retry.** При отказе исполнителя — зафиксировать EXEC_FAILED в routing-errors.log, вернуть ошибку вызывающему контексту.
 - **AGENT_FAULT → iwe_checklist_memory.py record.** Задачи типа AGENT_FAULT маршрутизируются в систему учёта косяков WP-316, не в LLM.
 
 ---
@@ -55,13 +55,15 @@ wp: WP-350
 {
   "executor": "имя исполнителя из каталога",
   "routing_path": "tag → executor (для метрики routing-path-distribution)",
-  "exec_result": "результат исполнителя или EXEC_FAILED/STRUCTURE_FAILED/NO_MATCH"
+  "exec_result": "OK / EXEC_FAILED / NO_MATCH / STRUCTURE_FAILED"
 }
 ```
 
+Доступен через флаг `--json`. По умолчанию — plain-text для human-readable consumers.
+
 **Время отклика:**
-- Lookup в executor-catalog.yaml — O(1), < 1 мс для каталога до 1000 записей
-- Haiku для разрешения неоднозначности (несколько исполнителей с одним тегом) — < 2 сек
+- Lookup в executor-catalog.yaml — O(N) linear scan через yaml.safe_load. Для текущего каталога (~40 записей) — < 10 мс. При масштабировании до 1000 записей рекомендуется перейти на кэшированный индекс.
+- Disambiguation не требуется — first-match по порядку в каталоге.
 
 ---
 
@@ -83,7 +85,7 @@ wp: WP-350
        └─ нет исполнителя в каталоге? → NO_MATCH + тип задачи для регистрации
 ```
 
-**Метрика:** при каждом routing записывается `routing-path-distribution` (tag → executor → success/fail).
+**Метрика:** при каждом routing записывается `routing-path-distribution` в TSV (`logs/routing-path-distribution.tsv`): timestamp, tag, executor, result (OK/EXEC_FAILED/NO_MATCH).
 
 ---
 
@@ -126,5 +128,5 @@ wp: WP-350
 | Нет routing-tag и Артефактор не смог структурировать | `STRUCTURE_FAILED` + тип входа → вернуть в вызывающий контекст |
 | Исполнитель завершился с ошибкой (exit ≠ 0 / timeout) | `EXEC_FAILED` + тип задачи + код ошибки → `routing-errors.log`; retry запрещён |
 | Тип задачи не найден в executor-catalog.yaml | `NO_MATCH` + тип задачи → логировать для пополнения каталога |
-| Несколько исполнителей с одним тегом | Haiku disambiguates → выбирает одного; при fail Haiku → первый по алфавиту (детерминированный fallback) |
+| Несколько исполнителей с одним тегом | First-match по порядку в executor-catalog.yaml |
 | Loop Маршрутизатор ↔ Артефактор сработал дважды | `STRUCTURE_FAILED` на второй итерации — не зацикливаться |
