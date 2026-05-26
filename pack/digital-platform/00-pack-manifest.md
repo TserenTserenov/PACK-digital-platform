@@ -72,6 +72,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | D | — | — |
 | DP.D.093 | Метка классификатора ≠ Источник ошибки | D | — | — |
 | DP.D.094 | Temporal correlation ≠ Causation | D | — | active |
+| DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | D | — | — |
+| DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -142,6 +144,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | FM | — | active |
 | DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | FM | — | — |
 | DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | FM | — | — |
+| DP.FM.084 | OAuth+CDN миграция без redirect_uri pre-flight: полный outage вместо частичного | FM | — | — |
+| DP.FM.085 | Hook-installer anti-patterns: --no-verify, double-run, no-backup, no-diff-check | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |

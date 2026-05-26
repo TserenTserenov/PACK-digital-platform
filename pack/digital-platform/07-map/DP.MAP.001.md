@@ -21,10 +21,10 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 49 |
+| Distinctions (D) | 51 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 68 |
+| Failure Modes (FM) | 70 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 149 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **508** |
+| **Total** | **512** |
 
 ## Distinctions
 
@@ -95,6 +95,8 @@ generated: true
 | DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | — | — |
 | DP.D.093 | Метка классификатора ≠ Источник ошибки | — | — |
 | DP.D.094 | Temporal correlation ≠ Causation | — | active |
+| DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | — | — |
+| DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | — | active |
 
 ## Methods
 
@@ -343,6 +345,8 @@ generated: true
 | DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | — | active |
 | DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | — | — |
 | DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | — | — |
+| DP.FM.084 | OAuth+CDN миграция без redirect_uri pre-flight: полный outage вместо частичного | — | — |
+| DP.FM.085 | Hook-installer anti-patterns: --no-verify, double-run, no-backup, no-diff-check | — | — |
 
 ## SoTA Annotations
 
@@ -684,6 +688,7 @@ generated: true
 - Missing `summary`: DP.D.064 (DP.D.064-same-vs-different-promise-wp-branch.md)
 - Missing `summary`: DP.D.065 (DP.D.065-orthogonal-distinctions.md)
 - Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
+- Missing `summary`: DP.D.099 (DP.D.099-read-metric-vs-downstream-effect.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -702,6 +707,7 @@ generated: true
 - Missing `summary`: DP.D.092 (DP.D.092-rate-limit-vs-value.md)
 - Missing `summary`: DP.D.093 (DP.D.093-classifier-label-vs-source.md)
 - Missing `summary`: DP.D.094 (DP.D.094-temporal-correlation-vs-causation.md)
+- Missing `summary`: DP.D.101 (DP.D.101-shared-module-sharing-symlink-submodule-vendor.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -847,6 +853,8 @@ generated: true
 - Missing `summary`: DP.FM.079 (DP.FM.079-impact-group-as-multiplier.md)
 - Missing `summary`: DP.FM.080 (DP.FM.080-symptom-masks-multiple-defects.md)
 - Missing `summary`: DP.FM.081 (DP.FM.081-probe-double-count-degradation.md)
+- Missing `summary`: DP.FM.084 (DP.FM.084-oauth-cdn-redirect-uri-no-preflight.md)
+- Missing `summary`: DP.FM.085 (DP.FM.085-hook-installer-anti-patterns.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
