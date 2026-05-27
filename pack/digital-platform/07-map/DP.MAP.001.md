@@ -549,7 +549,7 @@ generated: true
 | DP.ROLE.058 | R?? Артефактор-Постановщик | Агентная роль: превращает сырой запрос пользователя в структурированный РП с routing-тегом (task_type + class), готовый к lookup в executor-catalog.yaml Маршрутизатора. | draft |
 | DP.ROLE.059 | R30 Маршрутизатор | Единая точка маршрутизации задач IWE: получает запрос с routing-тегом, выбирает исполнителя из executor-catalog.yaml, не классифицирует самостоятельно — исполняет routing-решения WP Gate или Артефактора. | draft |
 | DP.ROLE.060 | Презентатор | Роль, готовящая и проводящая публичные выступления (доклады, презентации) от имени IWE/MIM. Обеспечивает единый стиль, структурный каркас слайдов и воспроизводимый процесс подготовки. | draft |
-| DP.ROLE.061 | External Session Adapter | Мост между внешним каналом (Telegram) и локальным исполнителем (Claude Code в VS Code). Не выполняет задачу — только маршрутизирует запрос и ответ между каналами. Две sub-responsibility: Ingress (cloud) и Egress (local). | draft |
+| DP.ROLE.061 | External Session Adapter | Мост между внешним каналом (Telegram) и локальным исполнителем (Claude Code). Поддерживает multi-turn диалог: каждый ход дописывается в SESSION-thread, Egress запускает Claude Code с полным контекстом. Capability scope: код+git, calendar, WP, IWE-знания. Две sub-responsibility: Ingress (cloud) и Egress (local). | draft |
 
 ### RUNBOOK
 
@@ -668,7 +668,7 @@ generated: true
 | DP.SC.159 | Маршрутизатор задач IWE | Пилот или агент получает: единственного исполнителя для любой входящей задачи — детерминированного (скрипт) или рассуждающего (LLM/скилл) — в соответствии с routing-тегом, проставленным WP Gate или Артефактором. | draft |
 | DP.SC.160 | Артефактор-Постановщик задач IWE | Пилот или Маршрутизатор получает: из сырого запроса — структурированный РП с routing-тегом (task_type, class, artifact, budget_estimate), готовый к lookup в executor-catalog. | draft |
 | DP.SC.161 | Session Memory Injector | Pre-flight сервис: читает iwe_memory.db, выбирает 0–3 релевантных напоминания и инжектирует их в системный промпт исполнителя. При сбое — graceful degradation (пустой контекст), ошибка логируется. | draft |
-| DP.SC.162 | External Session Request | Пилот отправляет запрос из Telegram → платформа инициирует сессию Claude Code в VS Code → результат возвращается в Telegram. SLA: acknowledgment P95≤10с, completion P95≤45с (light). | draft |
+| DP.SC.162 | External Session Request | Пилот ведёт полноценную multi-turn рабочую сессию через Telegram — эквивалент окна VS Code, но асинхронно. Поддерживаются: диалог вопрос→ответ→вопрос, работа по РП, операции с календарём, создание РП, поиск по IWE. Все действия трекаются. | draft |
 
 ### SYS
 
