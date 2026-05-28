@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 74 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 152 |
+| Methods (M) | 154 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **524** |
+| **Total** | **526** |
 
 ## Distinctions
 
@@ -255,6 +255,8 @@ generated: true
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | — | active |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | — | — |
+| DP.M.199 | Три уровня параметров конфигурируемой системы | — | active |
+| DP.M.200 | Самофинансирующийся реферальный механизм | — | active |
 
 ## Work Products
 
@@ -833,6 +835,8 @@ generated: true
 - Missing `summary`: DP.M.169 (DP.M.169-experimental-weight-guard-condition.md)
 - Missing `summary`: DP.M.197 (DP.M.197-fix-contract-spec-with-regression-checks.md)
 - Missing `summary`: DP.M.198 (DP.M.198-atomic-state-change-with-user-reply.md)
+- Missing `summary`: DP.M.199 (DP.M.199-three-tier-config-parameters.md)
+- Missing `summary`: DP.M.200 (DP.M.200-self-financing-referral-mechanism.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)

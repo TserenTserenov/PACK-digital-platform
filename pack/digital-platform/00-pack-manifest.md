@@ -318,6 +318,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | M | — | active |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | M | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | M | — | — |
+| DP.M.199 | Три уровня параметров конфигурируемой системы | M | — | active |
+| DP.M.200 | Самофинансирующийся реферальный механизм | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
