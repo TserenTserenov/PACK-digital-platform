@@ -935,3 +935,13 @@ created: 2026-05-22
 **Почему важно:** Только `set-environment` — потеря переменной после reboot. Только `environment.d` — новая переменная не видна до полного session restart. Для headless-агентов с `linger=yes` оба механизма обязательны.
 
 **Контекст:** Выявлено при деплое агентов на tsekh-1 (WP-200 Ф7, 2026-05-22). Применимо ко всем remote-headless deployments через user systemd.
+
+---
+
+### DP.D.102: Четыре канала событий IWE по семантике
+
+→ см. `DP.D.102-event-calendar-four-channels.md`
+
+**Краткое:** Календарь IWE Platform Ops (one-shot дедлайны РП) ≠ process-catalog→ledger→watchdog (ритмические процессы) ≠ inbox/reminder-*.md (дискретные напоминания) ≠ личный Google Calendar (личное). Смешение каналов → потеря напоминаний или поломка derived-артефактов (запись в readonly ledger).
+
+**Контекст:** peer-session 2026-05-28-01 (WP-358 Ф6 анализ).
