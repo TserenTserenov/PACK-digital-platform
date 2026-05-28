@@ -151,6 +151,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.087 | Watchdog false-positive: молодой скрипт как overdue | FM | — | active |
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | FM | — | active |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | FM | — | — |
+| DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -320,6 +321,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | M | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | M | — | active |
 | DP.M.200 | Самофинансирующийся реферальный механизм | M | — | active |
+| DP.M.201 | Separate API Keys per Workload (изоляция квот по рабочим нагрузкам) | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

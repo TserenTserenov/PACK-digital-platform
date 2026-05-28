@@ -945,3 +945,24 @@ created: 2026-05-22
 **Краткое:** Календарь IWE Platform Ops (one-shot дедлайны РП) ≠ process-catalog→ledger→watchdog (ритмические процессы) ≠ inbox/reminder-*.md (дискретные напоминания) ≠ личный Google Calendar (личное). Смешение каналов → потеря напоминаний или поломка derived-артефактов (запись в readonly ledger).
 
 **Контекст:** peer-session 2026-05-28-01 (WP-358 Ф6 анализ).
+
+---
+
+### DP.D.103: In-memory session state (auto-cleanup on redeploy) ≠ Persistent session state без TTL (zombie accumulation)
+
+| Аспект | In-memory state | Persistent без TTL |
+|--------|-----------------|-------------------|
+| **Поведение при redeploy** | Очищается автоматически | Остаётся навечно |
+| **Zombie sessions** | Нет — redeploy = garbage collector | Накапливаются без TTL/cron |
+| **Failure mode** | Потеря активных сессий при сбое | Orphan-записи растут бесконечно |
+| **Применимость** | Краткоживущие сессии (диалоги, wizard) | Требующие сохранения после сбоя |
+
+**Тест выбора:** «Нужно ли сохранять сессию после сбоя/рестарта сервера?»
+- Нет → in-memory (cleanup при redeploy = feature)
+- Да → persistent с явным TTL/cleanup job
+
+**Почему важно:** «In-memory с потерей» интуитивно воспринимается как слабость. Но для краткоживущих диалоговых сессий потеря при redeploy = автоматический cleanup zombie-сессий. БД без TTL накапливает orphan-записи. Ключевой критерий — lifecycle объекта, не «надёжность» как абстрактное свойство.
+
+**Контекст:** Выявлено при ArchGate WP-358 Ф10 (2026-05-28), проектирование session tracker в Telegram-боте.
+
+→ см. `DP.D.103-in-memory-vs-persistent-session-state.md`

@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 52 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 74 |
+| Failure Modes (FM) | 75 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 154 |
+| Methods (M) | 155 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **526** |
+| **Total** | **528** |
 
 ## Distinctions
 
@@ -257,6 +257,7 @@ generated: true
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | — | active |
 | DP.M.200 | Самофинансирующийся реферальный механизм | — | active |
+| DP.M.201 | Separate API Keys per Workload (изоляция квот по рабочим нагрузкам) | — | active |
 
 ## Work Products
 
@@ -357,6 +358,7 @@ generated: true
 | DP.FM.087 | Watchdog false-positive: молодой скрипт как overdue | — | active |
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | — | active |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | — | — |
+| DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | — | active |
 
 ## SoTA Annotations
 
@@ -837,6 +839,7 @@ generated: true
 - Missing `summary`: DP.M.198 (DP.M.198-atomic-state-change-with-user-reply.md)
 - Missing `summary`: DP.M.199 (DP.M.199-three-tier-config-parameters.md)
 - Missing `summary`: DP.M.200 (DP.M.200-self-financing-referral-mechanism.md)
+- Missing `summary`: DP.M.201 (DP.M.201-separate-api-keys-per-workload.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -879,6 +882,7 @@ generated: true
 - Missing `summary`: DP.FM.087 (DP.FM.087-watchdog-new-script-overdue-false-positive.md)
 - Missing `summary`: DP.FM.088 (DP.FM.088-done-phase-open-checkboxes-hidden-debt.md)
 - Missing `summary`: DP.FM.090 (DP.FM.090-ordinal-guard-vs-semantic-role-in-turn-dispatcher.md)
+- Missing `summary`: DP.FM.091 (DP.FM.091-god-table-cross-domain-coupling.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
