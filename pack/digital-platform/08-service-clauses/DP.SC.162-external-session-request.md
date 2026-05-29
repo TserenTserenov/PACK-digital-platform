@@ -167,6 +167,64 @@ Claude: inbox/WP-361.md создан с Ф1 IntegrationGate (~2h): SC + Role + s
 
 ---
 
+## Финализация сессии (§close) — WP-358 Ф10
+
+> **Проблема, которую закрывает:** SESSION-* файлы оставались в `inbox/agent/sessions/` после завершения разговора. Пилот не находил итог через сутки (только `session_id`-хеш в Telegram). Корень — асимметрия с правилом `sessions/YYYY-MM-DD-*.md` для peer-сессий (DP.SC.154).
+
+### Триггер финализации
+
+Один из:
+- **Явно:** пилот пишет `/close` в Telegram-сессии
+- **Неявно (TTL):** mtime сессии ≥ `inactivity_close_ttl` (по умолчанию 60 мин тишины)
+- **Cron:** Day Open детектор обнаруживает `status: completed` И age≥24ч → флаг финализации (Эгресс выполняет в фоне)
+
+### Шаги финализации (Egress-сторона)
+
+| # | Шаг | Артефакт |
+|---|-----|----------|
+| 1 | Сгенерировать topic-slug из первой содержательной строки `SESSION-<id>-thread.md` (turn:1 role:pilot, ≤60 символов, kebab-case) | `<topic-slug>` |
+| 2 | Создать `DS-my-strategy/sessions/external/YYYY-MM/SESSION-<id>/` | директория |
+| 3 | Сформировать `report.md`: frontmatter (`session_id`, `date`, `topic`, `outcome`, `wp`, `turns`) + 5-10 строк итога | `report.md` |
+| 4 | `git mv inbox/agent/sessions/SESSION-<id>{.md,-thread.md}` → `sessions/external/YYYY-MM/SESSION-<id>/{session.md,thread.md}` | перемещённое сырьё |
+| 5 | Дописать строку в `sessions/external/00-index.md`: date, session_id, topic, status, ссылка на report | обновлённый индекс |
+| 6 | Push в git | коммит |
+| 7 | Telegram: прислать пилоту ссылку на `report.md` (не `session_id`) | сообщение |
+
+### Frontmatter report.md (минимум)
+
+```yaml
+---
+session_id: SESSION-<id>
+date: YYYY-MM-DD
+topic: "<one-line summary>"
+outcome: consensus | abandoned | escalated | utility
+wp: NNN | null              # связь с РП если упомянут в thread
+turns: N
+finalized_at: ISO8601
+---
+```
+
+### Инвариант после финализации
+
+- `inbox/agent/sessions/SESSION-<id>.md` НЕ существует
+- `sessions/external/YYYY-MM/SESSION-<id>/{report,session,thread}.md` существуют
+- Скрипт `check-open-sessions.sh` НЕ возвращает эту сессию
+
+### Failure mode и компенсация
+
+- **Пилот не пишет `/close`, TTL не сработал** → Day Open детектор показывает в DayPlan секцию «🔴 Незакрытые сессии». Пилот решает: финализировать вручную или продолжить.
+- **`git mv` fail (rebase/conflict)** → оставить файлы на месте, отметить `status: completed`, повторить финализацию при следующем `/close` или вручную.
+- **Backfill 52 pre-cutover файлов** — НЕ выполняется. Cutover-дата зашита в детектор (`SESSION_CUTOVER_DATE`).
+
+### Артефакты-реализация
+
+- Скрипт-детектор: `DS-my-strategy/scripts/check-open-sessions.sh`
+- Day Open hook: `~/IWE/extensions/day-open.after.md § 7c`
+- Day Close hook: `~/IWE/extensions/day-close.checks.md § Незакрытые external-сессии`
+- Bot Telegram-ответ: `handlers/external_session.py` (формирование report-URL)
+
+---
+
 ## Mac-зависимость и deployment options
 
 | Вариант | Где запускается Egress | Подходит для | Ограничение |
