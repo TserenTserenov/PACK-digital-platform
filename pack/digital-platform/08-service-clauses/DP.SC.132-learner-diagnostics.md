@@ -137,7 +137,7 @@ wp: WP-318
 | TG ConversationHandler | UI в боте | 👤 `/diagnose` |
 | Браузерная страница `/diagnose` | UI в вебе | 👤 переход на страницу |
 | VS Code `IWE: Diagnose` | UI в редакторе | 👤 команда в палитре |
-| Hermes-агент `diagnostician-watcher` | Фоновый мониторинг | ⏰ ежедневный тик |
+| Сигнальщик инвалидации профиля (`diagnostician-watcher`) | Фоновый мониторинг | ⏰ ежедневный тик |
 
 ---
 

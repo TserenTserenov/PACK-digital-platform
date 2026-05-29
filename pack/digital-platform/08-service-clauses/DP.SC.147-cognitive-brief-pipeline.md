@@ -52,7 +52,7 @@ related:
 
 **Триггер:**
 - Ежедневный cron (04:00 МСК) — полный пересчёт brief для всех пилотов.
-- Hermes-агент (DP.ROLE.042 §3.4) — event-driven обновление при сигнале «застрял» (domain_event).
+- Сигнальщик инвалидации профиля (DP.ROLE.042 §3.4, `diagnostician-watcher`) — event-driven обновление при сигнале «застрял» (domain_event).
 - On-demand — при первом запросе Навигатора за день, если cron ещё не отработал.
 
 **Время отклика:**
@@ -105,7 +105,7 @@ related:
 | Сервис | Роль | Триггер |
 |--------|------|---------|
 | Cognitive Brief Composer | DP.ROLE.052 + pipeline worker | ⏰ Ежедневный cron |
-| Hermes-агент | DP.ROLE.042 §3.4 | 📩 domain_event (stuck signal) |
+| Сигнальщик инвалидации профиля | DP.ROLE.042 §3.4 | 📩 domain_event (stuck signal) |
 | `get_cognitive_brief` | MCP tool (Gateway) | 🔍 Навигатор запрос |
 
 ## Пользовательский путь

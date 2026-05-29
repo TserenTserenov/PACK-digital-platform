@@ -96,7 +96,7 @@ Opening (протокол ОРЗ)
   в Ф12 WP-350 и отдельном DP.SC на stateful execution.
 - **Динамический инжект fault-warnings при routing** — отклонён; используется статическое поле
   `warnings_key` в executor-catalog.yaml (минимальный IO, без усложнения роли).
-- **Payload AGENT_FAULT** (граница Hermes vs iwe_checklist_memory.py) — открытый вопрос,
+- **Payload AGENT_FAULT** (граница Session Memory Injector vs iwe_checklist_memory.py) — открытый вопрос,
   разрешить в Ф12 WP-350.
 
 ## Связи

@@ -16,7 +16,7 @@ relates: DP.D.064 (same-vs-different-promise), DP.D.069 (artifact-vs-mode), DP.M
 
 ## Когда применять
 
-У РП появляются «соседние» родственные работы (Q&A history, Trace store, Hermes memory, real-time channel, системные правила, общие компоненты). Соблазн merge: «это близко по теме, объединим в один РП». Результат: scope инфлируется до неподъёмного, обещание размывается, owner перегружен.
+У РП появляются «соседние» родственные работы (Q&A history, Trace store, Session Memory Injector, real-time channel, системные правила, общие компоненты). Соблазн merge: «это близко по теме, объединим в один РП». Результат: scope инфлируется до неподъёмного, обещание размывается, owner перегружен.
 
 ## Метод
 
@@ -35,7 +35,7 @@ relates: DP.D.064 (same-vs-different-promise), DP.D.069 (artifact-vs-mode), DP.M
 |------------------|----------------|----------------|
 | Q&A history | WP-XXX (отдельный РП) | Другое обещание (хранение vs маршрутизация) |
 | Trace store | WP-295 (planned) | Inbox = транзит, Trace = архив (разные жизненные циклы) |
-| Hermes memory | WP-316 | Память агента ≠ inbox задач |
+| Session Memory Injector | WP-316 | Память агента ≠ inbox задач |
 | Real-time channel | WP-203 Ф6 | Режим артефакта, не новый артефакт (см. DP.D.069) |
 
 ## Тест
@@ -53,7 +53,7 @@ relates: DP.D.064 (same-vs-different-promise), DP.D.069 (artifact-vs-mode), DP.M
 
 5 соседних работ:
 - Trace store (WP-295) — `extends: DP.SC.NNN-agent-trace`
-- Hermes memory (WP-316) — separate WP, no interface (разные scope)
+- Session Memory Injector (WP-316) — separate WP, no interface (разные scope)
 - Notification Dispatcher (WP-320) — `uses: DP.SC.MMM-notification-dispatch` для P0-уведомлений
 - Real-time channel — `extends: DP.SC.NNN` (WP-203 Ф6, не отдельный РП — см. DP.D.069)
 - Системные правила (CCR ↔ inbox protocol) — `uses: DP.SC.KKK-ccr-runtime`
@@ -62,7 +62,7 @@ relates: DP.D.064 (same-vs-different-promise), DP.D.069 (artifact-vs-mode), DP.M
 
 ## Применимость
 
-- Любой crowded scope (Agent Inbox, Hermes, ЦД→Память migration).
+- Любой crowded scope (Agent Inbox, Session Memory, ЦД→Память migration).
 - Zonтик-РП с подфазами — каждая подфаза имеет своё SC, родитель агрегирует.
 - Обсуждения «расширим scope или новый РП».
 

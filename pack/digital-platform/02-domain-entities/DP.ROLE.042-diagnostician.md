@@ -29,7 +29,7 @@ wp: WP-318
 > # see DP.SC.132, DP.ROLE.042
 >
 > **Kind:** Interactive Dialogue Role + Background Monitoring Role (платформенная роль диагностики ученика).
-> **Owner Role:** Платформа (aisystant) — исполнитель ConversationHandler (TG), REST endpoint (браузер), MCP tool (VS Code), Hermes-агент (фоновый).
+> **Owner Role:** Платформа (aisystant) — исполнитель ConversationHandler (TG), REST endpoint (браузер), MCP tool (VS Code), Сигнальщик инвалидации профиля (фоновый режим, см. §3.4).
 > **Источник алгоритма:** `role-prefixes.md R28`, `PD.FORM.089 §6.1`.
 
 ---
@@ -143,7 +143,7 @@ Fallback: нет cp-данных → B-lite (stage_raw из Аттестатор
 
 ### Режим 4: Фоновый помощник (silent monitoring)
 
-Hermes-агент `diagnostician-watcher` (WP-316, ежедневный тик):
+Сигнальщик инвалидации профиля (`diagnostician-watcher`, WP-316, ежедневный тик):
 
 **Триггеры инвалидации:**
 - `bh.inv ≥ +50%` за неделю vs baseline (рост активности)
@@ -231,4 +231,4 @@ Hermes-агент `diagnostician-watcher` (WP-316, ежедневный тик):
 | РП реализации | `DS-my-strategy/inbox/WP-318-diagnostika-vkhodnogo-urovnya.md` |
 | Аттестатор (upstream bh) | `DP.ROLE.041`, `DS-my-strategy/inbox/WP-310-attestator.md` |
 | Портной (downstream cp-потребитель) | `WP-149` |
-| Hermes-агенты (фоновый режим) | `WP-316`, `DP.ROLE.NNN-hermes` |
+| Сигнальщик инвалидации профиля (фоновый режим) | `WP-316` (archive/wp-contexts/WP-316/) |
