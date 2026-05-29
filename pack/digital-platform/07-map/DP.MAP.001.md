@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-28
-last_updated: 2026-05-28
+created: 2026-05-29
+last_updated: 2026-05-29
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-28. Do not edit manually.
+> Auto-generated from frontmatter on 2026-05-29. Do not edit manually.
 
 ---
 
@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 52 |
+| Distinctions (D) | 55 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 75 |
+| Failure Modes (FM) | 89 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 155 |
+| Methods (M) | 167 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **528** |
+| **Total** | **557** |
 
 ## Distinctions
 
@@ -98,6 +98,9 @@ generated: true
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | — | — |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | — | active |
+| DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
+| DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
+| DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
 
 ## Methods
 
@@ -258,6 +261,18 @@ generated: true
 | DP.M.199 | Три уровня параметров конфигурируемой системы | — | active |
 | DP.M.200 | Самофинансирующийся реферальный механизм | — | active |
 | DP.M.201 | Separate API Keys per Workload (изоляция квот по рабочим нагрузкам) | — | active |
+| DP.M.202 | Loyalty: отдельная группа community events с двумя независимыми лимитами | — | active |
+| DP.M.203 | Neon multi-DB FDW cross-schema prefix rules | — | — |
+| DP.M.205 | Gamification Rate Limit by Event Controllability | — | — |
+| DP.M.206 | Fast-fail-and-restart предпочтительнее in-process reconnect когда состояние коннекта = source-of-truth подписки | — | active |
+| DP.M.207 | Explicit choice до stateful default при первом входе | — | active |
+| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | — | active |
+| DP.M.209 | Dry-run = 50% production migration: полный checklist с явным блокером | — | active |
+| DP.M.210 | Трёхуровневая сегментация застрявших пользователей (α/β/γ) для диагностики bottleneck | — | active |
+| DP.M.211 | Диагностика L1 FAIL в concept-coverage по регистрационному зазору | — | active |
+| DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | — | active |
+| DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
+| DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
 
 ## Work Products
 
@@ -359,6 +374,20 @@ generated: true
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | — | active |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | — | — |
 | DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | — | active |
+| DP.FM.092 | Fire-and-forget temporal coupling со streak/бизнес-логикой | — | active |
+| DP.FM.093 | Retry storm guard создаёт orphaned content при деградации API в момент первой попытки | — | active |
+| DP.FM.094 | Бинарный счётчик advance маскирует легитимные причины non-advance (DLQ-blocked) | — | active |
+| DP.FM.095 | Feature-flag activated without ALTER FUNCTION | — | — |
+| DP.FM.096 | Config without emitter — invisible zero events | — | — |
+| DP.FM.097 | Deployment Path Drift — Home vs Repo | — | — |
+| DP.FM.098 | SM-Mutex Guard Coverage Gap — Queue-Based Flows Bypass Guard | — | — |
+| DP.FM.099 | NOTIFY-подписка живёт на коннекте — смерть conn = весь event-loop зомби | — | active |
+| DP.FM.100 | Snapshot stale → неверный диагноз без сигнала | — | — |
+| DP.FM.101 | Rule-engine NOOP при отсутствии записи — silent event drop | — | active |
+| DP.FM.102 | Boolean flag с hardcoded константой в ветке вычисления — silent underpayment | — | active |
+| DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | — | draft |
+| DP.FM.104 | Отсутствие обратной функции identity-lookup | — | active |
+| DP.FM.105 | Внутренний health-probe слеп к собственным падениям | — | active |
 
 ## SoTA Annotations
 
@@ -706,6 +735,9 @@ generated: true
 - Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
 - Missing `summary`: DP.D.099 (DP.D.099-read-metric-vs-downstream-effect.md)
 - Missing `summary`: DP.D.102 (DP.D.102-event-calendar-four-channels.md)
+- Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
+- Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
+- Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -840,6 +872,18 @@ generated: true
 - Missing `summary`: DP.M.199 (DP.M.199-three-tier-config-parameters.md)
 - Missing `summary`: DP.M.200 (DP.M.200-self-financing-referral-mechanism.md)
 - Missing `summary`: DP.M.201 (DP.M.201-separate-api-keys-per-workload.md)
+- Missing `summary`: DP.M.202 (DP.M.202-loyalty-community-events-dual-cap.md)
+- Missing `summary`: DP.M.203 (DP.M.203-neon-multi-db-fdw-schema-prefix.md)
+- Missing `summary`: DP.M.205 (DP.M.205-gamification-event-controllability-rate-limit.md)
+- Missing `summary`: DP.M.206 (DP.M.206-fast-fail-and-restart-over-reconnect.md)
+- Missing `summary`: DP.M.207 (DP.M.207-explicit-choice-before-stateful-default.md)
+- Missing `summary`: DP.M.208 (DP.M.208-diagnostics-before-behavioral-nudge.md)
+- Missing `summary`: DP.M.209 (DP.M.209-dry-run-half-of-production-migration.md)
+- Missing `summary`: DP.M.210 (DP.M.210-three-tier-stuck-user-segmentation.md)
+- Missing `summary`: DP.M.211 (DP.M.211-concept-coverage-introduces-registration-gap.md)
+- Missing `summary`: DP.M.212 (DP.M.212-discourse-webhook-iwe-event-pipeline-mapping.md)
+- Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
+- Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -883,6 +927,20 @@ generated: true
 - Missing `summary`: DP.FM.088 (DP.FM.088-done-phase-open-checkboxes-hidden-debt.md)
 - Missing `summary`: DP.FM.090 (DP.FM.090-ordinal-guard-vs-semantic-role-in-turn-dispatcher.md)
 - Missing `summary`: DP.FM.091 (DP.FM.091-god-table-cross-domain-coupling.md)
+- Missing `summary`: DP.FM.092 (DP.FM.092-fire-and-forget-temporal-coupling.md)
+- Missing `summary`: DP.FM.093 (DP.FM.093-retry-storm-guard-silent-orphan.md)
+- Missing `summary`: DP.FM.094 (DP.FM.094-binary-counter-masks-legitimate-non-advance.md)
+- Missing `summary`: DP.FM.095 (DP.FM.095-feature-flag-without-alter-function.md)
+- Missing `summary`: DP.FM.096 (DP.FM.096-config-without-emitter-invisible-bug.md)
+- Missing `summary`: DP.FM.097 (DP.FM.097-deployment-path-drift-home-vs-repo.md)
+- Missing `summary`: DP.FM.098 (DP.FM.098-sm-mutex-guard-queue-flow-bypass.md)
+- Missing `summary`: DP.FM.099 (DP.FM.099-notify-subscription-tied-to-connection.md)
+- Missing `summary`: DP.FM.100 (DP.FM.100-stale-snapshot-silent-misdiagnosis.md)
+- Missing `summary`: DP.FM.101 (DP.FM.101-rule-engine-noop-missing-rule-silent-drop.md)
+- Missing `summary`: DP.FM.102 (DP.FM.102-boolean-flag-hardcoded-constant-silent-underpayment.md)
+- Missing `summary`: DP.FM.103 (DP.FM.103-coverage-script-no-guide-scope-filter-false-fail.md)
+- Missing `summary`: DP.FM.104 (DP.FM.104-missing-reverse-identity-lookup.md)
+- Missing `summary`: DP.FM.105 (DP.FM.105-internal-probe-blind-to-own-failure.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -904,4 +962,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-28*
+*Generated by `scripts/generate-map.py` on 2026-05-29*

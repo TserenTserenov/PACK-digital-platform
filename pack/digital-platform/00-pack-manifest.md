@@ -75,6 +75,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | D | — | — |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | D | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | D | — | active |
+| DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
+| DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
+| DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -152,6 +155,20 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | FM | — | active |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | FM | — | — |
 | DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | FM | — | active |
+| DP.FM.092 | Fire-and-forget temporal coupling со streak/бизнес-логикой | FM | — | active |
+| DP.FM.093 | Retry storm guard создаёт orphaned content при деградации API в момент первой попытки | FM | — | active |
+| DP.FM.094 | Бинарный счётчик advance маскирует легитимные причины non-advance (DLQ-blocked) | FM | — | active |
+| DP.FM.095 | Feature-flag activated without ALTER FUNCTION | FM | — | — |
+| DP.FM.096 | Config without emitter — invisible zero events | FM | — | — |
+| DP.FM.097 | Deployment Path Drift — Home vs Repo | FM | — | — |
+| DP.FM.098 | SM-Mutex Guard Coverage Gap — Queue-Based Flows Bypass Guard | FM | — | — |
+| DP.FM.099 | NOTIFY-подписка живёт на коннекте — смерть conn = весь event-loop зомби | FM | — | active |
+| DP.FM.100 | Snapshot stale → неверный диагноз без сигнала | FM | — | — |
+| DP.FM.101 | Rule-engine NOOP при отсутствии записи — silent event drop | FM | — | active |
+| DP.FM.102 | Boolean flag с hardcoded константой в ветке вычисления — silent underpayment | FM | — | active |
+| DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | FM | — | draft |
+| DP.FM.104 | Отсутствие обратной функции identity-lookup | FM | — | active |
+| DP.FM.105 | Внутренний health-probe слеп к собственным падениям | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -322,6 +339,18 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.199 | Три уровня параметров конфигурируемой системы | M | — | active |
 | DP.M.200 | Самофинансирующийся реферальный механизм | M | — | active |
 | DP.M.201 | Separate API Keys per Workload (изоляция квот по рабочим нагрузкам) | M | — | active |
+| DP.M.202 | Loyalty: отдельная группа community events с двумя независимыми лимитами | M | — | active |
+| DP.M.203 | Neon multi-DB FDW cross-schema prefix rules | M | — | — |
+| DP.M.205 | Gamification Rate Limit by Event Controllability | M | — | — |
+| DP.M.206 | Fast-fail-and-restart предпочтительнее in-process reconnect когда состояние коннекта = source-of-truth подписки | M | — | active |
+| DP.M.207 | Explicit choice до stateful default при первом входе | M | — | active |
+| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | M | — | active |
+| DP.M.209 | Dry-run = 50% production migration: полный checklist с явным блокером | M | — | active |
+| DP.M.210 | Трёхуровневая сегментация застрявших пользователей (α/β/γ) для диагностики bottleneck | M | — | active |
+| DP.M.211 | Диагностика L1 FAIL в concept-coverage по регистрационному зазору | M | — | active |
+| DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | M | — | active |
+| DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | M | — | active |
+| DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -536,4 +565,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-28*
+> *Auto-generated by `generate-map.py` on 2026-05-29*
