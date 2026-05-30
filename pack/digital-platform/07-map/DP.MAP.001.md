@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 56 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 89 |
+| Failure Modes (FM) | 90 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 167 |
+| Methods (M) | 169 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **559** |
+| **Total** | **562** |
 
 ## Distinctions
 
@@ -274,6 +274,8 @@ generated: true
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
+| DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
+| DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
 
 ## Work Products
 
@@ -389,6 +391,7 @@ generated: true
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | — | active |
+| DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | — | — |
 
 ## SoTA Annotations
 
@@ -886,6 +889,8 @@ generated: true
 - Missing `summary`: DP.M.212 (DP.M.212-discourse-webhook-iwe-event-pipeline-mapping.md)
 - Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
+- Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
+- Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -943,6 +948,7 @@ generated: true
 - Missing `summary`: DP.FM.103 (DP.FM.103-coverage-script-no-guide-scope-filter-false-fail.md)
 - Missing `summary`: DP.FM.104 (DP.FM.104-missing-reverse-identity-lookup.md)
 - Missing `summary`: DP.FM.105 (DP.FM.105-internal-probe-blind-to-own-failure.md)
+- Missing `summary`: DP.FM.113 (DP.FM.113-regex-search-swallows-second-violation.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
