@@ -37,11 +37,17 @@ related:
 - **Отчёт в чат** (claude.ai) с резюме: что сделал агент, какие файлы изменены, ссылка на коммит.
 - **Запись в `proxy_calls`** с `user_id`, `cost_usd`, `latency_ms` — для биллинга.
 
-**Триггер:** Вызов MCP-tool `run_strategist(params)` или `run_extractor(params)` через Gateway (sync request-response).
+**Триггер:** Вызов одного из трёх MCP-tools через Gateway:
+- `run_strategist(user_prompt, context_artifacts?, idempotency_key?)` — async kick-off, возвращает 202 + run_id.
+- `run_extractor(user_prompt, context_artifacts?, idempotency_key?)` — async kick-off, возвращает 202 + run_id.
+- `get_run_status(run_id)` — sync GET, возвращает status (started/completed/failed/timeout) + error_code при failure + committed_files + result_url при completed.
+
+**Async pattern (Ф3.5):** POST endpoints возвращают сразу 202 + `Location: /v1/runs/{run_id}`. Клиент опрашивает `get_run_status` каждые 5-10с до status != "started". `background_task_timeout_s = 200` хард-лимит на agent-runner; gateway side `idempotency_key` fallback = SHA-256 от (agent + user_prompt + context_artifacts) если клиент не передал явно — стабильный retry без дублей run.
 
 **Время отклика:**
 - `run_strategist`: 30-90 секунд (полный strategic analysis с записью в Strategy.md).
 - `run_extractor`: 20-60 секунд (один capture-candidate из переданного текста).
+- `get_run_status`: <100ms (DB lookup).
 
 **Режим отказа:**
 | Ситуация | Поведение |
@@ -120,15 +126,28 @@ Gateway = stateless прозрачный прокси. agent-runner = новый
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
 | 1 | Установить `aisystant-knowledge` App на `personal-guide` | пользователь | connect-guide |
-| 2 | Открыть claude.ai, вызвать `run_strategist({focus: 'WP-200'})` | пользователь | claude.ai + Gateway |
-| 3 | Gateway → agent-runner → LLM-цикл → commit | агент-раннер | agent-runner |
-| 4 | Получить в чате: «Готово, коммит abc1234» | пользователь | claude.ai |
+| 2 | Webhook `installation_repositories.added` → автоматически: индексация (user_sources) + auto-scope (agent_scopes_mvp) | платформа | gateway-mcp |
+| 3 | Открыть claude.ai, вызвать `run_strategist({user_prompt: ...})` | пользователь | claude.ai + Gateway |
+| 4 | Gateway → agent-runner → LLM-цикл → enforce_scope → commit | агент-раннер | agent-runner |
+| 5 | Опросить `get_run_status(run_id)` каждые 5-10с до status=completed | claude.ai | Gateway |
+| 6 | Получить `result_url = https://github.com/<repo>/commit/<sha>` в чате | пользователь | claude.ai |
 
 ## Связь с другими обещаниями
 
 - **Extends:** [DP.IWE.003] — Cloud Gateway. Этот SC реализует §8.2 (паритет с CLI).
 - **Uses:** [DP.SC.034] — Local Gateway: file lock семантика переиспользуется (per-user lock в agent-runner предотвращает race на одном repo).
 - **Uses:** [DP.SC.036] — Routing Gate: agent-runner проверяет `agent_scopes_mvp` ДО записи.
+
+## Auto-scope provisioning (Ф4, 2026-05-30)
+
+Без auto-provisioning каждый новый пилот требовал ручного INSERT в `agent_scopes_mvp` — блокер для масштабирования. Решение:
+
+- agent-runner экспонирует internal endpoint `POST /v1/admin/scope-provision` с auth `Authorization: Bearer <PROXY_SHARED_SECRET>` (НЕ Ory JWT, server-to-server).
+- gateway-mcp в webhook handler `installation_repositories.added` параллельно с `triggerFullReindex` вызывает fire-and-forget `provisionAgentScopes(env, userId, owner/repo)`.
+- agent-runner idempotent UPSERT: добавляет `repo_full_name` в `allowed_repos` для `run_strategist` и `run_extractor` с дефолтными `allowed_paths` из `DEFAULT_AGENT_SCOPES`. Повторный вызов — no-op (array_append с проверкой).
+- Дефолтные scope: Стратег = `['docs/**', 'inbox/**', 'Strategy.md', '**/*.md']`, Экстрактор = `['inbox/**', 'docs/**']`. Пилот может сузить через manual UPDATE.
+
+**Тест:** один webhook event → две таблицы заполнены без вмешательства пилота. Реверс при `installation_repositories.removed`: `revoked_at = now()` (через update_user_sources аналогично).
 
 ## Migration path: agent_scopes_mvp → Keto
 
