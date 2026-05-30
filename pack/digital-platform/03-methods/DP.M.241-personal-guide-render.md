@@ -88,7 +88,7 @@ Weekly welcome — один файл с обзором программы (PD.FO
 | `DS-my-strategy/<пилот>` | Репо подключён через GitHub App |
 | `personal_search` (LMS, клуб) | Всегда |
 | Honcho (кэш inferences) | Всегда |
-| PACK-personal seeds | Только Ученик |
+| PACK-personal seeds | Все программы (универсальная база; DS-программа делает lookup через roadmap.yaml — см. контракт WP-371 v2 §4.3) |
 | `docs/ru/personal-design/` (ЛР) | Все программы, вес от квалификации |
 | `docs/ru/professional/` (РР) | Работник+; требует `professional_guides_ready: true` (WP-333) |
 | `docs/ru/research/` (ИР) | Стратег+; требует readiness-флаг |
@@ -179,7 +179,7 @@ temporal_context:
 | `docs/professional/` (РР) | 0 | **2** | **3** | **3** | **3** |
 | `docs/research/` (ИР) | 0 | 0 | **2** | **3** | **3** |
 | RCS-слоты | **3** | 2 | 1 | 1 | 1 |
-| PACK-personal seeds | **3** | 1 | 0 | 0 | 0 |
+| PACK-personal seeds | **3** | 2 | 2 | 2 | 2 |
 | DS-my-strategy сигналы | 1 | **2** | **3** | **3** | **3** |
 | `personal_search` + Honcho | 1 | 2 | 2 | **3** | **3** |
 
