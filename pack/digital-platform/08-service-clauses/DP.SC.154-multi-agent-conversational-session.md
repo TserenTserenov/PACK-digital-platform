@@ -9,8 +9,9 @@ layer: L4-Platform
 summary: "Пилот ставит задачу команде из 2+ peer-агентов разных вендоров; они многотурово обсуждают её, согласуют единый отчёт; любой может эскалировать к пилоту при принципиальном несогласии."
 consumer: DP.ROLE.001  # IWE Creator (пилот)
 created: 2026-05-22
-updated: 2026-05-22
-wp: WP-337-З-Ф0
+updated: 2026-05-30
+wp: [WP-337-З-Ф0, WP-367-Ф5]
+version: v4
 related:
   specializes: []
   realizes: []
@@ -35,13 +36,82 @@ related:
 - [ ] Журнал реплик `sessions/conversations/<YYYY-MM-DD>-<NN>-<slug>/` сохраняется до явной архивации (для аудита и pattern mining). Нумерация `NN` ежедневная, начинается с `01`.
 - [ ] Лимит ходов в одной сессии — не больше 10 (защита от расходящихся обсуждений). **Лимит применяется к содержательной части после согласования ролей.** Ходы sequential role-discovery (см. раздел «Opening сессии») в лимит **не входят** (max 3 discovery-хода до эскалации). При исчерпании содержательного лимита без консенсуса итог = «не сошлись», отчёт включает обе позиции, эскалация к пилоту.
 
+## Двухосная модель ролей (WP-367 Ф5, v4)
+
+> **Источник:** peer-session `2026-05-30-06-wp367-content-role-primacy` (CONSENSUS turn 5). Уточняет N-мерную ортогональность (v3) до конкретной двухосной модели с явными default- и swap-правилами.
+
+Каждый агент в peer-сессии характеризуется по двум независимым осям:
+
+| Ось | Поле в frontmatter реплики | Что задаёт | Источник значения |
+|-----|----------------------------|------------|-------------------|
+| **Содержательная роль** (`content_role`) | `content_role: DP.ROLE.NNN \| MIM.R.NNN \| ad-hoc:<имя>` | **Полный домен-контекст**: критерии выбора метода + формат артефакта + критерии качества + связи с другими ролями. Онтологическая линза, не маршрутизатор. | Pack (`DP.ROLE`/`MIM.R`) или ad-hoc snapshot в `meta.yaml.ad_hoc_roles` |
+| **Процессная позиция** (`process_position`) | `process_position: writer \| peer` | Координация: writer держит workspace lock, peer имеет право эскалации. **Не определяет экспертизу.** | Default rule (см. ниже) или explicit swap |
+
+**Session context** (в `meta.yaml`, не в реплике):
+- `initiator_agent: <id>` — invariant сессии, кто открыл.
+- `swap_history: []` — журнал перестановок `process_position` (если были).
+- `ad_hoc_roles: {role_name: {agent_id, rationale, first_used_turn}}` — реестр ad-hoc ролей, использованных в сессии.
+
+### Default rule для process-position
+
+- [ ] **Initiator = writer, respondent = peer.** Без обсуждения в Opening. Process-position derived автоматически из `meta.yaml.initiator_agent`.
+
+Это **не** делает process-position derived от content-role — обе оси независимы. Default — это **координационное правило по умолчанию**, не логический вывод.
+
+### SWAP_WRITER explicit маркер
+
+Для смены writer-позиции в течение сессии — explicit-маркер в реплике:
+
+```
+REQUEST_SWAP_WRITER: <reason>
+```
+
+Протокол:
+1. Любой агент пишет `REQUEST_SWAP_WRITER: <reason>` в своей реплике.
+2. Партнёр в следующей реплике отвечает: `SWAP_ACK` (согласен) или `SWAP_NACK: <reason>` (отказ).
+3. При `SWAP_ACK` — мета-реплика `<NN>-swap.md` фиксирует переход:
+   ```yaml
+   ---
+   turn: <NN>
+   type: swap_writer
+   from_writer: <old_agent_id>
+   to_writer: <new_agent_id>
+   reason: "<...>"
+   ---
+   ```
+4. Обновляется `meta.yaml.swap_history: [{turn, from, to, reason}]`.
+5. При `SWAP_NACK` — сохраняется текущий writer, сессия продолжается. `swap_history` не меняется. Эскалация к пилоту — опционально (если NACK блокирует прогресс).
+
+**Запрет:** implicit swap (изменение поведения без маркера) — нарушение lock-инварианта.
+
+### ROLE_DRIFT маркер
+
+Для смены `content_role` в течение сессии — explicit-маркер:
+
+```
+ROLE_DRIFT: <old_role> → <new_role> — reason: <...>
+```
+
+Различение:
+- **Инкрементальный drift** (новая роль из того же семейства, e.g. Стратег → Стратег-кризисный, Архитектор → Архитектор-данных) — маркер + `meta.yaml.roles` update, сессия продолжается.
+- **Фундаментальный drift** (смена домена, e.g. Архитектор → Аудитор кода, или смена класса задачи open-loop → trivial) — закрытие сессии (`CONSENSUS: none, drift fundamental`) и открытие новой с правильным framing.
+
+Граница субъективная: «новый методический инструментарий из того же семейства?» Если да — incremental, если нет — fundamental.
+
+### Constraints (нелегитимные комбинации)
+
+- [ ] **Ровно 1 writer per session.** Lock-инвариант. Два агента с `process_position: writer` одновременно = коллизия.
+- [ ] **Content-role валидируется** через Pack (`DP.ROLE`/`MIM.R`/`VR.R`) ИЛИ через snapshot в `meta.yaml.ad_hoc_roles` (с rationale).
+- [ ] **Swap process-position только explicit-маркером.** Implicit — нарушение.
+- [ ] **Принцип:** содержательные роли разных агентов взаимодополняющие (см. Правило 2 ниже). Одинаковые = эхо-камера.
+
 ## Правила совмещения ролей
 
 В peer-сессии каждый агент играет одну или несколько **ролей**. Роли бывают двух типов:
 - **Протокольные позиции** — `writer` (писатель) / `peer` (напарник). Фиксированы DP.SC.154. Определяют write-доступ к workspace и порядок реплик.
 - **Содержательные роли** — каталог Pack (`DP.ROLE.NNN`, `VR.R.NNN`). Определяют экспертизу, метод, домен внимания.
 
-**Все роли ортогональны друг другу** — N независимых измерений, не одна ось «протокольная × доменная» (см. [DP.ROLE.039 §13](../02-domain-entities/DP.ROLE.039-peer-agent.md#13-n-мерная-ортогональность-ролей)).
+**Все роли ортогональны друг другу** — N независимых измерений, не одна ось «протокольная × доменная» (см. [DP.ROLE.039 §13](../02-domain-entities/DP.ROLE.039-peer-agent.md#13-n-мерная-ортогональность-ролей)). С v4 (WP-367 Ф5) — конкретизировано до двухосной модели выше.
 
 ### Правило 1. Внутри одного агента
 
@@ -106,11 +176,27 @@ Initiator в `02-writer.md`:
 ### Pack-first с gap-toleration
 
 > **Источник gap-toleration:** peer-session `2026-05-29-25-wp367-pack-roles-implementation` ход 1 (VR.R.001 Верификатор отметил: при текущем недонаполненном каталоге `03-methods/` формальный «deviate с обоснованием» сделает Pack-first нарушаемым в 90% случаев). Решение записать gap-toleration принято initiator'ом в ходе 2.
+>
+> **Уточнение v4 (WP-367 Ф5):** содержательная роль из Pack даёт **полный домен-контекст** (критерии выбора метода + формат артефакта + критерии качества + связи), не только метод. Метод подбирается **внутри линзы**, не определяется ей 1:1. Pack — каталог онтологических линз, не маршрутизатор «роль→единственный метод».
 
 При определении роли:
-- **Default:** использовать метод из Pack (`DP.M.NNN`, `03-methods/`), соответствующий взятой роли
-- **При gap (нет метода в Pack):** допустимо ad-hoc подход с явной фиксацией в реплике: «Pack-gap: для роли X нет метода в `03-methods/`, использую ad-hoc Y»
-- **Систематический gap:** 3+ ad-hoc для одной роли → флаг для расширения Pack (создать `DP.M.NNN`)
+- **Default:** использовать **домен-контекст роли из Pack** (`DP.ROLE.NNN` / `MIM.R.NNN`): критерии выбора метода (passport), формат артефакта (templates), сценарии (relations). Метод подбирается внутри линзы — может быть `DP.M.NNN` / `MIM.M.NNN`, может быть ad-hoc если задача уникальна.
+- **При gap (нет роли или метода в Pack):** допустим ad-hoc подход с явной фиксацией в реплике («Pack-gap: для X нет в каталоге, использую ad-hoc Y») И в `meta.yaml.ad_hoc_roles`.
+- **Систематический gap:** 3+ ad-hoc для одной роли (по разным сессиям, не по упоминаниям в одной) → флаг для расширения Pack (создать `DP.ROLE.NNN`/`DP.M.NNN`).
+
+### Каскад Pack-расширения (Week Close audit)
+
+> **Источник:** peer-session `2026-05-30-06-wp367-content-role-primacy` turn 3-5. До v4 каскад существовал как «промокана», без автоматического механизма — risk: backlog без owner.
+
+**Pipeline (self-executing):**
+1. Каждая peer-сессия фиксирует ad-hoc роли в `meta.yaml.ad_hoc_roles`.
+2. На Week Close скрипт `DS-my-strategy/scripts/audit-ad-hoc-roles.py` (см. DP.SC.154 → Реализующие сервисы) проходит по `sessions/YYYY-MM/`, агрегирует частоту по имени ad-hoc роли.
+3. При частоте ≥3 сессий И отсутствии открытого `WP-NNN-pack-gap-<role-name>` в `inbox/` (проверка через `WP-REGISTRY.md` grep + `inbox/` glob) — автоматически создаёт WP через `scripts/create-wp.sh` (`--title --budget --priority --slug --related`) с slug `pack-gap-<role-name>`.
+4. WP попадает в обычный pipeline пилота. Дедупликация: повторный аудит не создаёт второй WP для той же роли.
+
+> **Порог `≥3` сессий** (а не `≥2`, упомянутый в CONSENSUS peer-сессии 2026-05-30-06): консервативный выбор, унаследованный от v3 (Pack-first §«Систематический gap: 3+ ad-hoc»). Обоснование: при threshold=2 две случайные ad-hoc в течение недели уже триггерят WP, что создаёт false-positive. Threshold=3 — устойчивый паттерн. Пересмотр — при наблюдении проблемы (либо false-positive при 3, либо длительная задержка формализации полезных ролей).
+
+**Принцип:** owner = pipeline + WP-механика, не отдельная роль или команда. Backlog не накапливается «где-то там» — материализуется в системе РП.
 
 Это честнее, чем формальный «deviate с обоснованием» при пустом каталоге методов.
 
@@ -132,6 +218,10 @@ Initiator в `02-writer.md`:
 | `agreed_roles` | `02-writer.md` или последующих writer-репликах после consensus | `{agent_id: [DP.ROLE.NNN, ...]}` | initiator |
 | `roles` (meta.yaml) | `meta.yaml` финально после discovery | `{agent_id: [DP.ROLE.NNN, ...]}` | initiator |
 | `roles` (реплика, опц.) | frontmatter любой содержательной реплики | `[DP.ROLE.NNN, ...]` (только текущий агент) | каждый агент в своей реплике |
+| `content_role` (v4) | frontmatter содержательной реплики | строка `DP.ROLE.NNN \| MIM.R.NNN \| ad-hoc:<имя>` | каждый агент в своей реплике |
+| `process_position` (v4) | frontmatter содержательной реплики | `writer \| peer` | каждый агент в своей реплике |
+| `ad_hoc_roles` (v4, meta.yaml) | `meta.yaml` | `{role_name: {agent_id, rationale, first_used_turn}}` | initiator при первом ad-hoc use |
+| `swap_history` (v4, meta.yaml) | `meta.yaml` | `[{turn, from, to, reason}]` | initiator после SWAP_ACK |
 
 ## Обещание
 
@@ -268,6 +358,7 @@ Initiator в `02-writer.md`:
 | Local Gateway (DP.SC.034) | Lock-валидатор | Любая попытка `write_file` напарника |
 | `sessions/conversations/<YYYY-MM-DD>-<NN>-<slug>/` | артефакт-хранилище | Каждая реплика и report.md |
 | `sessions/conversations/00-index.md` | навигация | Создание / завершение сессии |
+| `DS-my-strategy/scripts/audit-ad-hoc-roles.py` (v4) | Каскад Pack-расширения | Week Close, проходит по `meta.yaml.ad_hoc_roles`, создаёт `WP-NNN-pack-gap-*` при freq ≥3 |
 
 ## Пользовательский путь
 
