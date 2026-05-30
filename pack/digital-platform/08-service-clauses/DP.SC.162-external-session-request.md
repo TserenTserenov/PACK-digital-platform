@@ -31,11 +31,19 @@ wp: WP-358
 
 2. **Acknowledgment SLA.** Бот отвечает «Работаю…» в Telegram за P95 ≤10с с момента отправки сообщения. Acknowledgment не зависит от длительности обработки.
 
-3. **Completion SLA.** P95 ≤45с для ходов `category: light` (ожидаемый ответ ≤200 токенов). Для `category: heavy` — async-режим: прогресс-нотификации каждые 15с, финальный ответ без гарантии SLA.
+3. **Completion SLA.** P95 ≤45с для ходов `category: light` (ожидаемый ответ ≤200 токенов). Для `category: heavy` — async-режим: прогресс-нотификации каждые 15с (см. §5 «Dispatcher publish heartbeat»), финальный ответ без гарантии SLA.
 
 4. **PII guard.** Флаг `--private` → thread-файл не коммитится в git, хранится только в локальной SQLite (`~/.iwe/sessions.db`). В SESSION-файл пишутся только метаданные (session_id, status, timestamps).
 
-5. **Timeout + Heartbeat.** `max_session_duration = 60 минут` с момента последнего хода (сессия закрывается после 60 мин тишины). Hard cut-off отдельного хода — 15 минут. Heartbeat диспетчера (self-check): ping в SQLite каждые 30с; miss >90с → статус `failed` + TG alert. Cancellation contract: `/cancel` от пилота → SIGTERM диспетчеру → partial transcript сохраняется → статус `cancelled`.
+5. **Timeout + Heartbeat.** `max_session_duration = 60 минут` с момента последнего хода (сессия закрывается после 60 мин тишины).
+
+   **Soft turn cut-off (amend WP-7 TGSH, 2026-05-30):** ход умирает только при **отсутствии heartbeat ≥15 минут** (не по wall-time от начала хода). Long-running генерации legitimate, пока живой heartbeat — это покрывает Claude extended thinking 20+ минут на больших промптах. Защита от runaway-процесса — внешний systemd `TimeoutStartSec=30мин` на dispatcher unit, не контрактная часть.
+
+   **Dispatcher publish heartbeat (amend WP-7 TGSH, 2026-05-30):** при активном ходе dispatcher пишет событие `session.heartbeat` в event-gateway (DP.SC.044) `learning.domain_event` каждые 15с с payload `{session_id, turn_n, elapsed_sec, progress_hint}`. Бот polls (Phase 1) или подписан через `LISTEN/NOTIFY` (Phase 2) и редактирует «Работаю...» сообщение с счётчиком + шлёт `sendChatAction: typing`.
+
+   **Dispatcher self-check (unchanged):** ping в SQLite каждые 30с; miss >90с → статус `failed` + TG alert. Это **второй слой защиты** (от падения самого dispatcher unit), не отменяется heartbeat-каналом в event-gateway.
+
+   **Cancellation contract (unchanged):** `/cancel` от пилота → SIGTERM диспетчеру → partial transcript сохраняется → статус `cancelled`.
 
 6. **Cleanup.** SESSION-файл и thread-файл архивируются в `inbox/agent/sessions/archive/` через 24ч после последнего хода или немедленно при `/close`. Папка `sessions/` не является постоянным хранилищем.
 
