@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 90 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 169 |
+| Methods (M) | 170 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 45 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 108 |
+| SC (SC) | 109 |
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **562** |
+| **Total** | **564** |
 
 ## Distinctions
 
@@ -276,6 +276,7 @@ generated: true
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
+| DP.M.241 | Порядок формирования персонального руководства | — | active |
 
 ## Work Products
 
@@ -715,6 +716,7 @@ generated: true
 | DP.SC.161 | Session Memory Injector | Pre-flight сервис: читает iwe_memory.db, выбирает 0–3 релевантных напоминания и инжектирует их в системный промпт исполнителя. При сбое — graceful degradation (пустой контекст), ошибка логируется. | draft |
 | DP.SC.162 | External Session Request | Пилот ведёт полноценную multi-turn рабочую сессию через Telegram — эквивалент окна VS Code, но асинхронно. Поддерживаются: диалог вопрос→ответ→вопрос, работа по РП, операции с календарём, создание РП, поиск по IWE. Все действия трекаются. | draft |
 | DP.SC.163 | Серверные агенты через Gateway (MVP) | Пользователь через Gateway получает результат работы агента (Стратег, Экстрактор) в виде коммита в свой GitHub-репозиторий — без локального CLI, с тем же артефактом, что и через VS Code | draft |
+| DP.SC.164 | Доставка персонального руководства пилоту | Ежедневный daily и еженедельный weekly файл персонального руководства, отражающий контекст пилота (активные РП, captures, посты, рефлексии, cp-профиль), доставляется в его репо `personal-guide/<пилот>/` по расписанию; не зависит от ритуалов ОРЗ. | draft |
 
 ### SYS
 
@@ -891,6 +893,7 @@ generated: true
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
 - Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
 - Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
+- Missing `summary`: DP.M.241 (DP.M.241-personal-guide-render.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
