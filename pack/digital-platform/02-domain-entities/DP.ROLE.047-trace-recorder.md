@@ -123,7 +123,7 @@ DP.ROLE.047 Trace Recorder
 | DP.ROLE.049 Path Coordinator | Sibling: при multi-path каждый из N путей пишет собственный trace branch (parent_session_id). |
 | DP.ROLE.001 IWE Creator | Потребитель retrieval API при OnSessionStart. Контракт: ≤500ms latency lazy. |
 | DP.ROLE.045 Agent Task Dispatcher | Sibling: dispatcher пишет audit-trail в git, recorder пишет trace в Neon. Не пересекаются (физический vs ментальный слой). |
-| R29 Детектор (DP.SC.025) | Ортогональный: ловит **факты провалов** на harness-событиях. Recorder фиксирует **рассуждения** между событиями. Не дублируют. |
+| R47 Детектор (DP.SC.025) | Ортогональный: ловит **факты провалов** на harness-событиях. Recorder фиксирует **рассуждения** между событиями. Не дублируют. |
 
 ---
 

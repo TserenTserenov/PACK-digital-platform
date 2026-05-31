@@ -137,7 +137,7 @@ related:
 
 | Сервис | Роль | Триггер | Путь |
 |--------|------|---------|------|
-| gateway-mcp (audit hook) | R29 Детектор | PostToolUse `dt_*` | DS-MCP/gateway-mcp |
+| gateway-mcp (audit hook) | R47 Детектор | PostToolUse `dt_*` | DS-MCP/gateway-mcp |
 | `dt_view_history` tool | R29 API-слой | MCP request | DS-MCP/gateway-mcp (новое, при реализации SC.030.2) |
 | activity-hub projection | R6 Кодировщик | LISTEN/NOTIFY `user_events` | WP-109 Ф3+ |
 

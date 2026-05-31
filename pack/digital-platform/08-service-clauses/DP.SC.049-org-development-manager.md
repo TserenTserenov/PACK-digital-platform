@@ -18,6 +18,7 @@ related:
     - DP.ROLE.063               # Менеджер оргразвития (R31) — носитель роли
     - DP.ROLE.042               # Диагност (R28) — готовность субъекта
     - MIM.M.030                 # Классификатор типа системы — Шаг 0
+    - MIM.M.031                 # Маршрутная таблица руководств программы РР — Шаг 3
   see_also:
     - DP.SC.020                 # Personal development program
     - PD.FORM.087               # Дуга нарратива программы ЛР (граница ЛР/РР)
@@ -58,14 +59,14 @@ wp: WP-369
 {
   "system_type": "personality | team | organization",
   "method": "IL | SM | SI",
-  "guide_reference": "docs/docs/ru/{personality-engineering|systems-management|methodology|firefighting}/[конкретное_руководство_после_routing-table]",
-  "first_step": "конкретное действие ≤30 мин",
+  "guide_reference": "см. MIM.M.031 routing-table — primary_guide (R8|R9|R10) + опционально foundation_guide (R1|R5|R7)",
+  "first_step": "конкретное действие ≤30 мин (взять из MIM.M.031 first_step_pointer.action_template)",
   "applicability_check": {"autonomy": true, "consent": true, "charter": true},
   "r28_readiness": "ok | downshift | escalate_to_navigator"
 }
 ```
 
-> **Примечание (Variant A, post-WP-369):** Поле `guide_reference` использует placeholder-формат. Конкретная routing-table `type → guide → section` для 6 канонических руководств программы РР — открытая задача после Ф7 WP-369 (spin-off РП ~1-2h). До завершения spin-off РП Менеджер выбирает дисциплину (СИ/СМ/ИЛ) и каталог руководств, конкретное руководство — через интерактивный выбор с автором.
+> **Примечание (после WP-377 Ф2.1):** Маршрутная таблица для `guide_reference` зафиксирована в `MIM.M.031` (PACK-MIM). Таблица — `status: hypothesis` до 20 вызовов калибровки; revision-критерии в frontmatter MIM.M.031.
 
 ---
 
@@ -102,6 +103,9 @@ wp: WP-369
   │   └─ ЛР-запрос → перенаправление R27
   │
   ├─ Шаг 3: маршрутизация к руководству + конкретный первый шаг
+  │   └─ MIM.M.031 (routing-table): system_type + cp.iwe → primary_guide
+  │       (R8|R9|R10) + опционально foundation_guide (R1|R5|R7);
+  │       first_step_pointer.action_template даёт шаг ≤30 мин.
   │
   └─ Шаг 4: фиксация рекомендации в personal-guide/team-guide субъекта
 ```
@@ -114,21 +118,21 @@ wp: WP-369
 - MIM.M.030: система = personality (вопросы 1, 2, 3 дают вес personality).
 - Applicability: автономия ✅, согласие ✅ (self), charter — implicit.
 - R28: cp.iwe=3 → ok, продолжать.
-- Метод: ИЛ-руководство из `docs/docs/ru/professional/personality-engineering/` (конкретное руководство — после routing-table в spin-off РП).
+- Метод: ИЛ — R9 «Инженерия личности», `docs/docs/ru/professional/personality-engineering/` (MIM.M.031 → primary_guide R9).
 - Первый шаг: диагностика стиля (PD.FORM.098) — 15 мин.
 
 **Сценарий 2: «В моей команде 5 человек, никто не понимает кто за что отвечает» — команда → СМ**
 - MIM.M.030: система = team (вопросы 2, 3, 5 дают вес team).
 - Applicability: автономия ✅ (тимлид), согласие — нужна проверка (команда уведомлена?), charter ✅.
 - R28: cp.iwe=3 → ok.
-- Метод: СМ-руководство из `docs/docs/ru/professional/systems-management/` (конкретное руководство — после routing-table).
+- Метод: СМ — R10 «Системный менеджмент», `docs/docs/ru/professional/systems-management/` (MIM.M.031 → primary_guide R10, точка входа `management-practices-and-manager-roles`).
 - Первый шаг: шаблон распределения ответственности — 30 мин.
 
 **Сценарий 3: «Наша компания 50 человек, процессы разваливаются при масштабировании» — организация → СИ**
 - MIM.M.030: система = organization (вопросы 2, 3, 7 дают вес organization).
 - Applicability: автономия ✅ (CEO/owner), согласие — нужна проверка стейкхолдеров, charter ✅.
 - R28: cp.iwe=4 → ok.
-- Метод: СИ-руководство из `docs/docs/ru/professional/systems-management/enterprise-architecture-practice/` (конкретное руководство — после routing-table).
+- Метод: СИ — R8 «Системная инженерия», `docs/docs/ru/professional/systems-engineering/` (MIM.M.031 → primary_guide R8, точка входа `engineering-process` / `evolutionary-architecture`).
 - Первый шаг: карта текущих бизнес-процессов (AS-IS) — 1 час.
 
 **Сценарий 4: «Помоги мне изменить моего сотрудника без его согласия»**
@@ -146,7 +150,7 @@ wp: WP-369
 | FM.03 | MIM.M.030 даёт неоднозначный результат (margin < 3) | Запросить 1-2 уточняющих вопроса, не выбирать метод вслепую |
 | FM.04 | Applicability не пройден | Отказ с объяснением границы, НЕ рекомендация |
 | FM.05 | ЛР-запрос («зачем мне жить») | Перенаправление R27 Навигатор |
-| FM.06 | Конкретное руководство отсутствует в routing-table | До завершения spin-off РП: предложить дисциплину (СИ/СМ/ИЛ) + каталог + интерактивный выбор с автором |
+| FM.06 | Конкретное руководство отсутствует в routing-table (MIM.M.031 FM.R4) | Откатиться на каталог `docs/docs/ru/professional/<guide>/` + интерактивный выбор подраздела с автором; залогировать в `learning.guide_routing_misses` |
 
 ---
 
@@ -160,10 +164,13 @@ wp: WP-369
 - DP.ROLE.063 — носитель роли R31.
 - DP.ROLE.042 — Диагност (Шаг 2 — готовность субъекта).
 - MIM.M.030 — классификатор типа системы (Шаг 0).
+- MIM.M.031 — маршрутная таблица руководств программы РР (Шаг 3).
 - DP.SC.020 — программа ЛР (граница).
 - PD.FORM.087 — дуга нарратива программы ЛР (граница ЛР/РР по фазе мировоззрения).
 - R27 Портной (см. DP.ROLE.001 §3.2; отдельного Pack-файла нет) — различение в DP.ROLE.063 §5.
-- WP-369 — порождающий РП.
+- WP-369 — порождающий РП роли.
+- WP-377 — порождающий РП маршрутной таблицы (MIM.M.031, Ф2.1).
 
-**Открытые задачи (spin-off, post-WP-369):**
-- Routing-table `type → guide → section`: выделить 6 канонических руководств программы РР из `docs/docs/ru/professional/{personality-engineering, systems-management, methodology, firefighting, systems-modeling}/` — отдельный РП (~1-2h).
+**Открытые задачи:**
+- Калибровка MIM.M.031 на 20 реальных вызовах (revision_criterion см. в frontmatter MIM.M.031).
+- Содержательное наполнение index.md шести канонических руководств в `docs/docs/ru/professional/` — внешняя зависимость от контент-канала.

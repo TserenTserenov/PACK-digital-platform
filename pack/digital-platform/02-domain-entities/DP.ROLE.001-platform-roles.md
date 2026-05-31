@@ -716,7 +716,7 @@ grade: 2+
 | R12 | **Оценщик** | Платформа DP | Bloom Eval, WP Validation, Fixation | Ответ ученика + эталон, Pack entity draft | Bloom-оценка, валидация по SPF |
 | R13 | **Проводник** | Платформа DP | FSM Routing, Tier Gating, Progressive Disclosure | Запрос пользователя, user_profile.tier | FSM Transition, Access Control Decision |
 | R21 | **Публикатор** | Экосистема | Daily Scan, Scheduled Publish, Manual Publish, Comment Check | DS-Knowledge-Index (status=ready), scheduled_publications | Опубликованные посты, расписание, уведомления |
-| R29 | **Детектор** | Экзокортекс (L4 harness) | Capture Dispatch, Pattern Detection, Incident Emission | Harness JSON (tool_name, file_path, cwd, hook_event), DP.FM.010 каталог | Event JSON в incident-log целевого репо (OwnerIntegrity), capture_log.jsonl |
+| R47 | **Детектор** | Экзокортекс (L4 harness) | Capture Dispatch, Pattern Detection, Incident Emission | Harness JSON (tool_name, file_path, cwd, hook_event), DP.FM.010 каталог | Event JSON в incident-log целевого репо (OwnerIntegrity), capture_log.jsonl |
 | R30 | **Контекст-менеджер** | Экзокортекс (L4 Personal) | Repo Context Loading, Mandatory-Load Resolution, Context Scope Guard | Путь файла → репо, `<repo>/CLAUDE.md`, блок «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» | Загруженный репо-контекст (правила + указанные файлы), или сигнал P3 при нарушении |
 | R41 | **Аттестатор** | Система персонального развития | Activity Hub Scan, bh-Calculation, Stage Transition Detection | learning.domain_event, w_reflections, iwe-actions-catalog | learning.stage_transitions (ступень), bh-сигнал (auto) |
 | R42 | **Диагност** | Система персонального развития | CAT Dialogue (≤5 Q), cp-Profile Assessment, Background Invalidation Monitor | Ответы пилота, bh-прокси Аттестатора, активность | learning.cp_assessments (cp-профиль + bottleneck + skip_to_stage), сигналы активным ролям |
@@ -897,7 +897,7 @@ related_roles:
 </details>
 
 <details>
-<summary><strong>R29 Детектор</strong> — полное описание (DP.D.033)</summary>
+<summary><strong>R47 Детектор</strong> — полное описание (DP.D.033)</summary>
 
 ```yaml
 name: "Детектор"
@@ -993,9 +993,9 @@ related_roles:
   - role: "R1 Стратег"
     interaction: "Детектор пишет incident-log → Стратег читает на Week Close → решения об эволюции правил"
   - role: "R23 Верификатор"
-    interaction: "Разные масштабы: R29 — авто-детекция правилом в момент события. R23 — проверка артефакта по эталону с загрузкой контекста. Не пересекаются: если паттерн выразим как правило — R29, если требует LLM-рассуждения — R23"
+    interaction: "Разные масштабы: R47 — авто-детекция правилом в момент события. R23 — проверка артефакта по эталону с загрузкой контекста. Не пересекаются: если паттерн выразим как правило — R47, если требует LLM-рассуждения — R23"
   - role: "R24 Аудитор"
-    interaction: "R24 находит накопившийся drift (coverage gaps). R29 ловит факт провала на лету. Взаимодополняющие"
+    interaction: "R24 находит накопившийся drift (coverage gaps). R47 ловит факт провала на лету. Взаимодополняющие"
 ```
 </details>
 
@@ -1024,7 +1024,7 @@ expectations:
     expects: "Блоки «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» в критических репо (DS-ecosystem-development, Pack-*)"
   - from: "R14 Заказчик"
     expects: "Ответы без инцидентов неверного размещения (P3)"
-  - from: "R29 Детектор"
+  - from: "R47 Детектор"
     expects: "Фиксация нарушения гейта как P3 в incident-log при обнаружении"
 
 methods:
@@ -1055,7 +1055,7 @@ scenarios:
     inputs: [file_path, корневой CLAUDE.md (уже загружен)]
     work_product: "Работа продолжена без блокировки; предложение создать CLAUDE.md при обнаружении домен-специфики"
   - name: "S3: Самокоррекция при нарушении"
-    trigger: "R29 Детектор зафиксировал P3 (ответ о репо без загрузки CLAUDE.md)"
+    trigger: "R47 Детектор зафиксировал P3 (ответ о репо без загрузки CLAUDE.md)"
     method: "Немедленный Repo Context Loading"
     inputs: [incident-log запись P3, <repo>/CLAUDE.md]
     work_product: "Скорректированный ответ + incident-log запись в целевом репо"
@@ -1064,7 +1064,7 @@ current_holders:
   - holder: "A1 Claude Code (декларативно, через инструкцию в корневом CLAUDE.md)"
     grade: 1
     covers_scenarios: [S1, S2]
-    note: "Нет автоматического enforcement. Гейт работает через инструкцию агенту. Нарушения → R29 Детектор (P3)."
+    note: "Нет автоматического enforcement. Гейт работает через инструкцию агенту. Нарушения → R47 Детектор (P3)."
 
 failure_modes:
   - "Агент не прочитал CLAUDE.md репо — P3 (игнорирование контекста). Фиксируется capture-шиной."
@@ -1076,7 +1076,7 @@ failure_modes:
 related_roles:
   - role: "R6 Кодировщик"
     interaction: "Кодировщик исполняет работу, Контекст-менеджер обеспечивает правильные правила репо до начала"
-  - role: "R29 Детектор"
+  - role: "R47 Детектор"
     interaction: "Детектор фиксирует нарушение гейта (P3), Контекст-менеджер самокорректируется при обнаружении"
   - role: "R1 Стратег"
     interaction: "Стратег решает какие репо требуют блока «ОБЯЗАТЕЛЬНО ЗАГРУЖАЙ» на Week Close"
@@ -1092,7 +1092,7 @@ related_roles:
 
 | # | Роль | Suprasystem | Метод (VR) | Вход | Выход (РП) |
 |---|------|-------------|------------|------|------------|
-| R23 | **Верификатор** | Все Pack'и + DS | VR.M.001 (по эталону) | Артефакт + эталон (Pack) | Verdict, список несоответствий |
+| R23 | **[Верификатор](DP.ROLE.023-verifier.md)** | Все Pack'и + DS | VR.M.001 (по эталону) | Артефакт + эталон (Pack) | Verdict, список несоответствий |
 | R24 | **Аудитор** | Все Pack'и + DS | VR.M.002, VR.M.004 (кросс-контекст, полнота) | Индекс + целевое множество | Отчёт аудита (coverage %) |
 | R25 | **Рецензент** | Все Pack'и + DS | Экспертная оценка | Артефакт + Pack домена | Замечания и рекомендации |
 | R26 | **Приёмщик** | Все Pack'и + DS | Агрегация результатов | Verdict + отчёт + замечания | Решение pass/fail/conditional |
@@ -1117,7 +1117,7 @@ related_roles:
 
 > **Ключевое:** Стратег (R1) и Экстрактор (R2) не могут работать одновременно (один Claude Code process). Консультант (R3) работает через отдельный Claude API в боте — может параллельно.
 
-**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 12 инструментов (I1-I12), 25 ролей (10 агентских + 8 функциональных + 7 пользовательских), ~47 сценариев. Репо: DS-ai-systems (монорепо, 8 систем), ~/IWE/.claude/ (harness-local для R29 Детектор). R30 Контекст-менеджер — декларативная роль (нет отдельного инструмента, реализована через инструкцию в корневом CLAUDE.md + capture-шина R29 для нарушений).
+**Статистика:** 2 агента (A1 Claude, A2 Пользователь), 12 инструментов (I1-I12), 25 ролей (10 агентских + 8 функциональных + 7 пользовательских), ~47 сценариев. Репо: DS-ai-systems (монорепо, 8 систем), ~/IWE/.claude/ (harness-local для R47 Детектор). R30 Контекст-менеджер — декларативная роль (нет отдельного инструмента, реализована через инструкцию в корневом CLAUDE.md + capture-шина R47 для нарушений).
 
 ### 3.3. Мета-роли владельца (Platform Contours)
 

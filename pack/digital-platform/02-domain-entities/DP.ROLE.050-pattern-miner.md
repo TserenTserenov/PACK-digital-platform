@@ -131,7 +131,7 @@ DP.ROLE.050 Pattern Miner
 | DP.ROLE.015 Captures Applier | Главный downstream: R15 на apply-captures принимает решения по кандидатам через стандартный extraction-report flow. |
 | DP.ROLE.001 IWE Creator | Consumer: R1 на Week Close читает weekly отчёт + reagent на rapid-cluster алерты. |
 | DP.ROLE.005 Architect | Consumer: R5 на monthly iwe-rules-review использует audit-отчёт для cleanup правил. |
-| R29 Детектор (DP.SC.025) | Ортогональный: SC.025 real-time детекторы; SC.040 batch майнинг. Дополняют, не дублируют. |
+| R47 Детектор (DP.SC.025) | Ортогональный: SC.025 real-time детекторы; SC.040 batch майнинг. Дополняют, не дублируют. |
 | DP.ROLE.044 Notification Dispatcher | Sibling: TG-алерты на rapid-cluster через NotDisp. |
 | WP-272 PACK-agent-rules | Target формат: draft AR.NNN frontmatter совместим с реестром. |
 

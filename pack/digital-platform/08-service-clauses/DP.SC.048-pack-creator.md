@@ -144,6 +144,8 @@ wp: WP-369
 - SPF/process 01-11 — источник процесса.
 - WP-369 — порождающий РП.
 
+**Связанные документы:**
+- Инвариант read-only upstream формализован в `SPF/process/00-process-overview.md#extension-mechanism` (WP-377 Ф2.2).
+
 **Открытые задачи (spin-off, post-WP-369):**
-- Формализация инварианта read-only upstream в `SPF/process/00-overview.md §extension-mechanism` — отдельный РП (~1h).
 - Файловый guard в скилле `/pack-creator` (запрет write в SPF/FPF на уровне файловой системы) — отдельный РП (Ф5 WP-369 отложен).
