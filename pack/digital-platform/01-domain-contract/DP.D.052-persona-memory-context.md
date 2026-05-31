@@ -3,9 +3,9 @@ id: DP.D.052
 name: "Различение: Персона / Память / Контекст"
 type: distinction
 status: active
-summary: "Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = user-owned Git, Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral."
+summary: "Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = distributed-entity (identity-anchor + Git declarations + Neon refs), Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. v2: разделены оси Writer / Identity-anchor / State-storage / Snapshot-unit (вместо склейки Owner+Артефакт); добавлено различение Носитель ≠ Персона ≠ Декларация Персоны (§10)."
 created: 2026-04-22
-updated: 2026-05-08
+updated: 2026-05-31
 valid_from: 2026-04-22
 trust:
   F: 4
@@ -33,25 +33,33 @@ tags: [persona, memory, projection, user-model, writer-owner, distinction]
 
 **Решение:** разделить по **writer + owner** (source-of-truth).
 
-## 2. Три слоя
+## 2. Три слоя — четыре оси (v2, 2026-05-31)
 
-| Слой | Writer | Owner | Пример хранимого | Подробно |
-|------|--------|-------|------------------|----------|
-| **Персона** | Пользователь (или агент по его поручению с acceptance) | Git пользователя | PACK-personal, DS-my-strategy, captures, preferences, Ory identity (декларация) | [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) |
-| **Память** | Платформа автоматически | Neon | Events (activity-hub), payments, baseline/potential/BKT/HLR, подписки | [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) |
-| **Контекст** (= Проекция) | Агент в runtime | Не хранится долго | Промпт LLM, Open Learner Model view, nudge message | [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md) |
+> **Изменение по сравнению с v1 (22 апр).** Предыдущая таблица склеивала «Owner» и «Артефакт» в одну колонку, что приводило к concept confusion: читатель видел «Owner = Git пользователя» и заключал, что Персона = файл в Git. На самом деле Персона — entity с **distributed identity**: identity-anchor (Ory subject_id или Pre-Grant claim_token) живёт отдельно от deklarативного содержимого (Git) и от ссылок (Neon). Распутываем оси.
+
+| Слой | Writer | Identity-anchor | State-storage | Snapshot-unit | Подробно |
+|------|--------|-----------------|---------------|---------------|----------|
+| **Персона** | Пользователь (или агент по его поручению с acceptance) | `Ory subject_id` (UUID, immutable; для Pre-Grant — `subscription_grants.claim_token`) | Git пользователя (PACK-personal, DS-my-strategy, captures, preferences) + ссылки в Neon (`persona_grants.ory_identity_id`) | Git commit hash + frontmatter `valid_from` декларации | [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) |
+| **Память** | Платформа автоматически | `Ory subject_id` (FK через `persona_grants`) | Neon (Observed events + Derived aggregates) | Event log offset + Derived snapshot version | [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) |
+| **Контекст** (= Проекция) | Агент в runtime | `Ory subject_id` (read для адресации) | Эфемерно (память процесса) | LLM-prompt assembly id (живёт от запроса до ответа) | [DP.ARCH.007](../02-domain-entities/DP.ARCH.007-projection.md) |
 
 > **Терминология (канон).** В архитектурном дискурсе используем **Проекция** (DP.ARCH.007) как каноническую сущность runtime-слоя. «Контекст» = обиходный синоним (LLM context window, промпт-сборка) — встречается в названии различения и тестах границы ради читаемости, но в спецификациях и кода ссылаемся на Проекцию. Путать не надо: это одно и то же, просто обиходное слово и архитектурное.
 
-## 3. Тест границы
+> **Distributed identity pattern.** Identity-anchor Персоны живёт в одном месте (Ory или Pre-Grant store), а state-storage — в другом (Git + Neon refs). Это стандартный паттерн federated identity систем (см. Cameron «Laws of Identity» 2005; OAuth2 federated identity RFC 6749 / 7591; W3C Decentralized Identifiers 2022) и архитектурно совпадает с «decoupled identity» Ory (<https://www.ory.sh/docs/concepts/identity>). Централизованная таблица `personas` в Neon была бы дублированием Ory subject_id и нарушала OwnerIntegrity — отвергаем.
 
-**Вопрос:** «Что пропадёт, если удалю X?»
+## 3. Тест границы (v2 — по новым осям)
 
-| Удалить | Слой |
-|---------|------|
-| Git пользователя | → Персона пропала |
-| Neon | → Память пропала |
-| Прервать текущий LLM-вызов | → Проекция пропала |
+**Вопрос:** «Что пропадёт, если удалю X?» — теперь проверяется по каждой оси отдельно.
+
+| Удалить | Что пропадёт | Что останется |
+|---------|--------------|---------------|
+| Identity-anchor Персоны (Ory subject_id или claim_token) | Identity Персоны → Персона перестаёт существовать как entity (её декларации становятся orphan-снимками) | Файлы в Git как orphan-history; Neon events с разорванной FK |
+| Git пользователя (PACK-personal/ etc.) | Все декларации Персоны (содержимое) | Identity-anchor в Ory; ссылки и наблюдения в Neon (Персона = entity жива, но без декларативного содержимого) |
+| Один Git commit | Одна snapshot-версия декларации | Identity, остальные снимки в Git history, Neon refs |
+| Neon `persona_grants` записи | Связь Персоны с Памятью (refs) | Identity-anchor + декларации в Git (Персона жива, но Память «отвязана») |
+| Neon (целиком) | Память пропала | Персона (anchor + Git) цела |
+| Прервать текущий LLM-вызов | Проекция пропала | Персона + Память целы |
+| Носитель (человек в физическом мире) перестал заходить | Ничего внутри платформы не пропадает | Всё (платформа не имеет прямого доступа к носителю; см. §11) |
 
 ## 4. Под-уровни Памяти
 
@@ -110,7 +118,33 @@ tags: [persona, memory, projection, user-model, writer-owner, distinction]
 - **БД Neon (9 штук)** — пакетное переименование в **WP-228 Ф25** (после Д1-Д12 структурных правок).
 - **DP.ARCH.003** расщеплён в **WP-257 Ф5** на DP.ARCH.005 + DP.ARCH.006 + DP.ARCH.007.
 
-## 10. Связанные документы
+## 10. Носитель ≠ Персона ≠ Декларация Персоны (v2, 2026-05-31)
+
+> **Производное различение, делает явной ось «сущность vs снимок» внутри Персоны.** Введено по итогам ревизии онтологии (peer-сессия 2026-05-31-11). Адресует пилотскую интуицию «в БД хранится не Персона, а её Версия»: интуиция верна (Git хранит snapshots, не саму entity), но не требует переименования — требует явного разделения трёх сущностей.
+
+| Сущность | Что это | Где живёт | Кто writer |
+|----------|---------|-----------|------------|
+| **Носитель** | Человек в физическом мире | Вне платформы | — (платформа не пишет в носителя) |
+| **Персона** | Entity-в-IWE, представляющая одного носителя | Distributed composition: Ory subject_id (anchor) + Git PACK-personal (declarations) + Neon `persona_grants` (refs) | Пользователь (для declarations) + Платформа (для refs); identity-anchor издаётся системой регистрации |
+| **Декларация Персоны** (Persona Snapshot) | Один срез декларативного содержимого Персоны на момент T | Git commit + frontmatter `valid_from` | Пользователь (или агент по поручению с acceptance) |
+
+**Тесты различения:**
+
+1. *Носитель vs Персона.* «Если носитель перестанет заходить — пропадёт ли Персона?» — Нет, Персона остаётся как entity внутри платформы (anchor живёт в Ory, декларации в Git, история наблюдений в Neon). Это и есть причина асимметрии: Персона — артефакт системы, носитель — нет.
+
+2. *Персона vs Декларация Персоны.* «Если удалить один Git commit (одну версию snapshot.md) — пропадёт ли Персона?» — Нет, Персона жива (anchor + остальные commits + Neon refs). Пропадёт одна версия декларации.
+
+3. *Полная смерть Персоны.* «Что нужно удалить, чтобы Персона перестала существовать?» — Identity-anchor (Ory subject_id или Pre-Grant claim_token). Удаление содержимого Git или Neon записей оставляет Персону как «entity без декларации» или «entity без памяти», но не уничтожает её.
+
+**Lifecycle anchor (важная деталь):**
+Persona anchor проходит две фазы. Pre-Grant: лид/гость, ещё нет Ory identity — anchor = `subscription_grants.claim_token`. Granted (после claim flow): полноценная Персона — anchor = `Ory subject_id`. Переход односторонний и атомарный. На обеих фазах Персона — валидная entity, но с разной prov-историей. Подробнее → DP.ARCH.005 §0.
+
+**Что это меняет в практике:**
+- При обсуждении «хранилища Персоны» — указывать какой именно компонент имеется в виду (anchor / declarations / refs), не «вся Персона в Git».
+- При проектировании удалений (GDPR right-to-be-forgotten) — последовательность: revoke anchor → wipe Git → wipe Neon refs; одно из трёх — частичная смерть, не полная.
+- При импорте Letta/Mem0-терминологии — наш «Persona» = их `human block` (Letta) или `structured user attributes` (Mem0), НЕ их `persona block` (= self-описание агента в Letta).
+
+## 11. Связанные документы
 
 - [DP.ARCH.005](../02-domain-entities/DP.ARCH.005-persona-entity.md) — Персона
 - [DP.ARCH.006](../02-domain-entities/DP.ARCH.006-memory-record.md) — Память
