@@ -50,21 +50,6 @@ tags: [persona, memory, projection, user-model, knowledge-graph, personal-ai, pk
 - **W3C Decentralized Identifiers (DID, 2022):** identity-anchor живёт независимо от application-state — прямое архитектурное обоснование distributed identity pattern для Персоны.
 - **OAuth 2.0 / OIDC federated identity (RFC 6749, 7591):** identity provider vs application — паттерн на котором стоит наша связка Ory ↔ application state.
 
-### 2.3 Альтернативный паттерн: unified peer (Honcho)
-
-**Honcho (Plastic Labs, 2024-2026)** выбирает противоположный подход — **unified peer model** вместо writer+owner расщепления.
-
-- Архитектура: `workspaces → peers → sessions → messages`. Humans и AI agents — first-class peers одного типа.
-- Two-stage pipeline: *ingest-time* (small fine-tuned model извлекает preferences/claims/observations из каждого сообщения, обновляет peer representation сразу) + *dream-time* (background reasoning — derives latent patterns).
-- Нет explicit writer+owner критерия: peer representation derives implicitly из переписки, не разделяет «декларация пользователя» vs «наблюдение платформы».
-
-**Почему IWE отвергает unified peer pattern:**
-1. **GDPR consent-flow:** declarative content (Персона) и observed events (Память) подпадают под разные согласия (Art. 6 GDPR). Implicit derivation смешивает их → невозможно изолировать для consent withdrawal.
-2. **Audit (VR.R.002):** каждая запись должна иметь чёткий writer-trail. Implicit derivation = chain LLM-вызовов без атомарного writer-event.
-3. **Capture-flow** (DP.SC.031/032): agent-write требует explicit user acceptance. Unified peer pattern размывает границу agent-write vs user-decl.
-
-Honcho-pattern уместен для агентов без compliance-обязательств; для платформы развития интеллекта со взрослым consent-контуром — writer+owner расщепление обязательно.
-
 ### 2.2 SoTA по слоям
 
 **Персона (user-declared):**
@@ -80,14 +65,29 @@ Honcho-pattern уместен для агентов без compliance-обяза
 - Open Learner Model (Bull & Kay 2007; Brusilovsky overlay model 1996+): проекция под пользователя как учебный инструмент. У OLM literature чёткое разделение: **Learner Profile** (declarative, user-controlled — коррелят нашей Персоны) vs **Learner Model** (computed by system — коррелят нашей Памяти.Derived) vs **Open Learner Model view** (визуализация для пользователя — коррелят нашей Проекции). Это даёт международный академический glossary якорь для трёхслойного критерия.
 - Context Engineering (DP.SOTA.002): runtime-сборка LLM-контекста — прямой предок LLM Context Projection.
 
-### Критический взгляд на метафору «digital twin» для людей
+### 2.3 Альтернативный паттерн: unified peer (Honcho)
+
+**Honcho (Plastic Labs, 2024-2026)** выбирает противоположный подход — **unified peer model** вместо writer+owner расщепления.
+
+- Архитектура: `workspaces → peers → sessions → messages`. Humans и AI agents — first-class peers одного типа.
+- Two-stage pipeline: *ingest-time* (small fine-tuned model извлекает preferences/claims/observations из каждого сообщения, обновляет peer representation сразу) + *dream-time* (background reasoning — derives latent patterns).
+- Нет explicit writer+owner критерия: peer representation derives implicitly из переписки, не разделяет «декларация пользователя» vs «наблюдение платформы».
+
+**Почему IWE отвергает unified peer pattern:**
+1. **GDPR consent-flow:** declarative content (Персона) и observed events (Память) подпадают под разные согласия (Art. 6 GDPR). Implicit derivation смешивает их → невозможно изолировать для consent withdrawal.
+2. **Audit (VR.R.002):** каждая запись должна иметь чёткий writer-trail. Implicit derivation = chain LLM-вызовов без атомарного writer-event.
+3. **Capture-flow** (DP.SC.031/032): agent-write требует explicit user acceptance. Unified peer pattern размывает границу agent-write vs user-decl.
+
+Honcho-pattern уместен для агентов без compliance-обязательств; для платформы развития интеллекта со взрослым consent-контуром — writer+owner расщепление обязательно.
+
+### 2.4 Критический взгляд на метафору «digital twin» для людей
 
 - **Springer AI&Society 2026 «Personalised LLMs and the risks of the digital twin metaphor»** (link.springer.com/article/10.1007/s00146-026-02875-4) — критикует сам термин «twin» применительно к LLM-моделям человека. Аргумент: LLM-модель — не копия и не симуляция; это performative artefact, имитирующий человека на distribution train-данных, но без каузальной связи с оригиналом. Метафора «twin» вводит в заблуждение про epistemic status.
 - **Springer Synthese 2026 «The ontology of the digital twin: contemporary case for metaontological analysis»** — DT синтезирует атрибуты, традиционно разделённые между онтологическими категориями (abstract/concrete, particular/universal), что требует пересмотра.
 
 **Импликация для IWE:** мы используем «Цифровой двойник» (PD.ARCH.001 §3.3) для описания «модели себя для рефлексии». При следующей ревизии этого термина — пересмотреть в свете academic critique. Текущий приоритет — не переименование (см. peer-сессия 2026-05-31-11 verdict), а явное указание границ метафоры.
 
-### Customer/UX дискурс — отдельная семантика «Persona»
+### 2.5 Customer/UX дискурс — отдельная семантика «Persona»
 
 В customer experience и UX-литературе термин **Persona** имеет другое значение: humanized fictional **типизация сегмента** (e.g. «Алиса, 28 лет, продакт-менеджер») для empathy/ideation, не для предсказания поведения. **Digital Twin** = real-time симуляция конкретного индивида. **Synthetic User** = generic репрезентация population segment. (Источники: doppeliq.ai, aiforinsightsleaders.substack.com 2025-2026.)
 
