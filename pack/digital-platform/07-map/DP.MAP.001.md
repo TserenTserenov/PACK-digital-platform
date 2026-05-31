@@ -24,7 +24,7 @@ generated: true
 | Distinctions (D) | 57 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 93 |
+| Failure Modes (FM) | 95 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 196 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **600** |
+| **Total** | **602** |
 
 ## Distinctions
 
@@ -423,6 +423,8 @@ generated: true
 | DP.FM.114 | Adapter Dependency Silent Regression | — | accepted |
 | DP.FM.115 | Peer Agent Overwrite Without Read | — | — |
 | DP.FM.116 | External Id Path Traversal | — | draft |
+| DP.FM.117 | Двойной учёт компонента в compound-формуле | — | — |
+| DP.FM.118 | Двойное значение метрики в названии (theoretical vs operational) | — | — |
 
 ## SoTA Annotations
 
@@ -1018,6 +1020,8 @@ generated: true
 - Missing `summary`: DP.FM.114 (DP.FM.114-adapter-dependency-silent-regression.md)
 - Missing `summary`: DP.FM.115 (DP.FM.115-peer-agent-overwrite-without-read.md)
 - Missing `summary`: DP.FM.116 (DP.FM.116-external-id-path-traversal.md)
+- Missing `summary`: DP.FM.117 (DP.FM.117-double-count-compound-formula-component.md)
+- Missing `summary`: DP.FM.118 (DP.FM.118-ambiguous-metric-name-theoretical-vs-operational.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)

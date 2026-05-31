@@ -966,3 +966,11 @@ created: 2026-05-22
 **Контекст:** Выявлено при ArchGate WP-358 Ф10 (2026-05-28), проектирование session tracker в Telegram-боте.
 
 → см. `DP.D.103-in-memory-vs-persistent-session-state.md`
+
+---
+
+### DP.D.113: pool.acquire(timeout) ≠ command_timeout в asyncpg
+
+- **pool.acquire(timeout) ≠ command_timeout в asyncpg** (DP.D.113). `command_timeout` защищает SQL-исполнение, НЕ ожидание в очереди соединений (`pool.acquire()`). При half-open TCP worker зависает на `acquire()`, а не на SQL → добавлять явный `pool.acquire(timeout=X)` во всех checkout-точках. Типичный gap: 4 места в 3 файлах (listener.py, db.py, matcher.py).
+
+**Контекст:** Выявлено при диагностике event-loop stall в production asyncpg worker (2026-05-29, WP-358).
