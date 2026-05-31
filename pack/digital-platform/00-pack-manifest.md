@@ -171,6 +171,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | FM | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | FM | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | FM | — | — |
+| DP.FM.114 | Adapter Dependency Silent Regression | FM | — | accepted |
+| DP.FM.115 | Peer Agent Overwrite Without Read | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -356,6 +358,16 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | M | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | M | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | M | — | active |
+| DP.M.242 | Ar5 Pack Quality Baseline | M | — | accepted |
+| DP.M.243 | Discriminator Column Sti Pattern | M | — | — |
+| DP.M.244 | Trust Boundary Server Side Authz | M | — | — |
+| DP.M.245 | Cp Profile Adaptive Facilitation | M | — | — |
+| DP.M.246 | Content Debt Triage Inbox | M | — | — |
+| DP.M.247 | Pre-LLM Eligibility Gate | M | — | active |
+| DP.M.248 | Composable CLI Linter — One Subcommand per Rule | M | — | active |
+| DP.M.249 | Delivery Tracker — Living Navigation Artifact for Umbrella WP | M | — | active |
+| DP.M.250 | Glossary-Driven Lint via YAML — Rules as Data | M | — | active |
+| DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

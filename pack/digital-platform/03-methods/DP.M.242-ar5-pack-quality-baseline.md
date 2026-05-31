@@ -1,0 +1,45 @@
+---
+id: DP.M.242
+type: method
+pack: PACK-digital-platform
+status: accepted
+trust: high
+epistemic_stage: observation
+valid_from: 2026-05-31
+source: WP-376 content-cleanup-backlog 2026-05-31
+---
+
+# DP.M.242 — AR.5-сигналы как количественная baseline-метрика качества Pack
+
+## Цель
+
+Измерить «долг различений» в Pack-репо через количество AR.5-нарушений (смешение слоёв/уровней/стилей). Создать количественную baseline для отслеживания улучшений качества Pack-контента.
+
+## Вход / Выход (IPO)
+
+**Вход:** Pack-репо + AR.5-скрипт
+
+**Процесс:**
+1. Запустить AR.5-проверку: `python3 scripts/check-ar5.py --pack PACK-<name>`
+2. Зафиксировать count AR.5-сигналов как baseline в `content-cleanup-backlog.md`
+3. Перечислить каждый сигнал с контекстом (файл, строка, тип нарушения)
+4. При Week Close: повторить → сравнить с baseline → trending down?
+
+**Выход:** `content-cleanup-backlog.md` с count сигналов + перечнем нарушений
+
+## Пороговые значения
+
+| Count | Интерпретация |
+|-------|---------------|
+| > 50  | Открыть зонтичный РП на content cleanup |
+| 20–50 | Включить в Week Close ревью |
+| ≤ 10  | Pack в хорошем состоянии |
+
+## Применимость
+
+Любой Pack-репо перед Week Close или перед релизом нового Pack-контента. Baseline 89 сигналов (PACK-personal, 31 мая 2026) = точка отсчёта для WP-376.
+
+## Связи
+
+- PACK-agent-rules: AR.5 — правило про смешение слоёв (source нарушений)
+- DS: DS-my-strategy/current/content-cleanup-backlog.md — пример baseline

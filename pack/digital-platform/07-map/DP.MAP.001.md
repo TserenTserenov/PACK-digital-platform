@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 56 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 90 |
+| Failure Modes (FM) | 92 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 170 |
+| Methods (M) | 180 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **570** |
+| **Total** | **582** |
 
 ## Distinctions
 
@@ -277,6 +277,16 @@ generated: true
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | — | active |
+| DP.M.242 | Ar5 Pack Quality Baseline | — | accepted |
+| DP.M.243 | Discriminator Column Sti Pattern | — | — |
+| DP.M.244 | Trust Boundary Server Side Authz | — | — |
+| DP.M.245 | Cp Profile Adaptive Facilitation | — | — |
+| DP.M.246 | Content Debt Triage Inbox | — | — |
+| DP.M.247 | Pre-LLM Eligibility Gate | — | active |
+| DP.M.248 | Composable CLI Linter — One Subcommand per Rule | — | active |
+| DP.M.249 | Delivery Tracker — Living Navigation Artifact for Umbrella WP | — | active |
+| DP.M.250 | Glossary-Driven Lint via YAML — Rules as Data | — | active |
+| DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | — | active |
 
 ## Work Products
 
@@ -393,6 +403,8 @@ generated: true
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | — | — |
+| DP.FM.114 | Adapter Dependency Silent Regression | — | accepted |
+| DP.FM.115 | Peer Agent Overwrite Without Read | — | — |
 
 ## SoTA Annotations
 
@@ -900,6 +912,16 @@ generated: true
 - Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
 - Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
 - Missing `summary`: DP.M.241 (DP.M.241-personal-guide-render.md)
+- Missing `summary`: DP.M.242 (DP.M.242-ar5-pack-quality-baseline.md)
+- Missing `summary`: DP.M.243 (DP.M.243-discriminator-column-sti-pattern.md)
+- Missing `summary`: DP.M.244 (DP.M.244-trust-boundary-server-side-authz.md)
+- Missing `summary`: DP.M.245 (DP.M.245-cp-profile-adaptive-facilitation.md)
+- Missing `summary`: DP.M.246 (DP.M.246-content-debt-triage-inbox.md)
+- Missing `summary`: DP.M.247 (DP.M.247-pre-llm-eligibility-gate.md)
+- Missing `summary`: DP.M.248 (DP.M.248-composable-cli-linter-per-rule.md)
+- Missing `summary`: DP.M.249 (DP.M.249-delivery-tracker-umbrella-wp.md)
+- Missing `summary`: DP.M.250 (DP.M.250-glossary-driven-lint-yaml.md)
+- Missing `summary`: DP.M.251 (DP.M.251-nighttime-rollout-with-rollback-verifier.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -958,6 +980,8 @@ generated: true
 - Missing `summary`: DP.FM.104 (DP.FM.104-missing-reverse-identity-lookup.md)
 - Missing `summary`: DP.FM.105 (DP.FM.105-internal-probe-blind-to-own-failure.md)
 - Missing `summary`: DP.FM.113 (DP.FM.113-regex-search-swallows-second-violation.md)
+- Missing `summary`: DP.FM.114 (DP.FM.114-adapter-dependency-silent-regression.md)
+- Missing `summary`: DP.FM.115 (DP.FM.115-peer-agent-overwrite-without-read.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
