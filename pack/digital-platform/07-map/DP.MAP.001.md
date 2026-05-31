@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 56 |
+| Distinctions (D) | 57 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 92 |
+| Failure Modes (FM) | 93 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 180 |
+| Methods (M) | 196 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 27 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **582** |
+| **Total** | **600** |
 
 ## Distinctions
 
@@ -99,6 +99,7 @@ generated: true
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | — | active |
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
+| DP.D.104 | Прогресс к награде ≠ Показ баланса | — | — |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
@@ -257,6 +258,18 @@ generated: true
 | DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | — | — |
 | DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | — | — |
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | — | active |
+| DP.M.181 | Multi Turn Session Thread Pattern | — | draft |
+| DP.M.182 | Dual Sla Acknowledgment Completion | — | draft |
+| DP.M.183 | Level Dependent Bonus Caps Ema | — | — |
+| DP.M.184 | EMA-сглаживание курса бонусов | — | — |
+| DP.M.185 | Степенная функция начисления баллов за усилие | — | — |
+| DP.M.186 | Тест 15-секундного обещания onboarding | — | — |
+| DP.M.187 | Бустер новичка: фиксированный множитель первые N дней | — | — |
+| DP.M.188 | Маппинг N backend ступеней в M UI грейдов | — | — |
+| DP.M.189 | Floor курса для защиты бизнес-обещания при росте community | — | — |
+| DP.M.190 | 3-уровневый fallback для технического риска в live-демо | — | — |
+| DP.M.191 | CTA воронки = ближайший продукт по времени, не самый ценный | — | — |
+| DP.M.192 | C9-проверка: абстрактный термин → сцена с человеком в действии | — | — |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | — | active |
@@ -274,6 +287,8 @@ generated: true
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
+| DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | — | active |
+| DP.M.231 | Одновременное восстановление N domain-rules как диагностический маркер блокировки main loop | — | active |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | — | active |
@@ -287,6 +302,8 @@ generated: true
 | DP.M.249 | Delivery Tracker — Living Navigation Artifact for Umbrella WP | — | active |
 | DP.M.250 | Glossary-Driven Lint via YAML — Rules as Data | — | active |
 | DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | — | active |
+| DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | — | active |
+| DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | — | active |
 
 ## Work Products
 
@@ -405,6 +422,7 @@ generated: true
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | — | accepted |
 | DP.FM.115 | Peer Agent Overwrite Without Read | — | — |
+| DP.FM.116 | External Id Path Traversal | — | draft |
 
 ## SoTA Annotations
 
@@ -760,6 +778,7 @@ generated: true
 - Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
 - Missing `summary`: DP.D.099 (DP.D.099-read-metric-vs-downstream-effect.md)
 - Missing `summary`: DP.D.102 (DP.D.102-event-calendar-four-channels.md)
+- Missing `summary`: DP.D.104 (DP.D.104-progress-to-reward-vs-balance.md)
 - Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
 - Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
 - Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
@@ -892,6 +911,18 @@ generated: true
 - Missing `summary`: DP.M.167 (DP.M.167-refinement-prompt-by-previous-length.md)
 - Missing `summary`: DP.M.168 (DP.M.168-post-deploy-regression-first-hypothesis.md)
 - Missing `summary`: DP.M.169 (DP.M.169-experimental-weight-guard-condition.md)
+- Missing `summary`: DP.M.181 (DP.M.181-multi-turn-session-thread-pattern.md)
+- Missing `summary`: DP.M.182 (DP.M.182-dual-sla-acknowledgment-completion.md)
+- Missing `summary`: DP.M.183 (DP.M.183-level-dependent-bonus-caps-ema.md)
+- Missing `summary`: DP.M.184 (DP.M.184-ema-bonus-exchange-rate-smoothing.md)
+- Missing `summary`: DP.M.185 (DP.M.185-power-law-effort-scoring.md)
+- Missing `summary`: DP.M.186 (DP.M.186-15-second-onboarding-promise-test.md)
+- Missing `summary`: DP.M.187 (DP.M.187-newcomer-fixed-multiplier-window.md)
+- Missing `summary`: DP.M.188 (DP.M.188-backend-stages-to-ui-grades-mapping.md)
+- Missing `summary`: DP.M.189 (DP.M.189-promise-floor-for-self-balancing-variable.md)
+- Missing `summary`: DP.M.190 (DP.M.190-live-demo-three-level-fallback.md)
+- Missing `summary`: DP.M.191 (DP.M.191-funnel-cta-temporal-proximity.md)
+- Missing `summary`: DP.M.192 (DP.M.192-c9-concrete-scene-replacement.md)
 - Missing `summary`: DP.M.197 (DP.M.197-fix-contract-spec-with-regression-checks.md)
 - Missing `summary`: DP.M.198 (DP.M.198-atomic-state-change-with-user-reply.md)
 - Missing `summary`: DP.M.199 (DP.M.199-three-tier-config-parameters.md)
@@ -909,6 +940,8 @@ generated: true
 - Missing `summary`: DP.M.212 (DP.M.212-discourse-webhook-iwe-event-pipeline-mapping.md)
 - Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
+- Missing `summary`: DP.M.230 (DP.M.230-dual-level-wait-for-infinite-retry-guard.md)
+- Missing `summary`: DP.M.231 (DP.M.231-simultaneous-domain-recovery-as-main-loop-block-marker.md)
 - Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
 - Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
 - Missing `summary`: DP.M.241 (DP.M.241-personal-guide-render.md)
@@ -922,6 +955,8 @@ generated: true
 - Missing `summary`: DP.M.249 (DP.M.249-delivery-tracker-umbrella-wp.md)
 - Missing `summary`: DP.M.250 (DP.M.250-glossary-driven-lint-yaml.md)
 - Missing `summary`: DP.M.251 (DP.M.251-nighttime-rollout-with-rollback-verifier.md)
+- Missing `summary`: DP.M.252 (DP.M.252-satisfied-by-existing-content-pre-build-scout.md)
+- Missing `summary`: DP.M.253 (DP.M.253-seminar-orientation-map-max-impact-triple.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -982,6 +1017,7 @@ generated: true
 - Missing `summary`: DP.FM.113 (DP.FM.113-regex-search-swallows-second-violation.md)
 - Missing `summary`: DP.FM.114 (DP.FM.114-adapter-dependency-silent-regression.md)
 - Missing `summary`: DP.FM.115 (DP.FM.115-peer-agent-overwrite-without-read.md)
+- Missing `summary`: DP.FM.116 (DP.FM.116-external-id-path-traversal.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)

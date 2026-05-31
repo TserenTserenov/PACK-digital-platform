@@ -76,6 +76,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | D | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | D | — | active |
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | D | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
+| DP.D.104 | Прогресс к награде ≠ Показ баланса | D | — | — |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
@@ -173,6 +174,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | FM | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | FM | — | accepted |
 | DP.FM.115 | Peer Agent Overwrite Without Read | FM | — | — |
+| DP.FM.116 | External Id Path Traversal | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -338,6 +340,18 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | M | — | — |
 | DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | M | — | — |
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | M | — | active |
+| DP.M.181 | Multi Turn Session Thread Pattern | M | — | draft |
+| DP.M.182 | Dual Sla Acknowledgment Completion | M | — | draft |
+| DP.M.183 | Level Dependent Bonus Caps Ema | M | — | — |
+| DP.M.184 | EMA-сглаживание курса бонусов | M | — | — |
+| DP.M.185 | Степенная функция начисления баллов за усилие | M | — | — |
+| DP.M.186 | Тест 15-секундного обещания onboarding | M | — | — |
+| DP.M.187 | Бустер новичка: фиксированный множитель первые N дней | M | — | — |
+| DP.M.188 | Маппинг N backend ступеней в M UI грейдов | M | — | — |
+| DP.M.189 | Floor курса для защиты бизнес-обещания при росте community | M | — | — |
+| DP.M.190 | 3-уровневый fallback для технического риска в live-демо | M | — | — |
+| DP.M.191 | CTA воронки = ближайший продукт по времени, не самый ценный | M | — | — |
+| DP.M.192 | C9-проверка: абстрактный термин → сцена с человеком в действии | M | — | — |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | M | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | M | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | M | — | active |
@@ -355,6 +369,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | M | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | M | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | M | — | active |
+| DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | M | — | active |
+| DP.M.231 | Одновременное восстановление N domain-rules как диагностический маркер блокировки main loop | M | — | active |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | M | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | M | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | M | — | active |
@@ -368,6 +384,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.249 | Delivery Tracker — Living Navigation Artifact for Umbrella WP | M | — | active |
 | DP.M.250 | Glossary-Driven Lint via YAML — Rules as Data | M | — | active |
 | DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | M | — | active |
+| DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | M | — | active |
+| DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
