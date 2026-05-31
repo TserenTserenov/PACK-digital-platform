@@ -6,11 +6,11 @@ layer: L4-Personal
 audience: [R1 Стратег, R5 Архитектор, R14 Заказчик]
 created: 2026-04-24
 updated: 2026-04-24
-links: [DP.D.050, DP.ARCH.004, WP-187, WP-227, WP-73, WP-109, WP-117]
+links: [DP.D.052, DP.ARCH.004, WP-187, WP-227, WP-73, WP-109, WP-117]
 related:
   extends: []
   realizes: [dt_* MCP tools в gateway-mcp, /twin MCP endpoint]
-  uses: [DP.D.050, DP.ARCH.004]
+  uses: [DP.D.052, DP.ARCH.004]
 ---
 
 # DP.SC.031 — Единый Read API над Памятью.Derived
@@ -21,7 +21,7 @@ related:
 
 **Кому:** любой канал-потребитель пользовательских данных (бот `/me`, `/progress`, `/twin`; VS Code IWE extension; Web App dashboard; сторонние плагины L3 через Plugin API WP-258) и стоящие за ними роли — R1 Стратег (владелец собственных данных), R14 Заказчик (потребитель своих индикаторов), R5 Архитектор (ответственный за целостность read-модели).
 
-**Зачем:** согласно модели Персона/Память/Контекст (DP.D.050, введена WP-257 22 апр 2026), расчётные индикаторы пользователя (baseline, potential, RCS, streak, active_days, coding_time, IWE-активность) живут в **Память.Derived** (Neon `platform`, бывший `digital-twin` #5). Если каждый канал ходит напрямую в БД своим SELECT'ом, возникают три проблемы:
+**Зачем:** согласно модели Персона/Память/Контекст (DP.D.052, введена WP-257 22 апр 2026), расчётные индикаторы пользователя (baseline, potential, RCS, streak, active_days, coding_time, IWE-активность) живут в **Память.Derived** (Neon `platform`, бывший `digital-twin` #5). Если каждый канал ходит напрямую в БД своим SELECT'ом, возникают три проблемы:
 
 1. Дублирование логики расчёта/агрегации → расхождение чисел между каналами (бот показывает streak 5, VS Code — 4).
 2. Обход tier-gating (T1-T4) и RLS → пользователь одного тира видит через Web App то, что запрещено в боте.
