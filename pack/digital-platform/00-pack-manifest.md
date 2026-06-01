@@ -429,6 +429,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | M | — | active |
 | DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | M | — | active |
 | DP.M.254 | Container abstraction mapping — IT-аналогии через Persona+Память+Контекст без импорта docker-терминов | M | — | active |
+| DP.M.255 | Поликорневая сборка контекста | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

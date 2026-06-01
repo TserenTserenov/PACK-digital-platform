@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 100 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 221 |
+| Methods (M) | 222 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **644** |
+| **Total** | **645** |
 
 ## Distinctions
 
@@ -340,6 +340,7 @@ generated: true
 | DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | — | active |
 | DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | — | active |
 | DP.M.254 | Container abstraction mapping — IT-аналогии через Persona+Память+Контекст без импорта docker-терминов | — | active |
+| DP.M.255 | Поликорневая сборка контекста | — | active |
 
 ## Work Products
 
@@ -1036,6 +1037,7 @@ generated: true
 - Missing `summary`: DP.M.252 (DP.M.252-satisfied-by-existing-content-pre-build-scout.md)
 - Missing `summary`: DP.M.253 (DP.M.253-seminar-orientation-map-max-impact-triple.md)
 - Missing `summary`: DP.M.254 (DP.M.254-container-abstraction-mapping.md)
+- Missing `summary`: DP.M.255 (DP.M.255-poly-root-context-assembly.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
