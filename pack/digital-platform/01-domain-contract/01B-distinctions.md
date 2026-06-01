@@ -974,3 +974,42 @@ created: 2026-05-22
 - **pool.acquire(timeout) ≠ command_timeout в asyncpg** (DP.D.113). `command_timeout` защищает SQL-исполнение, НЕ ожидание в очереди соединений (`pool.acquire()`). При half-open TCP worker зависает на `acquire()`, а не на SQL → добавлять явный `pool.acquire(timeout=X)` во всех checkout-точках. Типичный gap: 4 места в 3 файлах (listener.py, db.py, matcher.py).
 
 **Контекст:** Выявлено при диагностике event-loop stall в production asyncpg worker (2026-05-29, WP-358).
+
+### DP.D.105: Pack-internal frontmatter check ≠ DS-level prose check (scope линтера)
+
+| Аспект | Pack-internal frontmatter check | DS-level prose check |
+|--------|--------------------------------|----------------------|
+| **Источник нарушения** | Frontmatter поля внутри Pack-файла (id, type, disjoint-теги, type-mapping) | Misuse Pack-понятий в downstream-документах (prose, конкретные кейсы) |
+| **Парсер** | Regex / YAML — детерминированный | Semantic parsing — требует контекста |
+| **False-positive rate** | Низкий | Высокий |
+| **Где живёт** | Линтер / CI-gate | Reviewer-checklist / Competency Questions |
+| **Стоимость поддержки** | Линейная (новое правило → новый regex) | Растёт — требует обновлений промптов / семантики |
+
+**Тест выбора:** «Парсится ли источник нарушения детерминированно?»
+- Да → правило линтера, Pack-internal scope
+- Нет → правило не линтерское — переносить в reviewer-checklist или CQ (см. [MIM.M.032](../../../PACK-MIM/pack/MIM/03-methods/MIM.M.032-competency-questions-as-pack-dod.md))
+
+**Failure mode при смешении:** Раздутые примеры и over-engineered правила (наблюдался кейс с 80 D.* вместо 15 — линтер ловил DS-level misuse, не свою зону ответственности).
+
+**Контекст:** Выявлено в peer-сессии 19 (use-ontology-engineering-in-packs, Тема 2, ход 4, 2026-05-27). Применимо к любым linter/validator системам, schema-validation, doc-style-checkers.
+
+### DP.D.106: Trigger по состоянию ≠ Trigger по счётчику (для архитектурных переключений)
+
+**State-based trigger** — переключение запускается при появлении **первого** объекта out-of-current-scope (первый non-Mac пилот; первый T2+ user; первый клиент в новом geo). Срабатывает до накопления tech-debt'а.
+
+**Counter-based trigger** — переключение запускается, когда счётчик достигает порога («когда users > 20»). К моменту срабатывания accumulated cost от обходных решений обычно превышает migration cost.
+
+| Аспект | State-based | Counter-based |
+|--------|-------------|---------------|
+| **Trigger** | Появление out-of-scope объекта | Достижение N |
+| **Накопление debt'а** | До trigger ≈ 0 | Линейный рост до threshold |
+| **Migration cost** | Стабильный | Растёт с каждым добавленным workaround'ом |
+| **Подходит для** | Качественных сдвигов (новая платформа, рефакторинг, абстракция) | Инкрементальной стоимости (capacity scaling) |
+
+**Тест выбора:** «Растёт ли debt линейно с N или есть точка качественного сдвига?» Качественный сдвиг → state-based. Линейный рост ёмкости/нагрузки → counter-based.
+
+**Failure mode:** counter-based для качественного сдвига → к trigger N=20 уже написано 3 OS-specific install-скрипта, миграция дороже, чем сделать extension при N=1.
+
+**Применимо к:** решениям о вводе абстракций, замене стека, миграции с PoC на production stack, кросс-платформенным архитектурам.
+
+**Источник:** session-transcript 2026-05-27 (peer-сессия 21 wp358-archgate, Тема 4 — switching B → A).

@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-05-31
-last_updated: 2026-05-31
+created: 2026-06-01
+last_updated: 2026-06-01
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-05-31. Do not edit manually.
+> Auto-generated from frontmatter on 2026-06-01. Do not edit manually.
 
 ---
 
@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 57 |
+| Distinctions (D) | 68 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 95 |
+| Failure Modes (FM) | 100 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 196 |
+| Methods (M) | 221 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 8 |
 | NAV (NAV) | 1 |
@@ -37,10 +37,10 @@ generated: true
 | ROLE (ROLE) | 48 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 112 |
-| SoTA Annotations (SOTA) | 27 |
+| SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **602** |
+| **Total** | **644** |
 
 ## Distinctions
 
@@ -95,6 +95,10 @@ generated: true
 | DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | — | — |
 | DP.D.093 | Метка классификатора ≠ Источник ошибки | — | — |
 | DP.D.094 | Temporal correlation ≠ Causation | — | active |
+| DP.D.095 | IWE ≠ Платформа — правило «кто управляет экземпляром» | — | active |
+| DP.D.096 | Парламент-модель памяти агентов — 5 элементов и инварианты | — | active |
+| DP.D.097 | Loop control у вызывающей роли, не у вызываемой | — | active |
+| DP.D.098 | Ground truth ≠ Self-assessment для валидации proxy-моделей | — | active |
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | — | — |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | — | active |
@@ -103,6 +107,13 @@ generated: true
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
+| DP.D.111 | Триаж ≠ Исполнение | — | active |
+| DP.D.114 | Software factory ≠ Platform — single-product vs PaaS | — | active |
+| DP.D.115 | Distributed orchestration ≠ Monolithic orchestrator | — | active |
+| DP.D.116 | Semantic compiler ≠ Static site generator (SSG) | — | active |
+| DP.D.117 | Два render pipeline'а ≠ два продукта ≠ два региона | — | active |
+| DP.D.118 | N-мерная ортогональность ролей в peer-сессии | — | active |
+| DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | — | active |
 
 ## Methods
 
@@ -193,6 +204,7 @@ generated: true
 | DP.M.083 | Batch frontmatter enum-validator (pre-commit) | — | active |
 | DP.M.084 | Batch-extraction pipeline из большого корпуса | — | active |
 | DP.M.085 | Онбординг пилота: Персональное руководство | — | active |
+| DP.M.086 | Cheap idempotency: dedicated notification_log вместо ALTER TABLE column | — | active |
 | DP.M.087 | SECRETS.md как обязательный артефакт перед deploy на новый хост | — | active |
 | DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | Двухуровневая защита Pack-инвариантов: pre-commit hook = быстрый локальный fail; GitHub Action = серверный enforcement при push/PR. Агентские коммиты (--no-verify, headless) покрываются только CI-слоем. | active |
 | DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | — | draft |
@@ -215,6 +227,7 @@ generated: true
 | DP.M.106 | Literature crosscheck при именовании Pack-сущностей | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
 | DP.M.107 | Role Rename Downstream Review | — | active |
 | DP.M.108 | Specializes Vs Parallel Roles | — | active |
+| DP.M.109 | Метод операциональной точности интеграционных терминов | — | active |
 | DP.M.110 | Декларативный словарь предикатов для nudge-движка | — | — |
 | DP.M.111 | Majority-vote детектор структурного drift | — | — |
 | DP.M.112 | run_skill() — headless dispatch скиллов через claude -p | — | draft |
@@ -258,6 +271,12 @@ generated: true
 | DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | — | — |
 | DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | — | — |
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | — | active |
+| DP.M.170 | Router-роль как рычаг разделения dispatch-решения от исполнения | — | active |
+| DP.M.171 | Fpf Sync Delta Map | — | active |
+| DP.M.172 | Knowledge File Archive Vs Delete | — | active |
+| DP.M.173 | Artifact-first контракт agentic-роли с confidence-полем | — | — |
+| DP.M.174 | Triple-hash idempotency для LLM-pipeline | — | — |
+| DP.M.177 | Управление жизненным циклом bug-report в inbox | Метод управляет жизненным циклом bug-report файлов в inbox/bugs/ через frontmatter-статус (open|resolved|invalid) и триггер Week Close: автоматический review открытых багов старше 14 дней с архивацией разрешённых. | active |
 | DP.M.181 | Multi Turn Session Thread Pattern | — | draft |
 | DP.M.182 | Dual Sla Acknowledgment Completion | — | draft |
 | DP.M.183 | Level Dependent Bonus Caps Ema | — | — |
@@ -270,6 +289,10 @@ generated: true
 | DP.M.190 | 3-уровневый fallback для технического риска в live-демо | — | — |
 | DP.M.191 | CTA воронки = ближайший продукт по времени, не самый ценный | — | — |
 | DP.M.192 | C9-проверка: абстрактный термин → сцена с человеком в действии | — | — |
+| DP.M.193 | Гибридный фикс — regex tolerance + локальная унификация | — | draft |
+| DP.M.194 | Anchored regex для frontmatter-aware матчинга | — | draft |
+| DP.M.195 | Pull-driven feature activation — defer до explicit user request | — | active |
+| DP.M.196 | Upsert Runtime Verify Double Delta | — | proposed |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | — | active |
@@ -287,8 +310,20 @@ generated: true
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
+| DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | — | active |
+| DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | — | active |
+| DP.M.220 | Threshold-or-time авто-коммит с daily squash | — | active |
+| DP.M.225 | Identity-anchor персонаж в семинаре | — | draft |
+| DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | — | active |
 | DP.M.231 | Одновременное восстановление N domain-rules как диагностический маркер блокировки main loop | — | active |
+| DP.M.232 | Декомпозиция umbrella-РП: domain-specific subsystem ≠ standard infra direction | — | active |
+| DP.M.233 | Cutover-date в детекторе вместо backfill legacy state | — | active |
+| DP.M.234 | Двухусловное определение «открыто» для гигиены workflow-артефактов | — | active |
+| DP.M.235 | Audit зонтичного РП: rescope через promote/cancel/defer/spawn | — | active |
+| DP.M.236 | Разделение фазы РП по классу верификации (trivial/closed-loop/open-loop/problem-framing) | — | draft |
+| DP.M.237 | Auto-route первого входа + explicit manual override affordance (SRB pattern) | — | draft |
+| DP.M.238 | Pre-articulated open questions в отложенной problem-framing фазе | — | draft |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | — | active |
@@ -304,6 +339,7 @@ generated: true
 | DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | — | active |
 | DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | — | active |
 | DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | — | active |
+| DP.M.254 | Container abstraction mapping — IT-аналогии через Persona+Память+Контекст без импорта docker-терминов | — | active |
 
 ## Work Products
 
@@ -374,6 +410,7 @@ generated: true
 | DP.FM.042 | Same Schema Neon Dbs | — | draft |
 | DP.FM.043 | Case Enum Assumption | — | draft |
 | DP.FM.044 | Retroactive Backfill Regime Mismatch | — | draft |
+| DP.FM.045 | log-after-success violation: idempotency-log записан ДО side-effect → retry невозможен | — | — |
 | DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
 | DP.FM.047 | Third Party Pii Vendor Gate | — | draft |
 | DP.FM.048 | Cf Bot Fight Mode Xhr Block | — | active |
@@ -398,11 +435,14 @@ generated: true
 | DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | — | active |
 | DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | — | — |
 | DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | — | — |
+| DP.FM.082 | «4 кирпича = Президент» — Парламент-антипаттерн с единым посредником | — | active |
+| DP.FM.083 | Empty Field Url Injection | — | active |
 | DP.FM.084 | OAuth+CDN миграция без redirect_uri pre-flight: полный outage вместо частичного | — | — |
 | DP.FM.085 | Hook-installer anti-patterns: --no-verify, double-run, no-backup, no-diff-check | — | — |
 | DP.FM.086 | Dangling Intent: РП pending без dueDate | — | active |
 | DP.FM.087 | Watchdog false-positive: молодой скрипт как overdue | — | active |
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | — | active |
+| DP.FM.089 | Test Blast Radius Shared Flow Io | — | proposed |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | — | — |
 | DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | — | active |
 | DP.FM.092 | Fire-and-forget temporal coupling со streak/бизнес-логикой | — | active |
@@ -419,6 +459,7 @@ generated: true
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | — | active |
+| DP.FM.111 | Спящее правило в session-memory: trust < cut-off → не попадает в reminders | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | — | accepted |
 | DP.FM.115 | Peer Agent Overwrite Without Read | — | — |
@@ -457,6 +498,7 @@ generated: true
 | DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
 | DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 | DP.SOTA.028 | Claude CLI headless hook inheritance — хуки из settings.json наследуются при `claude -p` | Lifecycle-хуки Claude Code (PostToolUse, Stop из .claude/settings.json) срабатывают при `claude -p` идентично интерактивному режиму. Headless-агент автоматически получает весь hook-слой (WakaTime, agent-trace-recorder, rule-engine) без дополнительного кода, при условии что CLAUDE_CONFIG_DIR / CLAUDE_PROJECT_DIR указаны. | draft |
+| DP.SOTA.029 | Ai Era Two Crisis Groups | — | draft |
 
 ## Maps
 
@@ -784,6 +826,7 @@ generated: true
 - Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
 - Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
 - Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
+- Missing `summary`: DP.D.111 (DP.D.111-triaging-vs-execution.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -802,7 +845,17 @@ generated: true
 - Missing `summary`: DP.D.092 (DP.D.092-rate-limit-vs-value.md)
 - Missing `summary`: DP.D.093 (DP.D.093-classifier-label-vs-source.md)
 - Missing `summary`: DP.D.094 (DP.D.094-temporal-correlation-vs-causation.md)
+- Missing `summary`: DP.D.095 (DP.D.095-iwe-vs-platform-boundary.md)
+- Missing `summary`: DP.D.096 (DP.D.096-parliament-model-agent-memory.md)
+- Missing `summary`: DP.D.097 (DP.D.097-loop-control-at-caller-not-callee.md)
+- Missing `summary`: DP.D.098 (DP.D.098-ground-truth-vs-self-assessment.md)
 - Missing `summary`: DP.D.101 (DP.D.101-shared-module-sharing-symlink-submodule-vendor.md)
+- Missing `summary`: DP.D.114 (DP.D.114-software-factory-vs-platform.md)
+- Missing `summary`: DP.D.115 (DP.D.115-distributed-vs-monolithic-orchestration.md)
+- Missing `summary`: DP.D.116 (DP.D.116-semantic-compiler-vs-ssg.md)
+- Missing `summary`: DP.D.117 (DP.D.117-render-pipelines-vs-products-vs-regions.md)
+- Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
+- Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -860,6 +913,7 @@ generated: true
 - Missing `summary`: DP.M.083 (DP.M.083-batch-frontmatter-enum-validator.md)
 - Missing `summary`: DP.M.084 (DP.M.084-batch-extraction-pipeline.md)
 - Missing `summary`: DP.M.085 (DP.M.085-personal-guide-onboarding.md)
+- Missing `summary`: DP.M.086 (DP.M.086-notification-log-cheap-idempotency.md)
 - Missing `summary`: DP.M.087 (DP.M.087-secrets-map-pre-deploy.md)
 - Missing `summary`: DP.M.089 (DP.M.089-f0-cost-baseline-llm-optimization.md)
 - Missing `summary`: DP.M.090 (DP.M.090-ci-guard-mutation-testing.md)
@@ -876,6 +930,7 @@ generated: true
 - Missing `summary`: DP.M.105 (DP.M.105-workflow-call-orchestration.md)
 - Missing `summary`: DP.M.107 (DP.M.107-role-rename-downstream-review.md)
 - Missing `summary`: DP.M.108 (DP.M.108-specializes-vs-parallel-roles.md)
+- Missing `summary`: DP.M.109 (DP.M.109-connection-vs-foundation-phrasing.md)
 - Missing `summary`: DP.M.110 (DP.M.110-declarative-nudge-markers.md)
 - Missing `summary`: DP.M.111 (DP.M.111-majority-vote-structure-drift-detector.md)
 - Missing `summary`: DP.M.112 (DP.M.112-run-skill-headless-dispatch.md)
@@ -913,6 +968,11 @@ generated: true
 - Missing `summary`: DP.M.167 (DP.M.167-refinement-prompt-by-previous-length.md)
 - Missing `summary`: DP.M.168 (DP.M.168-post-deploy-regression-first-hypothesis.md)
 - Missing `summary`: DP.M.169 (DP.M.169-experimental-weight-guard-condition.md)
+- Missing `summary`: DP.M.170 (DP.M.170-router-role-dispatch-separation.md)
+- Missing `summary`: DP.M.171 (DP.M.171-fpf-sync-delta-map.md)
+- Missing `summary`: DP.M.172 (DP.M.172-knowledge-file-archive-vs-delete.md)
+- Missing `summary`: DP.M.173 (DP.M.173-artifact-first-contract-with-confidence.md)
+- Missing `summary`: DP.M.174 (DP.M.174-triple-hash-idempotency-llm-pipeline.md)
 - Missing `summary`: DP.M.181 (DP.M.181-multi-turn-session-thread-pattern.md)
 - Missing `summary`: DP.M.182 (DP.M.182-dual-sla-acknowledgment-completion.md)
 - Missing `summary`: DP.M.183 (DP.M.183-level-dependent-bonus-caps-ema.md)
@@ -925,6 +985,10 @@ generated: true
 - Missing `summary`: DP.M.190 (DP.M.190-live-demo-three-level-fallback.md)
 - Missing `summary`: DP.M.191 (DP.M.191-funnel-cta-temporal-proximity.md)
 - Missing `summary`: DP.M.192 (DP.M.192-c9-concrete-scene-replacement.md)
+- Missing `summary`: DP.M.193 (DP.M.193-hybrid-fix-regex-tolerance-local-unification.md)
+- Missing `summary`: DP.M.194 (DP.M.194-anchored-regex-frontmatter-aware.md)
+- Missing `summary`: DP.M.195 (DP.M.195-pull-driven-feature-activation.md)
+- Missing `summary`: DP.M.196 (DP.M.196-upsert-runtime-verify-double-delta.md)
 - Missing `summary`: DP.M.197 (DP.M.197-fix-contract-spec-with-regression-checks.md)
 - Missing `summary`: DP.M.198 (DP.M.198-atomic-state-change-with-user-reply.md)
 - Missing `summary`: DP.M.199 (DP.M.199-three-tier-config-parameters.md)
@@ -942,8 +1006,20 @@ generated: true
 - Missing `summary`: DP.M.212 (DP.M.212-discourse-webhook-iwe-event-pipeline-mapping.md)
 - Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
+- Missing `summary`: DP.M.218 (DP.M.218-close-check-open-autofix-defense-in-depth.md)
+- Missing `summary`: DP.M.219 (DP.M.219-by-script-marker-idempotent-injection.md)
+- Missing `summary`: DP.M.220 (DP.M.220-threshold-or-time-auto-commit.md)
+- Missing `summary`: DP.M.225 (DP.M.225-identity-anchor-character-seminar.md)
+- Missing `summary`: DP.M.226 (DP.M.226-progressive-card-filling-seminar.md)
 - Missing `summary`: DP.M.230 (DP.M.230-dual-level-wait-for-infinite-retry-guard.md)
 - Missing `summary`: DP.M.231 (DP.M.231-simultaneous-domain-recovery-as-main-loop-block-marker.md)
+- Missing `summary`: DP.M.232 (DP.M.232-umbrella-decomposition-domain-specific-vs-infra.md)
+- Missing `summary`: DP.M.233 (DP.M.233-cutover-date-vs-backfill.md)
+- Missing `summary`: DP.M.234 (DP.M.234-two-condition-open-state-detector.md)
+- Missing `summary`: DP.M.235 (DP.M.235-umbrella-wp-rescope-audit.md)
+- Missing `summary`: DP.M.236 (DP.M.236-phase-split-by-verification-class.md)
+- Missing `summary`: DP.M.237 (DP.M.237-auto-route-plus-manual-override-affordance.md)
+- Missing `summary`: DP.M.238 (DP.M.238-pre-articulated-open-questions-deferred-phase.md)
 - Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
 - Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
 - Missing `summary`: DP.M.241 (DP.M.241-personal-guide-render.md)
@@ -959,6 +1035,7 @@ generated: true
 - Missing `summary`: DP.M.251 (DP.M.251-nighttime-rollout-with-rollback-verifier.md)
 - Missing `summary`: DP.M.252 (DP.M.252-satisfied-by-existing-content-pre-build-scout.md)
 - Missing `summary`: DP.M.253 (DP.M.253-seminar-orientation-map-max-impact-triple.md)
+- Missing `summary`: DP.M.254 (DP.M.254-container-abstraction-mapping.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -975,6 +1052,7 @@ generated: true
 - Missing `summary`: DP.FM.042 (DP.FM.042-same-schema-neon-dbs.md)
 - Missing `summary`: DP.FM.043 (DP.FM.043-case-enum-assumption.md)
 - Missing `summary`: DP.FM.044 (DP.FM.044-retroactive-backfill-regime-mismatch.md)
+- Missing `summary`: DP.FM.045 (DP.FM.045-log-before-send-blocks-retry.md)
 - Missing `summary`: DP.FM.047 (DP.FM.047-third-party-pii-vendor-gate.md)
 - Missing `summary`: DP.FM.048 (DP.FM.048-cf-bot-fight-mode-xhr-block.md)
 - Missing `summary`: DP.FM.049 (DP.FM.049-document-centric-bottleneck.md)
@@ -995,11 +1073,14 @@ generated: true
 - Missing `summary`: DP.FM.079 (DP.FM.079-impact-group-as-multiplier.md)
 - Missing `summary`: DP.FM.080 (DP.FM.080-symptom-masks-multiple-defects.md)
 - Missing `summary`: DP.FM.081 (DP.FM.081-probe-double-count-degradation.md)
+- Missing `summary`: DP.FM.082 (DP.FM.082-president-architecture-disguised-as-parliament.md)
+- Missing `summary`: DP.FM.083 (DP.FM.083-empty-field-url-injection.md)
 - Missing `summary`: DP.FM.084 (DP.FM.084-oauth-cdn-redirect-uri-no-preflight.md)
 - Missing `summary`: DP.FM.085 (DP.FM.085-hook-installer-anti-patterns.md)
 - Missing `summary`: DP.FM.086 (DP.FM.086-dangling-intent-pending-no-due-date.md)
 - Missing `summary`: DP.FM.087 (DP.FM.087-watchdog-new-script-overdue-false-positive.md)
 - Missing `summary`: DP.FM.088 (DP.FM.088-done-phase-open-checkboxes-hidden-debt.md)
+- Missing `summary`: DP.FM.089 (DP.FM.089-test-blast-radius-shared-flow-io.md)
 - Missing `summary`: DP.FM.090 (DP.FM.090-ordinal-guard-vs-semantic-role-in-turn-dispatcher.md)
 - Missing `summary`: DP.FM.091 (DP.FM.091-god-table-cross-domain-coupling.md)
 - Missing `summary`: DP.FM.092 (DP.FM.092-fire-and-forget-temporal-coupling.md)
@@ -1016,12 +1097,14 @@ generated: true
 - Missing `summary`: DP.FM.103 (DP.FM.103-coverage-script-no-guide-scope-filter-false-fail.md)
 - Missing `summary`: DP.FM.104 (DP.FM.104-missing-reverse-identity-lookup.md)
 - Missing `summary`: DP.FM.105 (DP.FM.105-internal-probe-blind-to-own-failure.md)
+- Missing `summary`: DP.FM.111 (DP.FM.111-rule-engine-dormant-low-trust.md)
 - Missing `summary`: DP.FM.113 (DP.FM.113-regex-search-swallows-second-violation.md)
 - Missing `summary`: DP.FM.114 (DP.FM.114-adapter-dependency-silent-regression.md)
 - Missing `summary`: DP.FM.115 (DP.FM.115-peer-agent-overwrite-without-read.md)
 - Missing `summary`: DP.FM.116 (DP.FM.116-external-id-path-traversal.md)
 - Missing `summary`: DP.FM.117 (DP.FM.117-double-count-compound-formula-component.md)
 - Missing `summary`: DP.FM.118 (DP.FM.118-ambiguous-metric-name-theoretical-vs-operational.md)
+- Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -1043,4 +1126,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-05-31*
+*Generated by `scripts/generate-map.py` on 2026-06-01*

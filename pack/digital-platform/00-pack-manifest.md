@@ -72,6 +72,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.092 | Rate limit ≠ Value: частотный потолок и ценность — две оси, две колонки | D | — | — |
 | DP.D.093 | Метка классификатора ≠ Источник ошибки | D | — | — |
 | DP.D.094 | Temporal correlation ≠ Causation | D | — | active |
+| DP.D.095 | IWE ≠ Платформа — правило «кто управляет экземпляром» | D | — | active |
+| DP.D.096 | Парламент-модель памяти агентов — 5 элементов и инварианты | D | — | active |
+| DP.D.097 | Loop control у вызывающей роли, не у вызываемой | D | — | active |
+| DP.D.098 | Ground truth ≠ Self-assessment для валидации proxy-моделей | D | — | active |
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | D | — | — |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | D | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | D | — | active |
@@ -80,6 +84,13 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
+| DP.D.111 | Триаж ≠ Исполнение | D | — | active |
+| DP.D.114 | Software factory ≠ Platform — single-product vs PaaS | D | — | active |
+| DP.D.115 | Distributed orchestration ≠ Monolithic orchestrator | D | — | active |
+| DP.D.116 | Semantic compiler ≠ Static site generator (SSG) | D | — | active |
+| DP.D.117 | Два render pipeline'а ≠ два продукта ≠ два региона | D | — | active |
+| DP.D.118 | N-мерная ортогональность ролей в peer-сессии | D | — | active |
+| DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -126,6 +137,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.042 | Same Schema Neon Dbs | FM | — | draft |
 | DP.FM.043 | Case Enum Assumption | FM | — | draft |
 | DP.FM.044 | Retroactive Backfill Regime Mismatch | FM | — | draft |
+| DP.FM.045 | log-after-success violation: idempotency-log записан ДО side-effect → retry невозможен | FM | — | — |
 | DP.FM.046 | Render-queue timeout — отсутствующий deadline на вызов подзадачи | FM | Задание зависает в очереди навсегда, потому что воркер ждёт ответа от подзадачи без явного timeout. Диагностика: open-sessions log. Признак: задание в статусе «выполняется» дольше expected_max. | active |
 | DP.FM.047 | Third Party Pii Vendor Gate | FM | — | draft |
 | DP.FM.048 | Cf Bot Fight Mode Xhr Block | FM | — | active |
@@ -150,11 +162,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.079 | impact_group как множитель — математический взрыв в формуле вознаграждения | FM | — | active |
 | DP.FM.080 | Закрытие РП после первого фикса при многодефектном симптоме | FM | — | — |
 | DP.FM.081 | Double-count в probe-пути: одно событие → два инкремента деградации | FM | — | — |
+| DP.FM.082 | «4 кирпича = Президент» — Парламент-антипаттерн с единым посредником | FM | — | active |
+| DP.FM.083 | Empty Field Url Injection | FM | — | active |
 | DP.FM.084 | OAuth+CDN миграция без redirect_uri pre-flight: полный outage вместо частичного | FM | — | — |
 | DP.FM.085 | Hook-installer anti-patterns: --no-verify, double-run, no-backup, no-diff-check | FM | — | — |
 | DP.FM.086 | Dangling Intent: РП pending без dueDate | FM | — | active |
 | DP.FM.087 | Watchdog false-positive: молодой скрипт как overdue | FM | — | active |
 | DP.FM.088 | Done-фаза с открытыми чек-боксами — скрытый технический долг | FM | — | active |
+| DP.FM.089 | Test Blast Radius Shared Flow Io | FM | — | proposed |
 | DP.FM.090 | Числовой порядковый guard в multi-producer turn-log вместо семантического | FM | — | — |
 | DP.FM.091 | God-Table Anti-Pattern (склейка несвязанных доменов в core-таблице) | FM | — | active |
 | DP.FM.092 | Fire-and-forget temporal coupling со streak/бизнес-логикой | FM | — | active |
@@ -171,6 +186,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | FM | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | FM | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | FM | — | active |
+| DP.FM.111 | Спящее правило в session-memory: trust < cut-off → не попадает в reminders | FM | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | FM | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | FM | — | accepted |
 | DP.FM.115 | Peer Agent Overwrite Without Read | FM | — | — |
@@ -277,6 +293,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.083 | Batch frontmatter enum-validator (pre-commit) | M | — | active |
 | DP.M.084 | Batch-extraction pipeline из большого корпуса | M | — | active |
 | DP.M.085 | Онбординг пилота: Персональное руководство | M | — | active |
+| DP.M.086 | Cheap idempotency: dedicated notification_log вместо ALTER TABLE column | M | — | active |
 | DP.M.087 | SECRETS.md как обязательный артефакт перед deploy на новый хост | M | — | active |
 | DP.M.088 | CI + pre-commit как defense-in-depth для Pack-инвариантов | M | Двухуровневая защита Pack-инвариантов: pre-commit hook = быстрый локальный fail; GitHub Action = серверный enforcement при push/PR. Агентские коммиты (--no-verify, headless) покрываются только CI-слоем. | active |
 | DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | M | — | draft |
@@ -299,6 +316,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.106 | Literature crosscheck при именовании Pack-сущностей | M | При создании новой роли/концепции/метода в Pack — обязательный прогон через 3-4 канонических литературных источника области, выбор имени closest-to-canon вместо собственного. Защищает от re-naming через 3-6 месяцев. | active |
 | DP.M.107 | Role Rename Downstream Review | M | — | active |
 | DP.M.108 | Specializes Vs Parallel Roles | M | — | active |
+| DP.M.109 | Метод операциональной точности интеграционных терминов | M | — | active |
 | DP.M.110 | Декларативный словарь предикатов для nudge-движка | M | — | — |
 | DP.M.111 | Majority-vote детектор структурного drift | M | — | — |
 | DP.M.112 | run_skill() — headless dispatch скиллов через claude -p | M | — | draft |
@@ -342,6 +360,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.167 | Ветвление refinement-промпта по длине предыдущего ответа | M | — | — |
 | DP.M.168 | Post-deploy регрессия как гипотеза №1 в RCA | M | — | — |
 | DP.M.169 | Экспериментальный вес с guard-условием для ML-метрики | M | — | active |
+| DP.M.170 | Router-роль как рычаг разделения dispatch-решения от исполнения | M | — | active |
+| DP.M.171 | Fpf Sync Delta Map | M | — | active |
+| DP.M.172 | Knowledge File Archive Vs Delete | M | — | active |
+| DP.M.173 | Artifact-first контракт agentic-роли с confidence-полем | M | — | — |
+| DP.M.174 | Triple-hash idempotency для LLM-pipeline | M | — | — |
+| DP.M.177 | Управление жизненным циклом bug-report в inbox | M | Метод управляет жизненным циклом bug-report файлов в inbox/bugs/ через frontmatter-статус (open|resolved|invalid) и триггер Week Close: автоматический review открытых багов старше 14 дней с архивацией разрешённых. | active |
 | DP.M.181 | Multi Turn Session Thread Pattern | M | — | draft |
 | DP.M.182 | Dual Sla Acknowledgment Completion | M | — | draft |
 | DP.M.183 | Level Dependent Bonus Caps Ema | M | — | — |
@@ -354,6 +378,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.190 | 3-уровневый fallback для технического риска в live-демо | M | — | — |
 | DP.M.191 | CTA воронки = ближайший продукт по времени, не самый ценный | M | — | — |
 | DP.M.192 | C9-проверка: абстрактный термин → сцена с человеком в действии | M | — | — |
+| DP.M.193 | Гибридный фикс — regex tolerance + локальная унификация | M | — | draft |
+| DP.M.194 | Anchored regex для frontmatter-aware матчинга | M | — | draft |
+| DP.M.195 | Pull-driven feature activation — defer до explicit user request | M | — | active |
+| DP.M.196 | Upsert Runtime Verify Double Delta | M | — | proposed |
 | DP.M.197 | Fix Contract (FC) — исполняемая спецификация исправления с regression_checks | M | — | — |
 | DP.M.198 | Атомарный переход в degrade-state: state + user-reply одним PUT | M | — | — |
 | DP.M.199 | Три уровня параметров конфигурируемой системы | M | — | active |
@@ -371,8 +399,20 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | M | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | M | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | M | — | active |
+| DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | M | — | active |
+| DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | M | — | active |
+| DP.M.220 | Threshold-or-time авто-коммит с daily squash | M | — | active |
+| DP.M.225 | Identity-anchor персонаж в семинаре | M | — | draft |
+| DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | M | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | M | — | active |
 | DP.M.231 | Одновременное восстановление N domain-rules как диагностический маркер блокировки main loop | M | — | active |
+| DP.M.232 | Декомпозиция umbrella-РП: domain-specific subsystem ≠ standard infra direction | M | — | active |
+| DP.M.233 | Cutover-date в детекторе вместо backfill legacy state | M | — | active |
+| DP.M.234 | Двухусловное определение «открыто» для гигиены workflow-артефактов | M | — | active |
+| DP.M.235 | Audit зонтичного РП: rescope через promote/cancel/defer/spawn | M | — | active |
+| DP.M.236 | Разделение фазы РП по классу верификации (trivial/closed-loop/open-loop/problem-framing) | M | — | draft |
+| DP.M.237 | Auto-route первого входа + explicit manual override affordance (SRB pattern) | M | — | draft |
+| DP.M.238 | Pre-articulated open questions в отложенной problem-framing фазе | M | — | draft |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | M | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | M | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | M | — | active |
@@ -388,6 +428,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.251 | Nighttime Rollout with Pre-Deploy Rollback and Post-Deploy Verifier | M | — | active |
 | DP.M.252 | Satisfied-by-Existing-Content — pre-build scout как класс defer в delivery pipeline | M | — | active |
 | DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | M | — | active |
+| DP.M.254 | Container abstraction mapping — IT-аналогии через Persona+Память+Контекст без импорта docker-терминов | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -592,6 +633,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.025 | BORO — 4D Ontology & Naming Pattern | SOTA | SOTA-аннотация вклада BORO в 4D-онтологию (ISO 15926 family) и универсального naming-паттерна как framework-level reusable структуры. trust: hypothesis. | active |
 | DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | SOTA | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 | DP.SOTA.028 | Claude CLI headless hook inheritance — хуки из settings.json наследуются при `claude -p` | SOTA | Lifecycle-хуки Claude Code (PostToolUse, Stop из .claude/settings.json) срабатывают при `claude -p` идентично интерактивному режиму. Headless-агент автоматически получает весь hook-слой (WakaTime, agent-trace-recorder, rule-engine) без дополнительного кода, при условии что CLAUDE_CONFIG_DIR / CLAUDE_PROJECT_DIR указаны. | draft |
+| DP.SOTA.029 | Ai Era Two Crisis Groups | SOTA | — | draft |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
 | DP.WP.002 | Ubiquitous Language | WP | Единый язык домена: глоссарий терминов, прорастающий во все артефакты — код, UI, документацию, тикеты, планы | draft |
@@ -610,4 +652,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-05-31*
+> *Auto-generated by `generate-map.py` on 2026-06-01*
