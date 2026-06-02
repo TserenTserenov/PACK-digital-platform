@@ -1,5 +1,5 @@
 ---
-id: DP.D.114
+id: DP.D.122
 type: distinction
 title: "Continuous data trend ≠ point-in-time measurement"
 status: active
@@ -9,10 +9,10 @@ epistemic_stage: validated
 domains: [observability, gate-design, measurement]
 related:
   - DP.D.094
-  - DP.M.224
+  - DP.M.265
 ---
 
-# DP.D.114: Continuous data trend ≠ point-in-time measurement
+# DP.D.122: Continuous data trend ≠ point-in-time measurement
 
 ## Различение
 
@@ -39,8 +39,8 @@ related:
 
 ## Связи
 
-- **DP.D.094** (temporal-correlation-vs-causation) — соседняя ось, но другой вопрос: «корреляция во времени = причина?». DP.D.114 — «достаточно ли одного temporal-измерения?».
-- **DP.M.224** (delta-signal vs raw values) — метод применения различения в bi-weekly review.
+- **DP.D.094** (temporal-correlation-vs-causation) — соседняя ось, но другой вопрос: «корреляция во времени = причина?». DP.D.122 — «достаточно ли одного temporal-измерения?».
+- **DP.M.265** (delta-signal vs raw values) — метод применения различения в bi-weekly review.
 
 ## Источник
 

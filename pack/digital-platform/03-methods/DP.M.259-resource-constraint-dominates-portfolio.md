@@ -3,7 +3,7 @@ id: DP.M.259
 name: "Resource constraint доминирует в портфеле при одном исполнителе"
 type: method
 domain: digital-platform
-pack_refs: [DP.D.111]
+pack_refs: [DP.D.121]
 status: active
 valid_from: 2026-05-30
 schema_version: 1
@@ -42,5 +42,5 @@ source: "peer-session 2026-05-30-26-wp250-bottleneck-review (report.md Тема 
 
 ## Связи
 
-- DP.D.111 (ТОС системы ≠ портфеля) — обосновывает почему resource-constraint поднимается на уровень портфеля
+- DP.D.121 (ТОС системы ≠ портфеля) — обосновывает почему resource-constraint поднимается на уровень портфеля
 - ТОС (Theory of Constraints, Goldratt) — методологическая основа

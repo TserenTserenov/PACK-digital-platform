@@ -1,5 +1,5 @@
 ---
-id: DP.M.241
+id: DP.M.266
 name: "Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation"
 type: method
 status: active
@@ -15,7 +15,7 @@ source: "session 2026-05-30 WP-201 Ф3.4 mcp_tools (peer-session 30, 01-peer.md:
 schema_version: 1
 ---
 
-# DP.M.241 — Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation
+# DP.M.266 — Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation
 
 ## Суть метода
 

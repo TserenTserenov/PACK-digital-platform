@@ -1,5 +1,5 @@
 ---
-id: DP.FM.114
+id: DP.FM.123
 name: "Reverse proxy режет long-running HTTP-handler — config application-timeout врёт"
 type: failure-mode
 domain: digital-platform
@@ -16,7 +16,7 @@ source: "session 2026-05-30 WP-201 Ф3.4 mcp_tools (peer-session 30, 02-writer.m
 schema_version: 1
 ---
 
-# DP.FM.114 — Reverse proxy режет long-running HTTP-handler — config application-timeout врёт
+# DP.FM.123 — Reverse proxy режет long-running HTTP-handler — config application-timeout врёт
 
 ## Описание
 

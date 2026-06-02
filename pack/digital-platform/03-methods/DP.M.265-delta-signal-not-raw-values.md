@@ -1,5 +1,5 @@
 ---
-id: DP.M.224
+id: DP.M.265
 type: method
 title: "Delta-signal vs raw values для periodic review"
 status: active
@@ -8,7 +8,7 @@ trust_level: T2
 epistemic_stage: validated
 domains: [observability, ux, ergonomics]
 related:
-  - DP.D.114
+  - DP.D.122
   - DP.M.223
 ---
 
@@ -52,7 +52,7 @@ UX-паттерн для bi-weekly / monthly review автоматически �
 
 ## Связи
 
-- **DP.D.114** (continuous trend ≠ point-in-time) — основание: delta-signal работает потому что continuous data уже содержит temporal axis.
+- **DP.D.122** (continuous trend ≠ point-in-time) — основание: delta-signal работает потому что continuous data уже содержит temporal axis.
 - **DP.M.223** (pointer-only fork closure) — соседний governance-метод из той же peer-сессии.
 
 ## Источник

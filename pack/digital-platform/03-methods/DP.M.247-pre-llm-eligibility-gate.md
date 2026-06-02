@@ -47,4 +47,4 @@ def render_pilot(pilot_context):
 ## Связи
 
 - pack_refs: DS-autonomous-agents render-pilot-guides.py
-- см. также: DP.M.241 (personal-guide-render) — конкретный consumer этого паттерна
+- см. также: DP.M.266 (personal-guide-render) — конкретный consumer этого паттерна

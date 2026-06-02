@@ -1,5 +1,5 @@
 ---
-id: DP.FM.117
+id: DP.FM.126
 name: "Полиморфный return type на shared helper ломает downstream callsites молча"
 type: failure-mode
 domain: digital-platform
@@ -16,7 +16,7 @@ source: "session 2026-05-30 WP-330 (peer-session 29, 01-peer.md, report-draft.md
 schema_version: 1
 ---
 
-# DP.FM.117 — Полиморфный return type на shared helper ломает downstream callsites молча
+# DP.FM.126 — Полиморфный return type на shared helper ломает downstream callsites молча
 
 ## Описание
 

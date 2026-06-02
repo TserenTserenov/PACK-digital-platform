@@ -107,11 +107,9 @@ generated: true
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
-| DP.D.111 | ТОС-горлышко системы ≠ горлышко портфеля проектов | — | active |
 | DP.D.111 | Триаж ≠ Исполнение | — | active |
 | DP.D.112 | Cutover инфраструктуры ≠ маркетинговый запуск | — | active |
 | DP.D.113 | AND-семантика ≠ OR-семантика для multi-storage state | Когда состояние сущности разнесено между volatile + durable storage'ами: AND-семантика (активна если оба источника подтверждают) требует orphan recovery loop; OR-семантика (активна если хотя бы один) безопаснее для doubt cases. | active |
-| DP.D.114 | Continuous Trend Vs Point In Time | — | active |
 | DP.D.114 | Software factory ≠ Platform — single-product vs PaaS | — | active |
 | DP.D.115 | Distributed orchestration ≠ Monolithic orchestrator | — | active |
 | DP.D.116 | Semantic compiler ≠ Static site generator (SSG) | — | active |
@@ -119,6 +117,8 @@ generated: true
 | DP.D.118 | N-мерная ортогональность ролей в peer-сессии | — | active |
 | DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | — | active |
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
+| DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | — | active |
+| DP.D.122 | Continuous Trend Vs Point In Time | — | active |
 
 ## Methods
 
@@ -320,7 +320,6 @@ generated: true
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | — | active |
 | DP.M.220 | Threshold-or-time авто-коммит с daily squash | — | active |
 | DP.M.223 | Marp тёмная тема — layout-классы для структурированных презентаций | — | — |
-| DP.M.224 | Delta Signal Not Raw Values | — | active |
 | DP.M.225 | Identity-anchor персонаж в семинаре | — | draft |
 | DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | — | active |
@@ -334,7 +333,6 @@ generated: true
 | DP.M.238 | Pre-articulated open questions в отложенной problem-framing фазе | — | draft |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | — | active |
-| DP.M.241 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | — | active |
 | DP.M.242 | Ar5 Pack Quality Baseline | — | accepted |
 | DP.M.243 | Discriminator Column Sti Pattern | — | — |
@@ -359,6 +357,8 @@ generated: true
 | DP.M.262 | Bidirectional cross-reference как защита от lifecycle coupling через чужой exec-механизм | — | active |
 | DP.M.263 | Каскад Pack-расширения через ad-hoc → snapshot → audit → авто-WP | — | current |
 | DP.M.264 | Пороговый сценарий аудита вместо отдельной операционной роли | — | current |
+| DP.M.265 | Delta Signal Not Raw Values | — | active |
+| DP.M.266 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | — | active |
 
 ## Work Products
 
@@ -485,18 +485,18 @@ generated: true
 | DP.FM.111 | Спящее правило в session-memory: trust < cut-off → не попадает в reminders | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | — | accepted |
-| DP.FM.114 | Reverse proxy режет long-running HTTP-handler — config application-timeout врёт | — | — |
-| DP.FM.115 | lru_cache для async resource с lifecycle: leak + cross-loop errors | — | — |
 | DP.FM.115 | Peer Agent Overwrite Without Read | — | — |
 | DP.FM.116 | External Id Path Traversal | — | draft |
-| DP.FM.116 | Short-name fallback в authorization scope-check: cross-tenant bypass | — | — |
 | DP.FM.117 | Двойной учёт компонента в compound-формуле | — | — |
-| DP.FM.117 | Полиморфный return type на shared helper ломает downstream callsites молча | — | — |
 | DP.FM.118 | Двойное значение метрики в названии (theoretical vs operational) | — | — |
 | DP.FM.119 | Concurrent Writers Break Threshold Logic | — | active |
 | DP.FM.120 | Маскировка нулей вместо root-fix в диагностике метрик | — | active |
 | DP.FM.121 | Dry-run side-effect — нарушение read-only обещания | — | active |
 | DP.FM.122 | Spec без impl — спецификация ушла вперёд кода | — | active |
+| DP.FM.123 | Reverse proxy режет long-running HTTP-handler — config application-timeout врёт | — | — |
+| DP.FM.124 | lru_cache для async resource с lifecycle: leak + cross-loop errors | — | — |
+| DP.FM.125 | Short-name fallback в authorization scope-check: cross-tenant bypass | — | — |
+| DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | — | — |
 
 ## SoTA Annotations
 
@@ -858,9 +858,9 @@ generated: true
 - Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
 - Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
 - Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
-- Missing `summary`: DP.D.111 (DP.D.111-toc-system-vs-portfolio.md)
 - Missing `summary`: DP.D.111 (DP.D.111-triaging-vs-execution.md)
 - Missing `summary`: DP.D.112 (DP.D.112-cutover-infra-vs-marketing-launch.md)
+- Missing `summary`: DP.D.121 (DP.D.121-toc-system-vs-portfolio.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -884,13 +884,13 @@ generated: true
 - Missing `summary`: DP.D.097 (DP.D.097-loop-control-at-caller-not-callee.md)
 - Missing `summary`: DP.D.098 (DP.D.098-ground-truth-vs-self-assessment.md)
 - Missing `summary`: DP.D.101 (DP.D.101-shared-module-sharing-symlink-submodule-vendor.md)
-- Missing `summary`: DP.D.114 (DP.D.114-continuous-trend-vs-point-in-time.md)
 - Missing `summary`: DP.D.114 (DP.D.114-software-factory-vs-platform.md)
 - Missing `summary`: DP.D.115 (DP.D.115-distributed-vs-monolithic-orchestration.md)
 - Missing `summary`: DP.D.116 (DP.D.116-semantic-compiler-vs-ssg.md)
 - Missing `summary`: DP.D.117 (DP.D.117-render-pipelines-vs-products-vs-regions.md)
 - Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
 - Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
+- Missing `summary`: DP.D.122 (DP.D.122-continuous-trend-vs-point-in-time.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1046,7 +1046,6 @@ generated: true
 - Missing `summary`: DP.M.219 (DP.M.219-by-script-marker-idempotent-injection.md)
 - Missing `summary`: DP.M.220 (DP.M.220-threshold-or-time-auto-commit.md)
 - Missing `summary`: DP.M.223 (DP.M.223-marp-dark-theme-layout-classes.md)
-- Missing `summary`: DP.M.224 (DP.M.224-delta-signal-not-raw-values.md)
 - Missing `summary`: DP.M.225 (DP.M.225-identity-anchor-character-seminar.md)
 - Missing `summary`: DP.M.226 (DP.M.226-progressive-card-filling-seminar.md)
 - Missing `summary`: DP.M.230 (DP.M.230-dual-level-wait-for-infinite-retry-guard.md)
@@ -1060,7 +1059,6 @@ generated: true
 - Missing `summary`: DP.M.238 (DP.M.238-pre-articulated-open-questions-deferred-phase.md)
 - Missing `summary`: DP.M.239 (DP.M.239-defense-in-depth-bail-out-regex-refactor.md)
 - Missing `summary`: DP.M.240 (DP.M.240-self-recoverable-tooling-symlink-writable-path.md)
-- Missing `summary`: DP.M.241 (DP.M.241-internal-service-auth-shared-secret-and-user-id-header.md)
 - Missing `summary`: DP.M.241 (DP.M.241-personal-guide-render.md)
 - Missing `summary`: DP.M.242 (DP.M.242-ar5-pack-quality-baseline.md)
 - Missing `summary`: DP.M.243 (DP.M.243-discriminator-column-sti-pattern.md)
@@ -1085,6 +1083,8 @@ generated: true
 - Missing `summary`: DP.M.262 (DP.M.262-bidirectional-cross-reference-exec-coupling.md)
 - Missing `summary`: DP.M.263 (DP.M.263-pack-coupling-cascade.md)
 - Missing `summary`: DP.M.264 (DP.M.264-threshold-audit-scenario.md)
+- Missing `summary`: DP.M.265 (DP.M.265-delta-signal-not-raw-values.md)
+- Missing `summary`: DP.M.266 (DP.M.266-internal-service-auth-shared-secret-and-user-id-header.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1154,18 +1154,18 @@ generated: true
 - Missing `summary`: DP.FM.111 (DP.FM.111-rule-engine-dormant-low-trust.md)
 - Missing `summary`: DP.FM.113 (DP.FM.113-regex-search-swallows-second-violation.md)
 - Missing `summary`: DP.FM.114 (DP.FM.114-adapter-dependency-silent-regression.md)
-- Missing `summary`: DP.FM.114 (DP.FM.114-reverse-proxy-truncates-long-running-handler.md)
-- Missing `summary`: DP.FM.115 (DP.FM.115-lru-cache-for-async-resource-with-lifecycle.md)
 - Missing `summary`: DP.FM.115 (DP.FM.115-peer-agent-overwrite-without-read.md)
 - Missing `summary`: DP.FM.116 (DP.FM.116-external-id-path-traversal.md)
-- Missing `summary`: DP.FM.116 (DP.FM.116-short-name-fallback-authorization-bypass.md)
 - Missing `summary`: DP.FM.117 (DP.FM.117-double-count-compound-formula-component.md)
-- Missing `summary`: DP.FM.117 (DP.FM.117-polymorphic-return-breaks-shared-helper-callsites.md)
 - Missing `summary`: DP.FM.118 (DP.FM.118-ambiguous-metric-name-theoretical-vs-operational.md)
 - Missing `summary`: DP.FM.119 (DP.FM.119-concurrent-writers-break-threshold-logic.md)
 - Missing `summary`: DP.FM.120 (DP.FM.120-zero-masking-instead-of-rootfix.md)
 - Missing `summary`: DP.FM.121 (DP.FM.121-dry-run-side-effect.md)
 - Missing `summary`: DP.FM.122 (DP.FM.122-spec-without-impl.md)
+- Missing `summary`: DP.FM.123 (DP.FM.123-reverse-proxy-truncates-long-running-handler.md)
+- Missing `summary`: DP.FM.124 (DP.FM.124-lru-cache-for-async-resource-with-lifecycle.md)
+- Missing `summary`: DP.FM.125 (DP.FM.125-short-name-fallback-authorization-bypass.md)
+- Missing `summary`: DP.FM.126 (DP.FM.126-polymorphic-return-breaks-shared-helper-callsites.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)

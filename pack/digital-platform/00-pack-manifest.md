@@ -84,11 +84,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
-| DP.D.111 | ТОС-горлышко системы ≠ горлышко портфеля проектов | D | — | active |
 | DP.D.111 | Триаж ≠ Исполнение | D | — | active |
 | DP.D.112 | Cutover инфраструктуры ≠ маркетинговый запуск | D | — | active |
 | DP.D.113 | AND-семантика ≠ OR-семантика для multi-storage state | D | Когда состояние сущности разнесено между volatile + durable storage'ами: AND-семантика (активна если оба источника подтверждают) требует orphan recovery loop; OR-семантика (активна если хотя бы один) безопаснее для doubt cases. | active |
-| DP.D.114 | Continuous Trend Vs Point In Time | D | — | active |
 | DP.D.114 | Software factory ≠ Platform — single-product vs PaaS | D | — | active |
 | DP.D.115 | Distributed orchestration ≠ Monolithic orchestrator | D | — | active |
 | DP.D.116 | Semantic compiler ≠ Static site generator (SSG) | D | — | active |
@@ -96,6 +94,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.118 | N-мерная ортогональность ролей в peer-сессии | D | — | active |
 | DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | D | — | active |
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | D | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
+| DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | D | — | active |
+| DP.D.122 | Continuous Trend Vs Point In Time | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -198,18 +198,18 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.111 | Спящее правило в session-memory: trust < cut-off → не попадает в reminders | FM | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | FM | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | FM | — | accepted |
-| DP.FM.114 | Reverse proxy режет long-running HTTP-handler — config application-timeout врёт | FM | — | — |
-| DP.FM.115 | lru_cache для async resource с lifecycle: leak + cross-loop errors | FM | — | — |
 | DP.FM.115 | Peer Agent Overwrite Without Read | FM | — | — |
 | DP.FM.116 | External Id Path Traversal | FM | — | draft |
-| DP.FM.116 | Short-name fallback в authorization scope-check: cross-tenant bypass | FM | — | — |
 | DP.FM.117 | Двойной учёт компонента в compound-формуле | FM | — | — |
-| DP.FM.117 | Полиморфный return type на shared helper ломает downstream callsites молча | FM | — | — |
 | DP.FM.118 | Двойное значение метрики в названии (theoretical vs operational) | FM | — | — |
 | DP.FM.119 | Concurrent Writers Break Threshold Logic | FM | — | active |
 | DP.FM.120 | Маскировка нулей вместо root-fix в диагностике метрик | FM | — | active |
 | DP.FM.121 | Dry-run side-effect — нарушение read-only обещания | FM | — | active |
 | DP.FM.122 | Spec без impl — спецификация ушла вперёд кода | FM | — | active |
+| DP.FM.123 | Reverse proxy режет long-running HTTP-handler — config application-timeout врёт | FM | — | — |
+| DP.FM.124 | lru_cache для async resource с lifecycle: leak + cross-loop errors | FM | — | — |
+| DP.FM.125 | Short-name fallback в authorization scope-check: cross-tenant bypass | FM | — | — |
+| DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -421,7 +421,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | M | — | active |
 | DP.M.220 | Threshold-or-time авто-коммит с daily squash | M | — | active |
 | DP.M.223 | Marp тёмная тема — layout-классы для структурированных презентаций | M | — | — |
-| DP.M.224 | Delta Signal Not Raw Values | M | — | active |
 | DP.M.225 | Identity-anchor персонаж в семинаре | M | — | draft |
 | DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | M | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | M | — | active |
@@ -435,7 +434,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.238 | Pre-articulated open questions в отложенной problem-framing фазе | M | — | draft |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | M | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | M | — | active |
-| DP.M.241 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | M | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | M | — | active |
 | DP.M.242 | Ar5 Pack Quality Baseline | M | — | accepted |
 | DP.M.243 | Discriminator Column Sti Pattern | M | — | — |
@@ -460,6 +458,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.262 | Bidirectional cross-reference как защита от lifecycle coupling через чужой exec-механизм | M | — | active |
 | DP.M.263 | Каскад Pack-расширения через ad-hoc → snapshot → audit → авто-WP | M | — | current |
 | DP.M.264 | Пороговый сценарий аудита вместо отдельной операционной роли | M | — | current |
+| DP.M.265 | Delta Signal Not Raw Values | M | — | active |
+| DP.M.266 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

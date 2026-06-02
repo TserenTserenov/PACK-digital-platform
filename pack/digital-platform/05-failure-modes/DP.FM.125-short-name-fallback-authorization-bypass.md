@@ -1,5 +1,5 @@
 ---
-id: DP.FM.116
+id: DP.FM.125
 name: "Short-name fallback в authorization scope-check: cross-tenant bypass"
 type: failure-mode
 domain: digital-platform
@@ -10,13 +10,13 @@ category: security
 severity: critical
 valid_from: 2026-05-30
 related:
-  see_also: [DP.M.241]
+  see_also: [DP.M.266]
 tags: [security, authorization, multi-tenant, scope, oauth, cross-tenant, bypass]
 source: "session 2026-05-30 WP-201 Ф3.4 mcp_tools (peer-session 30, review-01.md C1, report.md §4)"
 schema_version: 1
 ---
 
-# DP.FM.116 — Short-name fallback в authorization scope-check: cross-tenant bypass
+# DP.FM.125 — Short-name fallback в authorization scope-check: cross-tenant bypass
 
 ## Описание
 

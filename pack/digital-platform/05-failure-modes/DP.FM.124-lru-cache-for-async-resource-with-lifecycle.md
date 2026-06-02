@@ -1,5 +1,5 @@
 ---
-id: DP.FM.115
+id: DP.FM.124
 name: "lru_cache для async resource с lifecycle: leak + cross-loop errors"
 type: failure-mode
 domain: digital-platform
@@ -10,13 +10,13 @@ category: framework
 severity: major
 valid_from: 2026-05-30
 related:
-  see_also: [DP.FM.114]
+  see_also: [DP.FM.123]
 tags: [fastapi, dependency-injection, async, lifecycle, lru-cache, connection-leak, httpx, asyncpg]
 source: "session 2026-05-30 WP-201 Ф3.4 mcp_tools (peer-session 30, 01-peer.md:25-29)"
 schema_version: 1
 ---
 
-# DP.FM.115 — lru_cache для async resource с lifecycle: leak + cross-loop errors
+# DP.FM.124 — lru_cache для async resource с lifecycle: leak + cross-loop errors
 
 ## Описание
 

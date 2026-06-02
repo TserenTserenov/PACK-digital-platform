@@ -11,7 +11,7 @@ epistemic_stage: formalized
 valid_from: 2026-06-01
 related:
   realizes: [DP.SC.164]
-  downstream: [DP.M.241]
+  downstream: [DP.M.266]
   see_also: [DP.SC.164]
 tags: [poly-context, context-assembly, multi-program, qualification, composition]
 source: "WP-379 Ф5 (peer-session 2026-06-01-12)"
@@ -143,12 +143,12 @@ poly_context as defined in §2, program_tag as defined in §2
 ```yaml
 related:
   realizes: [DP.SC.164]
-  downstream: [DP.M.241]
+  downstream: [DP.M.266]
   see_also: [DP.SC.164]
 ```
 
 - **DP.SC.164** — обещание, часть которого реализует этот метод (§Этап-1: Сборщик контекста)
-- **DP.M.241** — downstream consumer: §S4 потребляет `poly_context` из §2 данного метода
+- **DP.M.266** — downstream consumer: §S4 потребляет `poly_context` из §2 данного метода
 
 ---
 
@@ -190,5 +190,5 @@ related:
 - **Peer-сессия 2026-06-01-09** (структура §1–§3): `DS-my-strategy/sessions/2026-06/2026-06-01-09-pack-extraction-poly-root/report.md`
 - **Peer-сессия 2026-06-01-12** (финализация): `DS-my-strategy/sessions/2026-06/2026-06-01-12-pack-extraction-f5-finalize/report.md`
 - **DP.SC.164** — обещание, которое реализует этот метод
-- **DP.M.241** — downstream consumer
+- **DP.M.266** — downstream consumer
 - **WP-379** — рабочий продукт извлечения метода из working code
