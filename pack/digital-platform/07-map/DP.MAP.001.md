@@ -24,7 +24,7 @@ generated: true
 | Distinctions (D) | 73 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 112 |
+| Failure Modes (FM) | 114 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 239 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **680** |
+| **Total** | **682** |
 
 ## Distinctions
 
@@ -501,6 +501,8 @@ generated: true
 | DP.FM.124 | lru_cache для async resource с lifecycle: leak + cross-loop errors | — | — |
 | DP.FM.125 | Short-name fallback в authorization scope-check: cross-tenant bypass | — | — |
 | DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | — | — |
+| DP.FM.127 | Python 3.9: тип-аннотации → TypeError без from __future__ import annotations | — | — |
+| DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | — | — |
 
 ## SoTA Annotations
 
@@ -1174,6 +1176,8 @@ generated: true
 - Missing `summary`: DP.FM.124 (DP.FM.124-lru-cache-for-async-resource-with-lifecycle.md)
 - Missing `summary`: DP.FM.125 (DP.FM.125-short-name-fallback-authorization-bypass.md)
 - Missing `summary`: DP.FM.126 (DP.FM.126-polymorphic-return-breaks-shared-helper-callsites.md)
+- Missing `summary`: DP.FM.127 (DP.FM.127-python39-future-annotations-compat.md)
+- Missing `summary`: DP.FM.128 (DP.FM.128-pytest-collection-error-missing-attribute.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)

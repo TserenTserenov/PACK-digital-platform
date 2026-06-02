@@ -210,6 +210,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.124 | lru_cache для async resource с lifecycle: leak + cross-loop errors | FM | — | — |
 | DP.FM.125 | Short-name fallback в authorization scope-check: cross-tenant bypass | FM | — | — |
 | DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | FM | — | — |
+| DP.FM.127 | Python 3.9: тип-аннотации → TypeError без from __future__ import annotations | FM | — | — |
+| DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
