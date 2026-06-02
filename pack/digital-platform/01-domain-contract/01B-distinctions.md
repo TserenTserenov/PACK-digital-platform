@@ -1107,3 +1107,25 @@ created: 2026-05-22
 **Применимость:** проектирование knowledge-production каталогов в Pack-системах (Aisystant, Roam, Obsidian-граф, knowledge-pack экосистемы).
 
 ---
+
+## DP.D.102 — Parliament Model (Платформа) ≠ Local Coordination Hub (IWE)
+
+**Источник:** session-transcript 2026-05-26 + peer-сессия 2026-05-26-16-wp337-parliament-boundary (report.md, тема 3) + commit 3ffe572a (WP-337/И refactor).
+
+**Различение.** Parliament Model — паттерн (как MVC), реализуемый на двух уровнях с разными инвариантами. **Parliament Model** = Platform-уровень (Координатор + доменные агенты + замок + верификатор в облаке Neon/GKE). **Local Coordination Hub** = IWE-уровень (Local Session Manager: peer-discovery + file-lock, offline-capable, single-node). **Platform Adapter** (DP.IWE.011) = мост между уровнями.
+
+**Критерий разграничения:**
+- offline-инвариант (IWE должен работать без сети) → Local Coordination Hub
+- плоский режим (новый пилот без аккаунта) → Local Coordination Hub
+- multi-tenant + аудит + RBAC → Parliament Model (Platform)
+
+**Тест:** «требуется ли работа без сети для одного пользователя?» Да → Local Coordination Hub. Нет (multi-tenant, облачные сервисы, аудит) → Parliament Model.
+
+**Антипаттерн:** объединять под одним именем «Parliament Model» обе реализации → архитектурный дрейф, путаница в обещаниях (инварианты разные).
+
+**Применимо:** к любым distributed-паттернам, реализуемым на двух уровнях (single-node offline vs cloud multi-tenant) — не сливать терминологически, разнести имена.
+
+**Связи:**
+- DP.IWE.005 Local Gateway (IWE-уровень реализация)
+- DP.IWE.003 Aisystant MCP / Cloud Gateway (Platform-уровень реализация)
+- DP.IWE.011 Platform Adapter (мост)

@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 112 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 235 |
+| Methods (M) | 238 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 9 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **676** |
+| **Total** | **679** |
 
 ## Distinctions
 
@@ -282,6 +282,9 @@ generated: true
 | DP.M.173 | Artifact-first контракт agentic-роли с confidence-полем | — | — |
 | DP.M.174 | Triple-hash idempotency для LLM-pipeline | — | — |
 | DP.M.177 | Управление жизненным циклом bug-report в inbox | Метод управляет жизненным циклом bug-report файлов в inbox/bugs/ через frontmatter-статус (open|resolved|invalid) и триггер Week Close: автоматический review открытых багов старше 14 дней с архивацией разрешённых. | active |
+| DP.M.178 | Wp Triage Three Step Filter | — | active |
+| DP.M.179 | Single Source Dashboard Script | — | active |
+| DP.M.180 | Defer Policy No Auto Escalate | — | active |
 | DP.M.181 | Multi Turn Session Thread Pattern | — | draft |
 | DP.M.182 | Dual Sla Acknowledgment Completion | — | draft |
 | DP.M.183 | Level Dependent Bonus Caps Ema | — | — |
@@ -1008,6 +1011,9 @@ generated: true
 - Missing `summary`: DP.M.172 (DP.M.172-knowledge-file-archive-vs-delete.md)
 - Missing `summary`: DP.M.173 (DP.M.173-artifact-first-contract-with-confidence.md)
 - Missing `summary`: DP.M.174 (DP.M.174-triple-hash-idempotency-llm-pipeline.md)
+- Missing `summary`: DP.M.178 (DP.M.178-wp-triage-three-step-filter.md)
+- Missing `summary`: DP.M.179 (DP.M.179-single-source-dashboard-script.md)
+- Missing `summary`: DP.M.180 (DP.M.180-defer-policy-no-auto-escalate.md)
 - Missing `summary`: DP.M.181 (DP.M.181-multi-turn-session-thread-pattern.md)
 - Missing `summary`: DP.M.182 (DP.M.182-dual-sla-acknowledgment-completion.md)
 - Missing `summary`: DP.M.183 (DP.M.183-level-dependent-bonus-caps-ema.md)

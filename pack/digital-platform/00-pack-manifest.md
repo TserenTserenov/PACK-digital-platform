@@ -383,6 +383,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.173 | Artifact-first контракт agentic-роли с confidence-полем | M | — | — |
 | DP.M.174 | Triple-hash idempotency для LLM-pipeline | M | — | — |
 | DP.M.177 | Управление жизненным циклом bug-report в inbox | M | Метод управляет жизненным циклом bug-report файлов в inbox/bugs/ через frontmatter-статус (open|resolved|invalid) и триггер Week Close: автоматический review открытых багов старше 14 дней с архивацией разрешённых. | active |
+| DP.M.178 | Wp Triage Three Step Filter | M | — | active |
+| DP.M.179 | Single Source Dashboard Script | M | — | active |
+| DP.M.180 | Defer Policy No Auto Escalate | M | — | active |
 | DP.M.181 | Multi Turn Session Thread Pattern | M | — | draft |
 | DP.M.182 | Dual Sla Acknowledgment Completion | M | — | draft |
 | DP.M.183 | Level Dependent Bonus Caps Ema | M | — | — |
