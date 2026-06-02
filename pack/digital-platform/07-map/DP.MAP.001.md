@@ -24,7 +24,7 @@ generated: true
 | Distinctions (D) | 74 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 116 |
+| Failure Modes (FM) | 117 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 243 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **689** |
+| **Total** | **690** |
 
 ## Distinctions
 
@@ -510,6 +510,7 @@ generated: true
 | DP.FM.127 | Python 3.9: тип-аннотации → TypeError без from __future__ import annotations | — | — |
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | — | — |
 | DP.FM.129 | Broken Symlink Silent Config Empty | — | — |
+| DP.FM.130 | Os Expanduser No Shell Vars | — | active |
 
 ## SoTA Annotations
 
@@ -1192,6 +1193,7 @@ generated: true
 - Missing `summary`: DP.FM.127 (DP.FM.127-python39-future-annotations-compat.md)
 - Missing `summary`: DP.FM.128 (DP.FM.128-pytest-collection-error-missing-attribute.md)
 - Missing `summary`: DP.FM.129 (DP.FM.129-broken-symlink-silent-config-empty.md)
+- Missing `summary`: DP.FM.130 (DP.FM.130-os-expanduser-no-shell-vars.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
