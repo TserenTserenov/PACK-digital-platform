@@ -382,6 +382,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.172 | Knowledge File Archive Vs Delete | M | — | active |
 | DP.M.173 | Artifact-first контракт agentic-роли с confidence-полем | M | — | — |
 | DP.M.174 | Triple-hash idempotency для LLM-pipeline | M | — | — |
+| DP.M.176 | WP Inbox: flat-file vs folder structuring | M | — | — |
 | DP.M.177 | Управление жизненным циклом bug-report в inbox | M | Метод управляет жизненным циклом bug-report файлов в inbox/bugs/ через frontmatter-статус (open|resolved|invalid) и триггер Week Close: автоматический review открытых багов старше 14 дней с архивацией разрешённых. | active |
 | DP.M.178 | Wp Triage Three Step Filter | M | — | active |
 | DP.M.179 | Single Source Dashboard Script | M | — | active |
