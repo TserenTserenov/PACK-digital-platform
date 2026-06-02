@@ -407,3 +407,35 @@ Initiator в `02-writer.md`:
 | Q6 | Детектор консенсуса | Только явный маркер `CONSENSUS: <резюме>` (case-sensitive, grep без `-i`). Без grep по keywords. Писатель читает и сам решает |
 | Q7 | Escalation-flow | Единый протокол: маркер → loop прерывается → причина в чат → ответ пилота → `escalation-<NN>.md` → loop продолжается |
 | Q8 | Close-гейт | **WARN не BLOCK**: при незавершённой сессии (`status: started`, нет `report.md`) → предложить `--finalize` или `--interrupt` |
+
+
+## Edge-case: Peer-unavailable unilateral CONSENSUS
+
+**Триггер:** peer-агент физически недоступен (content filter, API down, ключ истёк, network failure).
+
+**Процедура:**
+
+1. **2 попытки вызова peer** через адаптер (`claude-peer-adapter.sh` / `kimi-peer-adapter.sh`).
+2. При стойком отказе — запись в peer.md и meta.yaml:
+   - `peer.md`: `consensus: unavailable, status: blocked`.
+   - `meta.yaml`: `peer_blocked: true, escalations_count: 1`.
+3. Writer оценивает наличие реальных альтернатив для решения:
+   - Альтернативы отсутствуют (декомпозиция очевидна, спецификация диктует выбор) → **unilateral CONSENSUS легитимен**.
+   - Альтернативы есть → **эскалация пилоту**, не unilateral.
+
+**Тест границы:**
+
+«Существует ли альтернатива, по которой peer мог бы возразить?»
+- Да → эскалация пилоту (writer не решает без peer-критика).
+- Нет → unilateral CONSENSUS, audit trail в meta.yaml.
+
+**Когда применимо:**
+
+- Переадресация к другому peer (claude-headless вместо Kimi) невозможна или не быстрее, чем продолжить unilateral.
+- Технический выбор без content-trade-off (декомпозиция фаз, переименование артефакта).
+
+**Failure mode без этого правила:**
+
+Writer либо стопает прогресс и просит пилота решать (мелкие технические выборы → bottleneck на пилоте), либо тихо принимает решение без записи о peer-блокировке (теряется audit trail).
+
+**Прецедент:** peer-сессия 2026-05-30-14-wp201-phase3-decomposition-pem — Kimi заблокирован content filter (HTTP 400 "high risk"), writer оценил отсутствие альтернатив (Ф3 декомпозиция по спецификации), принял unilateral CONSENSUS, зафиксировал в meta.yaml.

@@ -84,7 +84,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
+| DP.D.111 | ТОС-горлышко системы ≠ горлышко портфеля проектов | D | — | active |
 | DP.D.111 | Триаж ≠ Исполнение | D | — | active |
+| DP.D.112 | Cutover инфраструктуры ≠ маркетинговый запуск | D | — | active |
+| DP.D.113 | AND-семантика ≠ OR-семантика для multi-storage state | D | Когда состояние сущности разнесено между volatile + durable storage'ами: AND-семантика (активна если оба источника подтверждают) требует orphan recovery loop; OR-семантика (активна если хотя бы один) безопаснее для doubt cases. | active |
+| DP.D.114 | Continuous Trend Vs Point In Time | D | — | active |
 | DP.D.114 | Software factory ≠ Platform — single-product vs PaaS | D | — | active |
 | DP.D.115 | Distributed orchestration ≠ Monolithic orchestrator | D | — | active |
 | DP.D.116 | Semantic compiler ≠ Static site generator (SSG) | D | — | active |
@@ -187,14 +191,25 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | FM | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | FM | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | FM | — | active |
+| DP.FM.107 | Volatile Function Upsert Trigger Cascade | FM | — | — |
 | DP.FM.108 | Owner-резолвер с пустым default из единственного источника (adopted-sovereign trap) | FM | — | active |
+| DP.FM.109 | Sentinel empty-string → прошлый слот планировщика | FM | — | — |
+| DP.FM.110 | Unix socket без protocol handshake → пустой ответ | FM | — | — |
 | DP.FM.111 | Спящее правило в session-memory: trust < cut-off → не попадает в reminders | FM | — | active |
 | DP.FM.113 | Regex `search()` глотает второе нарушение в multi-violation validators | FM | — | — |
 | DP.FM.114 | Adapter Dependency Silent Regression | FM | — | accepted |
+| DP.FM.114 | Reverse proxy режет long-running HTTP-handler — config application-timeout врёт | FM | — | — |
+| DP.FM.115 | lru_cache для async resource с lifecycle: leak + cross-loop errors | FM | — | — |
 | DP.FM.115 | Peer Agent Overwrite Without Read | FM | — | — |
 | DP.FM.116 | External Id Path Traversal | FM | — | draft |
+| DP.FM.116 | Short-name fallback в authorization scope-check: cross-tenant bypass | FM | — | — |
 | DP.FM.117 | Двойной учёт компонента в compound-формуле | FM | — | — |
+| DP.FM.117 | Полиморфный return type на shared helper ломает downstream callsites молча | FM | — | — |
 | DP.FM.118 | Двойное значение метрики в названии (theoretical vs operational) | FM | — | — |
+| DP.FM.119 | Concurrent Writers Break Threshold Logic | FM | — | active |
+| DP.FM.120 | Маскировка нулей вместо root-fix в диагностике метрик | FM | — | active |
+| DP.FM.121 | Dry-run side-effect — нарушение read-only обещания | FM | — | active |
+| DP.FM.122 | Spec без impl — спецификация ушла вперёд кода | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -401,9 +416,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | M | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | M | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | M | — | active |
+| DP.M.217 | Glue Requires Executor Pipeline Decomposition | M | — | active |
 | DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | M | — | active |
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | M | — | active |
 | DP.M.220 | Threshold-or-time авто-коммит с daily squash | M | — | active |
+| DP.M.223 | Marp тёмная тема — layout-классы для структурированных презентаций | M | — | — |
+| DP.M.224 | Delta Signal Not Raw Values | M | — | active |
 | DP.M.225 | Identity-anchor персонаж в семинаре | M | — | draft |
 | DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | M | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | M | — | active |
@@ -417,6 +435,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.238 | Pre-articulated open questions в отложенной problem-framing фазе | M | — | draft |
 | DP.M.239 | Defense-in-depth bail-out при refactor regex single→multi: fail-loud вместо silent best-effort | M | — | active |
 | DP.M.240 | Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH | M | — | active |
+| DP.M.241 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | M | — | active |
 | DP.M.241 | Порядок формирования персонального руководства | M | — | active |
 | DP.M.242 | Ar5 Pack Quality Baseline | M | — | accepted |
 | DP.M.243 | Discriminator Column Sti Pattern | M | — | — |
@@ -432,6 +451,15 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.253 | Seminar Orientation Map — max-impact triple для семинара с концептуальным контентом | M | — | active |
 | DP.M.254 | Container abstraction mapping — IT-аналогии через Persona+Память+Контекст без импорта docker-терминов | M | — | active |
 | DP.M.255 | Поликорневая сборка контекста | M | — | active |
+| DP.M.256 | Pointer Only Fork Closure | M | — | active |
+| DP.M.257 | Closed Partial Multi Channel Resumption | M | — | active |
+| DP.M.258 | Cross Component Trigger Body Search Path | M | — | — |
+| DP.M.259 | Resource constraint доминирует в портфеле при одном исполнителе | M | — | active |
+| DP.M.260 | Intentional disablement как третья гипотеза при пустой/нулевой функции | M | — | active |
+| DP.M.261 | Port working SQL из known-good источника vs реимплементация | M | — | active |
+| DP.M.262 | Bidirectional cross-reference как защита от lifecycle coupling через чужой exec-механизм | M | — | active |
+| DP.M.263 | Каскад Pack-расширения через ad-hoc → snapshot → audit → авто-WP | M | — | current |
+| DP.M.264 | Пороговый сценарий аудита вместо отдельной операционной роли | M | — | current |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -442,6 +470,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.041 | Метод связывания доменных сущностей с физ.реализацией | METHOD | Правило связывания доменных сущностей Pack (DP.D.*, DP.CONCEPT.*) с физ.реализацией (таблица БД в DP.ARCH.004 §10) и кодовой реализацией (DS-файлы/модули). Сохраняет OwnerIntegrity: один факт — одно место, обратная ссылка из Pack в реализацию есть, но источник правды — DP.ARCH.004. v2 (24 апр, WP-228 Ф30) расширен §4 ARCH-bump sync-процессом и §5 антипаттерном дублирования формулировок downstream. | active |
 | DP.METHOD.042 | Сценарии использования concept-графа агентами в runtime | METHOD | 4 сценария применения concept-графа агентами платформы IWE: Claude Code (я), автор Pack, ролевые агенты бота (Портной/Оценщик/Навигатор), учебная траектория. Каждый описан по шаблону IntegrationGate шаг 2: потребитель → триггер → запрос → использование → observable-сигнал. | draft |
 | DP.METHOD.050 | Метод применения Quantum-Like Lens (QL-lite) | METHOD | Дисциплина применения quantum-like линзы FPF C.26* в проектировании метрик, диагностики, наблюдаемости и архитектурных решений. Активируется только при остаточной запутанности после классического набора. Включает 5 предохранителей и явный критерий выхода. | active |
+| DP.METHOD.051 | n8n встроенный /healthz endpoint для внешнего мониторинга | METHOD | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
