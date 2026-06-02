@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 73 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 114 |
+| Failure Modes (FM) | 115 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 239 |
+| Methods (M) | 242 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 9 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **682** |
+| **Total** | **686** |
 
 ## Distinctions
 
@@ -363,6 +363,9 @@ generated: true
 | DP.M.264 | Пороговый сценарий аудита вместо отдельной операционной роли | — | current |
 | DP.M.265 | Delta Signal Not Raw Values | — | active |
 | DP.M.266 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | — | active |
+| DP.M.267 | Grep Marker Deferred Auto Registry | — | — |
+| DP.M.268 | Auto Generated Ownership Marker | — | — |
+| DP.M.269 | Bidirectional Registry Drift Guard | — | — |
 
 ## Work Products
 
@@ -503,6 +506,7 @@ generated: true
 | DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | — | — |
 | DP.FM.127 | Python 3.9: тип-аннотации → TypeError без from __future__ import annotations | — | — |
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | — | — |
+| DP.FM.129 | Broken Symlink Silent Config Empty | — | — |
 
 ## SoTA Annotations
 
@@ -1095,6 +1099,9 @@ generated: true
 - Missing `summary`: DP.M.264 (DP.M.264-threshold-audit-scenario.md)
 - Missing `summary`: DP.M.265 (DP.M.265-delta-signal-not-raw-values.md)
 - Missing `summary`: DP.M.266 (DP.M.266-internal-service-auth-shared-secret-and-user-id-header.md)
+- Missing `summary`: DP.M.267 (DP.M.267-grep-marker-deferred-auto-registry.md)
+- Missing `summary`: DP.M.268 (DP.M.268-auto-generated-ownership-marker.md)
+- Missing `summary`: DP.M.269 (DP.M.269-bidirectional-registry-drift-guard.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1178,6 +1185,7 @@ generated: true
 - Missing `summary`: DP.FM.126 (DP.FM.126-polymorphic-return-breaks-shared-helper-callsites.md)
 - Missing `summary`: DP.FM.127 (DP.FM.127-python39-future-annotations-compat.md)
 - Missing `summary`: DP.FM.128 (DP.FM.128-pytest-collection-error-missing-attribute.md)
+- Missing `summary`: DP.FM.129 (DP.FM.129-broken-symlink-silent-config-empty.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)

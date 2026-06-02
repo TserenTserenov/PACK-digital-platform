@@ -212,6 +212,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.126 | Полиморфный return type на shared helper ломает downstream callsites молча | FM | — | — |
 | DP.FM.127 | Python 3.9: тип-аннотации → TypeError без from __future__ import annotations | FM | — | — |
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | FM | — | — |
+| DP.FM.129 | Broken Symlink Silent Config Empty | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -466,6 +467,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.264 | Пороговый сценарий аудита вместо отдельной операционной роли | M | — | current |
 | DP.M.265 | Delta Signal Not Raw Values | M | — | active |
 | DP.M.266 | Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation | M | — | active |
+| DP.M.267 | Grep Marker Deferred Auto Registry | M | — | — |
+| DP.M.268 | Auto Generated Ownership Marker | M | — | — |
+| DP.M.269 | Bidirectional Registry Drift Guard | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
