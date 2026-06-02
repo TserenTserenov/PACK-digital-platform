@@ -105,7 +105,6 @@ generated: true
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
 | DP.D.104 | Прогресс к награде ≠ Показ баланса | — | — |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
-| DP.D.108 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
 | DP.D.111 | Триаж ≠ Исполнение | — | active |
@@ -115,6 +114,7 @@ generated: true
 | DP.D.117 | Два render pipeline'а ≠ два продукта ≠ два региона | — | active |
 | DP.D.118 | N-мерная ортогональность ролей в peer-сессии | — | active |
 | DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | — | active |
+| DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 
 ## Methods
 

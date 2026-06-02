@@ -82,7 +82,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | D | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
 | DP.D.104 | Прогресс к награде ≠ Показ баланса | D | — | — |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
-| DP.D.108 | Type-string runtime drift ≠ File-replace terminology drift | D | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
 | DP.D.111 | Триаж ≠ Исполнение | D | — | active |
@@ -92,6 +91,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.117 | Два render pipeline'а ≠ два продукта ≠ два региона | D | — | active |
 | DP.D.118 | N-мерная ортогональность ролей в peer-сессии | D | — | active |
 | DP.D.119 | Предметная роль ≠ структурная роль в peer-сессии | D | — | active |
+| DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | D | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
