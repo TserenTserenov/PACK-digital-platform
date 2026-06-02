@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 73 |
+| Distinctions (D) | 74 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 115 |
+| Failure Modes (FM) | 116 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 242 |
+| Methods (M) | 243 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 9 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **686** |
+| **Total** | **689** |
 
 ## Distinctions
 
@@ -119,6 +119,7 @@ generated: true
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | — | active |
 | DP.D.122 | Continuous Trend Vs Point In Time | — | active |
+| DP.D.123 | State-Dependency Test для классификации skills | — | active |
 
 ## Methods
 
@@ -319,6 +320,7 @@ generated: true
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
+| DP.M.215 | SQL NOT EXISTS guard для predicate-based row exclusion | — | active |
 | DP.M.217 | Glue Requires Executor Pipeline Decomposition | — | active |
 | DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | — | active |
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | — | active |
@@ -485,6 +487,7 @@ generated: true
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | — | active |
+| DP.FM.106 | Anthropic API usage limit — терминальный blocker automation-pipeline | — | active |
 | DP.FM.107 | Volatile Function Upsert Trigger Cascade | — | — |
 | DP.FM.108 | Owner-резолвер с пустым default из единственного источника (adopted-sovereign trap) | — | active |
 | DP.FM.109 | Sentinel empty-string → прошлый слот планировщика | — | — |
@@ -901,6 +904,7 @@ generated: true
 - Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
 - Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
 - Missing `summary`: DP.D.122 (DP.D.122-continuous-trend-vs-point-in-time.md)
+- Missing `summary`: DP.D.123 (DP.D.123-state-dependency-test-for-skill-classification.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1055,6 +1059,7 @@ generated: true
 - Missing `summary`: DP.M.212 (DP.M.212-discourse-webhook-iwe-event-pipeline-mapping.md)
 - Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
+- Missing `summary`: DP.M.215 (DP.M.215-sql-not-exists-guard-for-predicate-based-row-exclusion.md)
 - Missing `summary`: DP.M.217 (DP.M.217-glue-requires-executor-pipeline-decomposition.md)
 - Missing `summary`: DP.M.218 (DP.M.218-close-check-open-autofix-defense-in-depth.md)
 - Missing `summary`: DP.M.219 (DP.M.219-by-script-marker-idempotent-injection.md)
@@ -1164,6 +1169,7 @@ generated: true
 - Missing `summary`: DP.FM.103 (DP.FM.103-coverage-script-no-guide-scope-filter-false-fail.md)
 - Missing `summary`: DP.FM.104 (DP.FM.104-missing-reverse-identity-lookup.md)
 - Missing `summary`: DP.FM.105 (DP.FM.105-internal-probe-blind-to-own-failure.md)
+- Missing `summary`: DP.FM.106 (DP.FM.106-anthropic-api-usage-limit-terminal-failure.md)
 - Missing `summary`: DP.FM.107 (DP.FM.107-volatile-function-upsert-trigger-cascade.md)
 - Missing `summary`: DP.FM.108 (DP.FM.108-owner-empty-default-from-single-source.md)
 - Missing `summary`: DP.FM.109 (DP.FM.109-sentinel-empty-string-past-scheduler.md)

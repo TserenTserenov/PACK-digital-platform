@@ -96,6 +96,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | D | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | D | — | active |
 | DP.D.122 | Continuous Trend Vs Point In Time | D | — | active |
+| DP.D.123 | State-Dependency Test для классификации skills | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -191,6 +192,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.103 | Coverage-скрипт без фильтра scope агрегирует FAIL из соседних guide | FM | — | draft |
 | DP.FM.104 | Отсутствие обратной функции identity-lookup | FM | — | active |
 | DP.FM.105 | Внутренний health-probe слеп к собственным падениям | FM | — | active |
+| DP.FM.106 | Anthropic API usage limit — терминальный blocker automation-pipeline | FM | — | active |
 | DP.FM.107 | Volatile Function Upsert Trigger Cascade | FM | — | — |
 | DP.FM.108 | Owner-резолвер с пустым default из единственного источника (adopted-sovereign trap) | FM | — | active |
 | DP.FM.109 | Sentinel empty-string → прошлый слот планировщика | FM | — | — |
@@ -423,6 +425,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.212 | Маппинг Discourse webhook в IWE event pipeline | M | — | active |
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | M | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | M | — | active |
+| DP.M.215 | SQL NOT EXISTS guard для predicate-based row exclusion | M | — | active |
 | DP.M.217 | Glue Requires Executor Pipeline Decomposition | M | — | active |
 | DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | M | — | active |
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | M | — | active |
