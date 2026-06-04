@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 117 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 243 |
+| Methods (M) | 245 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 9 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **691** |
+| **Total** | **693** |
 
 ## Distinctions
 
@@ -368,6 +368,8 @@ generated: true
 | DP.M.267 | Grep Marker Deferred Auto Registry | — | — |
 | DP.M.268 | Auto Generated Ownership Marker | — | — |
 | DP.M.269 | Bidirectional Registry Drift Guard | — | — |
+| DP.M.270 | Resolve Instructions Level | — | — |
+| DP.M.271 | Lazy Channel Aware Resource Creation | — | — |
 
 ## Work Products
 
@@ -1109,6 +1111,8 @@ generated: true
 - Missing `summary`: DP.M.267 (DP.M.267-grep-marker-deferred-auto-registry.md)
 - Missing `summary`: DP.M.268 (DP.M.268-auto-generated-ownership-marker.md)
 - Missing `summary`: DP.M.269 (DP.M.269-bidirectional-registry-drift-guard.md)
+- Missing `summary`: DP.M.270 (DP.M.270-resolve-instructions-level.md)
+- Missing `summary`: DP.M.271 (DP.M.271-lazy-channel-aware-resource-creation.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)

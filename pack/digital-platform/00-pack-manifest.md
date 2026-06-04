@@ -474,6 +474,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.267 | Grep Marker Deferred Auto Registry | M | — | — |
 | DP.M.268 | Auto Generated Ownership Marker | M | — | — |
 | DP.M.269 | Bidirectional Registry Drift Guard | M | — | — |
+| DP.M.270 | Resolve Instructions Level | M | — | — |
+| DP.M.271 | Lazy Channel Aware Resource Creation | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
