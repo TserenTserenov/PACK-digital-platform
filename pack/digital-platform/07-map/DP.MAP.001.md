@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 49 |
+| ROLE (ROLE) | 51 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 114 |
+| SC (SC) | 115 |
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **695** |
+| **Total** | **698** |
 
 ## Distinctions
 
@@ -722,6 +722,8 @@ generated: true
 | DP.ROLE.062 | Создатель паков (R30) | Роль LLM-сопровождения автора PACK-X через SPF-цикл наполнения 01-11: вызывает R28 Диагност для определения режима (assembly/hybrid/full SPF), ведёт по фазам, защищает инвариант read-only upstream FPF/SPF. Работает с одним PACK-X за сессию; cross-pack consistency — у R24. | draft |
 | DP.ROLE.063 | Менеджер оргразвития (R31) | Роль LLM-проводника между запросом субъекта об оргизменении (себя/команды/организации) и методами СИ/СМ/ИЛ программы РР. Шаг 0 — классификация типа системы (MIM.M.030). LLM-stateless по in-memory, file-stateful по контексту субъекта (personal-guide/team-guide). | draft |
 | DP.ROLE.064 | Сторож новых задач (issue watcher) | Специализированная операционная роль: фоновый скрипт, который ежедневно обходит github-репо IWE, выявляет новые задачи (issues), классифицирует важность и шлёт дайджест пилоту в Telegram. Скрипт ≠ агент (фиксированный flow, без LLM). Один исполнитель = одна роль (специализированный агент по имени роли). | draft |
+| DP.ROLE.064 | Плановик (Planner) | Роль операционного планирования (HOW MUCH / WHEN): упаковка приоритетов месяца от Стратега (R1) в рабочие продукты недели с бюджетами, распределение по дням, удержание WIP-лимита. Выделена из R1 Стратега (DP.ROLE.012), который сужается до стратегирования (WHAT/WHY). Stub — наполняется по мере реализации канала в РП378. | stub |
+| DP.ROLE.065 | hermes-proxy-tool | — | draft |
 
 ### RUNBOOK
 
@@ -848,6 +850,7 @@ generated: true
 | DP.SC.164 | Доставка персонального руководства пилоту | Ежедневный daily и еженедельный weekly файл персонального руководства, отражающий контекст пилота (активные РП, captures, посты, рефлексии, cp-профиль), доставляется в его репо `personal-guide/<пилот>/` по расписанию; не зависит от ритуалов ОРЗ. | draft |
 | DP.SC.165 | Scope-control для bridge write-tools | Bridge write-tools (`personal_write`, `personal_propose_capture`) проходят server-side scope check в gateway-mcp; bridge cache TTL=60s даёт быстрый deny без round-trip | draft |
 | DP.SC.166 | Сторож новых задач — ежедневный дайджест в Telegram | Раз в сутки (до 09:00) обойти все github-репо в ~/IWE/*, найти задачи, созданные за последние 2 дня и ещё не показанные пилоту, классифицировать важность и отправить дайджест в Telegram. Критичные (потеря данных / безопасность / регрессия) — отдельной пометкой. Дедуп через state-файл, идемпотентно. | draft |
+| DP.SC.167 | hermes-chat | — | draft |
 
 ### SYS
 
@@ -922,6 +925,7 @@ generated: true
 - Missing `summary`: DP.IWE.011-adapter-headless (headless-adapter.md)
 - Missing `summary`: DP.IWE.011 (DP.IWE.011-runtime-host-contract.md)
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-decomposer.md)
+- Missing `summary`: DP.ROLE.065 (DP.ROLE.065-hermes-proxy-tool.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
@@ -1220,6 +1224,7 @@ generated: true
 - Missing `summary`: DP.SC.140 (DP.SC.140-club-action-catalog.md)
 - Missing `summary`: DP.SC.145 (DP.SC.145-llm-router.md)
 - Missing `summary`: DP.SC.146 (DP.SC.146-secret-drift-detector.md)
+- Missing `summary`: DP.SC.167 (DP.SC.167-hermes-chat.md)
 
 ---
 
