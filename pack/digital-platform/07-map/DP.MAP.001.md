@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 48 |
+| ROLE (ROLE) | 49 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 113 |
+| SC (SC) | 114 |
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **693** |
+| **Total** | **695** |
 
 ## Distinctions
 
@@ -721,6 +721,7 @@ generated: true
 | DP.ROLE.061 | External Session Adapter | Мост между внешним каналом (Telegram) и локальным исполнителем (Claude Code). Поддерживает multi-turn диалог: каждый ход дописывается в SESSION-thread, Egress запускает Claude Code с полным контекстом. Capability scope: код+git, calendar, WP, IWE-знания. Две sub-responsibility: Ingress (cloud) и Egress (local). | draft |
 | DP.ROLE.062 | Создатель паков (R30) | Роль LLM-сопровождения автора PACK-X через SPF-цикл наполнения 01-11: вызывает R28 Диагност для определения режима (assembly/hybrid/full SPF), ведёт по фазам, защищает инвариант read-only upstream FPF/SPF. Работает с одним PACK-X за сессию; cross-pack consistency — у R24. | draft |
 | DP.ROLE.063 | Менеджер оргразвития (R31) | Роль LLM-проводника между запросом субъекта об оргизменении (себя/команды/организации) и методами СИ/СМ/ИЛ программы РР. Шаг 0 — классификация типа системы (MIM.M.030). LLM-stateless по in-memory, file-stateful по контексту субъекта (personal-guide/team-guide). | draft |
+| DP.ROLE.064 | Сторож новых задач (issue watcher) | Специализированная операционная роль: фоновый скрипт, который ежедневно обходит github-репо IWE, выявляет новые задачи (issues), классифицирует важность и шлёт дайджест пилоту в Telegram. Скрипт ≠ агент (фиксированный flow, без LLM). Один исполнитель = одна роль (специализированный агент по имени роли). | draft |
 
 ### RUNBOOK
 
@@ -846,6 +847,7 @@ generated: true
 | DP.SC.163 | Серверные агенты через Gateway (MVP) | Пользователь через Gateway получает результат работы агента (Стратег, Экстрактор) в виде коммита в свой GitHub-репозиторий — без локального CLI, с тем же артефактом, что и через VS Code | draft |
 | DP.SC.164 | Доставка персонального руководства пилоту | Ежедневный daily и еженедельный weekly файл персонального руководства, отражающий контекст пилота (активные РП, captures, посты, рефлексии, cp-профиль), доставляется в его репо `personal-guide/<пилот>/` по расписанию; не зависит от ритуалов ОРЗ. | draft |
 | DP.SC.165 | Scope-control для bridge write-tools | Bridge write-tools (`personal_write`, `personal_propose_capture`) проходят server-side scope check в gateway-mcp; bridge cache TTL=60s даёт быстрый deny без round-trip | draft |
+| DP.SC.166 | Сторож новых задач — ежедневный дайджест в Telegram | Раз в сутки (до 09:00) обойти все github-репо в ~/IWE/*, найти задачи, созданные за последние 2 дня и ещё не показанные пилоту, классифицировать важность и отправить дайджест в Telegram. Критичные (потеря данных / безопасность / регрессия) — отдельной пометкой. Дедуп через state-файл, идемпотентно. | draft |
 
 ### SYS
 
