@@ -1,6 +1,8 @@
 ---
 id: DP.ROLE.064
 name: Сторож новых задач (issue watcher)
+name_ru: Сторож новых задач
+name_en: Issue watcher
 type: role-description
 status: draft
 valid_from: 2026-06-04
