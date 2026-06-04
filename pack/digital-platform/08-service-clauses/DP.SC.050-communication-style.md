@@ -18,10 +18,11 @@ related:
 
 ## Правило (инвариант)
 
-- [x] Источник истины базового стиля (L0) - одна каноническая копия в Pack (`PACK-digital-platform`). Все остальные файлы (FMT-шаблон, корневые CLAUDE.md/AGENTS.md, бот, шлюз, skill Гермеса) - проекции, синхронизируемые автоматически.
+- [x] Источник истины базового стиля (L0) - одна каноническая копия в Pack: `02-domain-entities/communication-style-base.md` (эта клауза = обещание, база = её payload-сущность). Все остальные носители - проекции.
+- [x] Доставка различается по носителю (WP-388 Ф8): бот, шлюз, FMT/CLAUDE.md - маркер-блок `COMMUNICATION-STYLE-BASE-START/END` (синхронизатор). Claude Code (автор + юзеры) - UserPromptSubmit-хук `inject-communication-style.sh`. Генерируемые корневые CLAUDE.md/AGENTS.md НЕ синхронизируются (их перезаписывают template-sync.sh / sync-agent-instructions.sh) - база приходит хуком.
 - [x] Три слоя: L0 (платформенный, read-only для всех), L1 (авторский, additive-only), L2 (пользовательский, additive-only). L1 и L2 не могут отменить или ослабить правила L0 - только добавить новые или ужесточить существующие.
 - [x] Единая нумерация правил A1-A11 для всех агентов. Один формат лога нарушений, один файл.
-- [x] Синхронизатор читает базу из Pack и записывает во все downstream между маркерами `COMMUNICATION-STYLE-BASE-START/END` за один прогон.
+- [x] Синхронизатор читает базу из Pack и записывает в downstream-носители с маркерами (бот, шлюз, FMT/CLAUDE.md) за один прогон. Генерируемые файлы и Claude Code - вне синхронизатора (хук).
 - [x] При расхождении копий (md5-сверка в Week Close) - Pack-версия побеждает, копии перезаписываются.
 
 ## Обещание
@@ -44,8 +45,9 @@ related:
 
 | Критерий | Как проверить |
 |----------|--------------|
-| L0-база живёт в Pack | `ls PACK-digital-platform/pack/digital-platform/08-service-clauses/DP.SC.050-communication-style.md` + связанный файл базы |
-| Downstream-копии содержат маркеры | `grep -r 'COMMUNICATION-STYLE-BASE-START' FMT-exocortex-template/ DS-my-strategy/ DS-MCP/` |
+| L0-база живёт в Pack | `ls PACK-digital-platform/pack/digital-platform/02-domain-entities/communication-style-base.md` (база) + `08-service-clauses/DP.SC.050-communication-style.md` (клауза) |
+| Носители с маркерами содержат блок | `grep -r 'COMMUNICATION-STYLE-BASE-START' FMT-exocortex-template/ DS-MCP/` (бот, шлюз, FMT) |
+| Хук доставки в Claude Code зарегистрирован | `grep inject-communication-style .claude/settings.json` + `ls .claude/hooks/inject-communication-style.sh` |
 | L1-авторский файл существует | `ls DS-my-strategy/memory/communication-style-author.md` |
 
 **Контекст** (при каких условиях обещание действует):
@@ -82,7 +84,7 @@ related:
 
 | Слой | Владелец | Source of truth | Кто получает | Формат override |
 |------|----------|----------------|-------------|----------------|
-| L0 платформенный | IWE (автор) | `PACK-digital-platform/.../DP.SC.050-communication-style.md` + связанная база | все агенты, все пользователи | read-only |
+| L0 платформенный | IWE (автор) | `PACK-digital-platform/.../02-domain-entities/communication-style-base.md` (база) + `DP.SC.050` (клауза-обещание) | все агенты, все пользователи | read-only |
 | L1 авторский | пилот | `DS-my-strategy/memory/communication-style-author.md` | только агенты пилота | additive-only |
 | L2 пользовательский | каждый user | `{USER-DS}/memory/communication-style-personal.md` | только агенты этого пользователя | additive-only |
 
