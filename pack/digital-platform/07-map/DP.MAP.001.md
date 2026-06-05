@@ -36,11 +36,11 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 51 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 117 |
+| SC (SC) | 118 |
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **701** |
+| **Total** | **702** |
 
 ## Distinctions
 
@@ -854,6 +854,7 @@ generated: true
 | DP.SC.165 | Scope-control для bridge write-tools | Bridge write-tools (`personal_write`, `personal_propose_capture`) проходят server-side scope check в gateway-mcp; bridge cache TTL=60s даёт быстрый deny без round-trip | draft |
 | DP.SC.166 | Сторож новых задач — ежедневный дайджест в Telegram | Раз в сутки (до 09:00) обойти все github-репо в ~/IWE/*, найти задачи, созданные за последние 2 дня и ещё не показанные пилоту, классифицировать важность и отправить дайджест в Telegram. Критичные (потеря данных / безопасность / регрессия) — отдельной пометкой. Дедуп через state-файл, идемпотентно. | draft |
 | DP.SC.167 | hermes-chat | — | draft |
+| DP.SC.168 | Онбординг IWE — зонтичное обещание | — | draft |
 
 ### SYS
 
@@ -1228,6 +1229,7 @@ generated: true
 - Missing `summary`: DP.SC.145 (DP.SC.145-llm-router.md)
 - Missing `summary`: DP.SC.146 (DP.SC.146-secret-drift-detector.md)
 - Missing `summary`: DP.SC.167 (DP.SC.167-hermes-chat.md)
+- Missing `summary`: DP.SC.168 (DP.SC.168-onboarding.md)
 
 ---
 
