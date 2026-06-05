@@ -167,11 +167,17 @@ wp: WP-378
 
 ## 9. Реализация-носитель
 
-`DS-MCP/agent-runner/src/prompts/strategist.txt` (текущий серверный fixator — по
-факту реализует планирование). Миграция `strategist.txt` → `planner.txt` + deprecation
-alias `run_strategist` → `run_planner` — **в спин-офф РП «серверный discovery-канал»**
+**Модель «два фиксатора» (не rename, 2026-06-05):** серверный фиксатор `run_strategist`
+сейчас пишет и стратегические файлы (Strategy.md, Dissatisfactions), и плановые (Plan, Day) —
+переименование в planner занизило бы его. Решение:
+- **`run_strategist`** (сохраняется, не ломается) — фиксатор Стратега: стратегические файлы.
+- **`run_planner`** (новый, добавляется) — фиксатор Плановика: `current/WeekPlan`, `current/DayPlan`.
+
+Носитель Плановика = `DS-MCP/agent-runner/src/prompts/planner.txt` (новый промпт) +
+MCP-инструмент `run_planner`. Реализация — **в спин-офф РП «серверный discovery-канал»**
 (DS-MCP — отдельный деплой-контур + правка production access-control `DEFAULT_AGENT_SCOPES`,
-требует своего смоука против прода).
+требует своего смоука против прода). Добавление `run_planner` **не ломает** живой
+`run_strategist` (claude.ai MCP) — deprecation alias не нужен.
 
 ## 10. Связанные документы
 
@@ -182,5 +188,5 @@ alias `run_strategist` → `run_planner` — **в спин-офф РП «сер�
 ## 11. Открыто (наполняется в последующих РП)
 
 - [ ] Сценарии (минимум 3 потребителя) — детализация после физической миграции каталога.
-- [ ] MCP-миграция `run_strategist` → `run_planner` (deprecation alias) — спин-офф серверного канала (DS-MCP).
+- [ ] Добавить MCP-инструмент `run_planner` (новый, плановые файлы) + `planner.txt`; сузить промпт `run_strategist` до стратегических файлов — спин-офф серверного канала (DS-MCP). `run_strategist` сохраняется (не ломается).
 - [ ] Физическая миграция `scenarios/` и `templates/` из каталога Стратега.
