@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 78 |
+| Distinctions (D) | 80 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 117 |
+| Failure Modes (FM) | 121 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 251 |
+| Methods (M) | 260 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **712** |
+| **Total** | **727** |
 
 ## Distinctions
 
@@ -123,7 +123,9 @@ generated: true
 | DP.D.124 | Агент-персонаж ≠ Агент-рантайм | — | active |
 | DP.D.125 | Два независимых измерения вместо матрицы (технологический тир ⟂ содержательный progress) | — | active |
 | DP.D.126 | Интерфейс ≠ Тир (канал доставки ортогонален технологическому уровню) | — | active |
+| DP.D.127 | Aux Class Vs Narrative | — | — |
 | DP.D.128 | Статический промпт ≠ интерактивный канал | — | active |
+| DP.D.129 | Historical Membership Vs Current Channel | — | — |
 
 ## Methods
 
@@ -380,6 +382,15 @@ generated: true
 | DP.M.275 | Sc Decomposition Via Umbrella | — | — |
 | DP.M.276 | Add Not Rename On Unpacking | — | — |
 | DP.M.277 | Single Source Method N Surfaces | — | — |
+| DP.M.278 | Hybrid Corpus Audit Protocol | — | — |
+| DP.M.279 | Held Patch Pattern | — | — |
+| DP.M.280 | Allow Fallback Cutover Pattern | — | — |
+| DP.M.281 | Recurring Error Diagnosis | — | active |
+| DP.M.282 | Function First Onboarding | — | active |
+| DP.M.283 | Byok First Tier Unlock | — | active |
+| DP.M.284 | Inline Cat Over Add Dir Cli | — | — |
+| DP.M.285 | Dual Write Safety Net Projection Migration | — | — |
+| DP.M.286 | Cold Review Frontmatter Anchors Pass | — | — |
 
 ## Work Products
 
@@ -523,6 +534,10 @@ generated: true
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | — | — |
 | DP.FM.129 | Broken Symlink Silent Config Empty | — | — |
 | DP.FM.130 | Os Expanduser No Shell Vars | — | active |
+| DP.FM.132 | Microservice Tier Sot Mismatch | — | — |
+| DP.FM.133 | Backup Restore No 3Way Merge | — | active |
+| DP.FM.134 | Vocabulary Split Aux Subsections | — | — |
+| DP.FM.135 | Projection Rule No Backfill Fallback Mask | — | — |
 
 ## SoTA Annotations
 
@@ -931,7 +946,9 @@ generated: true
 - Missing `summary`: DP.D.124 (DP.D.124-agent-persona-vs-runtime.md)
 - Missing `summary`: DP.D.125 (DP.D.125-two-orthogonal-axes-vs-matrix.md)
 - Missing `summary`: DP.D.126 (DP.D.126-interface-vs-tier.md)
+- Missing `summary`: DP.D.127 (DP.D.127-aux-class-vs-narrative.md)
 - Missing `summary`: DP.D.128 (DP.D.128-static-prompt-vs-interactive-channel.md)
+- Missing `summary`: DP.D.129 (DP.D.129-historical-membership-vs-current-channel.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1143,6 +1160,15 @@ generated: true
 - Missing `summary`: DP.M.275 (DP.M.275-sc-decomposition-via-umbrella.md)
 - Missing `summary`: DP.M.276 (DP.M.276-add-not-rename-on-unpacking.md)
 - Missing `summary`: DP.M.277 (DP.M.277-single-source-method-n-surfaces.md)
+- Missing `summary`: DP.M.278 (DP.M.278-hybrid-corpus-audit-protocol.md)
+- Missing `summary`: DP.M.279 (DP.M.279-held-patch-pattern.md)
+- Missing `summary`: DP.M.280 (DP.M.280-allow-fallback-cutover-pattern.md)
+- Missing `summary`: DP.M.281 (DP.M.281-recurring-error-diagnosis.md)
+- Missing `summary`: DP.M.282 (DP.M.282-function-first-onboarding.md)
+- Missing `summary`: DP.M.283 (DP.M.283-byok-first-tier-unlock.md)
+- Missing `summary`: DP.M.284 (DP.M.284-inline-cat-over-add-dir-cli.md)
+- Missing `summary`: DP.M.285 (DP.M.285-dual-write-safety-net-projection-migration.md)
+- Missing `summary`: DP.M.286 (DP.M.286-cold-review-frontmatter-anchors-pass.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1229,6 +1255,10 @@ generated: true
 - Missing `summary`: DP.FM.128 (DP.FM.128-pytest-collection-error-missing-attribute.md)
 - Missing `summary`: DP.FM.129 (DP.FM.129-broken-symlink-silent-config-empty.md)
 - Missing `summary`: DP.FM.130 (DP.FM.130-os-expanduser-no-shell-vars.md)
+- Missing `summary`: DP.FM.132 (DP.FM.132-microservice-tier-sot-mismatch.md)
+- Missing `summary`: DP.FM.133 (DP.FM.133-backup-restore-no-3way-merge.md)
+- Missing `summary`: DP.FM.134 (DP.FM.134-vocabulary-split-aux-subsections.md)
+- Missing `summary`: DP.FM.135 (DP.FM.135-projection-rule-no-backfill-fallback-mask.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
