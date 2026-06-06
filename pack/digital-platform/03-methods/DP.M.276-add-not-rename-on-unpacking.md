@@ -1,0 +1,54 @@
+---
+id: DP.M.276
+title: "ADD-not-RENAME при распаковке tool/role/SC: backward-compat через сохранение исходного + добавление нового"
+type: method
+pack: PACK-digital-platform
+domain: digital-platform
+epistemic_stage: confirmed
+trust: high
+valid_from: 2026-06-05
+source: "session WP-378/349/362/392 evening 2026-06-05, git diff DS-my-strategy 223ef6276 (WP-378 follow-up, B-006 backlog)"
+related: [DP.M.275, DP.D.058]
+---
+
+# DP.M.276 — ADD-not-RENAME при распаковке tool/role/SC
+
+## Описание
+
+При распаковке функциональности (роль split, SC decomposes, tool разделяется на два или более) — сохранять исходное имя tool/endpoint/SC и добавлять новые параллельно. Не переименовывать.
+
+## Принцип
+
+| Вариант | Действие | Риск |
+|---------|----------|------|
+| RENAME (анти-паттерн) | Переименовать исходный + добавить второй | Ломает прод: внешние клиенты, скрипты, кэшированные ссылки, прежние сессии |
+| **ADD-not-RENAME** | Сохранить исходный + добавить новый параллельно | Migration ответственность — на стороне клиента, постепенный переход |
+
+## Пример
+
+При распаковке роли «Стратег» (DP.ROLE.012) на discovery (DP.ROLE.012-strategist) + planning (DP.ROLE.066-planner) на серверной стороне:
+
+- ❌ Переименовать `run_strategist` → `run_discovery_strategist`, добавить `run_planner`.
+- ✅ Сохранить `run_strategist` (как есть, частью зонтика), добавить `run_planner` параллельно.
+
+## Применение
+
+Паттерн применим к:
+- MCP tools (`run_strategist` / `run_planner`)
+- CLI subcommands
+- REST endpoints
+- SC-имена (DP.SC.011 не переименовывается даже после превращения в зонтик)
+- Role-имена в каталогах
+
+## Тест применимости
+
+«Есть ли активные внешние ссылки на старое имя?» (клиенты, скрипты пилота, кэш, сессии). Да → ADD, не RENAME. Нет → можно RENAME без риска.
+
+## Антипаттерн «связка распаковки и deprecation»
+
+«Зачищаем legacy сразу, заодно с распаковкой» — соединение двух разных решений (распаковка vs deprecation) в один шаг = риск отказа без необходимости. Deprecation — отдельное решение со своим расписанием, после того как ADD прошло period soak.
+
+## Связи
+
+- DP.M.275 — Распаковка Service Clause через зонтик (парный паттерн)
+- DP.D.058 — Service Clause ≠ Carrier

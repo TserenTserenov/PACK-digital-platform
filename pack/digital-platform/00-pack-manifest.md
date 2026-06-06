@@ -96,8 +96,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | D | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | D | — | active |
 | DP.D.122 | Continuous Trend Vs Point In Time | D | — | active |
+| DP.D.122 | Статический промпт ≠ интерактивный канал | D | — | active |
 | DP.D.123 | State-Dependency Test для классификации skills | D | — | active |
 | DP.D.124 | Агент-персонаж ≠ Агент-рантайм | D | — | active |
+| DP.D.125 | Два независимых измерения вместо матрицы (технологический тир ⟂ содержательный progress) | D | — | active |
+| DP.D.126 | Интерфейс ≠ Тир (канал доставки ортогонален технологическому уровню) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -480,6 +483,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.272 | Role Unpacking Via Split To | M | — | — |
 | DP.M.273 | Explicit Prefix Guard Disambiguation | M | — | — |
 | DP.M.274 | Три уровня мастерства пилота (Iron Man framing) | M | — | active |
+| DP.M.275 | Sc Decomposition Via Umbrella | M | — | — |
+| DP.M.276 | Add Not Rename On Unpacking | M | — | — |
+| DP.M.277 | Single Source Method N Surfaces | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

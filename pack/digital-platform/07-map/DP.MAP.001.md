@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 75 |
+| Distinctions (D) | 78 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 117 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 248 |
+| Methods (M) | 251 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **706** |
+| **Total** | **712** |
 
 ## Distinctions
 
@@ -119,8 +119,11 @@ generated: true
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | — | active |
 | DP.D.122 | Continuous Trend Vs Point In Time | — | active |
+| DP.D.122 | Статический промпт ≠ интерактивный канал | — | active |
 | DP.D.123 | State-Dependency Test для классификации skills | — | active |
 | DP.D.124 | Агент-персонаж ≠ Агент-рантайм | — | active |
+| DP.D.125 | Два независимых измерения вместо матрицы (технологический тир ⟂ содержательный progress) | — | active |
+| DP.D.126 | Интерфейс ≠ Тир (канал доставки ортогонален технологическому уровню) | — | active |
 
 ## Methods
 
@@ -374,6 +377,9 @@ generated: true
 | DP.M.272 | Role Unpacking Via Split To | — | — |
 | DP.M.273 | Explicit Prefix Guard Disambiguation | — | — |
 | DP.M.274 | Три уровня мастерства пилота (Iron Man framing) | — | active |
+| DP.M.275 | Sc Decomposition Via Umbrella | — | — |
+| DP.M.276 | Add Not Rename On Unpacking | — | — |
+| DP.M.277 | Single Source Method N Surfaces | — | — |
 
 ## Work Products
 
@@ -921,8 +927,11 @@ generated: true
 - Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
 - Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
 - Missing `summary`: DP.D.122 (DP.D.122-continuous-trend-vs-point-in-time.md)
+- Missing `summary`: DP.D.122 (DP.D.122-static-prompt-vs-interactive-channel.md)
 - Missing `summary`: DP.D.123 (DP.D.123-state-dependency-test-for-skill-classification.md)
 - Missing `summary`: DP.D.124 (DP.D.124-agent-persona-vs-runtime.md)
+- Missing `summary`: DP.D.125 (DP.D.125-two-orthogonal-axes-vs-matrix.md)
+- Missing `summary`: DP.D.126 (DP.D.126-interface-vs-tier.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1131,6 +1140,9 @@ generated: true
 - Missing `summary`: DP.M.272 (DP.M.272-role-unpacking-via-split-to.md)
 - Missing `summary`: DP.M.273 (DP.M.273-explicit-prefix-guard-disambiguation.md)
 - Missing `summary`: DP.M.274 (DP.M.274-ironman-three-mastery-levels.md)
+- Missing `summary`: DP.M.275 (DP.M.275-sc-decomposition-via-umbrella.md)
+- Missing `summary`: DP.M.276 (DP.M.276-add-not-rename-on-unpacking.md)
+- Missing `summary`: DP.M.277 (DP.M.277-single-source-method-n-surfaces.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
