@@ -28,8 +28,8 @@ related:
     - DP.ARCH.002   # §2б Две оси онбординга (оснащение × развитие). Контролёр ведёт по технологической оси; реализация get_journey_state/get_next_onboarding_step — Ф28/WP-392 Б1, здесь не вводится
 created: 2026-05-17
 updated: 2026-05-20
-version: v0.4
-wp: WP-326
+version: v0.5
+wp: WP-349
 ---
 
 # Контролёр развития — DP.ROLE.046
@@ -148,6 +148,7 @@ Lock освобождается автоматически при заверше
 | 0.2 | 2026-05-17 | Триггер 06:00 → 05:30 МСК (синхронизация с DP.SC.139 v0.2 и реальным systemd timer) | WP-326 |
 | 0.3 | 2026-05-20 | Переименование: «IWE Stage Controller» → «Контролёр развития». `specializes: DP.ROLE.022 Оркестратор`. Ось контроля параметризуется (ступени Ученика, степени квалификации ШСМ, стиль, домены — одна логика, разные таблицы маркеров). `downstream_consumers` расширены: добавлены Навигатор, Проводник, Диагност-напоминание | WP-326 |
 | 0.4 | 2026-05-20 | Профиль Onboarding — реализован (WP-346): заполнены TBD-поля в §12 (источник = `learning.onboarding_state` миграция 233, маркеры = `OnboardingMarkers` dict в `onboarding_controller.py`). SC = DP.SC.151. | WP-346 |
+| 0.5 | 2026-06-06 | §12 Onboarding: добавлены `UPGRADE_MARKERS` (b_low/b_high/c/e/f/g, WP-349 Ф2), двуосевая модель (DP.ARCH.002 §2б), MCP-инструменты `get_journey_state`/`get_next_onboarding_step` как каноническое «где пилот»/«следующий шаг» (gateway-mcp Ф28 a378127). Миграция 236 (cp_stage + has_diagnosis). | WP-349 |
 
 ## 12. Ось контроля — параметр, не основание для разделения роли
 
@@ -170,7 +171,7 @@ Lock освобождается автоматически при заверше
 | **Development (текущий)** | Ступени Ученика 1-5 + cp.iwe × cp.cre | FORM.089 §6.3 | `learning.cp_assessments` от Диагноста |
 | **Qualification (план)** | Степени квалификации ШСМ 1-8 (Работник → Мастер) | TBD (новая таблица в PD Pack) | TBD (защита квалификации = редкое событие) |
 | **Style (план)** | Признаки сформированного стиля (PD.FORM.098) | TBD | TBD (rhythm + ratio + consistency) |
-| **Onboarding (реализован WP-346)** | Уровни знакомства с платформой (0–10, WP-343) | `OnboardingMarkers` dict в `onboarding_controller.py` (11 строк, триггеры сообщений 0-10) | `learning.onboarding_state` (миграция 233: `msg_N_sent_at`, `slot_count`, `activity_days_count`, `has_subscription`, first_use_* флаги) |
+| **Onboarding (реализован WP-346+WP-349)** | Два измерения: технологическая ось (оснащение T0-T4, DP.ARCH.002) × содержательная (ступень Ученика 1-5 из cp-профиля, DP.SC.132). Маркеры: `OnboardingMarkers` (0-10, WP-343) + `UPGRADE_MARKERS` (b_low/b_high/c/e/f/g, WP-349). **Канонические источники «где пилот» / «следующий шаг»:** `get_journey_state` + `get_next_onboarding_step` (MCP gateway-mcp, Ф28 WP-349, коммит a378127) — используются из любого канала (бот / браузер / claude.ai / VS Code). Бот-команда `/setup` = проекция этих инструментов (Ф30). | `learning.onboarding_state` (миграция 233+236: `msg_N_sent_at`, `cp_stage`, `has_diagnosis`, `slot_count`, `activity_days_count`, `has_subscription`, first_use_* флаги) + `learning.cp_assessments` (содержательная ось) |
 | **Domain (план)** | Освоение конкретной области (системное менеджмент, продукт, ...) | TBD | TBD |
 
 «Контролёр стиля» и «Контролёр развития» — это **не разные роли**, а одна роль с разными профилями. Single Responsibility сохранён: обязанность = «обход + сверка + точечная инициация». Объект внимания (ось) — параметр. Холдер один (`iwe-stage-controller.py`); если профилей становится несколько — это разные systemd timers с разными конфигами, не разные роли.

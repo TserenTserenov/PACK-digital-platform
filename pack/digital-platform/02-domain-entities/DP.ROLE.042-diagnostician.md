@@ -4,7 +4,7 @@ name: Диагност (R28)
 type: role-description
 status: draft
 valid_from: 2026-05-16
-summary: "Роль диалоговой и фоновой диагностики ученика: проводит диалог ≤5 вопросов (три фазы), вычисляет cp-профиль (ступень + bottleneck + recommended_stream + skip_to_stage), сохраняет в learning.cp_assessments. В фоновом режиме — silent-monitoring сигналов инвалидации и подсказки активным ролям (Навигатор / Портной / Аттестатор). Реализует двойной gate FORM.089 §5.1 с Аттестатором."
+summary: "Роль диалоговой и фоновой диагностики ученика: проводит диалог ≤5 вопросов (три фазы), вычисляет cp-профиль (ступень + bottleneck + recommended_stream + skip_to_stage), сохраняет в learning.cp_assessments. Является стартом содержательной оси онбординга (DP.ARCH.002 §2б): диагностика доступна на T1 (free), результат питает get_journey_state (MCP). В фоновом режиме — silent-monitoring сигналов инвалидации и подсказки активным ролям (Навигатор / Портной / Аттестатор). Реализует двойной gate FORM.089 §5.1 с Аттестатором."
 related:
   specializes: [U.RoleAssignment]
   component_of: [DP.ROLE.001]
@@ -19,9 +19,10 @@ related:
     - Аттестатор (cp-подтверждение gate при переходе ступени)
     - Навигатор (bottleneck для ответа «с чего начать»)
     - /progress в боте и браузере (отображение cp-профиля)
+    - get_journey_state MCP (содержательная ось: cp_stage + bottleneck + has_diagnosis → journey_state, WP-349 Ф28)
 created: 2026-05-16
-updated: 2026-05-16
-wp: WP-318
+updated: 2026-06-06
+wp: WP-349
 ---
 
 # Диагност — DP.ROLE.042 (R28)
