@@ -103,6 +103,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.127 | Aux Class Vs Narrative | D | — | — |
 | DP.D.128 | Статический промпт ≠ интерактивный канал | D | — | active |
 | DP.D.129 | Historical Membership Vs Current Channel | D | — | — |
+| DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | D | — | — |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -226,6 +227,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.133 | Backup Restore No 3Way Merge | FM | — | active |
 | DP.FM.134 | Vocabulary Split Aux Subsections | FM | — | — |
 | DP.FM.135 | Projection Rule No Backfill Fallback Mask | FM | — | — |
+| DP.FM.140 | Cutover отключает основной путь, оставляя side-channel активным | FM | — | — |
+| DP.FM.141 | Shared queue без tenant-ключа: dedup-scope распространяется между инстансами | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |

@@ -21,10 +21,10 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 80 |
+| Distinctions (D) | 81 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 121 |
+| Failure Modes (FM) | 123 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 260 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **728** |
+| **Total** | **731** |
 
 ## Distinctions
 
@@ -126,6 +126,7 @@ generated: true
 | DP.D.127 | Aux Class Vs Narrative | — | — |
 | DP.D.128 | Статический промпт ≠ интерактивный канал | — | active |
 | DP.D.129 | Historical Membership Vs Current Channel | — | — |
+| DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | — | — |
 
 ## Methods
 
@@ -538,6 +539,8 @@ generated: true
 | DP.FM.133 | Backup Restore No 3Way Merge | — | active |
 | DP.FM.134 | Vocabulary Split Aux Subsections | — | — |
 | DP.FM.135 | Projection Rule No Backfill Fallback Mask | — | — |
+| DP.FM.140 | Cutover отключает основной путь, оставляя side-channel активным | — | — |
+| DP.FM.141 | Shared queue без tenant-ключа: dedup-scope распространяется между инстансами | — | — |
 
 ## SoTA Annotations
 
@@ -950,6 +953,7 @@ generated: true
 - Missing `summary`: DP.D.127 (DP.D.127-aux-class-vs-narrative.md)
 - Missing `summary`: DP.D.128 (DP.D.128-static-prompt-vs-interactive-channel.md)
 - Missing `summary`: DP.D.129 (DP.D.129-historical-membership-vs-current-channel.md)
+- Missing `summary`: DP.D.130 (DP.D.130-two-axis-onboarding-model.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1260,6 +1264,8 @@ generated: true
 - Missing `summary`: DP.FM.133 (DP.FM.133-backup-restore-no-3way-merge.md)
 - Missing `summary`: DP.FM.134 (DP.FM.134-vocabulary-split-aux-subsections.md)
 - Missing `summary`: DP.FM.135 (DP.FM.135-projection-rule-no-backfill-fallback-mask.md)
+- Missing `summary`: DP.FM.140 (DP.FM.140-cutover-incomplete-side-channel.md)
+- Missing `summary`: DP.FM.141 (DP.FM.141-shared-queue-no-tenant-key.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
