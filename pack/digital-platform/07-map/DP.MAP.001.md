@@ -119,11 +119,11 @@ generated: true
 | DP.D.120 | Type-string runtime drift ≠ File-replace terminology drift | Два класса drift'а вокабуляра. Runtime: writer и resolver обмениваются через string literal без shared enum — новые значения silently попадают в else-ветку. File-replace: переименование термина в файлах через sed — пропущенные места остаются с old name. | active |
 | DP.D.121 | ТОС-горлышко системы ≠ горлышко портфеля проектов | — | active |
 | DP.D.122 | Continuous Trend Vs Point In Time | — | active |
-| DP.D.122 | Статический промпт ≠ интерактивный канал | — | active |
 | DP.D.123 | State-Dependency Test для классификации skills | — | active |
 | DP.D.124 | Агент-персонаж ≠ Агент-рантайм | — | active |
 | DP.D.125 | Два независимых измерения вместо матрицы (технологический тир ⟂ содержательный progress) | — | active |
 | DP.D.126 | Интерфейс ≠ Тир (канал доставки ортогонален технологическому уровню) | — | active |
+| DP.D.128 | Статический промпт ≠ интерактивный канал | — | active |
 
 ## Methods
 
@@ -927,11 +927,11 @@ generated: true
 - Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
 - Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
 - Missing `summary`: DP.D.122 (DP.D.122-continuous-trend-vs-point-in-time.md)
-- Missing `summary`: DP.D.122 (DP.D.122-static-prompt-vs-interactive-channel.md)
 - Missing `summary`: DP.D.123 (DP.D.123-state-dependency-test-for-skill-classification.md)
 - Missing `summary`: DP.D.124 (DP.D.124-agent-persona-vs-runtime.md)
 - Missing `summary`: DP.D.125 (DP.D.125-two-orthogonal-axes-vs-matrix.md)
 - Missing `summary`: DP.D.126 (DP.D.126-interface-vs-tier.md)
+- Missing `summary`: DP.D.128 (DP.D.128-static-prompt-vs-interactive-channel.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
