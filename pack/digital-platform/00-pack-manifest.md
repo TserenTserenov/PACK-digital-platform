@@ -514,6 +514,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.288 | Dual-nudge same-day re-engagement — два нуджа о практике в день доставки контента | M | — | active |
 | DP.M.290 | Explicit next-step numbering — явный номер следующего шага вместо абстрактного "завтра" | M | — | active |
 | DP.M.291 | Patch Object Vs String Path Mock | M | — | — |
+| DP.M.292 | Tier Source Provenance | M | — | — |
+| DP.M.293 | Graceful Degradation Secondary Db Timeout | M | — | — |
+| DP.M.294 | Extraction Report Lifecycle Applied Archive | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

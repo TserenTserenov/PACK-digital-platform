@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 129 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 264 |
+| Methods (M) | 267 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **741** |
+| **Total** | **744** |
 
 ## Distinctions
 
@@ -396,6 +396,9 @@ generated: true
 | DP.M.288 | Dual-nudge same-day re-engagement — два нуджа о практике в день доставки контента | — | active |
 | DP.M.290 | Explicit next-step numbering — явный номер следующего шага вместо абстрактного "завтра" | — | active |
 | DP.M.291 | Patch Object Vs String Path Mock | — | — |
+| DP.M.292 | Tier Source Provenance | — | — |
+| DP.M.293 | Graceful Degradation Secondary Db Timeout | — | — |
+| DP.M.294 | Extraction Report Lifecycle Applied Archive | — | — |
 
 ## Work Products
 
@@ -1188,6 +1191,9 @@ generated: true
 - Missing `summary`: DP.M.288 (DP.M.288-dual-nudge-same-day-reengagement.md)
 - Missing `summary`: DP.M.290 (DP.M.290-explicit-next-step-numbering.md)
 - Missing `summary`: DP.M.291 (DP.M.291-patch-object-vs-string-path-mock.md)
+- Missing `summary`: DP.M.292 (DP.M.292-tier-source-provenance.md)
+- Missing `summary`: DP.M.293 (DP.M.293-graceful-degradation-secondary-db-timeout.md)
+- Missing `summary`: DP.M.294 (DP.M.294-extraction-report-lifecycle-applied-archive.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
