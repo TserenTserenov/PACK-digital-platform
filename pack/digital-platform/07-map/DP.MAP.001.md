@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 81 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 129 |
+| Failure Modes (FM) | 131 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 270 |
+| Methods (M) | 272 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **747** |
+| **Total** | **751** |
 
 ## Distinctions
 
@@ -402,6 +402,8 @@ generated: true
 | DP.M.295 | Digital Twin Derived Over Primitive | — | — |
 | DP.M.296 | Diagnosis Drill Down All Weak Slices | — | — |
 | DP.M.297 | Platform Specific Path From Params Yaml | — | — |
+| DP.M.298 | Fail-closed scope sidecar: ранний парсинг + deny при недоступности сервиса | — | — |
+| DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | — | — |
 
 ## Work Products
 
@@ -557,6 +559,8 @@ generated: true
 | DP.FM.142 | New codepath no retry-symmetry — новый code-path без retry-симметрии с legacy-path | — | active |
 | DP.FM.143 | Ppid Fallback Stale Pidfile Multiagent | — | — |
 | DP.FM.144 | Side Effect Check Blocks Primary Flow | — | — |
+| DP.FM.145 | FDW-только-READ: cross-DB write в SQL-миграции молча провалится | — | — |
+| DP.FM.146 | Unconditional helper return = always-fires gate: гейт срабатывает для всех пользователей | — | — |
 
 ## SoTA Annotations
 
@@ -1200,6 +1204,8 @@ generated: true
 - Missing `summary`: DP.M.295 (DP.M.295-digital-twin-derived-over-primitive.md)
 - Missing `summary`: DP.M.296 (DP.M.296-diagnosis-drill-down-all-weak-slices.md)
 - Missing `summary`: DP.M.297 (DP.M.297-platform-specific-path-from-params-yaml.md)
+- Missing `summary`: DP.M.298 (DP.M.298-fail-closed-scope-sidecar.md)
+- Missing `summary`: DP.M.299 (DP.M.299-rotation-impact-map.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1298,6 +1304,8 @@ generated: true
 - Missing `summary`: DP.FM.142 (DP.FM.142-new-codepath-no-retry-symmetry.md)
 - Missing `summary`: DP.FM.143 (DP.FM.143-ppid-fallback-stale-pidfile-multiagent.md)
 - Missing `summary`: DP.FM.144 (DP.FM.144-side-effect-check-blocks-primary-flow.md)
+- Missing `summary`: DP.FM.145 (DP.FM.145-fdw-read-only-cross-db-write.md)
+- Missing `summary`: DP.FM.146 (DP.FM.146-unconditional-helper-always-fires-gate.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)

@@ -235,6 +235,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.142 | New codepath no retry-symmetry — новый code-path без retry-симметрии с legacy-path | FM | — | active |
 | DP.FM.143 | Ppid Fallback Stale Pidfile Multiagent | FM | — | — |
 | DP.FM.144 | Side Effect Check Blocks Primary Flow | FM | — | — |
+| DP.FM.145 | FDW-только-READ: cross-DB write в SQL-миграции молча провалится | FM | — | — |
+| DP.FM.146 | Unconditional helper return = always-fires gate: гейт срабатывает для всех пользователей | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -520,6 +522,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.295 | Digital Twin Derived Over Primitive | M | — | — |
 | DP.M.296 | Diagnosis Drill Down All Weak Slices | M | — | — |
 | DP.M.297 | Platform Specific Path From Params Yaml | M | — | — |
+| DP.M.298 | Fail-closed scope sidecar: ранний парсинг + deny при недоступности сервиса | M | — | — |
+| DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
