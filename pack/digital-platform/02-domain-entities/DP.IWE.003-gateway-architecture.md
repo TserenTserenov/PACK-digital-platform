@@ -205,10 +205,55 @@ Push в Pack-репо (GitHub)
 
 Лимиты токенов — часть Billing Module (DP.SC.112). Мониторинг: usage per user_id, alert при превышении порога.
 
+## 10. Единственная ответственность Gateway (ADR, WP-402)
+
+> **Источник:** ИТ-встреча 07.06.2026 (Андрей Смирнов) + peer-сессия WP-402 (Claude + Kimi, 08.06.2026).
+> **Статус:** принято. Защищает паттерн от рецидива — backend-state в gateway.
+
+### 10.1. Тест единственной ответственности
+
+**Тест Андрея (дословно):** посмотри на конфиги gateway — если там только URL бэкендов (три MCP-сервера) → правильный gateway. Если там БД, GitHub-токены, что угодно кроме URL → gateway взял на себя прикладную логику.
+
+**Аналогия:** регулировщик только направляет, не печёт пирожки.
+
+### 10.2. Принцип-арбитр
+
+> **Gateway маршрутизирует ПО правилам, но не ВЛАДЕЕТ состоянием правил.**
+
+Разрешает кажущийся конфликт «маршрутизация — функция gateway, значит таблица маршрутов имеет право жить в gateway»:
+
+- Gateway **делает** fan-out routing по списку backends для конкретного `user_id` — это его роль.
+- Gateway **не делает** CRUD состояния «какой backend привязан к какому пользователю» — это прикладные данные.
+- Источник истины состояния (таблица) принадлежит **control-plane** (отдельный сервис). Gateway получает готовый список backend-URL по HTTP (`GET /backends/{userId}`) и роутит. В конфиге gateway — `CONTROL_PLANE_URL` (ещё один URL), не `REGISTRY_DB_URL` (Neon-коннект).
+
+Тот же паттерн применяется к subscription (фаза Р4): источник истины (подписка) вне gateway, gateway читает claim из JWT (инжектится Ory token hook через `HYDRA_HOOK_SECRET`) + graceful degradation (expired → 401 → silent refresh), не из `SUBSCRIPTION_DATABASE_URL`. На момент принятия ADR subscription ещё читается из БД — перевод запланирован, не выполнен.
+
+### 10.3. Граница ответственности
+
+| Остаётся в Gateway (маршрутизация) | Выносится (прикладная логика / БД) |
+|---|---|
+| Ory JWT auth | `scope.ts` — bridge write-scope (читает INDICATORS БД) → отдельный сервис |
+| Fan-out по backend-URL | `agent-status.ts` — agent registry (БД) → отдельный сервис / agent-runner |
+| Rate-limit, circuit-breaker | `backend-registry.ts` — BYOB per-user (БД) → control-plane |
+| `knowledge-gate.ts` — HTTP-валидация backend (БД нет; упростить с 7 проверок KG-01..07 до базовой HTTP-connectivity) | subscription/tier — переводится на JWT-claim + graceful degradation |
+| `agent-tools.ts` — JSON-схемы proxy (БД нет) | IWE system prompt (~700 строк), Hermes proxy, GitHub webhook handler |
+| `tool-tiers.ts` — tier-policy (pure-function, БД нет) | — |
+
+**Критерий выноса (однозначный):** модуль открывает соединение с Neon → не gateway. Исключение отсутствует: `knowledge-gate.ts` и `tool-tiers.ts` работают без БД (HTTP-валидация и pure-function соответственно) и потому остаются — это подтверждает критерий, а не нарушает его.
+
+### 10.4. BYOB и control-plane (двухтактно)
+
+- **Такт 1 (WP-402):** `backend_registry` сейчас — задел (0 строк в проде, env `REGISTRY_DB_URL` помечен `optional until BYOB is live`, [DP.D.036](../01-domain-contract/DP.D.036-byob-knowledge-architecture.md) status=draft). Удаляется из gateway как dead weight; fan-out остаётся на статических backends из env. Удаление, не миграция — мигрировать нечего.
+- **Такт 2 (BYOB в прод, отдельная фаза):** control-plane владеет `backend_registry`; gateway читает `GET /backends/{userId}`. BYOB работает без редеплоя gateway — динамика на стороне control-plane.
+
+### 10.5. Развёртывание без downtime
+
+Blue/green с health-check вместо in-place миграции: gateway v2 поднимается отдельным контейнером; health-check `/health` возвращает 200 только если успешно забиндил backend-URL из env (рантайм-проверка теста §10.1); оркестратор переключает трафик после успешного health-check; rollback мгновенный.
+
 ## 9. Связанные документы
 
 - [DP.ARCH.001](DP.ARCH.001-platform-architecture.md) — архитектура платформы (принципы ЭМОГССБ)
 - [DP.EXOCORTEX.001](DP.EXOCORTEX.001-modular-exocortex.md) — модульный экзокортекс
 - [DP.IWE.001](DP.IWE.001-intelligent-working-environment.md) — IWE как концепция
 - [DP.IWE.002](DP.IWE.002-iwe-template-and-setup.md) — шаблон и setup
-- [DP.D.036](../../../02-domain-entities/) — BYOB Knowledge Architecture
+- [DP.D.036](../01-domain-contract/DP.D.036-byob-knowledge-architecture.md) — BYOB Knowledge Architecture
