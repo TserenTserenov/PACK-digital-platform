@@ -517,6 +517,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.292 | Tier Source Provenance | M | — | — |
 | DP.M.293 | Graceful Degradation Secondary Db Timeout | M | — | — |
 | DP.M.294 | Extraction Report Lifecycle Applied Archive | M | — | — |
+| DP.M.295 | Digital Twin Derived Over Primitive | M | — | — |
+| DP.M.296 | Diagnosis Drill Down All Weak Slices | M | — | — |
+| DP.M.297 | Platform Specific Path From Params Yaml | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

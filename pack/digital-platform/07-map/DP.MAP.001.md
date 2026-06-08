@@ -27,7 +27,7 @@ generated: true
 | Failure Modes (FM) | 129 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 267 |
+| Methods (M) | 270 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **744** |
+| **Total** | **747** |
 
 ## Distinctions
 
@@ -399,6 +399,9 @@ generated: true
 | DP.M.292 | Tier Source Provenance | — | — |
 | DP.M.293 | Graceful Degradation Secondary Db Timeout | — | — |
 | DP.M.294 | Extraction Report Lifecycle Applied Archive | — | — |
+| DP.M.295 | Digital Twin Derived Over Primitive | — | — |
+| DP.M.296 | Diagnosis Drill Down All Weak Slices | — | — |
+| DP.M.297 | Platform Specific Path From Params Yaml | — | — |
 
 ## Work Products
 
@@ -1194,6 +1197,9 @@ generated: true
 - Missing `summary`: DP.M.292 (DP.M.292-tier-source-provenance.md)
 - Missing `summary`: DP.M.293 (DP.M.293-graceful-degradation-secondary-db-timeout.md)
 - Missing `summary`: DP.M.294 (DP.M.294-extraction-report-lifecycle-applied-archive.md)
+- Missing `summary`: DP.M.295 (DP.M.295-digital-twin-derived-over-primitive.md)
+- Missing `summary`: DP.M.296 (DP.M.296-diagnosis-drill-down-all-weak-slices.md)
+- Missing `summary`: DP.M.297 (DP.M.297-platform-specific-path-from-params-yaml.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
