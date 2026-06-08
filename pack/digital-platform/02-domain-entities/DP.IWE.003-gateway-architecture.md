@@ -236,10 +236,11 @@ Push в Pack-репо (GitHub)
 | Fan-out по backend-URL | `agent-status.ts` — agent registry (БД) → отдельный сервис / agent-runner |
 | Rate-limit, circuit-breaker | `backend-registry.ts` — BYOB per-user (БД) → control-plane |
 | `knowledge-gate.ts` — HTTP-валидация backend (БД нет; упростить с 7 проверок KG-01..07 до базовой HTTP-connectivity) | subscription/tier — переводится на JWT-claim + graceful degradation |
-| `agent-tools.ts` — JSON-схемы proxy (БД нет) | IWE system prompt (~700 строк), Hermes proxy, GitHub webhook handler |
+| `agent-tools.ts` — JSON-схемы proxy (БД нет) | GitHub webhook handler — installations БД → `agent-runner` / `github-integration` |
 | `tool-tiers.ts` — tier-policy (pure-function, БД нет) | — |
+| Hermes proxy (`HERMES_RUNTIME_URL` — URL, не Neon), IWE system prompt (~700 строк статики) — остаются по тесту Андрея | — |
 
-**Критерий выноса (однозначный):** модуль открывает соединение с Neon → не gateway. Исключение отсутствует: `knowledge-gate.ts` и `tool-tiers.ts` работают без БД (HTTP-валидация и pure-function соответственно) и потому остаются — это подтверждает критерий, а не нарушает его.
+**Критерий выноса (однозначный):** модуль открывает соединение с Neon → не gateway. Исключение отсутствует: `knowledge-gate.ts`, `tool-tiers.ts`, Hermes proxy, IWE system prompt работают без Neon (HTTP-валидация / pure-function / URL-proxy / статика) и потому остаются — это подтверждает критерий, а не нарушает его. *Чистка index.ts от объёмной статики — отдельный refactor-РП (не нарушение принципа, поэтому вне scope WP-402).*
 
 ### 10.4. BYOB и control-plane (двухтактно)
 
