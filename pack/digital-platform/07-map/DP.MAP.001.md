@@ -34,13 +34,13 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 51 |
+| ROLE (ROLE) | 52 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 120 |
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **752** |
+| **Total** | **753** |
 
 ## Distinctions
 
@@ -773,6 +773,7 @@ generated: true
 | DP.ROLE.064 | Сторож новых задач (issue watcher) | Специализированная операционная роль: фоновый скрипт, который ежедневно обходит github-репо IWE, выявляет новые задачи (issues), классифицирует важность и шлёт дайджест пилоту в Telegram. Скрипт ≠ агент (фиксированный flow, без LLM). Один исполнитель = одна роль (специализированный агент по имени роли). | draft |
 | DP.ROLE.065 | hermes-proxy-tool | — | draft |
 | DP.ROLE.066 | Плановик (Planner) | Роль операционного планирования (HOW MUCH / WHEN): упаковка приоритетов месяца от Стратега (R1) в рабочие продукты недели с бюджетами, распределение по дням, удержание WIP-лимита. Выделена из R1 Стратега (DP.ROLE.012), который сужается до стратегирования (WHAT/WHY). | draft |
+| DP.ROLE.067 | Онбордер | — | draft |
 
 ### RUNBOOK
 
@@ -987,6 +988,7 @@ generated: true
 - Missing `summary`: DP.IWE.011 (DP.IWE.011-runtime-host-contract.md)
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-decomposer.md)
 - Missing `summary`: DP.ROLE.065 (DP.ROLE.065-hermes-proxy-tool.md)
+- Missing `summary`: DP.ROLE.067 (DP.ROLE.067-onboarder.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)

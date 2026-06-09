@@ -6,7 +6,7 @@ version: 1
 status: draft
 created: 2026-06-09
 wp: WP-406
-roles: [DP.ROLE.NNN]
+roles: [DP.ROLE.067]
 layer: L2-Platform
 related:
   parent: DP.SC.168
