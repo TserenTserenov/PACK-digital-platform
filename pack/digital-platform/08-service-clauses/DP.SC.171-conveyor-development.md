@@ -10,7 +10,7 @@ layer: L2-Platform
 related:
   realizes: []
   uses:
-    - DP.ROLE.067
+    - DP.ROLE.072
     - DP.ROLE.068
     - DP.ROLE.069
     - DP.ROLE.070
@@ -103,9 +103,9 @@ wp: WP-403
 
 | Сервис | Роль | Триггер |
 |--------|------|---------|
-| WP Gate Ritual | DP.ROLE.067 | 👤 Начало сессии разработчика |
+| WP Gate Ritual | DP.ROLE.072 | 👤 Начало сессии разработчика |
 | IntegrationGate / ArchGate | DP.ROLE.069 | 👤 Новый инструмент / сложная задача |
-| Capture-to-Pack | DP.ROLE.067 | ⏰ Во время станции Работа |
+| Capture-to-Pack | DP.ROLE.072 | ⏰ Во время станции Работа |
 | Peer-review | DP.ROLE.070 | 👤 Готовность к проверке |
 | Merge gate | DP.ROLE.071 | 👤 PR после верификации |
 
@@ -116,10 +116,10 @@ wp: WP-403
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
 | 1 | Сырая нужда → карточка задачи | DP.ROLE.068 | Ручная постановка |
-| 2 | Получение задачи из очереди | DP.ROLE.067 | Диспетчер (DP.ROLE.045) |
-| 3 | WP Gate + открытие РП | DP.ROLE.067 | WP Gate Ritual |
-| 4 | Проектирование (ArchGate при необходимости) | DP.ROLE.069 / DP.ROLE.067 | IntegrationGate |
-| 5 | Реализация + захват знания | DP.ROLE.067 | Код + Capture-to-Pack |
+| 2 | Получение задачи из очереди | DP.ROLE.072 | Диспетчер (DP.ROLE.045) |
+| 3 | WP Gate + открытие РП | DP.ROLE.072 | WP Gate Ritual |
+| 4 | Проектирование (ArchGate при необходимости) | DP.ROLE.069 / DP.ROLE.072 | IntegrationGate |
+| 5 | Реализация + захват знания | DP.ROLE.072 | Код + Capture-to-Pack |
 | 6 | Проверка | DP.ROLE.070 | Peer-review / verify |
 | 7 | Merge + закрытие | DP.ROLE.071 | Merge gate |
 

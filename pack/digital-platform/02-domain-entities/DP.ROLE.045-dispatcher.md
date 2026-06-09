@@ -12,14 +12,14 @@ related:
   uses:
     - DP.ROLE.039        # Peer Agent — sibling (peer может писать task для другого peer)
     - DP.ROLE.044        # Notification Dispatcher — уведомление пилота о P0-failed
-    - DP.ROLE.067        # Разработчик-исполнитель — потребитель задач конвейера
+    - DP.ROLE.072        # Разработчик-исполнитель — потребитель задач конвейера
     - DP.ROLE.071        # Ведущий разработчик — контроль WIP и приоритетов очереди
     - RemoteTrigger API  # claude.ai CCR-канал
     - inbox/agent/       # task/result хранилище
   downstream_consumers:
     - DP.ROLE.001 IWE Creator — пилот видит status pending tasks и забирает results
     - DP.ROLE.039 Peer Agent — peer ставит task для другого peer через тот же канал
-    - DP.ROLE.067 Разработчик-исполнитель — получает задачи конвейера из очереди
+    - DP.ROLE.072 Разработчик-исполнитель — получает задачи конвейера из очереди
     - Scout CCR — пишет findings + auto-promotes в tasks/ для P0
 created: 2026-05-17
 updated: 2026-06-09
@@ -145,7 +145,7 @@ DP.ROLE.045 Dispatcher
 | DP.ROLE.044 Notification Dispatcher | Потребитель Dispatcher'а: при P0-failed → send_telegram_message |
 | DP.ROLE.053 Декомпозитор | Источник task'ов: при появлении новой РП open-loop ≥3h может предложить разбиение через template `task: artifactor-stages` |
 | DP.ROLE.027 Навигатор | Источник task'ов: может ставить «retro по неделе» через template `retro` |
-| DP.ROLE.067 Разработчик-исполнитель | Потребитель задач конвейера — получает из очереди |
+| DP.ROLE.072 Разработчик-исполнитель | Потребитель задач конвейера — получает из очереди |
 | DP.ROLE.071 Ведущий разработчик | Контроль WIP и приоритетов очереди команды |
 
 ---
