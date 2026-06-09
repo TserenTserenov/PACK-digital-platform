@@ -226,19 +226,21 @@ Push в Pack-репо (GitHub)
 - Gateway **не делает** CRUD состояния «какой backend привязан к какому пользователю» — это прикладные данные.
 - Источник истины состояния (таблица) принадлежит **control-plane** (отдельный сервис). Gateway получает готовый список backend-URL по HTTP (`GET /backends/{userId}`) и роутит. В конфиге gateway — `CONTROL_PLANE_URL` (ещё один URL), не `REGISTRY_DB_URL` (Neon-коннект).
 
-Тот же паттерн применяется к subscription (фаза Р4): источник истины (подписка) вне gateway, gateway читает claim из JWT (инжектится Ory token hook через `HYDRA_HOOK_SECRET`) + graceful degradation (expired → 401 → silent refresh), не из `SUBSCRIPTION_DATABASE_URL`. На момент принятия ADR subscription ещё читается из БД — перевод запланирован, не выполнен.
+Тот же паттерн применяется к subscription (фаза Р4): источник истины (подписка) вне gateway, gateway читает claim из JWT (инжектится Ory token hook через `HYDRA_HOOK_SECRET`) + graceful degradation (expired → 401 → silent refresh), не из `SUBSCRIPTION_DATABASE_URL`. **Выполнено (WP-402 Р4, 2026-06-08):** `SUBSCRIPTION_DATABASE_URL` убран из роутинг-пути gateway; token hook (`/hydra-hook/token`) читает БД как endpoint выдачи claims — легитимный остаток, признанный в WP-402 Р7.**
 
 ### 10.3. Граница ответственности
 
 | Остаётся в Gateway (маршрутизация) | Выносится (прикладная логика / БД) |
 |---|---|
-| Ory JWT auth | `scope.ts` — bridge write-scope (читает INDICATORS БД) → отдельный сервис |
-| Fan-out по backend-URL | `agent-status.ts` — agent registry (БД) → отдельный сервис / agent-runner |
-| Rate-limit, circuit-breaker | `backend-registry.ts` — BYOB per-user (БД) → control-plane |
-| `knowledge-gate.ts` — HTTP-валидация backend (БД нет; упростить с 7 проверок KG-01..07 до базовой HTTP-connectivity) | subscription/tier — переводится на JWT-claim + graceful degradation |
-| `agent-tools.ts` — JSON-схемы proxy (БД нет) | GitHub webhook handler — installations БД → `agent-runner` / `github-integration` |
-| `tool-tiers.ts` — tier-policy (pure-function, БД нет) | — |
-| Hermes proxy (`HERMES_RUNTIME_URL` — URL, не Neon), IWE system prompt (~700 строк статики) — остаются по тесту Андрея | — |
+| Ory JWT auth | `scope.ts` + `provisionBridgeScopes` — bridge write-scope и provisioning (INDICATORS БД) → `bridge-scope-service` (WP-402 Р1, завершено 2026-06-09) |
+| Fan-out по backend-URL | `agent-status.ts` — agent registry (БД) → `agent-status-service` (WP-402 Р2) |
+| Rate-limit, circuit-breaker | `backend-registry.ts` — BYOB per-user (БД) → control-plane (удалён как dead weight, WP-402 Р3) |
+| `knowledge-gate.ts` — HTTP-валидация backend (БД нет) | subscription/tier — переведено на JWT-claim (WP-402 Р4) |
+| `agent-tools.ts` — JSON-схемы proxy (БД нет) | GitHub webhook handler — installations БД → `github-integration-service` (WP-402 Р6) |
+| `tool-tiers.ts` — tier-policy (pure-function, БД нет) | `get_user_context`, BYOK, consent, cognitive-brief → `user-profile-service` / `learning-context-service` (WP-402 Р8–Р9) |
+| Hermes proxy (`HERMES_RUNTIME_URL` — URL, не Neon), IWE system prompt (~700 строк статики) | BYOK-management (`list/grant/revoke_llm_key`) → `user-profile-service` (WP-402 Р11) |
+
+**Выполнено (WP-402, 2026-06-09):** gateway на роутинг-пути не имеет Neon-коннектов. `INDICATORS_DATABASE_URL`, `SUBSCRIPTION_DATABASE_URL` (роутинг), `DATABASE_URL` (роутинг, кроме token hook), `LEARNING_DATABASE_URL` убраны. Остаётся `SUBSCRIPTION_DATABASE_URL` только в token hook endpoint (`/hydra-hook/token`) — endpoint выдачи claims, не роутер, признан легитимным остатком в WP-402 Р7.
 
 **Критерий выноса (однозначный):** модуль открывает соединение с Neon → не gateway. Исключение отсутствует: `knowledge-gate.ts`, `tool-tiers.ts`, Hermes proxy, IWE system prompt работают без Neon (HTTP-валидация / pure-function / URL-proxy / статика) и потому остаются — это подтверждает критерий, а не нарушает его. *Чистка index.ts от объёмной статики — отдельный refactor-РП (не нарушение принципа, поэтому вне scope WP-402).*
 
