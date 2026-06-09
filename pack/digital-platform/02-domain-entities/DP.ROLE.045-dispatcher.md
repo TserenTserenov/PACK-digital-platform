@@ -12,14 +12,17 @@ related:
   uses:
     - DP.ROLE.039        # Peer Agent — sibling (peer может писать task для другого peer)
     - DP.ROLE.044        # Notification Dispatcher — уведомление пилота о P0-failed
+    - DP.ROLE.067        # Разработчик-исполнитель — потребитель задач конвейера
+    - DP.ROLE.071        # Ведущий разработчик — контроль WIP и приоритетов очереди
     - RemoteTrigger API  # claude.ai CCR-канал
     - inbox/agent/       # task/result хранилище
   downstream_consumers:
     - DP.ROLE.001 IWE Creator — пилот видит status pending tasks и забирает results
     - DP.ROLE.039 Peer Agent — peer ставит task для другого peer через тот же канал
+    - DP.ROLE.067 Разработчик-исполнитель — получает задачи конвейера из очереди
     - Scout CCR — пишет findings + auto-promotes в tasks/ для P0
 created: 2026-05-17
-updated: 2026-05-17
+updated: 2026-06-09
 wp: WP-324
 ---
 
@@ -58,6 +61,9 @@ wp: WP-324
 | При P0-failed — нотифицировать | `send_telegram_message` через DP.ROLE.044 |
 | Архивировать >7 дней | Scout sweeper: `mv tasks/X.md archive/2026/` + соответствующий result |
 | Cleanup stale assigned (>2h) | Scout sweeper: `status: assigned → pending` или `failed` |
+| Распознать задачу конвейера | `wp: WP-4xx` OR `tags: [conveyor]` OR `tier_required: T4+` — парсинг frontmatter |
+| Поставить в очередь команды | `status: pending → status: queued-for-team` — запись в task-файл |
+| Уведомить команду | Ping в peer-status или Telegram через DP.ROLE.044 |
 
 ---
 
@@ -125,6 +131,7 @@ DP.ROLE.045 Dispatcher
 3. **Lock-based concurrency.** Два параллельных dispatcher не запускаются. Lock-файл с TTL 50 мин; при истечении — следующий dispatcher cleanup'ает и работает.
 4. **No bash injection.** Dispatcher не выполняет произвольный bash из task body — только через template substitution + предусмотренный канал.
 5. **Idempotency на task_id.** Повторный запуск dispatcher для уже `assigned` task — no-op (только проверяет trigger_id status, не создаёт новый).
+6. **Push-to-queue, not assign.** Диспетчер ставит задачу конвейера в очередь команды (`queued-for-team`), не назначает конкретному разработчику. Конкретный разработчик берёт задачу сам (pull) или получает от Ведущего (DP.ROLE.071).
 6. **Audit-trail обязателен.** Каждое изменение статуса = git commit с осмысленным message (`dispatch(WP-324): TASK-X pending→assigned via trig_NNNN`).
 
 ---
@@ -138,6 +145,8 @@ DP.ROLE.045 Dispatcher
 | DP.ROLE.044 Notification Dispatcher | Потребитель Dispatcher'а: при P0-failed → send_telegram_message |
 | DP.ROLE.053 Декомпозитор | Источник task'ов: при появлении новой РП open-loop ≥3h может предложить разбиение через template `task: artifactor-stages` |
 | DP.ROLE.027 Навигатор | Источник task'ов: может ставить «retro по неделе» через template `retro` |
+| DP.ROLE.067 Разработчик-исполнитель | Потребитель задач конвейера — получает из очереди |
+| DP.ROLE.071 Ведущий разработчик | Контроль WIP и приоритетов очереди команды |
 
 ---
 

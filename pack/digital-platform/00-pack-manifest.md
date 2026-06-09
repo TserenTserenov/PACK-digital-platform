@@ -592,7 +592,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.064 | Сторож новых задач (issue watcher) | ROLE | Специализированная операционная роль: фоновый скрипт, который ежедневно обходит github-репо IWE, выявляет новые задачи (issues), классифицирует важность и шлёт дайджест пилоту в Telegram. Скрипт ≠ агент (фиксированный flow, без LLM). Один исполнитель = одна роль (специализированный агент по имени роли). | draft |
 | DP.ROLE.065 | hermes-proxy-tool | ROLE | — | draft |
 | DP.ROLE.066 | Плановик (Planner) | ROLE | Роль операционного планирования (HOW MUCH / WHEN): упаковка приоритетов месяца от Стратега (R1) в рабочие продукты недели с бюджетами, распределение по дням, удержание WIP-лимита. Выделена из R1 Стратега (DP.ROLE.012), который сужается до стратегирования (WHAT/WHY). | draft |
+| DP.ROLE.067 | Разработчик-исполнитель IWE | ROLE | Член команды разработки IWE (T4+ / TD1). Ведёт задачу через 6 станций конвейера WP-403, обеспечивая двойной выход: работающий код/артефакт + зафиксированное знание. | draft |
 | DP.ROLE.067 | Онбордер | ROLE | — | draft |
+| DP.ROLE.068 | Постановщик задачи IWE | ROLE | Член команды T4+. Превращает сырую нужду (баг, идея, замечание) в оформленную задачу для конвейера WP-403 с тегом маршрутизации, классом верификации и критерием приёмки. | draft |
+| DP.ROLE.069 | Архитектор конвейера IWE | ROLE | Член команды T4+. Проходит ArchGate и IntegrationGate для задач конвейера WP-403: обещание, сценарии, роли, границы. Сложные решения — согласование с Ведущим (TD1+TA4). | draft |
+| DP.ROLE.070 | Верификатор конвейера IWE | ROLE | Член команды T4+ (другой разработчик). Независимая проверка работы Разработчика-исполнителя по эталону перед закрытием РП. Возвращает PASS/FAIL с обоснованием. | draft |
+| DP.ROLE.071 | Ведущий разработчик IWE | ROLE | Ведущий разработчик команды IWE (TD1+TA4). Согласовывает merge, принимает архитектурные решения высокого уровня, подписывает рост в команде. | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -715,6 +720,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.168 | Онбординг IWE — зонтичное обещание | SC | — | draft |
 | DP.SC.169 | conductor-lite | SC | — | draft |
 | DP.SC.170 | onboarder | SC | — | draft |
+| DP.SC.171 | conveyor-development | SC | — | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
