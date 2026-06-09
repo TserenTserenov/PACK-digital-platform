@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 81 |
+| Distinctions (D) | 83 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 131 |
@@ -40,7 +40,7 @@ generated: true
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **759** |
+| **Total** | **761** |
 
 ## Distinctions
 
@@ -127,6 +127,8 @@ generated: true
 | DP.D.128 | Статический промпт ≠ интерактивный канал | — | active |
 | DP.D.129 | Historical Membership Vs Current Channel | — | — |
 | DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | — | — |
+| DP.D.131 | Костюм ≠ Оснащение (тир) | — | active |
+| DP.D.132 | Первокурсник ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | — | active |
 
 ## Methods
 
@@ -773,12 +775,12 @@ generated: true
 | DP.ROLE.064 | Сторож новых задач (issue watcher) | Специализированная операционная роль: фоновый скрипт, который ежедневно обходит github-репо IWE, выявляет новые задачи (issues), классифицирует важность и шлёт дайджест пилоту в Telegram. Скрипт ≠ агент (фиксированный flow, без LLM). Один исполнитель = одна роль (специализированный агент по имени роли). | draft |
 | DP.ROLE.065 | hermes-proxy-tool | — | draft |
 | DP.ROLE.066 | Плановик (Planner) | Роль операционного планирования (HOW MUCH / WHEN): упаковка приоритетов месяца от Стратега (R1) в рабочие продукты недели с бюджетами, распределение по дням, удержание WIP-лимита. Выделена из R1 Стратега (DP.ROLE.012), который сужается до стратегирования (WHAT/WHY). | draft |
-| DP.ROLE.067 | Разработчик-исполнитель IWE | Член команды разработки IWE (T4+ / TD1). Ведёт задачу через 6 станций конвейера WP-403, обеспечивая двойной выход: работающий код/артефакт + зафиксированное знание. | draft |
 | DP.ROLE.067 | Онбордер | — | draft |
 | DP.ROLE.068 | Постановщик задачи IWE | Член команды T4+. Превращает сырую нужду (баг, идея, замечание) в оформленную задачу для конвейера WP-403 с тегом маршрутизации, классом верификации и критерием приёмки. | draft |
 | DP.ROLE.069 | Архитектор конвейера IWE | Член команды T4+. Проходит ArchGate и IntegrationGate для задач конвейера WP-403: обещание, сценарии, роли, границы. Сложные решения — согласование с Ведущим (TD1+TA4). | draft |
 | DP.ROLE.070 | Верификатор конвейера IWE | Член команды T4+ (другой разработчик). Независимая проверка работы Разработчика-исполнителя по эталону перед закрытием РП. Возвращает PASS/FAIL с обоснованием. | draft |
 | DP.ROLE.071 | Ведущий разработчик IWE | Ведущий разработчик команды IWE (TD1+TA4). Согласовывает merge, принимает архитектурные решения высокого уровня, подписывает рост в команде. | draft |
+| DP.ROLE.072 | Разработчик-исполнитель IWE | Член команды разработки IWE (T4+ / TD1). Ведёт задачу через 6 станций конвейера WP-403, обеспечивая двойной выход: работающий код/артефакт + зафиксированное знание. | draft |
 
 ### RUNBOOK
 
@@ -982,6 +984,8 @@ generated: true
 - Missing `summary`: DP.D.128 (DP.D.128-static-prompt-vs-interactive-channel.md)
 - Missing `summary`: DP.D.129 (DP.D.129-historical-membership-vs-current-channel.md)
 - Missing `summary`: DP.D.130 (DP.D.130-two-axis-onboarding-model.md)
+- Missing `summary`: DP.D.131 (DP.D.131-costume-vs-equipment.md)
+- Missing `summary`: DP.D.132 (DP.D.132-firstokursnik-vs-member.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
