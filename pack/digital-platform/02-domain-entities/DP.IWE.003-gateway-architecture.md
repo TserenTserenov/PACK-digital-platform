@@ -253,6 +253,23 @@ Push в Pack-репо (GitHub)
 
 Blue/green с health-check вместо in-place миграции: gateway v2 поднимается отдельным контейнером; health-check `/health` возвращает 200 только если успешно забиндил backend-URL из env (рантайм-проверка теста §10.1); оркестратор переключает трафик после успешного health-check; rollback мгновенный.
 
+### 10.6. Технический долг: DB-fallback на Try1/Try2 путях (known debt, у Андрея)
+
+`validateOryToken` содержит три пути проверки токена:
+
+| Путь | Тип токена | DB-fallback | Статус |
+|------|-----------|-------------|--------|
+| Try0 (JWT) | JWT access token | Убран (WP-402 Р16, 2026-06-09) — claim `ext.has_subscription` инжектируется Hydra hook (Variant D), всегда boolean | ✅ завершено |
+| Try1 (opaque) | Opaque access token | Остаётся: `/userinfo` не возвращает `ext`-claims → DB-lookup единственный способ получить has_subscription | Known debt |
+| Try2 (Kratos) | Kratos session | Остаётся: `/sessions/whoami` не знает Hydra-claims → DB-lookup обязателен | Known debt |
+
+**Try1/Try2 — архитектурная задача Андрея.** Варианты решения:
+- (А) Выдавать только JWT-токены и запрещать opaque/session-пути для подписанных клиентов.
+- (Б) Вынести DB-lookup из gateway в отдельный сервис (subscription-resolver) — gateway остаётся без Neon, делегирует HTTP-вызов.
+- (В) Настроить Ory Hydra так, чтобы `/userinfo` возвращал `ext`-claims аналогично JWT.
+
+До решения `SUBSCRIPTION_DATABASE_URL` в Try1/Try2 — легитимный остаток (архитектурная граница, не нарушение принципа §10.1). Принятие решения — у Андрея.
+
 ## 9. Связанные документы
 
 - [DP.ARCH.001](DP.ARCH.001-platform-architecture.md) — архитектура платформы (принципы ЭМОГССБ)
