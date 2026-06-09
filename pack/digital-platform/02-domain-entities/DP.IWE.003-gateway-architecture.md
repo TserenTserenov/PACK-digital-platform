@@ -253,22 +253,17 @@ Push в Pack-репо (GitHub)
 
 Blue/green с health-check вместо in-place миграции: gateway v2 поднимается отдельным контейнером; health-check `/health` возвращает 200 только если успешно забиндил backend-URL из env (рантайм-проверка теста §10.1); оркестратор переключает трафик после успешного health-check; rollback мгновенный.
 
-### 10.6. Технический долг: DB-fallback на Try1/Try2 путях (known debt, у Андрея)
+### 10.6. Результат WP-402 Р16: роутинг-путь полностью без DB-fallback
 
-`validateOryToken` содержит три пути проверки токена:
+`validateOryToken` — итоговое состояние после WP-402 Р16 (2026-06-09):
 
-| Путь | Тип токена | DB-fallback | Статус |
-|------|-----------|-------------|--------|
-| Try0 (JWT) | JWT access token | Убран (WP-402 Р16, 2026-06-09) — claim `ext.has_subscription` инжектируется Hydra hook (Variant D), всегда boolean | ✅ завершено |
-| Try1 (opaque) | Opaque access token | Остаётся: `/userinfo` не возвращает `ext`-claims → DB-lookup единственный способ получить has_subscription | Known debt |
-| Try2 (Kratos) | Kratos session | Остаётся: `/sessions/whoami` не знает Hydra-claims → DB-lookup обязателен | Known debt |
+| Путь | Тип токена | Логика подписки | Статус |
+|------|-----------|-----------------|--------|
+| Try0 (JWT) | JWT access token | Claim `ext.has_subscription` из Hydra hook (Variant D), всегда boolean. `?? false` для legacy-токенов. | ✅ завершено |
+| Try1 (opaque) | Opaque access token | `hasSubscription` выводится из тира через `user-profile-service /tier`: T2/T3/T4 → true, T1 → false. Один HTTP-вызов вместо DB+HTTP. | ✅ завершено |
+| Try2 (Kratos) | Kratos session | Удалён. Подтверждено мёртвым кодом — ни бот, ни браузер, ни другие клиенты не несут Kratos session token в gateway. | ✅ удалён |
 
-**Try1/Try2 — архитектурная задача Андрея.** Варианты решения:
-- (А) Выдавать только JWT-токены и запрещать opaque/session-пути для подписанных клиентов.
-- (Б) Вынести DB-lookup из gateway в отдельный сервис (subscription-resolver) — gateway остаётся без Neon, делегирует HTTP-вызов.
-- (В) Настроить Ory Hydra так, чтобы `/userinfo` возвращал `ext`-claims аналогично JWT.
-
-До решения `SUBSCRIPTION_DATABASE_URL` в Try1/Try2 — легитимный остаток (архитектурная граница, не нарушение принципа §10.1). Принятие решения — у Андрея.
+**`SUBSCRIPTION_DATABASE_URL` остаётся только в Hydra token hook** (`/hydra-hook/token`) — endpoint выдачи claims, не роутинг-путь. Это легитимный остаток, зафиксированный в §10.4.
 
 ## 9. Связанные документы
 
