@@ -5,7 +5,7 @@ valid_from: 2026-06-10
 owner: platform
 schema_version: 1
 source: peer-session 2026-06-10-11-wp406-f6-artifacts (WP-406 Ф6)
-related: [DP.SC.173, DP.ROLE.073, DP.ROLE.067, DP.SC.170]
+related: [DP.SC.170, DP.ROLE.067]
 ---
 
 # Calibration Matrix — P1-P9 Value Milestones
@@ -15,9 +15,9 @@ related: [DP.SC.173, DP.ROLE.073, DP.ROLE.067, DP.SC.170]
 на момент MVP; план валидации — как проверить что прокси работает.
 
 > **Архитектурное правило:** `user_milestones` хранит факты (кто что пережил).
-> Логика «когда предлагать следующую пользу» — в Дорожнике (DP.SC.173).
+> Логика «когда предлагать следующую пользу» — в Онбордере Фаза 2 (DP.SC.170 §11).
 > Колонка `milestone_p_class` (pre/post onboarding) — не хранится в схеме;
-> Дорожник проверяет `onboarding_complete` + `user_milestones` напрямую.
+> Онбордер Фаза 2 проверяет `onboarding_complete` + `user_milestones` напрямую.
 
 ## Таблица
 
@@ -28,9 +28,9 @@ related: [DP.SC.173, DP.ROLE.073, DP.ROLE.067, DP.SC.170]
 | P3 | Марафон на регулярной основе | Пользователь подписан на марафон И получил хотя бы 3 урока (`marathon_checkins >= 3`) | high | INSERT после 3-го зафиксированного чек-ина в `marathon_state` | Retention 14d у когорты has_p3=true vs false. Ожидаемое: +15%. |
 | P4 | Профиль в Aisystant | `user_profile.completed_at IS NOT NULL` (имя + цель + выбранная ступень) | high | INSERT при первом `user_profile.completed_at` | Операционная; профиль либо заполнен, либо нет. Ложные срабатывания маловероятны. |
 | P5 | Первая маленькая победа | Ответил на вопрос урока ИЛИ записал мысль (`quiz_attempts >= 1 OR note_events >= 1`) | medium | INSERT при первом quiz_attempt или note_event | Распределение по типу события (quiz vs note). Если >90% — note без quiz → победа формальная, не содержательная. |
-| P6 | Персональная траектория | `user_profile.bottleneck IS NOT NULL AND user_profile.recommended_stream IS NOT NULL` | high | INSERT после заполнения bottleneck + recommended_stream (часть Х3 Онбордера) | Онбордер закрывает P6 как часть Х3 — двойного трекинга нет, Дорожник просто видит has_p6=true. |
+| P6 | Персональная траектория | `user_profile.bottleneck IS NOT NULL AND user_profile.recommended_stream IS NOT NULL` | high | INSERT после заполнения bottleneck + recommended_stream (часть Х3 Онбордера) | Онбордер закрывает P6 как часть Х3 — двойного трекинга нет, Онбордер Фаза 2 просто видит has_p6=true. |
 | P7 | Доступ к сообществу (клуб) | `club_memberships.active = true` | high | INSERT при первой активной записи в club_memberships | Операционная. Ложные срабатывания исключены FK-ограничением. |
-| P8 | Цифровой двойник | `digital_twin.initialized_at IS NOT NULL` (хотя бы один cp-слот заполнен) | medium | INSERT при первом `digital_twin.initialized_at` | Качество цифрового двойника (cp-профиль vs эталон Диагноста) — отдельная метрика вне Дорожника. |
+| P8 | Цифровой двойник | `digital_twin.initialized_at IS NOT NULL` (хотя бы один cp-слот заполнен) | medium | INSERT при первом `digital_twin.initialized_at` | Качество цифрового двойника (cp-профиль vs эталон Диагноста) — отдельная метрика вне Онбордера. |
 | P9 | Своя среда развития | Репозиторий DS-strategy создан И есть хотя бы 1 коммит (`github_repos.has_ds_strategy = true AND commit_count >= 1`) | medium | INSERT при первом коммите в DS-strategy репозиторий пользователя | Retention 30d у когорты has_p9=true. Ожидаемое: наивысший retention среди всех P. |
 
 ## Примечания
@@ -40,8 +40,8 @@ related: [DP.SC.173, DP.ROLE.073, DP.ROLE.067, DP.SC.170]
   с `has_p1=true` — прокси работает «на доверии».
 
 - **P4 и P6 — закрываются Онбордером:** в процессе прохождения Х3 (DP.SC.170) Онбордер сам
-  обновляет `user_profile`. Дорожник (DP.SC.173) видит уже заполненные `has_p4=true` / `has_p6=true`
+  обновляет `user_profile`. Онбордер Фаза 2 видит уже заполненные `has_p4=true` / `has_p6=true`
   и не предлагает их повторно.
 
-- **Escalate after declines:** параметр Дорожника `escalate_after_declines` (default: 2).
+- **Escalate after declines:** параметр Онбордера `escalate_after_declines` (default: 2).
   Не хардкод в этой матрице.

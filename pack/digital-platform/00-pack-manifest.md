@@ -600,7 +600,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.070 | Верификатор конвейера IWE | ROLE | Член команды T4+ (другой разработчик). Независимая проверка работы Разработчика-исполнителя по эталону перед закрытием РП. Возвращает PASS/FAIL с обоснованием. | draft |
 | DP.ROLE.071 | Ведущий разработчик IWE | ROLE | Ведущий разработчик команды IWE (TD1+TA4). Согласовывает merge, принимает архитектурные решения высокого уровня, подписывает рост в команде. | draft |
 | DP.ROLE.072 | Разработчик-исполнитель IWE | ROLE | Член команды разработки IWE (T4+ / TD1). Ведёт задачу через 6 станций конвейера WP-403, обеспечивая двойной выход: работающий код/артефакт + зафиксированное знание. | draft |
-| DP.ROLE.073 | Pathfinder | ROLE | — | — |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -725,7 +724,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.170 | onboarder | SC | — | draft |
 | DP.SC.171 | conveyor-development | SC | — | draft |
 | DP.SC.172 | База инженерного стиля кода | SC | Агент-разработчик выдаёт код craft-уровня (без перечисленных запахов) при написании кода в репозиториях IWE | active |
-| DP.SC.173 | Pathfinder | SC | — | — |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
