@@ -1,6 +1,9 @@
 ---
 id: DP.VM.001
 title: "Calibration Matrix — P1-P9 Value Milestones"
+name_ru: "Матрица польз P1-P9"
+name_en: "P1-P9 Value Milestones Calibration Matrix"
+summary: "Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Первокурсника/событие тира)."
 valid_from: 2026-06-10
 updated: 2026-06-10
 owner: platform

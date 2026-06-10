@@ -927,7 +927,7 @@ generated: true
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
-| DP.VM.001 | P1 P9 Calibration Matrix | — | — |
+| DP.VM.001 | P1 P9 Calibration Matrix | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Первокурсника/событие тира). | — |
 
 ## Warnings
 
@@ -1351,7 +1351,6 @@ generated: true
 - Missing `summary`: DP.SC.169 (DP.SC.169-conductor-lite.md)
 - Missing `summary`: DP.SC.170 (DP.SC.170-onboarder.md)
 - Missing `summary`: DP.SC.171 (DP.SC.171-conveyor-development.md)
-- Missing `summary`: DP.VM.001 (P1-P9-calibration-matrix.md)
 
 ---
 
