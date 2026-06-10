@@ -1,7 +1,10 @@
 ---
 id: DP.ROLE.073
 name: Хранитель реестра стилей
+name_ru: Хранитель реестра стилей
+name_en: Style Registry Keeper
 type: agential
+related: [DP.SC.173, DP.SC.175, DP.ROLE.074]
 kind: "Операционная роль (владелец данных + провайдер фрагментов)"
 owner_role: "R22 Оркестратор"
 suprasystem: "Система управления языковыми стилями (WP-412)"

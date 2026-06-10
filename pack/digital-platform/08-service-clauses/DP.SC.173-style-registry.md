@@ -1,6 +1,8 @@
 ---
 id: DP.SC.173
 name: Реестр языковых стилей
+name_ru: Реестр языковых стилей
+name_en: Language Style Registry
 type: sc
 status: draft
 layer: L2-Platform

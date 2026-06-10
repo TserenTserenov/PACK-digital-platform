@@ -1,6 +1,8 @@
 ---
 id: DP.SC.174
 name: Диспетчер контекста стилей
+name_ru: Диспетчер контекста стилей
+name_en: Style Context Dispatcher
 type: sc
 status: draft
 layer: L2-Platform

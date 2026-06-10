@@ -1,7 +1,10 @@
 ---
 id: DP.ROLE.074
 name: Диспетчер стилей
+name_ru: Диспетчер стилей
+name_en: Style Dispatcher
 type: agential
+related: [DP.SC.174, DP.SC.173, DP.ROLE.073]
 kind: "Операционная роль (маршрутизатор контекста + инъектор)"
 owner_role: "R22 Оркестратор"
 suprasystem: "Система управления языковыми стилями (WP-412)"

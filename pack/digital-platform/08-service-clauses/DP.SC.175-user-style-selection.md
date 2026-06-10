@@ -1,6 +1,8 @@
 ---
 id: DP.SC.175
 name: Выбор стиля пользователем
+name_ru: Выбор стиля пользователем
+name_en: User Style Selection
 type: sc
 status: draft
 layer: L2-Platform
