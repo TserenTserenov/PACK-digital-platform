@@ -34,14 +34,14 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 57 |
+| ROLE (ROLE) | 59 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 122 |
+| SC (SC) | 125 |
 | SoTA Annotations (SOTA) | 28 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **763** |
+| **Total** | **768** |
 
 ## Distinctions
 
@@ -782,6 +782,8 @@ generated: true
 | DP.ROLE.070 | Верификатор конвейера IWE | Член команды T4+ (другой разработчик). Независимая проверка работы Разработчика-исполнителя по эталону перед закрытием РП. Возвращает PASS/FAIL с обоснованием. | draft |
 | DP.ROLE.071 | Ведущий разработчик IWE | Ведущий разработчик команды IWE (TD1+TA4). Согласовывает merge, принимает архитектурные решения высокого уровня, подписывает рост в команде. | draft |
 | DP.ROLE.072 | Разработчик-исполнитель IWE | Член команды разработки IWE (T4+ / TD1). Ведёт задачу через 6 станций конвейера WP-403, обеспечивая двойной выход: работающий код/артефакт + зафиксированное знание. | draft |
+| DP.ROLE.073 | Хранитель реестра стилей | — | draft |
+| DP.ROLE.074 | Диспетчер стилей | — | draft |
 
 ### RUNBOOK
 
@@ -916,6 +918,9 @@ generated: true
 | DP.SC.170 | onboarder | — | draft |
 | DP.SC.171 | conveyor-development | — | draft |
 | DP.SC.172 | База инженерного стиля кода | Агент-разработчик выдаёт код craft-уровня (без перечисленных запахов) при написании кода в репозиториях IWE | active |
+| DP.SC.173 | Реестр языковых стилей | Реестр хранит языковые стили как данные (оси, голос, тон, регистры, жанры, пресеты) и компилирует фрагмент системного промпта по полному композитному ключу детерминированно | draft |
+| DP.SC.174 | Диспетчер контекста стилей | Диспетчер вычисляет полный композитный ключ из сырого контекста хода (детектор канала + роль читателя), запрашивает фрагмент у реестра и инъектирует его в промпт до первого токена | draft |
+| DP.SC.175 | Выбор стиля пользователем | Пользователь настраивает стиль по осям (модель Grammarly), пресетам или из текста-примера; выбор пишется как user_override_hash в каскад платформа→канал→пользователь и применяется со следующего хода | draft |
 
 ### SYS
 
@@ -1007,6 +1012,8 @@ generated: true
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-decomposer.md)
 - Missing `summary`: DP.ROLE.065 (DP.ROLE.065-hermes-proxy-tool.md)
 - Missing `summary`: DP.ROLE.067 (DP.ROLE.067-onboarder.md)
+- Missing `summary`: DP.ROLE.073 (DP.ROLE.073-style-registry-keeper.md)
+- Missing `summary`: DP.ROLE.074 (DP.ROLE.074-style-dispatcher.md)
 - Missing `summary`: DP.M.012 (DP.M.012-machine-check-postcondition.md)
 - Missing `summary`: DP.M.014 (DP.M.014-evaluator-worker.md)
 - Missing `summary`: DP.M.015 (DP.M.015-four-layer-gamification-dependency.md)
