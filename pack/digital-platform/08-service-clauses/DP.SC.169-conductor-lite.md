@@ -1,9 +1,12 @@
 ---
 id: DP.SC.169
 name: conductor-lite
-title: "Проводник T0/T1 — онбординг-помощник (conversational)"
+title: "Проводник T0/T1 — онбординг-помощник (conversational) [DEPRECATED]"
 version: 1
-status: draft
+status: deprecated
+deprecated_at: 2026-06-10
+deprecated_by: WP-406 Ф7
+superseded_by: DP.SC.170
 created: 2026-06-06
 wp: WP-349
 roles: [DP.ROLE.013]
@@ -11,7 +14,14 @@ layer: L2-Platform
 related:
   parent: DP.SC.168
   sibling: DP.SC.167
+  superseded_by: DP.SC.170
 ---
+
+> **DEPRECATED (WP-406 Ф7, 2026-06-10).** Функция поглощена Онбордером (DP.SC.170, DP.ROLE.067). Онбордер теперь работает с T0, включая setup-guidance и первичную ориентацию. DP.ROLE.013 (FSM) остаётся для technical feature unlocking T1→T4 — это не онбординг-функция и выходит за рамки поглощения.
+> 
+> Файл сохраняется как архивный артефакт для reference. Не использовать в новых реализациях.
+
+
 
 # DP.SC.169 — Проводник (онбординг-помощник, T0/T1)
 
