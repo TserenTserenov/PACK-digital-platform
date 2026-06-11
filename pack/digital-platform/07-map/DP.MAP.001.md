@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 83 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 131 |
+| Failure Modes (FM) | 136 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 272 |
+| Methods (M) | 274 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 10 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **768** |
+| **Total** | **775** |
 
 ## Distinctions
 
@@ -407,6 +407,8 @@ generated: true
 | DP.M.297 | Platform Specific Path From Params Yaml | — | — |
 | DP.M.298 | Fail-closed scope sidecar: ранний парсинг + deny при недоступности сервиса | — | — |
 | DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | — | — |
+| DP.M.300 | gh pr diff branch-on-branch: проверка реального scope PR через checkout | — | — |
+| DP.M.301 | Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only | — | — |
 
 ## Work Products
 
@@ -564,6 +566,11 @@ generated: true
 | DP.FM.144 | Side Effect Check Blocks Primary Flow | — | — |
 | DP.FM.145 | FDW-только-READ: cross-DB write в SQL-миграции молча провалится | — | — |
 | DP.FM.146 | Unconditional helper return = always-fires gate: гейт срабатывает для всех пользователей | — | — |
+| DP.FM.147 | aiogram Bot() без try/finally session.close() → leak HTTP-коннектов в scheduler | — | — |
+| DP.FM.148 | Regex Detector Semantic Blindspot | — | — |
+| DP.FM.149 | Channel Style Bleed Peer Synthesis | — | — |
+| DP.FM.150 | Silent Rule Decay No Cost | — | — |
+| DP.FM.151 | Subscription gate multi-path divergence | — | — |
 
 ## SoTA Annotations
 
@@ -1234,6 +1241,8 @@ generated: true
 - Missing `summary`: DP.M.297 (DP.M.297-platform-specific-path-from-params-yaml.md)
 - Missing `summary`: DP.M.298 (DP.M.298-fail-closed-scope-sidecar.md)
 - Missing `summary`: DP.M.299 (DP.M.299-rotation-impact-map.md)
+- Missing `summary`: DP.M.300 (DP.M.300-gh-pr-diff-branch-on-branch-verification.md)
+- Missing `summary`: DP.M.301 (DP.M.301-sync-source-of-truth-to-derived-workflow.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1334,6 +1343,11 @@ generated: true
 - Missing `summary`: DP.FM.144 (DP.FM.144-side-effect-check-blocks-primary-flow.md)
 - Missing `summary`: DP.FM.145 (DP.FM.145-fdw-read-only-cross-db-write.md)
 - Missing `summary`: DP.FM.146 (DP.FM.146-unconditional-helper-always-fires-gate.md)
+- Missing `summary`: DP.FM.147 (DP.FM.147-aiogram-bot-session-leak-no-finally.md)
+- Missing `summary`: DP.FM.148 (DP.FM.148-regex-detector-semantic-blindspot.md)
+- Missing `summary`: DP.FM.149 (DP.FM.149-channel-style-bleed-peer-synthesis.md)
+- Missing `summary`: DP.FM.150 (DP.FM.150-silent-rule-decay-no-cost.md)
+- Missing `summary`: DP.FM.151 (DP.FM.151-subscription-gate-multi-path-divergence.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
