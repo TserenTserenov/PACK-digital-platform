@@ -239,11 +239,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.144 | Side Effect Check Blocks Primary Flow | FM | — | — |
 | DP.FM.145 | FDW-только-READ: cross-DB write в SQL-миграции молча провалится | FM | — | — |
 | DP.FM.146 | Unconditional helper return = always-fires gate: гейт срабатывает для всех пользователей | FM | — | — |
-| DP.FM.147 | aiogram Bot() без try/finally session.close() → leak HTTP-коннектов в scheduler | FM | — | — |
-| DP.FM.148 | Regex Detector Semantic Blindspot | FM | — | — |
-| DP.FM.149 | Channel Style Bleed Peer Synthesis | FM | — | — |
-| DP.FM.150 | Silent Rule Decay No Cost | FM | — | — |
-| DP.FM.151 | Subscription gate multi-path divergence | FM | — | — |
+| DP.FM.147 | aiogram Bot() без try/finally session.close() → leak HTTP-коннектов в scheduler | FM | Bot() создаётся per-call в scheduler, session.close() стоит после падающих операций без try/finally — при исключении HTTP-соединение к Telegram остаётся открытым, дескрипторы растут. | — |
+| DP.FM.148 | Regex Detector Semantic Blindspot | FM | Regex-детектор стиля видит только морфологию, не смысл — ловит одно орфографическое правило (98% срабатываний), семантические нарушения не замечает, создавая видимость покрытия. | — |
+| DP.FM.149 | Channel Style Bleed Peer Synthesis | FM | Синтезатор читает технические turn-файлы и продолжает их стиль при записи отчёта для пилота — английские термины и машинные маркеры переползают из доказательного слоя в pilot-facing. | — |
+| DP.FM.150 | Silent Rule Decay No Cost | FM | Детектор пишет лог, агрегатор поднимает напоминание по порогу N в неделю — при редких нарушениях критического правила порог молчит, нарушитель не видит ошибку, правило перестаёт действовать. | — |
+| DP.FM.151 | Subscription gate multi-path divergence | FM | В OAuth с двумя типами токенов (JWT и opaque) проверка подписки дублируется в нескольких путях кода — фикс одного пути не покрывает другой, один тип клиента проходит, другой блокируется при том же тарифе. | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -531,8 +531,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.297 | Platform Specific Path From Params Yaml | M | — | — |
 | DP.M.298 | Fail-closed scope sidecar: ранний парсинг + deny при недоступности сервиса | M | — | — |
 | DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | M | — | — |
-| DP.M.300 | gh pr diff branch-on-branch: проверка реального scope PR через checkout | M | — | — |
-| DP.M.301 | Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only | M | — | — |
+| DP.M.300 | gh pr diff branch-on-branch: проверка реального scope PR через checkout | M | gh pr diff на ветке поверх feature-ветки показывает изменения обеих суммарно; реальный scope PR берётся через checkout + git log main..HEAD. | — |
+| DP.M.301 | Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only | M | Две копии одного файла, синхронизируемые односторонне: правки только в источнике через commit перед sync, производная read-only — иначе sync затирает правки незакоммиченным состоянием. | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

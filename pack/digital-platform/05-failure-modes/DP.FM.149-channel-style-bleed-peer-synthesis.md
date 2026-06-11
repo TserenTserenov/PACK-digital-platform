@@ -1,12 +1,17 @@
 ---
 id: DP.FM.149
 title: "Channel-style-bleed — технический стиль стенограмм заражает pilot-facing синтез"
+name_ru: "Протекание технического стиля стенограмм в отчёт для пилота"
+name_en: "Channel-style-bleed in peer-session synthesis"
+summary: "Синтезатор читает технические turn-файлы и продолжает их стиль при записи отчёта для пилота — английские термины и машинные маркеры переползают из доказательного слоя в pilot-facing."
 type: failure-mode
 pack: PACK-digital-platform
 domain: digital-platform
 trust: confirmed
 epistemic_stage: 3
 valid_from: 2026-06-10
+related:
+  see_also: [DP.FM.148, DP.SC.050]
 source: session WP-388 style-audit, 2026-06-10
 ---
 

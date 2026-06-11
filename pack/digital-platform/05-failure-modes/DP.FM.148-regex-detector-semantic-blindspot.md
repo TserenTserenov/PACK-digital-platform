@@ -1,12 +1,17 @@
 ---
 id: DP.FM.148
 title: "Regex-detector semantic blindspot — 98% нарушений одно правило"
+name_ru: "Слепота regex-детектора к семантике стиля"
+name_en: "Regex-detector semantic blindspot"
+summary: "Regex-детектор стиля видит только морфологию, не смысл — ловит одно орфографическое правило (98% срабатываний), семантические нарушения не замечает, создавая видимость покрытия."
 type: failure-mode
 pack: PACK-digital-platform
 domain: digital-platform
 trust: confirmed
 epistemic_stage: 3
 valid_from: 2026-06-10
+related:
+  see_also: [DP.FM.149, DP.FM.150]
 source: session WP-388 style-audit, 2026-06-10
 ---
 

@@ -1,12 +1,17 @@
 ---
 id: DP.FM.151
 name: Subscription gate multi-path divergence
+name_ru: "Расхождение проверки подписки по разным путям токена"
+name_en: "Subscription gate multi-path divergence"
+summary: "В OAuth с двумя типами токенов (JWT и opaque) проверка подписки дублируется в нескольких путях кода — фикс одного пути не покрывает другой, один тип клиента проходит, другой блокируется при том же тарифе."
 type: fm
 domain: digital-platform
 pack: PACK-digital-platform
 trust: confirmed
 epistemic_stage: 2
 valid_from: 2026-06-10
+related:
+  see_also: [DP.FM.148, DP.FM.149]
 source: "session-close 2026-06-10, WP-392 hermes_chat fix"
 ---
 

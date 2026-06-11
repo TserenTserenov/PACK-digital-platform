@@ -1,6 +1,9 @@
 ---
 id: DP.FM.147
 name: "aiogram Bot() без try/finally session.close() → leak HTTP-коннектов в scheduler"
+name_ru: "Утечка сессии бота aiogram без try/finally в планировщике"
+name_en: "aiogram Bot session leak without try/finally in scheduler"
+summary: "Bot() создаётся per-call в scheduler, session.close() стоит после падающих операций без try/finally — при исключении HTTP-соединение к Telegram остаётся открытым, дескрипторы растут."
 type: failure-mode
 domain: digital-platform
 pack: PACK-digital-platform

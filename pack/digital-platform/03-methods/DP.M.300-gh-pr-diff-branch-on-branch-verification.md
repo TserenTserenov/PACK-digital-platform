@@ -1,6 +1,9 @@
 ---
 id: DP.M.300
 name: "gh pr diff branch-on-branch: проверка реального scope PR через checkout"
+name_ru: "Проверка реального состава PR на ветке-поверх-ветки"
+name_en: "gh pr diff branch-on-branch verification"
+summary: "gh pr diff на ветке поверх feature-ветки показывает изменения обеих суммарно; реальный scope PR берётся через checkout + git log main..HEAD."
 type: method
 domain: digital-platform
 pack: PACK-digital-platform
@@ -9,7 +12,7 @@ epistemic_stage: formalized
 category: peer-review
 valid_from: 2026-06-09
 related:
-  see_also: [DP.M.291]
+  see_also: [DP.M.291, DP.SC.154]
 tags: [pr-review, gh-cli, git, branch-on-branch, stacked-pr, peer-agent, verification, diff]
 source: "session 2026-06-09, WP-403 KE, PR #164/#166 в FMT-exocortex-template + memory/lessons_peer_pr_verification.md"
 schema_version: 1

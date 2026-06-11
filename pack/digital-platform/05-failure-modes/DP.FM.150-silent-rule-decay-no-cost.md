@@ -1,12 +1,17 @@
 ---
 id: DP.FM.150
 title: "Silent rule decay — нарушение без видимого cost делает правило мёртвым"
+name_ru: "Тихая смерть правила без видимой цены нарушения"
+name_en: "Silent rule decay without violation cost"
+summary: "Детектор пишет лог, агрегатор поднимает напоминание по порогу N в неделю — при редких нарушениях критического правила порог молчит, нарушитель не видит ошибку, правило перестаёт действовать."
 type: failure-mode
 pack: PACK-digital-platform
 domain: digital-platform
 trust: confirmed
 epistemic_stage: 3
 valid_from: 2026-06-10
+related:
+  see_also: [DP.FM.148, AS.M.061]
 source: session WP-388 style-audit, 2026-06-10
 ---
 

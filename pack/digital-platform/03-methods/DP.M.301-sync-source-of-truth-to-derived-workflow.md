@@ -1,6 +1,9 @@
 ---
 id: DP.M.301
 name: "Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only"
+name_ru: "Синхронизация источник-истины → производная копия"
+name_en: "Sync source-of-truth to derived workflow"
+summary: "Две копии одного файла, синхронизируемые односторонне: правки только в источнике через commit перед sync, производная read-only — иначе sync затирает правки незакоммиченным состоянием."
 type: method
 domain: digital-platform
 pack: PACK-digital-platform
@@ -9,7 +12,7 @@ epistemic_stage: formalized
 category: sync-architecture
 valid_from: 2026-06-09
 related:
-  see_also: [DP.M.104]
+  see_also: [DP.M.104, DP.SC.035]
 tags: [sync, source-of-truth, derived, read-only, content-sync, marathon-content, drift-prevention, owner-integrity]
 source: "session 2026-06-09, commit 138a760 vs db243c0 (marathon IWE→ИИ-помощник sync) + memory/feedback_marathon_content_sync_workflow.md"
 schema_version: 1
