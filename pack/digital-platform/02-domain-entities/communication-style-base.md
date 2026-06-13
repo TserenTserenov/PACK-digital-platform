@@ -1,6 +1,6 @@
 ---
 name: communication-style-base
-description: "L0 базовый разговорный стиль IWE - единый источник истины (SoT) для всех агентов"
+description: "S0 базовый разговорный стиль IWE - единый источник истины (SoT) для всех агентов"
 type: reference
 horizon: hot
 domains: [communication, ux]
@@ -8,7 +8,7 @@ status: active
 valid_from: 2026-06-01
 owner: platform
 schema_version: 1
-layer: L0
+layer: S0
 parent_sc: DP.SC.050
 note: "Source of truth. FMT-копия и downstream-файлы - проекции, синхронизируемые скриптом."
 ---
