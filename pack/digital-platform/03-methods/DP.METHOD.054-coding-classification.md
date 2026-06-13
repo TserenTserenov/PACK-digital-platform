@@ -10,13 +10,14 @@ related:
     - DP.ROLE.012   # Стратег — заводит РП и реестры
   informs:
     - DP.KR.001     # карта маршрутизации знаний (Routing Gate)
-  realized_by: []   # AR-правило доставки агентам — target, при приёмке
+  realized_by:
+    - AR.234        # правило-доставка (peer-session 2026-06-13-39); status: draft до флипа метода в active
 created: 2026-06-13
 updated: 2026-06-13
 source: WP-419 (Ф1 принцип принуждения + Ф2 SOTA deep-research + Ф3 сопоставление + SOTA-аудит peer-сессия 2026-06-13-15)
 min_model_tier: sonnet
 model_floor_status: provisional
-schema_version: 0
+schema_version: 0   # 0 = pre-acceptance (метод draft); → 1 при флипе в active (догфуд §5: новые схемы стартуют с 1 после приёмки)
 ---
 
 # DP.METHOD.054 — Метод кодирования и классификации IWE
@@ -117,8 +118,9 @@ proposed → active → deprecated → retired
 
 > Метод в Pack без хука мёртв при рождении. Поэтому при активации:
 
-- **AR-правило** (PACK-agent-rules): при заведении нового кода/реестра в WP Gate / `wp-new` / Routing Gate — обязательны поля чеклиста §5 (минимум: owner, enforcement_mechanism, bounded_context).
+- **AR-правило** (PACK-agent-rules): при заведении нового кода/реестра в WP Gate / `wp-new` / Routing Gate — обязательны поля чеклиста §5 (минимум: owner, enforcement_mechanism, bounded_context). **Реализовано: `AR.234` Schema Registration Gate** (peer-session 2026-06-13-39). Граница с соседями: AR.234 = новая *схема*; AR.211 = экземпляр ID внутри схемы; AR.233 = переименование токена (= §7).
 - **Триггер:** Routing Gate (DP.KR.001 §5) проверяет наличие записи в каталоге реестров.
+- **Статус доставки:** AR.234 `status: draft` (зарегистрировано, боевой хук не вшит) — флип в `active` одним актом с флипом метода после ревью ИТ-встречи.
 
 ## 10. Что НЕ входит (scope-guard / target-state)
 
@@ -131,5 +133,6 @@ proposed → active → deprecated → retired
 
 - [ ] Прогон чеклиста §5 на 3 реальных кейсах (напр. SR.NNN, AR.NNN, реестр стилей) + 1 новом.
 - [ ] Ревью на ИТ-встрече (схемы 0.OPS — командный канон, 4 владельца).
-- [ ] AR-правило доставки зарегистрировано.
+- [x] AR-правило доставки зарегистрировано. → `AR.234` (status: draft; peer-session 2026-06-13-39).
+- [ ] Ревью ИТ-встречи пройдено → флип `AR.234` и метода в `status: active` (одним актом).
 - [ ] При прохождении — `status: active`.
