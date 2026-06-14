@@ -51,3 +51,12 @@ related:
 - Хуки: `inject-code-style-anchor.sh` (UserPromptSubmit, stateless), `inject-code-style.sh` (PreToolUse Edit|Write, кап 9500), `code-style-hook.sh` (Stop, `git diff HEAD`, P1/P2/P4).
 - Аггрегатор: `style-feedback-loop.py` (обе оси — A-правила текст + P-правила код).
 - Проекция Kimi: SYNC-CORE → AGENTS.md. Hermes: follow-up.
+
+## Доставка (через единый реестр стилей, WP-408 Ф5 + WP-412)
+
+> С WP-412 (система управления языковыми стилями) доставка P0-P6 к агенту идёт через **единый реестр**, а не через standalone-хук. Эта SC остаётся **источником истины контента** (`content_source`), не становится потребителем правил.
+
+- **Регистрация:** P0-P6 представлены в реестре регистром `LS.FORM.002-register-code-developer` (`PACK-rhetoric/pack/language-style/registry/`). Это **слот-указатель** (`content_source: DP.SC.172`, `projection: read-only`), не копия — компилятор тянет живой контент из L0-базы. Регистрация ссылочная: владелец контента остаётся PACK-digital-platform (эта SC + `engineering-code-style-base.md`).
+- **Путь доставки:** диспетчер реестра (`registry/dispatcher.py --event pretooluse-edit`) → компилятор → фрагмент в контекст агента. Хук `inject-code-style.sh` вызывает диспетчер (не хардкодит правила).
+- **Режим отказа реестра (file-fallback):** при недоступности реестра хук падает на статический снимок `.claude/styles/p05-core.md` (промоция WP-412 Ф11). Установки без PACK-rhetoric получают ядро P0-P6 из снимка.
+- **Граница владения:** контент P0-P6 = WP-408 (PACK-digital-platform); инфраструктура доставки (реестр, компилятор, диспетчер, хук-вызов, file-fallback) = WP-412. Один факт — одно место.

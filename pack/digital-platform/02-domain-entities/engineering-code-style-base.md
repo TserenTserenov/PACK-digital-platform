@@ -180,6 +180,8 @@ async def handle(request):
 2. **Детектор-страховка (v1):** `code-style-hook.sh` (Stop-хук, `git diff HEAD`) ловит детерминируемое подмножество — `assert True`/`expect(true).toBe(true)` (P1), `locals()[` (P2), `except Exception:\s*pass` (P4). Пишет в единый `~/.claude/logs/style-violations.log` (формат WP-388), правила P1/P2/P4.
 3. **Review-агент (v2):** семантический чек-лист на diff для копипасты, мёртвого кода и P5.
 
+**Доставка через единый реестр (WP-412).** С WP-412 (система управления языковыми стилями) шаг 1 «Инжекция» исполняется не standalone-хуком, а через **единый реестр стилей**: хук `inject-code-style.sh` вызывает диспетчер реестра (`PACK-rhetoric/pack/language-style/registry/dispatcher.py`), который компилирует фрагмент P0-P6 из этой базы (регистр `LS.FORM.002-register-code-developer` — слот-указатель `content_source: DP.SC.172`, не копия). **При недоступности реестра** хук падает на статический снимок `.claude/styles/p05-core.md` (file-fallback, промоция WP-412 Ф11) — поэтому standalone-описание выше остаётся валидным как резервный путь. Граница: контент P0-P6 — здесь (PACK-digital-platform); механизм доставки — WP-412. См. DP.SC.172 § «Доставка».
+
 ## Слои (как у разговорного стиля)
 
 | Слой | Владелец | Файл | Наследование |
