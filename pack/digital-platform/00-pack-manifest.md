@@ -731,7 +731,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.165 | Scope-control для bridge write-tools | SC | Bridge write-tools (`personal_write`, `personal_propose_capture`) проходят server-side scope check в gateway-mcp; bridge cache TTL=60s даёт быстрый deny без round-trip | draft |
 | DP.SC.166 | Сторож новых задач — ежедневный дайджест в Telegram | SC | Раз в сутки (до 09:00) обойти все github-репо в ~/IWE/*, найти задачи, созданные за последние 2 дня и ещё не показанные пилоту, классифицировать важность и отправить дайджест в Telegram. Критичные (потеря данных / безопасность / регрессия) — отдельной пометкой. Дедуп через state-файл, идемпотентно. | draft |
 | DP.SC.167 | hermes-chat | SC | — | draft |
-| DP.SC.168 | Онбординг IWE — зонтичное обещание | SC | — | draft |
+| DP.SC.168 | Онбординг платформы — зонтичное обещание | SC | — | draft |
 | DP.SC.169 | conductor-lite | SC | — | deprecated |
 | DP.SC.170 | onboarder | SC | — | draft |
 | DP.SC.171 | conveyor-development | SC | — | draft |
