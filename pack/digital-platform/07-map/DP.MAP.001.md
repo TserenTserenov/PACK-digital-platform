@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 83 |
+| Distinctions (D) | 85 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 136 |
+| Failure Modes (FM) | 144 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 274 |
+| Methods (M) | 285 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 11 |
 | NAV (NAV) | 1 |
@@ -37,11 +37,11 @@ generated: true
 | ROLE (ROLE) | 60 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 128 |
-| SoTA Annotations (SOTA) | 28 |
+| SoTA Annotations (SOTA) | 29 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **780** |
+| **Total** | **802** |
 
 ## Distinctions
 
@@ -130,6 +130,8 @@ generated: true
 | DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | — | — |
 | DP.D.131 | Костюм ≠ Оснащение (тир) | — | active |
 | DP.D.132 | Первокурсник ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | — | active |
+| DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | — | active |
+| DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | — | active |
 
 ## Methods
 
@@ -409,6 +411,17 @@ generated: true
 | DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | — | — |
 | DP.M.300 | gh pr diff branch-on-branch: проверка реального scope PR через checkout | gh pr diff на ветке поверх feature-ветки показывает изменения обеих суммарно; реальный scope PR берётся через checkout + git log main..HEAD. | — |
 | DP.M.301 | Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only | Две копии одного файла, синхронизируемые односторонне: правки только в источнике через commit перед sync, производная read-only — иначе sync затирает правки незакоммиченным состоянием. | — |
+| DP.M.302 | Trusted-reference хранилище: immutable контракт + audit-таблица рядом | — | draft |
+| DP.M.303 | Production DDL через gated-шаг: отдельный .sql файл вне application code | — | draft |
+| DP.M.304 | Локальный импорт тяжёлой зависимости для optional backend | — | draft |
+| DP.M.305 | Frozen formula hash: версия формулы как артефакт под change-control | — | draft |
+| DP.M.306 | Честная деградация тайла панели: статусные коды вместо дефолтных значений | — | draft |
+| DP.M.308 | Reader Contract Check Before Gate Removal | — | active |
+| DP.M.309 | Halliday Language Rule Routing | — | active |
+| DP.M.310 | Три измерения консистентности при автопереводе | Автоперевод требует трёх ортогональных измерений: (1) текст (LLM translation), (2) граф понятий (термин-глоссарий), (3) стиль (per-language style base). Пропуск любого — специфический вид drift. | — |
+| DP.M.311 | File-fallback из шаблона: graceful degradation при отсутствии Pack | Интерфейс-слой (FMT-шаблон) доставляет базовое поведение (стили, правила, шаблоны) пользователю двухуровневой цепочкой: сначала ищем в Pack (полный домен), при отсутствии — берём встроенный фолбэк из шаблона. Необязательный Pack перестаёт быть жёсткой зависимостью. | — |
+| DP.M.312 | OAuth prompt=login: принудительная re-authentication через стандартный параметр | Если клиент держит refresh-токен/grant и при reconnect не показывает форму входа, добавление параметра prompt=login (RFC 6749) к OAuth-authorize URL заставляет identity-провайдер игнорировать существующую сессию и потребовать свежую аутентификацию. | — |
+| DP.M.313 | Enforcement ladder: уровни и критерии promotion правил | Каждое правило системы существует на одном из 5 уровней enforcement (E0 существует — E4 блокирует merge). Промоция между уровнями — отдельная инженерная задача. Главный паттерн — E3 (ручное ревью) → E2 (CI-скрипт) при условии однозначной автоматической проверки. | — |
 
 ## Work Products
 
@@ -571,6 +584,14 @@ generated: true
 | DP.FM.149 | Channel Style Bleed Peer Synthesis | Синтезатор читает технические turn-файлы и продолжает их стиль при записи отчёта для пилота — английские термины и машинные маркеры переползают из доказательного слоя в pilot-facing. | — |
 | DP.FM.150 | Silent Rule Decay No Cost | Детектор пишет лог, агрегатор поднимает напоминание по порогу N в неделю — при редких нарушениях критического правила порог молчит, нарушитель не видит ошибку, правило перестаёт действовать. | — |
 | DP.FM.151 | Subscription gate multi-path divergence | В OAuth с двумя типами токенов (JWT и opaque) проверка подписки дублируется в нескольких путях кода — фикс одного пути не покрывает другой, один тип клиента проходит, другой блокируется при том же тарифе. | — |
+| DP.FM.153 | Перемежающийся 401 со статическим ключом = прокси или env, не ключ | — | — |
+| DP.FM.154 | Commit-without-push на сервере → отложенная дивергенция | — | — |
+| DP.FM.155 | Cross Db Trigger Boundary | — | active |
+| DP.FM.156 | Agent Tool Check Before Pilot Escalation | Агент просит пилота выполнить авторизацию, пройти UI-шаги или дать доступ, не проверив сначала доступные инструменты — нарушение принципа 'инструменты до эскалации'. | — |
+| DP.FM.157 | Cloud Backup Wrong Claude Layer | В многоуровневой топологии IWE облачный бэкап имеет доступ только к одному уровню (governance), но пишет в слот другого уровня (workspace-root) — каждый день правильный локальный бэкап перезаписывается неправильным. | — |
+| DP.FM.158 | Xargs Word Splitting Spaces False Fail | Использование pipe-xargs для проверки существования файлов с пробелами в имени: «DayPlan 2026-06-13.md» разбивается на «DayPlan» и «2026-06-13.md» — оба несуществующих → false FAIL на каждом Day Close. | — |
+| DP.FM.159 | Creation-flow gap between linked identity providers | Если две identity-системы связаны односторонним ETL (читает из Б, не пишет в Б), регистрация в системе А не создаёт идентичность в Б. Пользователь с аккаунтом А упирается в форму входа Б без аккаунта — UX-симптом «не принимает пароль». | — |
+| DP.FM.160 | Интерфейс без ядра порождает галлюцинацию данных | Когда интерфейсный агент (бот, chatbot, voice UI) не подключён к источнику данных через tool-вызов, LLM не возвращает ошибку — генерирует правдоподобный ответ из параметров модели. Симптом неотличим от правильного ответа без сверки с SoT. | — |
 
 ## SoTA Annotations
 
@@ -604,6 +625,7 @@ generated: true
 | DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 | DP.SOTA.028 | Claude CLI headless hook inheritance — хуки из settings.json наследуются при `claude -p` | Lifecycle-хуки Claude Code (PostToolUse, Stop из .claude/settings.json) срабатывают при `claude -p` идентично интерактивному режиму. Headless-агент автоматически получает весь hook-слой (WakaTime, agent-trace-recorder, rule-engine) без дополнительного кода, при условии что CLAUDE_CONFIG_DIR / CLAUDE_PROJECT_DIR указаны. | draft |
 | DP.SOTA.029 | Ai Era Two Crisis Groups | — | draft |
+| DP.SOTA.030 | Eam Agent Manifest Standard | — | draft |
 
 ## Maps
 
@@ -971,6 +993,8 @@ generated: true
 - Missing `summary`: DP.D.111 (DP.D.111-triaging-vs-execution.md)
 - Missing `summary`: DP.D.112 (DP.D.112-cutover-infra-vs-marketing-launch.md)
 - Missing `summary`: DP.D.121 (DP.D.121-toc-system-vs-portfolio.md)
+- Missing `summary`: DP.D.136 (DP.D.136-survival-predictor-vs-design-quality.md)
+- Missing `summary`: DP.D.137 (DP.D.137-exocortex-claude-slot-workspace-vs-governance.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1246,6 +1270,13 @@ generated: true
 - Missing `summary`: DP.M.297 (DP.M.297-platform-specific-path-from-params-yaml.md)
 - Missing `summary`: DP.M.298 (DP.M.298-fail-closed-scope-sidecar.md)
 - Missing `summary`: DP.M.299 (DP.M.299-rotation-impact-map.md)
+- Missing `summary`: DP.M.302 (DP.M.302-trusted-reference-immutable-audit-table.md)
+- Missing `summary`: DP.M.303 (DP.M.303-gated-ddl-separate-from-application-code.md)
+- Missing `summary`: DP.M.304 (DP.M.304-local-import-optional-backend.md)
+- Missing `summary`: DP.M.305 (DP.M.305-frozen-formula-hash-change-control.md)
+- Missing `summary`: DP.M.306 (DP.M.306-honest-tile-degradation-status-codes.md)
+- Missing `summary`: DP.M.308 (DP.M.308-reader-contract-check-before-gate-removal.md)
+- Missing `summary`: DP.M.309 (DP.M.309-halliday-language-rule-routing.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
@@ -1346,7 +1377,11 @@ generated: true
 - Missing `summary`: DP.FM.144 (DP.FM.144-side-effect-check-blocks-primary-flow.md)
 - Missing `summary`: DP.FM.145 (DP.FM.145-fdw-read-only-cross-db-write.md)
 - Missing `summary`: DP.FM.146 (DP.FM.146-unconditional-helper-always-fires-gate.md)
+- Missing `summary`: DP.FM.153 (DP.FM.153-intermittent-401-static-key-proxy-or-env.md)
+- Missing `summary`: DP.FM.154 (DP.FM.154-commit-without-push-deferred-divergence.md)
+- Missing `summary`: DP.FM.155 (DP.FM.155-cross-db-trigger-boundary.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
+- Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)

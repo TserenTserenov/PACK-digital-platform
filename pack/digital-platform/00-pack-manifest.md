@@ -106,6 +106,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | D | — | — |
 | DP.D.131 | Костюм ≠ Оснащение (тир) | D | — | active |
 | DP.D.132 | Первокурсник ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | D | — | active |
+| DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | D | — | active |
+| DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -244,6 +246,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.149 | Channel Style Bleed Peer Synthesis | FM | Синтезатор читает технические turn-файлы и продолжает их стиль при записи отчёта для пилота — английские термины и машинные маркеры переползают из доказательного слоя в pilot-facing. | — |
 | DP.FM.150 | Silent Rule Decay No Cost | FM | Детектор пишет лог, агрегатор поднимает напоминание по порогу N в неделю — при редких нарушениях критического правила порог молчит, нарушитель не видит ошибку, правило перестаёт действовать. | — |
 | DP.FM.151 | Subscription gate multi-path divergence | FM | В OAuth с двумя типами токенов (JWT и opaque) проверка подписки дублируется в нескольких путях кода — фикс одного пути не покрывает другой, один тип клиента проходит, другой блокируется при том же тарифе. | — |
+| DP.FM.153 | Перемежающийся 401 со статическим ключом = прокси или env, не ключ | FM | — | — |
+| DP.FM.154 | Commit-without-push на сервере → отложенная дивергенция | FM | — | — |
+| DP.FM.155 | Cross Db Trigger Boundary | FM | — | active |
+| DP.FM.156 | Agent Tool Check Before Pilot Escalation | FM | Агент просит пилота выполнить авторизацию, пройти UI-шаги или дать доступ, не проверив сначала доступные инструменты — нарушение принципа 'инструменты до эскалации'. | — |
+| DP.FM.157 | Cloud Backup Wrong Claude Layer | FM | В многоуровневой топологии IWE облачный бэкап имеет доступ только к одному уровню (governance), но пишет в слот другого уровня (workspace-root) — каждый день правильный локальный бэкап перезаписывается неправильным. | — |
+| DP.FM.158 | Xargs Word Splitting Spaces False Fail | FM | Использование pipe-xargs для проверки существования файлов с пробелами в имени: «DayPlan 2026-06-13.md» разбивается на «DayPlan» и «2026-06-13.md» — оба несуществующих → false FAIL на каждом Day Close. | — |
+| DP.FM.159 | Creation-flow gap between linked identity providers | FM | Если две identity-системы связаны односторонним ETL (читает из Б, не пишет в Б), регистрация в системе А не создаёт идентичность в Б. Пользователь с аккаунтом А упирается в форму входа Б без аккаунта — UX-симптом «не принимает пароль». | — |
+| DP.FM.160 | Интерфейс без ядра порождает галлюцинацию данных | FM | Когда интерфейсный агент (бот, chatbot, voice UI) не подключён к источнику данных через tool-вызов, LLM не возвращает ошибку — генерирует правдоподобный ответ из параметров модели. Симптом неотличим от правильного ответа без сверки с SoT. | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -533,6 +543,17 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.299 | Rotation impact map: инвентаризация мест секрета до ротации | M | — | — |
 | DP.M.300 | gh pr diff branch-on-branch: проверка реального scope PR через checkout | M | gh pr diff на ветке поверх feature-ветки показывает изменения обеих суммарно; реальный scope PR берётся через checkout + git log main..HEAD. | — |
 | DP.M.301 | Sync source-of-truth → derived: edit-commit-push в SoT, derived read-only | M | Две копии одного файла, синхронизируемые односторонне: правки только в источнике через commit перед sync, производная read-only — иначе sync затирает правки незакоммиченным состоянием. | — |
+| DP.M.302 | Trusted-reference хранилище: immutable контракт + audit-таблица рядом | M | — | draft |
+| DP.M.303 | Production DDL через gated-шаг: отдельный .sql файл вне application code | M | — | draft |
+| DP.M.304 | Локальный импорт тяжёлой зависимости для optional backend | M | — | draft |
+| DP.M.305 | Frozen formula hash: версия формулы как артефакт под change-control | M | — | draft |
+| DP.M.306 | Честная деградация тайла панели: статусные коды вместо дефолтных значений | M | — | draft |
+| DP.M.308 | Reader Contract Check Before Gate Removal | M | — | active |
+| DP.M.309 | Halliday Language Rule Routing | M | — | active |
+| DP.M.310 | Три измерения консистентности при автопереводе | M | Автоперевод требует трёх ортогональных измерений: (1) текст (LLM translation), (2) граф понятий (термин-глоссарий), (3) стиль (per-language style base). Пропуск любого — специфический вид drift. | — |
+| DP.M.311 | File-fallback из шаблона: graceful degradation при отсутствии Pack | M | Интерфейс-слой (FMT-шаблон) доставляет базовое поведение (стили, правила, шаблоны) пользователю двухуровневой цепочкой: сначала ищем в Pack (полный домен), при отсутствии — берём встроенный фолбэк из шаблона. Необязательный Pack перестаёт быть жёсткой зависимостью. | — |
+| DP.M.312 | OAuth prompt=login: принудительная re-authentication через стандартный параметр | M | Если клиент держит refresh-токен/grant и при reconnect не показывает форму входа, добавление параметра prompt=login (RFC 6749) к OAuth-authorize URL заставляет identity-провайдер игнорировать существующую сессию и потребовать свежую аутентификацию. | — |
+| DP.M.313 | Enforcement ladder: уровни и критерии promotion правил | M | Каждое правило системы существует на одном из 5 уровней enforcement (E0 существует — E4 блокирует merge). Промоция между уровнями — отдельная инженерная задача. Главный паттерн — E3 (ручное ревью) → E2 (CI-скрипт) при условии однозначной автоматической проверки. | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -769,6 +790,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.026 | Unified pipeline + content-hash skip — альтернатива дубль-pipeline для одного state | SOTA | Анти-паттерн: два кода (delta + full-rebuild) для одного derived state → drift risk. Паттерн: единая функция reindexFor(files[]) idempotent + content_hash skip → полный rebuild почти-нулевой стоимости; webhook / heartbeat-cron / manual вызывают одну точку. | draft |
 | DP.SOTA.028 | Claude CLI headless hook inheritance — хуки из settings.json наследуются при `claude -p` | SOTA | Lifecycle-хуки Claude Code (PostToolUse, Stop из .claude/settings.json) срабатывают при `claude -p` идентично интерактивному режиму. Headless-агент автоматически получает весь hook-слой (WakaTime, agent-trace-recorder, rule-engine) без дополнительного кода, при условии что CLAUDE_CONFIG_DIR / CLAUDE_PROJECT_DIR указаны. | draft |
 | DP.SOTA.029 | Ai Era Two Crisis Groups | SOTA | — | draft |
+| DP.SOTA.030 | Eam Agent Manifest Standard | SOTA | — | draft |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.VM.001 | P1 P9 Calibration Matrix | VM | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Первокурсника/событие тира). | — |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |

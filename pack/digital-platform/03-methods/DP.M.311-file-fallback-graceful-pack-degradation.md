@@ -1,0 +1,60 @@
+---
+id: DP.M.311
+name: "File-fallback из шаблона: graceful degradation при отсутствии Pack"
+name_ru: "File-fallback из шаблона: graceful degradation при отсутствии Pack"
+name_en: "File fallback from template: graceful degradation when Pack absent"
+summary: "Интерфейс-слой (FMT-шаблон) доставляет базовое поведение (стили, правила, шаблоны) пользователю двухуровневой цепочкой: сначала ищем в Pack (полный домен), при отсутствии — берём встроенный фолбэк из шаблона. Необязательный Pack перестаёт быть жёсткой зависимостью."
+type: method
+domain: digital-platform
+pack: PACK-digital-platform
+trust: observed
+epistemic_stage: 2
+category: delivery-architecture
+valid_from: 2026-06-14
+related:
+  see_also: [DP.M.018]
+tags: [fallback, fmt, pack, degradation, styles, delivery, optional-dependency]
+source: "WP-412 Ф11, sessions/2026-06/2026-06-14-style-file-fallback.md, commits dcbb160 + dd117c5"
+schema_version: 1
+---
+
+# DP.M.311 — File-fallback из шаблона: graceful degradation при отсутствии Pack
+
+## Описание
+
+Шаблон IWE (FMT-exocortex-template) доставляет пользователю базовое поведение (языковые стили, правила, шаблоны) даже когда необязательный Pack (например, PACK-rhetoric) отсутствует. Решение — двухуровневая цепочка чтения: сначала Pack, при отсутствии — встроенный fallback в самом FMT.
+
+## Алгоритм (IPO)
+
+**Вход:** запрос ресурса R (стиль, правило, шаблон) из шаблона или хука
+**Процесс:**
+1. Проверить наличие Pack-источника (`PACK-X/pack/X/...`)
+2. Pack найден → загрузить из Pack (полная версия)
+3. Pack отсутствует → загрузить из встроенного fallback (`FMT-exocortex-template/.claude/styles/`, `.claude/templates/` и т.п.)
+**Выход:** ресурс R, доставленный в одной из двух версий, без отказа
+
+## Применимость
+
+| Слой | Источник fallback | Триггер |
+|------|------------------|---------|
+| Языковые стили | `.claude/styles/` в FMT | PACK-rhetoric отсутствует |
+| Шаблоны промптов | `.claude/templates/` в FMT | Pack-домен не установлен |
+| Правила формата | `.claude/rules/` в FMT | Pack-источник не клонирован |
+
+## Принцип
+
+Интерфейс-уровень не обязан блокироваться при отсутствии необязательного Pack. Pack даёт расширенную/доменную версию; FMT гарантирует минимальный рабочий артефакт.
+
+## Тест применимости
+
+«Может ли FMT доставить базовое поведение без этого Pack?» Если нет — Pack обязательный, fallback не применим. Если да — необязательный Pack, нужен fallback в FMT.
+
+## Failure modes (антипаттерны)
+
+- **Hard dependency:** Pack считается обязательным, шаблон ломается при его отсутствии (downgrade в новый клон → broken setup)
+- **Silent divergence:** Pack-версия и FMT-fallback расходятся без changelog → пользователь видит разное поведение в зависимости от наличия Pack
+
+## Связи
+
+- DP.M.018 — runtime data fallback (другой layer: данные в момент исполнения, не файлы при доставке)
+- WP-412 — изначальный кейс реализации (Ф11)
