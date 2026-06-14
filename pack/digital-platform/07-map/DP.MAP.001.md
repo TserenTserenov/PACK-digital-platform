@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 85 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 144 |
+| Failure Modes (FM) | 146 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 285 |
+| Methods (M) | 286 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 11 |
+| METHOD (METHOD) | 13 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **802** |
+| **Total** | **807** |
 
 ## Distinctions
 
@@ -416,6 +416,7 @@ generated: true
 | DP.M.304 | Локальный импорт тяжёлой зависимости для optional backend | — | draft |
 | DP.M.305 | Frozen formula hash: версия формулы как артефакт под change-control | — | draft |
 | DP.M.306 | Честная деградация тайла панели: статусные коды вместо дефолтных значений | — | draft |
+| DP.M.307 | Bootstrap mode метрики по N выборки: hidden / interval / point | — | draft |
 | DP.M.308 | Reader Contract Check Before Gate Removal | — | active |
 | DP.M.309 | Halliday Language Rule Routing | — | active |
 | DP.M.310 | Три измерения консистентности при автопереводе | Автоперевод требует трёх ортогональных измерений: (1) текст (LLM translation), (2) граф понятий (термин-глоссарий), (3) стиль (per-language style base). Пропуск любого — специфический вид drift. | — |
@@ -584,6 +585,7 @@ generated: true
 | DP.FM.149 | Channel Style Bleed Peer Synthesis | Синтезатор читает технические turn-файлы и продолжает их стиль при записи отчёта для пилота — английские термины и машинные маркеры переползают из доказательного слоя в pilot-facing. | — |
 | DP.FM.150 | Silent Rule Decay No Cost | Детектор пишет лог, агрегатор поднимает напоминание по порогу N в неделю — при редких нарушениях критического правила порог молчит, нарушитель не видит ошибку, правило перестаёт действовать. | — |
 | DP.FM.151 | Subscription gate multi-path divergence | В OAuth с двумя типами токенов (JWT и opaque) проверка подписки дублируется в нескольких путях кода — фикс одного пути не покрывает другой, один тип клиента проходит, другой блокируется при том же тарифе. | — |
+| DP.FM.152 | tracked-dir-added-to-gitignore: Добавление отслеживаемой git-папки в .gitignore без untracking | — | — |
 | DP.FM.153 | Перемежающийся 401 со статическим ключом = прокси или env, не ключ | — | — |
 | DP.FM.154 | Commit-without-push на сервере → отложенная дивергенция | — | — |
 | DP.FM.155 | Cross Db Trigger Boundary | — | active |
@@ -592,6 +594,7 @@ generated: true
 | DP.FM.158 | Xargs Word Splitting Spaces False Fail | Использование pipe-xargs для проверки существования файлов с пробелами в имени: «DayPlan 2026-06-13.md» разбивается на «DayPlan» и «2026-06-13.md» — оба несуществующих → false FAIL на каждом Day Close. | — |
 | DP.FM.159 | Creation-flow gap between linked identity providers | Если две identity-системы связаны односторонним ETL (читает из Б, не пишет в Б), регистрация в системе А не создаёт идентичность в Б. Пользователь с аккаунтом А упирается в форму входа Б без аккаунта — UX-симптом «не принимает пароль». | — |
 | DP.FM.160 | Интерфейс без ядра порождает галлюцинацию данных | Когда интерфейсный агент (бот, chatbot, voice UI) не подключён к источнику данных через tool-вызов, LLM не возвращает ошибку — генерирует правдоподобный ответ из параметров модели. Симптом неотличим от правильного ответа без сверки с SoT. | — |
+| DP.FM.161 | pack-event-name-drift: Pack документирует выдуманное имя события, в коде другое имя | — | — |
 
 ## SoTA Annotations
 
@@ -725,6 +728,8 @@ generated: true
 | DP.METHOD.051 | n8n встроенный /healthz endpoint для внешнего мониторинга | — | — |
 | DP.METHOD.053 | Метод извлечения НЭП (Неудовлетворённость / Эмоция / Проблема) | Сократически-структурированный разбор сырых заметок и рефлексии на триаду Проблема / Неудовлетворённость / Эмоция с привязкой к роли и силе, выводящий пилота к целям и приоритетам месяца. Единый источник (single-source структуры) для обоих каналов discovery R1 Стратега — локального skill и серверного multi-turn. | active |
 | DP.METHOD.054 | Метод кодирования и классификации IWE | Метод заведения, ведения, версионирования и отмены кодов и схем классификации (реестров, нумераций, префиксов) в IWE. Объединяет две дорожки: дизайн схемы (корректность — фасеты, владелец namespace, разделение ID и классификации) и принуждение схемы (выживание — ось механизмов E0-E3). Предиктор выживания схемы — стоимость нарушения, не качество дизайна; но хорошо принуждённая плохая схема остаётся плохой, поэтому обе дорожки обязательны. | active |
+| DP.METHOD.055 | Метод безопасного автоматического git push (push-invariant) | Тройное условие перед автоматическим push в CI/CD или cron: clean tree AND ahead>0 AND behind==0. При behind>0 (diverged) — молча пропустить, сигнализирует pull-alert компонент. | active |
+| DP.METHOD.056 | Pre-deploy аудит потребителей перед сменой имён MCP-инструментов | Перед деплоем gateway с изменёнными именами инструментов — grep по всем клиентским репо на старые имена. Деплой только атомарно с обновлением потребителей. | active |
 
 ### NAV
 
@@ -1275,6 +1280,7 @@ generated: true
 - Missing `summary`: DP.M.304 (DP.M.304-local-import-optional-backend.md)
 - Missing `summary`: DP.M.305 (DP.M.305-frozen-formula-hash-change-control.md)
 - Missing `summary`: DP.M.306 (DP.M.306-honest-tile-degradation-status-codes.md)
+- Missing `summary`: DP.M.307 (DP.M.307-bootstrap-mode-sample-size-thresholds.md)
 - Missing `summary`: DP.M.308 (DP.M.308-reader-contract-check-before-gate-removal.md)
 - Missing `summary`: DP.M.309 (DP.M.309-halliday-language-rule-routing.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
@@ -1377,9 +1383,11 @@ generated: true
 - Missing `summary`: DP.FM.144 (DP.FM.144-side-effect-check-blocks-primary-flow.md)
 - Missing `summary`: DP.FM.145 (DP.FM.145-fdw-read-only-cross-db-write.md)
 - Missing `summary`: DP.FM.146 (DP.FM.146-unconditional-helper-always-fires-gate.md)
+- Missing `summary`: DP.FM.152 (DP.FM.152-tracked-dir-added-to-gitignore.md)
 - Missing `summary`: DP.FM.153 (DP.FM.153-intermittent-401-static-key-proxy-or-env.md)
 - Missing `summary`: DP.FM.154 (DP.FM.154-commit-without-push-deferred-divergence.md)
 - Missing `summary`: DP.FM.155 (DP.FM.155-cross-db-trigger-boundary.md)
+- Missing `summary`: DP.FM.161 (DP.FM.161-pack-event-name-drift.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
