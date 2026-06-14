@@ -189,3 +189,5 @@ async def handle(request):
 | L0 | платформа | `02-domain-entities/engineering-code-style-base.md` (этот) | все получают автоматически |
 | L1 | пилот | `DS-my-strategy/memory/code-style-author.md` | additive-only |
 | L2 | каждый user | `{USER-DS}/memory/code-style-personal.md` | additive-only, не отменяет L0 |
+
+> **L1 доставляется указателем, не копией (WP-408 Ф6).** Файл-источник L1 — `code-style-author.md` (выше). В реестр стилей WP-412 он попадает через наложение-указатель `overlays/author/code.yaml` (`content_source: L1.code-style`), которое компилятор materialize в момент сборки. Инвариант OwnerIntegrity: наложение остаётся **указателем** на файл-источник; инлайн контента правил прямо в overlay = дубликат и дрейф (запрещено). Один факт — одно место.
