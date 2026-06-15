@@ -138,4 +138,5 @@ proposed → active → deprecated → retired
 - [x] Ревью ИТ-встречи пройдено (2026-06-13) → флип `AR.234` и метода в `status: active`.
 - [x] `status: active`, `schema_version: 1`.
 - [x] **structural E2 врезан** (peer-session 2026-06-14-03): CI-замок каталога `registry-catalog-validate.yml` (DS-ecosystem-development) + починен генератор реестра правил (skip-invalid).
-- [ ] **Остаток (отдельные задачи):** semantic agent-write nudge (реанимация шины artifact_creation + AR.009 — арх-решение) + ресинк ~28 дрейфующих AR-правил под схему генератора.
+- [x] **Ресинк AR-правил:** генератор починен 2026-06-14 (skip-invalid); `rules-registry.yaml` = 64/64 AR-файлов. Дрейф закрыт.
+- [ ] **Остаток (отдельная задача):** semantic agent-write nudge — реанимация шины artifact_creation + AR.009 (арх-решение, отложено). E3 задокументирован в AR.234 §Активация.
