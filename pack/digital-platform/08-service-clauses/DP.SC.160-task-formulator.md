@@ -9,7 +9,7 @@ layer: L4-Platform
 summary: "Пилот или Маршрутизатор получает: из сырого запроса — структурированный РП с routing-тегом (task_type, class, artifact, budget_estimate), готовый к lookup в executor-catalog."
 consumer: Маршрутизатор (DP.ROLE.059), Пилот IWE (через Opening при отсутствии явного РП)
 created: 2026-05-25
-updated: 2026-05-25
+updated: 2026-06-16
 related:
   specializes: []
   realizes:
@@ -47,18 +47,29 @@ wp: WP-350
 
 **Что получит:**
 
-```
+```json
 {
   "task_type": "role_design | bot_fix | day_open | agent_fault | ...",
   "class": "trivial | closed-loop | open-loop | problem-framing",
   "artifact": "краткое описание ожидаемого артефакта",
-  "budget_estimate": "~Xh",
+  "budget_estimate": "~Xh | ?",
   "confidence": "high | low",
-  "routing_tag": "{class, task_type}"
+  "routing_tag": "{class, task_type}",
+  "resolution_path": "keyword | llm"
 }
 ```
 
-**Время отклика:** < 5 сек (Haiku-вызов для классификации; без LLM если task_type очевиден из ключевых слов)
+Поле `budget_estimate: "?"` — маркер «не определено» (потребитель запрашивает у пилота отдельно).
+Поле `resolution_path` — путь классификации: `"keyword"` = статический lookup (< 200 мс), `"llm"` = Haiku-вызов (< 60 сек).
+
+**Время отклика (два SLA):**
+
+| Путь | SLA | Условие |
+|------|-----|---------|
+| `keyword` | < 200 мс | task_type однозначно определён по ключевым словам |
+| `llm` | < 60 сек | Haiku-fallback при неоднозначности; потребитель видит `resolution_path: "llm"` |
+
+Потребитель, ожидающий < 5 сек, должен проверять `resolution_path` перед синхронным ожиданием.
 
 ---
 
