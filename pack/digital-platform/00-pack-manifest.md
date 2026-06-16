@@ -106,6 +106,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | D | — | — |
 | DP.D.131 | Костюм ≠ Оснащение (тир) | D | — | active |
 | DP.D.132 | Первокурсник ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | D | — | active |
+| DP.D.133 | Три уровня изоляции данных в IWE | D | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | D | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
@@ -272,7 +273,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.IWE.011-adapter-claude-code | Claude Code Adapter for IWE Host Contract | IWE | — | active |
 | DP.IWE.011-adapter-headless | Headless Adapter for IWE Host Contract | IWE | — | active |
 | DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
-| DP.KR.030 | Принцип триады учёт-доступ-аудит | KR | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. KR.030 = foundation серии; KR.031–033 = отдельные принципы каждой ветки (WP-214 Ф4). Серия KR.030–039 зарезервирована. | draft |
+| DP.KR.030 | Принцип триады учёт-доступ-аудит | KR | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. KR.030 = foundation серии (delivered WP-214). KR.031–033 = refinement-принципы каждой ветки; отложены, создаются при отдельном РП по необходимости. Серия KR.030–039 зарезервирована. | active |
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности и DS docs/ через обнаружение, классификацию, двойной routing и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
 | DP.M.003 | Context Engineering Protocol | M | Метод проектирования контекста ИИ-агента: Write/Select/Compress/Isolate → CLAUDE.md + memory/ + Pack layers | draft |
