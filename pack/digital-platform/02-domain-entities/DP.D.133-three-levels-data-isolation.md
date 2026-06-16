@@ -8,7 +8,7 @@ summary: "Данные в IWE изолируются на трёх незави�
 created: 2026-06-16
 valid_from: 2026-06-16
 trust:
-  F: 3
+  F: 4
   G: domain
   R: 0.85
 epistemic_stage: established
