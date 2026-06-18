@@ -74,6 +74,59 @@ related:
 - Интерфейс **не** обращается к данным напрямую
 - ИИ-система **не** знает, какой UI у пользователя
 
+## 3.1. Распределение данных (Data Ownership Model)
+
+> **Источник:** WP-336-архитектура-платформы-iwe §3 (июнь 2026). Это вторая проекция данных Слоя 1 — не по технологии хранения, а по владению и характеру данных.
+
+Три хранилища данных распределяются по характеру:
+
+| Хранилище | Доля | Что хранит | Владелец |
+|-----------|------|------------|----------|
+| **Git (GitHub)** | ~10% | Исходный код, Pack-документы, конфигурации IWE, декларации Персон | Платформа + пользователи |
+| **Neon PostgreSQL** | ~85% | Все операционные данные: события, прогресс, профили, платежи, подписки | Платформа (по юрисдикции) |
+| **Session (ephemeral)** | ~5% | Текущий контекст LLM-сессии, промежуточные вычисления | Агент (runtime) |
+
+### Ключевые схемы Neon
+
+**Активность пользователя (`activity_log`):**
+```sql
+CREATE TABLE learning.activity_log (
+  event_id     UUID PRIMARY KEY,
+  user_id      UUID NOT NULL,
+  event_type   TEXT NOT NULL,
+  payload      JSONB,
+  ingested_at  TIMESTAMPTZ DEFAULT now()
+);
+```
+
+**cp-профиль созидателя (`learner_cp_profile`):**
+```sql
+CREATE TABLE learning.learner_cp_profile (
+  user_id   UUID PRIMARY KEY,
+  cp_rhy    SMALLINT,  -- rhythm: регулярность практики
+  cp_wld    SMALLINT,  -- worldview: системное мышление
+  cp_skl    SMALLINT,  -- skill: мастерство в методах
+  cp_iwe    SMALLINT,  -- iwe: использование экзокортекса
+  cp_int    SMALLINT,  -- intelligence: агентность
+  cp_agt    SMALLINT,  -- agency: воздействие на среду
+  updated_at TIMESTAMPTZ
+);
+```
+
+**Поведенческие индикаторы (`behavior_indicators`):**
+```sql
+CREATE TABLE learning.behavior_indicators (
+  user_id   UUID PRIMARY KEY,
+  bh_sys    SMALLINT,  -- системность практики
+  bh_inv    SMALLINT,  -- инвестиции в развитие
+  bh_awr    SMALLINT,  -- осознанность
+  bh_per    SMALLINT,  -- настойчивость
+  updated_at TIMESTAMPTZ
+);
+```
+
+**Принцип:** Neon содержит все производные (агрегаты, профили, статусы). Git содержит первоисточники (код, паки, конфиги). Session никогда не пишет в персистентные хранилища напрямую.
+
 ## 4. Архитектурные характеристики
 
 > Характеристика ≠ Принцип (DP.D.010). Характеристика — измеряемое качество. Принцип — правило для достижения характеристики.
