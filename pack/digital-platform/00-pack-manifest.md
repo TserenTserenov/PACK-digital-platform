@@ -697,7 +697,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.036 | Knowledge Routing Gate — маршрутизация артефактов в IWE | SC | Агент получает канонический путь размещения для любого нового артефакта до выполнения Write, используя каскад vocab → DP.KR.001 → repo CLAUDE.md | draft |
 | DP.SC.037 | Agent Trace | SC | — | draft |
 | DP.SC.038 | Agent Replay | SC | — | draft |
-| DP.SC.039 | Multipath | SC | — | draft |
+| DP.SC.039 | Multipath | SC | — | active |
 | DP.SC.040 | Pattern Miner | SC | — | draft |
 | DP.SC.041 | Индикатор мультипликатора IWE в характеристике мастерства | SC | Потребители (Аттестатор, Навигатор, Metabase) получают в digital_twins.data['3_derived']['3_2_mastery'] четыре числа: multiplier_auto, multiplier_manual, multiplier_drift, multiplier_7d_avg. Расхождение — сигнал, не ошибка. | active |
 | DP.SC.042 | Извлечение знаний в Pack | SC | Знания из сессий, обратной связи и документов преобразуются в Pack-сущности (правила, роли, методы, различения) и интегрируются в платформу | active |

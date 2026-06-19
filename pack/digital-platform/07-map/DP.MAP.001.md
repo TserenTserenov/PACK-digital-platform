@@ -890,7 +890,7 @@ generated: true
 | DP.SC.036 | Knowledge Routing Gate — маршрутизация артефактов в IWE | Агент получает канонический путь размещения для любого нового артефакта до выполнения Write, используя каскад vocab → DP.KR.001 → repo CLAUDE.md | draft |
 | DP.SC.037 | Agent Trace | — | draft |
 | DP.SC.038 | Agent Replay | — | draft |
-| DP.SC.039 | Multipath | — | draft |
+| DP.SC.039 | Multipath | — | active |
 | DP.SC.040 | Pattern Miner | — | draft |
 | DP.SC.041 | Индикатор мультипликатора IWE в характеристике мастерства | Потребители (Аттестатор, Навигатор, Metabase) получают в digital_twins.data['3_derived']['3_2_mastery'] четыре числа: multiplier_auto, multiplier_manual, multiplier_drift, multiplier_7d_avg. Расхождение — сигнал, не ошибка. | active |
 | DP.SC.042 | Извлечение знаний в Pack | Знания из сессий, обратной связи и документов преобразуются в Pack-сущности (правила, роли, методы, различения) и интегрируются в платформу | active |

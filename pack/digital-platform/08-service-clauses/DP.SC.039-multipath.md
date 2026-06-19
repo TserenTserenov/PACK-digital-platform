@@ -1,11 +1,11 @@
 ---
 id: DP.SC.039
 title: "Параллельный запуск нескольких путей (multi-path / best-of-N)"
-status: draft
+status: active
 layer: L4-Personal
 audience: [R1 Стратег, R5 Архитектор, R23 Аудитор, R25 Рецензент, DP.ROLE.049 R32 Координатор путей]
 created: 2026-05-17
-updated: 2026-05-17
+updated: 2026-06-19
 links: [WP-295, DP.SOTA.022, DP.SC.037, DP.M.005]
 related:
   extends: []
@@ -150,4 +150,11 @@ related:
 
 ---
 
-**Статус:** draft, 17 мая 2026. Реализация: Ф3 WP-295 (~12h). Требует: SC.037 в проде (для trace форков), отдельный IntegrationGate для R32 Координатора путей (Ф0.4).
+**Статус:** active, реализован 2026-06-19 (WP-295 Ф3-core peer-session 2026-06-19-24).
+
+**Ф3-core (реализовано):**
+- `~/IWE/scripts/iwe-multipath.py` — CLI `run`/`score`, asyncio.Semaphore(max=3), heuristic selector
+- `MULTIPATH_PARENT_ID` env var поддержан в `agent-trace-recorder.sh` (source=multipath_parent в session start)
+- Selector: `heuristic` (structural score без embeddings). `archgate` (LLM-as-Judge) — Ф3-full.
+
+**Ф3-full (отложено):** LLM-as-Judge pairwise selector, Reflexion-loop поверх top-1, cluster-then-pick.
