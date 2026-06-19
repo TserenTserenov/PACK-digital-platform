@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 87 |
+| Distinctions (D) | 88 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 153 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **829** |
+| **Total** | **830** |
 
 ## Distinctions
 
@@ -134,6 +134,7 @@ generated: true
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | — | active |
 | DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | — | draft |
+| DP.D.155 | Active Day Definition | — | active |
 
 ## Methods
 
@@ -1063,6 +1064,7 @@ generated: true
 - Missing `summary`: DP.D.131 (DP.D.131-costume-vs-equipment.md)
 - Missing `summary`: DP.D.132 (DP.D.132-firstokursnik-vs-member.md)
 - Missing `summary`: DP.D.154 (DP.D.154-iwesys-product-org-topology.md)
+- Missing `summary`: DP.D.155 (DP.D.155-active-day-definition.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
