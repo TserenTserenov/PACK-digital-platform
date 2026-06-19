@@ -109,6 +109,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.133 | Три уровня изоляции данных в IWE | D | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | D | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | D | — | active |
+| DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -259,6 +260,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.161 | pack-event-name-drift: Pack документирует выдуманное имя события, в коде другое имя | FM | — | — |
 | DP.FM.162 | РП-контекст: vapor-claim о готовом компоненте (дрейф карточки от кода) | FM | — | draft |
 | DP.FM.163 | Локально зелено, в CI красно: node_modules маскирует stale package-lock | FM | — | draft |
+| DP.FM.164 | jose JWKS DNS-failure маскируется под request timed out | FM | — | active |
+| DP.FM.165 | Foreground Shell Orphan Ide Extension | FM | — | draft |
+| DP.FM.166 | Schema Consumer Contract Breach | FM | — | draft |
+| DP.FM.167 | Тихий False от upstream отключает except-fallback | FM | — | draft |
+| DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -560,6 +566,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.311 | File-fallback из шаблона: graceful degradation при отсутствии Pack | M | Интерфейс-слой (FMT-шаблон) доставляет базовое поведение (стили, правила, шаблоны) пользователю двухуровневой цепочкой: сначала ищем в Pack (полный домен), при отсутствии — берём встроенный фолбэк из шаблона. Необязательный Pack перестаёт быть жёсткой зависимостью. | — |
 | DP.M.312 | OAuth prompt=login: принудительная re-authentication через стандартный параметр | M | Если клиент держит refresh-токен/grant и при reconnect не показывает форму входа, добавление параметра prompt=login (RFC 6749) к OAuth-authorize URL заставляет identity-провайдер игнорировать существующую сессию и потребовать свежую аутентификацию. | — |
 | DP.M.313 | Enforcement ladder: уровни и критерии promotion правил | M | Каждое правило системы существует на одном из 5 уровней enforcement (E0 существует — E4 блокирует merge). Промоция между уровнями — отдельная инженерная задача. Главный паттерн — E3 (ручное ревью) → E2 (CI-скрипт) при условии однозначной автоматической проверки. | — |
+| DP.M.314 | Structural criterion over symbol heuristic | M | При дизайне lint/audit-скриптов для markdown-артефактов проверять AST-структуру (заголовки уровней + непустые блоки), а не символьные паттерны (пунктуация →, :, *). Символьные эвристики дают false-positive на заголовках и false-negative на альтернативных нотациях. | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -577,6 +584,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.056 | Pre-deploy аудит потребителей перед сменой имён MCP-инструментов | METHOD | Перед деплоем gateway с изменёнными именами инструментов — grep по всем клиентским репо на старые имена. Деплой только атомарно с обновлением потребителей. | active |
 | DP.METHOD.057 | Идемпотентные SQL-миграции | METHOD | Миграция БД должна быть безопасна при повторном запуске: проверка «уже существует» перед созданием, проверка «ещё существует» перед удалением. | active |
 | DP.METHOD.058 | Повтор и форк сессии агента | METHOD | Восстановить контекст агентской сессии до выбранной точки решения, чтобы исследовать альтернативный путь (форк) или воспроизвести рассуждение (повтор). | active |
+| DP.METHOD.059 | Bash 32 Portability Python3 Heredoc | METHOD | — | draft |
+| DP.METHOD.060 | Skill Promotion L2 To L1 | METHOD | — | draft |
+| DP.METHOD.061 | Incremental Architecture Seed Order | METHOD | — | draft |
+| DP.METHOD.062 | Skill Description Scope Guard | METHOD | — | draft |
+| DP.METHOD.063 | Wp To Pack Migration Flow | METHOD | WP→Pack migration flow: WP-document = thinking workspace (mutable), Pack = canonical source of truth (stable). After crystallization — content migrates to Pack, WP moves to archive. | draft |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
@@ -825,4 +837,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-06-18*
+> *Auto-generated by `generate-map.py` on 2026-06-19*

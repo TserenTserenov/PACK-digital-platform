@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-06-18
-last_updated: 2026-06-18
+created: 2026-06-19
+last_updated: 2026-06-19
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-06-18. Do not edit manually.
+> Auto-generated from frontmatter on 2026-06-19. Do not edit manually.
 
 ---
 
@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 86 |
+| Distinctions (D) | 87 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 148 |
+| Failure Modes (FM) | 153 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 286 |
+| Methods (M) | 287 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 15 |
+| METHOD (METHOD) | 20 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **817** |
+| **Total** | **829** |
 
 ## Distinctions
 
@@ -133,6 +133,7 @@ generated: true
 | DP.D.133 | Три уровня изоляции данных в IWE | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | — | active |
+| DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | — | draft |
 
 ## Methods
 
@@ -424,6 +425,7 @@ generated: true
 | DP.M.311 | File-fallback из шаблона: graceful degradation при отсутствии Pack | Интерфейс-слой (FMT-шаблон) доставляет базовое поведение (стили, правила, шаблоны) пользователю двухуровневой цепочкой: сначала ищем в Pack (полный домен), при отсутствии — берём встроенный фолбэк из шаблона. Необязательный Pack перестаёт быть жёсткой зависимостью. | — |
 | DP.M.312 | OAuth prompt=login: принудительная re-authentication через стандартный параметр | Если клиент держит refresh-токен/grant и при reconnect не показывает форму входа, добавление параметра prompt=login (RFC 6749) к OAuth-authorize URL заставляет identity-провайдер игнорировать существующую сессию и потребовать свежую аутентификацию. | — |
 | DP.M.313 | Enforcement ladder: уровни и критерии promotion правил | Каждое правило системы существует на одном из 5 уровней enforcement (E0 существует — E4 блокирует merge). Промоция между уровнями — отдельная инженерная задача. Главный паттерн — E3 (ручное ревью) → E2 (CI-скрипт) при условии однозначной автоматической проверки. | — |
+| DP.M.314 | Structural criterion over symbol heuristic | При дизайне lint/audit-скриптов для markdown-артефактов проверять AST-структуру (заголовки уровней + непустые блоки), а не символьные паттерны (пунктуация →, :, *). Символьные эвристики дают false-positive на заголовках и false-negative на альтернативных нотациях. | — |
 
 ## Work Products
 
@@ -598,6 +600,11 @@ generated: true
 | DP.FM.161 | pack-event-name-drift: Pack документирует выдуманное имя события, в коде другое имя | — | — |
 | DP.FM.162 | РП-контекст: vapor-claim о готовом компоненте (дрейф карточки от кода) | — | draft |
 | DP.FM.163 | Локально зелено, в CI красно: node_modules маскирует stale package-lock | — | draft |
+| DP.FM.164 | jose JWKS DNS-failure маскируется под request timed out | — | active |
+| DP.FM.165 | Foreground Shell Orphan Ide Extension | — | draft |
+| DP.FM.166 | Schema Consumer Contract Breach | — | draft |
+| DP.FM.167 | Тихий False от upstream отключает except-fallback | — | draft |
+| DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | — | draft |
 
 ## SoTA Annotations
 
@@ -735,6 +742,11 @@ generated: true
 | DP.METHOD.056 | Pre-deploy аудит потребителей перед сменой имён MCP-инструментов | Перед деплоем gateway с изменёнными именами инструментов — grep по всем клиентским репо на старые имена. Деплой только атомарно с обновлением потребителей. | active |
 | DP.METHOD.057 | Идемпотентные SQL-миграции | Миграция БД должна быть безопасна при повторном запуске: проверка «уже существует» перед созданием, проверка «ещё существует» перед удалением. | active |
 | DP.METHOD.058 | Повтор и форк сессии агента | Восстановить контекст агентской сессии до выбранной точки решения, чтобы исследовать альтернативный путь (форк) или воспроизвести рассуждение (повтор). | active |
+| DP.METHOD.059 | Bash 32 Portability Python3 Heredoc | — | draft |
+| DP.METHOD.060 | Skill Promotion L2 To L1 | — | draft |
+| DP.METHOD.061 | Incremental Architecture Seed Order | — | draft |
+| DP.METHOD.062 | Skill Description Scope Guard | — | draft |
+| DP.METHOD.063 | Wp To Pack Migration Flow | WP→Pack migration flow: WP-document = thinking workspace (mutable), Pack = canonical source of truth (stable). After crystallization — content migrates to Pack, WP moves to archive. | draft |
 
 ### NAV
 
@@ -1050,6 +1062,7 @@ generated: true
 - Missing `summary`: DP.D.130 (DP.D.130-two-axis-onboarding-model.md)
 - Missing `summary`: DP.D.131 (DP.D.131-costume-vs-equipment.md)
 - Missing `summary`: DP.D.132 (DP.D.132-firstokursnik-vs-member.md)
+- Missing `summary`: DP.D.154 (DP.D.154-iwesys-product-org-topology.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1294,6 +1307,10 @@ generated: true
 - Missing `summary`: DP.M.308 (DP.M.308-reader-contract-check-before-gate-removal.md)
 - Missing `summary`: DP.M.309 (DP.M.309-halliday-language-rule-routing.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
+- Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
+- Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
+- Missing `summary`: DP.METHOD.061 (DP.METHOD.061-incremental-architecture-seed-order.md)
+- Missing `summary`: DP.METHOD.062 (DP.METHOD.062-skill-description-scope-guard.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1400,6 +1417,11 @@ generated: true
 - Missing `summary`: DP.FM.161 (DP.FM.161-pack-event-name-drift.md)
 - Missing `summary`: DP.FM.162 (DP.FM.162-wp-context-vapor-claim-drift.md)
 - Missing `summary`: DP.FM.163 (DP.FM.163-npm-ci-vs-npm-run-lock-mismatch.md)
+- Missing `summary`: DP.FM.164 (DP.FM.164-jose-jwks-dns-failure-timeout.md)
+- Missing `summary`: DP.FM.165 (DP.FM.165-foreground-shell-orphan-ide-extension.md)
+- Missing `summary`: DP.FM.166 (DP.FM.166-schema-consumer-contract-breach.md)
+- Missing `summary`: DP.FM.167 (DP.FM.167-silent-false-disables-except-fallback.md)
+- Missing `summary`: DP.FM.168 (DP.FM.168-metric-zero-active-user-identity-first.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
@@ -1429,4 +1451,4 @@ generated: true
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-06-18*
+*Generated by `scripts/generate-map.py` on 2026-06-19*
