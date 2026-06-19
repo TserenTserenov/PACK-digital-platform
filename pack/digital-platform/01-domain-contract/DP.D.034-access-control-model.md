@@ -203,7 +203,8 @@ Position = Role + Entitlement + Default Scope + параметры
 |---------|----------------|
 | Регистрация | Role=Участник + Tier=T1 |
 | Оплата подписки | Tier=T2 |
-| Заполнение ЦД (≥20 мин) | Tier=T3 |
+| Подключение любого AI-клиента (claude.ai / Claude Code / VS Code / Telegram) | Tier=T3 |
+| Подключение GitHub | Tier=T4 |
 | Реферальная ссылка (при одобрении) | Role=Амбассадор + Scope=referral:invited_users |
 
 **Способ 2: Position** — администратор назначает позицию одним действием.

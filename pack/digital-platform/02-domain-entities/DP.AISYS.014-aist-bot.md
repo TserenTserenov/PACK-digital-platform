@@ -202,15 +202,16 @@ related:
 
 **Подписка:** «Бесконечное развитие» (БР) на system-school.ru — единственная подписка. TG Stars — опциональные донаты, не подписка.
 
-**🧬 T3 — Персонализация** (подключён Цифровой двойник):
-- Персональные рекомендации на основе целей, проблем и интересов
-- Полный профиль с проекцией в ЦД (10 полей)
+**🧬 T3 — Персонализация** (подключён любой AI-клиент):
+- Персональное руководство под твои цели, ступень и активные РП
+- Гермес знает твою историю (Память.Derived)
 - Усиленная адаптация контента
 
-Как перейти на T3:
-- Заполни профиль (/profile) — бот подстроит контент под тебя
-- Пройди тест (/test) — бот адаптирует стиль и сложность
-- Подключи Цифровой двойник (/settings → Подключения) — бот учтёт твои цели, проблемы и интересы
+Как перейти на T3 (нужна активная подписка + подключить любой AI-клиент — WP-406 Ф13):
+- В боте: /connect_external — подключить через Telegram
+- Или в claude.ai: Connect → Aisystant MCP (OAuth)
+- Или Claude Code / VS Code с Aisystant MCP
+- Профиль (/profile) и тест (/test) повышают качество персонализации, но T3 открывает именно подключённый AI-клиент
 
 **🚀 T4 — Созидание** (локальный экзокортекс):
 - Claude Code + агенты (Стратег, Экстрактор, Синхронизатор)
@@ -252,15 +253,16 @@ The platform has 5 learner tiers (T0-T4) and 3 orthogonal axes: TM (mentors), TA
 
 **Subscription:** «Бесконечное развитие» (БР) on system-school.ru — the only subscription. TG Stars are optional donations, not a subscription.
 
-**🧬 T3 — Personalization** (Digital Twin connected):
-- Personal recommendations based on goals, problems and interests
-- Full profile with DT projection (10 fields)
+**🧬 T3 — Personalization** (any AI client connected):
+- Personal guide tailored to your goals, mastery stage and active work products
+- Hermes knows your history (Memory.Derived)
 - Enhanced content adaptation
 
-How to reach T3:
-- Fill your profile (/profile) — bot tailors content for you
-- Take the test (/test) — bot adapts style and difficulty
-- Connect Digital Twin (/settings → Connections) — bot considers your goals, problems and interests
+How to reach T3 (active subscription + connect any AI client — WP-406 Ф13):
+- In the bot: /connect_external — connect via Telegram
+- Or in claude.ai: Connect → Aisystant MCP (OAuth)
+- Or Claude Code / VS Code with Aisystant MCP
+- Profile (/profile) and test (/test) improve personalization quality, but T3 is unlocked by a connected AI client
 
 **🚀 T4 — Creation** (local exocortex):
 - Claude Code + agents (Strategist, Extractor, Synchronizer)
