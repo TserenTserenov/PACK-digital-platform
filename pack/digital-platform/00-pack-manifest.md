@@ -656,6 +656,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.074 | Диспетчер стилей | ROLE | — | draft |
 | DP.ROLE.075 | Доставщик (Delivery Policy Layer) | ROLE | Слой политики исходящих: единая воронка всех сообщений пользователю. Применяет глобальный потолок по классу, приоритет, дедуп-по-всем и hard-gate предпочтений, затем передаёт транспорту (DP.ROLE.044) для физической доставки. | draft |
 | DP.ROLE.076 | Ревьюер инженерного стиля кода (Code Craft Reviewer) | ROLE | Контрольный агент: по git diff семантически проверяет соответствие крафт-правилам P1-P9 (DP.SC.172), которые механический детектор не ловит. Read-only на код, пишет только в свой канал (лог стиля + отчёт). Advisory-вердикт с severity; не блокирует и не правит. | active |
+| DP.ROLE.077 | Учётчик следов (trace-accountant) | ROLE | Единственный authorized writer в learning.domain_event. Принимает следы от сенсорных адаптеров, применяет consent-guard, нормализует, маршрутизирует по route_catalog, управляет trace_stubs и reconciler-отчётом. | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -790,6 +791,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.179 | Семантический ревью соответствия инженерному стилю кода | SC | Контрольный агент по git diff семантически проверяет соответствие правилам инженерного стиля P1-P9 (DP.SC.172), которые механический детектор не ловит (копипаста P2, мёртвый код P3, смешение обязанностей P5, наблюдаемость P6, неидиоматичность P8, ручной парсинг P9). Выдаёт advisory-вердикт с file:line + severity в единый лог стиля → метрика code-compliance. Никогда не мутирует код; gating — политика потребителя, не роли. | active |
 | DP.SC.180 | unit-economics | SC | — | draft |
 | DP.SC.181 | Гард ID-коллизий в Pack-репо (pre-commit) | SC | Delta-aware pre-commit гард блокирует коммит, если новый entity-файл занимает уже существующий код (PREFIX.TYPE.N), и подсказывает следующий свободный номер. Закрывает гонку параллельных агентов, независимо берущих max+1 в одной рабочей папке. Глобальный pack-lint остаётся warning, CI check-pack-collisions — бэкстоп. | active |
+| DP.SC.182 | Учётчик следов (trace-accountant) | SC | Принимает сырые следы от сенсорных адаптеров, проверяет consent, нормализует, маршрутизирует в домы знания по route_catalog, управляет stub-буфером offline+restrictive, ведёт reconciler-отчёт. Единственный authorized writer в learning.domain_event. | draft |
+| DP.SC.183 | Bot Llm Dialog | SC | — | draft |
+| DP.SC.184 | Bot Day Open | SC | — | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

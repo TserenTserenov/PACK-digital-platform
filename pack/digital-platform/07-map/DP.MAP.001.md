@@ -34,14 +34,14 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 61 |
+| ROLE (ROLE) | 62 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 132 |
+| SC (SC) | 135 |
 | SoTA Annotations (SOTA) | 29 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **830** |
+| **Total** | **834** |
 
 ## Distinctions
 
@@ -839,6 +839,7 @@ generated: true
 | DP.ROLE.074 | Диспетчер стилей | — | draft |
 | DP.ROLE.075 | Доставщик (Delivery Policy Layer) | Слой политики исходящих: единая воронка всех сообщений пользователю. Применяет глобальный потолок по классу, приоритет, дедуп-по-всем и hard-gate предпочтений, затем передаёт транспорту (DP.ROLE.044) для физической доставки. | draft |
 | DP.ROLE.076 | Ревьюер инженерного стиля кода (Code Craft Reviewer) | Контрольный агент: по git diff семантически проверяет соответствие крафт-правилам P1-P9 (DP.SC.172), которые механический детектор не ловит. Read-only на код, пишет только в свой канал (лог стиля + отчёт). Advisory-вердикт с severity; не блокирует и не правит. | active |
+| DP.ROLE.077 | Учётчик следов (trace-accountant) | Единственный authorized writer в learning.domain_event. Принимает следы от сенсорных адаптеров, применяет consent-guard, нормализует, маршрутизирует по route_catalog, управляет trace_stubs и reconciler-отчётом. | draft |
 
 ### RUNBOOK
 
@@ -983,6 +984,9 @@ generated: true
 | DP.SC.179 | Семантический ревью соответствия инженерному стилю кода | Контрольный агент по git diff семантически проверяет соответствие правилам инженерного стиля P1-P9 (DP.SC.172), которые механический детектор не ловит (копипаста P2, мёртвый код P3, смешение обязанностей P5, наблюдаемость P6, неидиоматичность P8, ручной парсинг P9). Выдаёт advisory-вердикт с file:line + severity в единый лог стиля → метрика code-compliance. Никогда не мутирует код; gating — политика потребителя, не роли. | active |
 | DP.SC.180 | unit-economics | — | draft |
 | DP.SC.181 | Гард ID-коллизий в Pack-репо (pre-commit) | Delta-aware pre-commit гард блокирует коммит, если новый entity-файл занимает уже существующий код (PREFIX.TYPE.N), и подсказывает следующий свободный номер. Закрывает гонку параллельных агентов, независимо берущих max+1 в одной рабочей папке. Глобальный pack-lint остаётся warning, CI check-pack-collisions — бэкстоп. | active |
+| DP.SC.182 | Учётчик следов (trace-accountant) | Принимает сырые следы от сенсорных адаптеров, проверяет consent, нормализует, маршрутизирует в домы знания по route_catalog, управляет stub-буфером offline+restrictive, ведёт reconciler-отчёт. Единственный authorized writer в learning.domain_event. | draft |
+| DP.SC.183 | Bot Llm Dialog | — | draft |
+| DP.SC.184 | Bot Day Open | — | draft |
 
 ### SYS
 
@@ -1450,6 +1454,8 @@ generated: true
 - Missing `summary`: DP.SC.170 (DP.SC.170-onboarder.md)
 - Missing `summary`: DP.SC.171 (DP.SC.171-conveyor-development.md)
 - Missing `summary`: DP.SC.180 (DP.SC.180-unit-economics.md)
+- Missing `summary`: DP.SC.183 (DP.SC.183-bot-llm-dialog.md)
+- Missing `summary`: DP.SC.184 (DP.SC.184-bot-day-open.md)
 
 ---
 
