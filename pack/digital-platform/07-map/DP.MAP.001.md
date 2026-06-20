@@ -34,14 +34,14 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 63 |
+| ROLE (ROLE) | 64 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 136 |
+| SC (SC) | 137 |
 | SoTA Annotations (SOTA) | 29 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **836** |
+| **Total** | **838** |
 
 ## Distinctions
 
@@ -841,6 +841,7 @@ generated: true
 | DP.ROLE.076 | Ревьюер инженерного стиля кода (Code Craft Reviewer) | Контрольный агент: по git diff семантически проверяет соответствие крафт-правилам P1-P9 (DP.SC.172), которые механический детектор не ловит. Read-only на код, пишет только в свой канал (лог стиля + отчёт). Advisory-вердикт с severity; не блокирует и не правит. | active |
 | DP.ROLE.077 | Учётчик следов (trace-accountant) | Единственный authorized writer в learning.domain_event. Принимает следы от сенсорных адаптеров, применяет consent-guard, нормализует, маршрутизирует по route_catalog, управляет trace_stubs и reconciler-отчётом. | draft |
 | DP.ROLE.078 | Владелец тира (Tier Authority) | Единственный компонент, который вычисляет и пишет traits.tier. Операционная роль: меняет состояние персоны. Носитель — user-profile-service. | draft |
+| DP.ROLE.079 | Bot Agent Session Orchestrator | Оркестратор live-агентной сессии IWE через Telegram: выбирает исполнителя (Claude/Kimi/Hermes) через factory, ведёт lifecycle сессии (start→run→pause→resume→close), принуждает audit + domain-scope, возвращает артефакты в Telegram. Не путать с Диспетчером очереди задач (DP.ROLE.045). | draft |
 
 ### RUNBOOK
 
@@ -989,6 +990,7 @@ generated: true
 | DP.SC.183 | Bot Llm Dialog | — | draft |
 | DP.SC.184 | Bot Day Open | — | draft |
 | DP.SC.185 | Владелец тира (Tier Authority) | Единственный authoritative-источник уровня доступа (traits.tier T0-T4). Вычисляет, хранит и поддерживает актуальность тира персоны по lifecycle-событиям: подписка, AI-клиент, GitHub, admin. | draft |
+| DP.SC.186 | Bot Agent Session | — | draft |
 
 ### SYS
 
@@ -1458,6 +1460,7 @@ generated: true
 - Missing `summary`: DP.SC.180 (DP.SC.180-unit-economics.md)
 - Missing `summary`: DP.SC.183 (DP.SC.183-bot-llm-dialog.md)
 - Missing `summary`: DP.SC.184 (DP.SC.184-bot-day-open.md)
+- Missing `summary`: DP.SC.186 (DP.SC.186-bot-agent-session.md)
 
 ## Staleness Warnings (>90 days since update)
 
