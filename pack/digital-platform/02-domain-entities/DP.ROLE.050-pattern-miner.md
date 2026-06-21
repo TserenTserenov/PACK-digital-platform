@@ -17,11 +17,12 @@ related:
     - DP.SOTA.022 §3                # pattern mining паттерны
     - DP.M.012 Machine-Check Postcondition  # для валидации draft AR
   downstream_consumers:
-    - DP.ROLE.015 Captures Applier  # R15 принимает/отклоняет кандидатов
+    - DP.ROLE.015 Captures Applier  # R15 принимает/отклоняет rule-кандидатов (адаптер A)
     - DP.ROLE.001 IWE Creator       # читает weekly report в Week Close
     - DP.ROLE.005 Architect          # monthly audit правил
+    - executor-catalog.yaml reflexes:  # адаптер B (WP-423): reflex-кандидат, approve пилот
 created: 2026-05-17
-updated: 2026-05-17
+updated: 2026-06-21
 wp: WP-295
 ---
 
@@ -36,7 +37,9 @@ wp: WP-295
 
 ## 1. Миссия
 
-Превращать сырьё из trace store в material для эволюции правил IWE: видеть, какие паттерны провалов / успехов повторяются за неделю-месяц, и предлагать кандидатов на новые `AR.NNN.md` в PACK-agent-rules. Без этого учёт превращается в архив — материал есть, но не превращается в обучение.
+Превращать сырьё из trace store в material для эволюции правил **и рефлексов** IWE: видеть, какие паттерны провалов / успехов повторяются за неделю-месяц, и предлагать кандидатов. Без этого учёт превращается в архив — материал есть, но не превращается в обучение.
+
+**Два выходных адаптера (WP-423):** общий движок добычи, разные выходы — (A) rule-кандидат `AR.NNN.md` в PACK-agent-rules (читает агент в промпте, approve R15); (B) reflex-кандидат `executor-catalog.yaml reflexes:` (исполняемый код без LLM, approve пилот). Различаются ТОЛЬКО типом выхода / адресатом approve / классом приёмки / целевым файлом — не алгоритмом добычи (см. [DP.SC.040 §Выходные адаптеры](../08-service-clauses/DP.SC.040-pattern-miner.md)).
 
 Аналогия: старатель на ручье. Промывает песок (trace), находит крупицы золота (повторяющиеся паттерны), показывает заказчику (R15 на apply-captures). Не принимает решений о выплавке слитков — только сортирует породу.
 
@@ -60,6 +63,7 @@ wp: WP-295
 | Monthly audit правил | `iwe miner audit --since 2026-04-01`: какие AR работают, какие мёртвые |
 | Audit-loop калибровки | track accept/reject/defer rate; reject>60% → пересмотр алгоритма |
 | Read-only по trace | никаких UPDATE/DELETE; все эффекты — отчёты в inbox |
+| Формировать reflex-кандидат (адаптер B, WP-423) | детерминированный исполнимый класс из `gate-decisions.jsonl` / базы косяков → строка `reflexes: source:crystallized enabled:false` + smoke deny-fixture (DP.SC.040 SC.040.4); `enabled:true` требует replay на истории; никогда не включает сам |
 
 ---
 
@@ -133,7 +137,8 @@ DP.ROLE.050 Pattern Miner
 | DP.ROLE.005 Architect | Consumer: R5 на monthly iwe-rules-review использует audit-отчёт для cleanup правил. |
 | R47 Детектор (DP.SC.025) | Ортогональный: SC.025 real-time детекторы; SC.040 batch майнинг. Дополняют, не дублируют. |
 | DP.ROLE.044 Notification Dispatcher | Sibling: TG-алерты на rapid-cluster через NotDisp. |
-| WP-272 PACK-agent-rules | Target формат: draft AR.NNN frontmatter совместим с реестром. |
+| WP-272 PACK-agent-rules | Target формат №1 (адаптер A): draft AR.NNN frontmatter совместим с реестром. |
+| `executor-catalog.yaml reflexes:` (адаптер B) | Target формат №2 (WP-423): reflex-кандидат (исполняемый код) vs №1 = `AR.NNN` (поведенческое правило). Approve — пилот; `enabled:true` требует replay на истории (DP.SC.040 §Выходные адаптеры). |
 
 ---
 
