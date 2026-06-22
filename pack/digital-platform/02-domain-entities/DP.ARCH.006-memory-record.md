@@ -20,6 +20,7 @@ related:
   used_by: [DP.AISYS.014, DP.CONCEPT.003, DP.ARCH.007, DP.SC.104]
   replaces_part_of: [DP.ARCH.003]
 tags: [memory, event-sourcing, cqrs, learner-model, knowledge-tracing, observed, derived]
+name_ru: "Память (Observed события + Derived агрегаты)"
 ---
 
 # Память (Observed события + Derived агрегаты)

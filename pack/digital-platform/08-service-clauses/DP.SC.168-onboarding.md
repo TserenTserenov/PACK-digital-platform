@@ -15,6 +15,7 @@ related:
   decomposed_into: [DP.SC.101, DP.SC.151, DP.SC.155, DP.SC.157, DP.SC.119, DP.SC.012]
   uses: [DP.ARCH.002 §2б, DP.ROLE.046, DP.ROLE.042]
   coordination: "tool-tiers.ts T0 — реализует WP-392 Б1 (не трогать без merge DP.ARCH.002 v2)"
+name_ru: "Онбординг платформы — зонтичное обещание"
 ---
 
 # DP.SC.168 — Онбординг платформы: зонтичное обещание

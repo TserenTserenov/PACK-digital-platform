@@ -19,6 +19,7 @@ related:
   used_by: [DP.AISYS.014, DP.SC.104, DP.CONCEPT.003]
   replaces_part_of: [DP.ARCH.003]
 tags: [projection, runtime, views, nudge-engine, ephemeral]
+name_ru: "Проекция (runtime-компиляция под потребителя)"
 ---
 
 # Проекция (runtime-компиляция под потребителя)

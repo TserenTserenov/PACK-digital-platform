@@ -19,6 +19,7 @@ related:
   used_by: [DP.ARCH.006, DP.ARCH.007, DP.SC.104, DP.CONCEPT.003]
   replaces_part_of: [DP.ARCH.003]
 tags: [persona, user-model, declarative, git-owned]
+name_ru: "Персона (декларативная модель созидателя)"
 ---
 
 # Персона (декларативная модель созидателя)

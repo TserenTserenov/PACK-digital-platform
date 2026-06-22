@@ -16,6 +16,7 @@ related:
   replaces_part_of: [DP.ARCH.003]
   used_by: [DP.SC.104, DP.CONCEPT.003, DP.D.035, DP.ARCH.004]
 tags: [persona, memory, projection, user-model, writer-owner, distinction]
+name_ru: "Различение: Персона / Память / Контекст"
 ---
 
 # DP.D.052 — Различение: Персона / Память / Контекст
