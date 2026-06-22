@@ -2,7 +2,8 @@
 id: DP.ROLE.079
 name: Bot Agent Session Orchestrator
 type: role-description
-status: draft
+status: active           # WP-428 Ф5 live-smoke принят (single-tenant пилот)
+scope: single-tenant (пилот)  # multi-tenant enforcement → спин-офф WP-4XX
 valid_from: 2026-06-20
 summary: "Оркестратор live-агентной сессии IWE через Telegram: выбирает исполнителя (Claude/Kimi/Hermes) через factory, ведёт lifecycle сессии (start→run→pause→resume→close), принуждает audit + domain-scope, возвращает артефакты в Telegram. Не путать с Диспетчером очереди задач (DP.ROLE.045)."
 related:

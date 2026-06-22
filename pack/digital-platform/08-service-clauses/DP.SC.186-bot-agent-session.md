@@ -1,9 +1,11 @@
 ---
 id: DP.SC.186
 title: "Агентная сессия IWE через бота"
-status: draft
-version: "0.1"
+status: active
+version: "1.0"
 created: 2026-06-20
+accepted: 2026-06-21        # Ф5 live-smoke принят (single-tenant пилот)
+scope: single-tenant (пилот)  # multi-tenant hardening → спин-офф WP-4XX
 wp: WP-428
 depends_on:
   - adr-unified-bot-router-v2   # executor-selection + agent_session lifecycle
