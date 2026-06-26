@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 88 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 153 |
+| Failure Modes (FM) | 154 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 290 |
+| Methods (M) | 292 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 20 |
+| METHOD (METHOD) | 25 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -37,11 +37,11 @@ generated: true
 | ROLE (ROLE) | 64 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 138 |
-| SoTA Annotations (SOTA) | 30 |
+| SoTA Annotations (SOTA) | 31 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **843** |
+| **Total** | **852** |
 
 ## Distinctions
 
@@ -430,6 +430,8 @@ generated: true
 | DP.M.325 | Radar Analog Search Before Build | — | draft |
 | DP.M.326 | Crystallization Threshold | — | draft |
 | DP.M.327 | Multi Level Lookup Diagnostic Precision | — | draft |
+| DP.M.328 | Yaml Preload Pure Bash Lookup | — | draft |
+| DP.M.329 | Идемпотентность вебхука на уровне ограничения БД (ON CONFLICT DO NOTHING) | — | active |
 
 ## Work Products
 
@@ -609,6 +611,7 @@ generated: true
 | DP.FM.166 | Schema Consumer Contract Breach | — | draft |
 | DP.FM.167 | Тихий False от upstream отключает except-fallback | — | draft |
 | DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | — | draft |
+| DP.FM.169 | Тихий fallback в content pipeline: acceptance PASS при деградации содержания | — | draft |
 
 ## SoTA Annotations
 
@@ -644,6 +647,7 @@ generated: true
 | DP.SOTA.029 | Ai Era Two Crisis Groups | — | draft |
 | DP.SOTA.030 | Eam Agent Manifest Standard | — | draft |
 | DP.SOTA.031 | Async Factory Deterministic Pipeline | — | draft |
+| DP.SOTA.032 | Semantic Chunking Rag | — | draft |
 
 ## Maps
 
@@ -752,6 +756,11 @@ generated: true
 | DP.METHOD.061 | Incremental Architecture Seed Order | — | draft |
 | DP.METHOD.062 | Skill Description Scope Guard | — | draft |
 | DP.METHOD.063 | Wp To Pack Migration Flow | WP→Pack migration flow: WP-document = thinking workspace (mutable), Pack = canonical source of truth (stable). After crystallization — content migrates to Pack, WP moves to archive. | draft |
+| DP.METHOD.064 | Outcome Gate Pending Status | gate:outcome-pending — formal interim phase status between 'mechanism verified' and 'prod behaviour confirmed'. Prevents premature phase closure when tests pass but production observation period not yet complete. | draft |
+| DP.METHOD.065 | Verifier Before Assembly | Verifier-before-assembly: explicit source availability check before content generation. Returns missing_source:<name> flags instead of silently falling back to defaults. | draft |
+| DP.METHOD.066 | Probe First | Probe-first: read-only разведка live-системы ДО реализации фазы, чья карточка делает проверяемые фактические утверждения о системе. | draft |
+| DP.METHOD.067 | Honest Provenance Backfill | При backfill provenance-колонки для данных неустановленного происхождения: 'unknown'+'flagged' (очередь аудита), не правдоподобный-но-непроверенный источник. | draft |
+| DP.METHOD.068 | Denormalize Provenance Column | При хранении провенанс-ссылки в сущности: денормализовать reference-колонку прямо в сущность, а не создавать отдельную canonical-таблицу-справочник — это избегает второго источника истины. | draft |
 
 ### NAV
 
@@ -1324,6 +1333,8 @@ generated: true
 - Missing `summary`: DP.M.325 (DP.M.325-radar-analog-search-before-build.md)
 - Missing `summary`: DP.M.326 (DP.M.326-crystallization-threshold.md)
 - Missing `summary`: DP.M.327 (DP.M.327-multi-level-lookup-diagnostic-precision.md)
+- Missing `summary`: DP.M.328 (DP.M.328-yaml-preload-pure-bash-lookup.md)
+- Missing `summary`: DP.M.329 (DP.M.329-webhook-idempotency-db-constraint.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1440,9 +1451,11 @@ generated: true
 - Missing `summary`: DP.FM.166 (DP.FM.166-schema-consumer-contract-breach.md)
 - Missing `summary`: DP.FM.167 (DP.FM.167-silent-false-disables-except-fallback.md)
 - Missing `summary`: DP.FM.168 (DP.FM.168-metric-zero-active-user-identity-first.md)
+- Missing `summary`: DP.FM.169 (DP.FM.169-silent-fallback-content-pipeline.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
+- Missing `summary`: DP.SOTA.032 (DP.SOTA.032-semantic-chunking-rag.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)

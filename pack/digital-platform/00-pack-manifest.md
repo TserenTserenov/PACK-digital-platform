@@ -266,6 +266,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.166 | Schema Consumer Contract Breach | FM | — | draft |
 | DP.FM.167 | Тихий False от upstream отключает except-fallback | FM | — | draft |
 | DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | FM | — | draft |
+| DP.FM.169 | Тихий fallback в content pipeline: acceptance PASS при деградации содержания | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -571,6 +572,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.325 | Radar Analog Search Before Build | M | — | draft |
 | DP.M.326 | Crystallization Threshold | M | — | draft |
 | DP.M.327 | Multi Level Lookup Diagnostic Precision | M | — | draft |
+| DP.M.328 | Yaml Preload Pure Bash Lookup | M | — | draft |
+| DP.M.329 | Идемпотентность вебхука на уровне ограничения БД (ON CONFLICT DO NOTHING) | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -593,6 +596,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.061 | Incremental Architecture Seed Order | METHOD | — | draft |
 | DP.METHOD.062 | Skill Description Scope Guard | METHOD | — | draft |
 | DP.METHOD.063 | Wp To Pack Migration Flow | METHOD | WP→Pack migration flow: WP-document = thinking workspace (mutable), Pack = canonical source of truth (stable). After crystallization — content migrates to Pack, WP moves to archive. | draft |
+| DP.METHOD.064 | Outcome Gate Pending Status | METHOD | gate:outcome-pending — formal interim phase status between 'mechanism verified' and 'prod behaviour confirmed'. Prevents premature phase closure when tests pass but production observation period not yet complete. | draft |
+| DP.METHOD.065 | Verifier Before Assembly | METHOD | Verifier-before-assembly: explicit source availability check before content generation. Returns missing_source:<name> flags instead of silently falling back to defaults. | draft |
+| DP.METHOD.066 | Probe First | METHOD | Probe-first: read-only разведка live-системы ДО реализации фазы, чья карточка делает проверяемые фактические утверждения о системе. | draft |
+| DP.METHOD.067 | Honest Provenance Backfill | METHOD | При backfill provenance-колонки для данных неустановленного происхождения: 'unknown'+'flagged' (очередь аудита), не правдоподобный-но-непроверенный источник. | draft |
+| DP.METHOD.068 | Denormalize Provenance Column | METHOD | При хранении провенанс-ссылки в сущности: денормализовать reference-колонку прямо в сущность, а не создавать отдельную canonical-таблицу-справочник — это избегает второго источника истины. | draft |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
@@ -832,6 +840,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.029 | Ai Era Two Crisis Groups | SOTA | — | draft |
 | DP.SOTA.030 | Eam Agent Manifest Standard | SOTA | — | draft |
 | DP.SOTA.031 | Async Factory Deterministic Pipeline | SOTA | — | draft |
+| DP.SOTA.032 | Semantic Chunking Rag | SOTA | — | draft |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.VM.001 | P1 P9 Calibration Matrix | VM | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Первокурсника/событие тира). | — |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |

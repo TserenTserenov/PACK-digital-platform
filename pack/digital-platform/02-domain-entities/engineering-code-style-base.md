@@ -142,6 +142,49 @@ y, m = s[0:4], s[5:7]          # дата срезами
 row = next(csv.reader([line])); d = datetime.date.fromisoformat(s)
 ```
 
+**P10 — функция-поиска / функция-попытка возвращает значение, а не флаг наличия.**
+```python
+# было: bool — caller вынужден вычислять повторно или терять результат
+def _try_auto_link(user_id, db) -> bool:
+    account = db.find_account(user_id)
+    return account is not None  # account.id теряется
+
+if _try_auto_link(uid, db):
+    db.link(uid, ???)  # откуда account_id?
+
+# стало: str | None — вычисленный результат передаётся дальше
+def _try_auto_link(user_id, db) -> str | None:
+    account = db.find_account(user_id)
+    return account.id if account else None
+
+if account_id := _try_auto_link(uid, db):
+    db.link(uid, account_id)
+```
+Применяется к: lookup-функции, поиску соответствия, попыткам соединения.
+
+**P11 — lookup из N источников возвращает типизированный результат с провенанс-полем, не голую строку.**
+```python
+# было: голая строка — откуда она пришла?
+def get_meme(slot, catalog) -> str:
+    return catalog.get(slot, DEFAULT_TEXT)   # source неизвестен
+
+# стало: типизированный результат с провенансом
+@dataclass
+class MemeResult:
+    text: str
+    source: str  # "catalog" | "fallback" | "empty"
+    slot: str
+
+def get_meme(slot, catalog) -> MemeResult:
+    if slot in catalog:
+        return MemeResult(text=catalog[slot], source="catalog", slot=slot)
+    if DEFAULT_TEXT:
+        logger.warning("meme_fallback", slot=slot)   # P6: explicit warning
+        return MemeResult(text=DEFAULT_TEXT, source="fallback", slot=slot)
+    return MemeResult(text="", source="empty", slot=slot)
+```
+Поле `source` одновременно: (1) диагностика для разработчика; (2) сигнал наблюдаемости (`source="fallback"` → WARNING = повод расширить каталог). Тест: «мой lookup из N источников возвращает голую строку — понимаю ли, откуда она пришла?» Нет → верни типизированный результат с полем source.
+
 ## Таблица идиом по языкам (ориентир для P8)
 
 > 3-5 ключевых идиом на язык. Не исчерпывающий каталог — указатель «как принято».
