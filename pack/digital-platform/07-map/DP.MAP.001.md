@@ -29,7 +29,7 @@ generated: true
 | KR (KR) | 2 |
 | Methods (M) | 293 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 28 |
+| METHOD (METHOD) | 29 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **856** |
+| **Total** | **857** |
 
 ## Distinctions
 
@@ -765,6 +765,7 @@ generated: true
 | DP.METHOD.096 | Phase Absorption By Child Wp | При росте дочернего РП в самостоятельный зонтичный — зонтичный-родитель явно передаёт конкретные фазы дочернему и переопределяет свой scope. Смешение scope между РП запрещено (OwnerIntegrity). | draft |
 | DP.METHOD.097 | Explicit Date Arg Reproducibility | Скрипт-генератор с date-dependent output принимает дату явно как --date YYYY-MM-DD. datetime.now() как единственный источник даты запрещён: делает вывод нетестируемым и ретроактивный рендеринг невозможным. | draft |
 | DP.METHOD.098 | Dedicated Style Gate Pipeline | Выделенный пост-генерационный gate с детерминированным словарём проверяет стиль/compliance LLM-вывода. Style-инструкция в промпте = 'попросить'; gate = 'проверить'. Оба нужны. | draft |
+| DP.METHOD.099 | Local Gateway Render Extension | Local Gateway = тонкий MCP-сервер, расширяемый операциями над локальными файлами пилота. Каждое расширение = отдельный Service Clause. Ограничение: онлайн только при работающей машине пилота. | draft |
 
 ### NAV
 
