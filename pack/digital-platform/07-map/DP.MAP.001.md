@@ -29,7 +29,7 @@ generated: true
 | KR (KR) | 2 |
 | Methods (M) | 293 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 32 |
+| METHOD (METHOD) | 33 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **861** |
+| **Total** | **862** |
 
 ## Distinctions
 
@@ -770,6 +770,7 @@ generated: true
 | DP.METHOD.100 | Testing As Specification | Тест задаёт форму ожидаемого выхода — это и есть спецификация. Хороший тест читается как требование: при этом входе — этот выход. Тест без observable assertion (assert True, вечно-зелёный тест) — не тест, а шум. Документация устаревает; тест — вместе с кодом. | draft |
 | DP.METHOD.101 | Append Only Audit Journal Integrity | Hash-chain trigger + SELECT FOR UPDATE на stream_tip + JCS + OTS anchors = дизайн append-only аудит-журнала с tamper-evidence и serialized writes без гонки хешей. Применимо к любому журналу с требованием non-repudiation. | draft |
 | DP.METHOD.102 | Principle Hierarchy Zpf Tpf | Иерархия ZPF→FPF→SPF→TPF→LPF классифицирует принципы по специфичности применения. Поиск: сверху вниз (от универсального к инстансу/носителю). Загрузка в агента: снизу вверх (LPF→ZPF), чтобы специфические перевешивали общие при конфликте. | draft |
+| DP.METHOD.103 | Language Parametric Onboarding Route | — | — |
 
 ### NAV
 
@@ -1350,6 +1351,7 @@ generated: true
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
 - Missing `summary`: DP.METHOD.061 (DP.METHOD.061-incremental-architecture-seed-order.md)
 - Missing `summary`: DP.METHOD.062 (DP.METHOD.062-skill-description-scope-guard.md)
+- Missing `summary`: DP.METHOD.103 (DP.METHOD.103-language-parametric-onboarding-route.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
