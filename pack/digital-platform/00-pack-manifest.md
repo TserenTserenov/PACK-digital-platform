@@ -112,6 +112,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | D | — | draft |
 | DP.D.155 | Active Day Definition | D | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | D | — | draft |
+| DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -269,6 +270,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | FM | — | draft |
 | DP.FM.169 | Тихий fallback в content pipeline: acceptance PASS при деградации содержания | FM | — | draft |
 | DP.FM.170 | Literal Guard Pattern Mismatch On Day One | FM | Guard проверяет наличие коммита через жёсткое совпадение текста, но реальные коммиты используют другой синтаксис. Guard сломан в момент деплоя. | — |
+| DP.FM.171 | Ui Visibility Vs Code Access | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -613,6 +615,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.102 | Principle Hierarchy Zpf Tpf | METHOD | Иерархия ZPF→FPF→SPF→TPF→LPF классифицирует принципы по специфичности применения. Поиск: сверху вниз (от универсального к инстансу/носителю). Загрузка в агента: снизу вверх (LPF→ZPF), чтобы специфические перевешивали общие при конфликте. | draft |
 | DP.METHOD.103 | Language Parametric Onboarding Route | METHOD | — | — |
 | DP.METHOD.104 | Lpf Role Substitution Test | METHOD | — | — |
+| DP.METHOD.105 | Rule By Function Not Location | METHOD | — | — |
+| DP.METHOD.106 | Mutation Test Honesty Check | METHOD | — | — |
+| DP.METHOD.107 | Rule By Template Structure | METHOD | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |

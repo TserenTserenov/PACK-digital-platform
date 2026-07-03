@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 89 |
+| Distinctions (D) | 90 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 155 |
+| Failure Modes (FM) | 156 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 293 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 34 |
+| METHOD (METHOD) | 37 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **864** |
+| **Total** | **869** |
 
 ## Distinctions
 
@@ -136,6 +136,7 @@ generated: true
 | DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | — | draft |
 | DP.D.155 | Active Day Definition | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | — | draft |
+| DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | — | draft |
 
 ## Methods
 
@@ -615,6 +616,7 @@ generated: true
 | DP.FM.168 | Метрика=0 для активного пользователя: code-review фильтра до проверки raw-данных | — | draft |
 | DP.FM.169 | Тихий fallback в content pipeline: acceptance PASS при деградации содержания | — | draft |
 | DP.FM.170 | Literal Guard Pattern Mismatch On Day One | Guard проверяет наличие коммита через жёсткое совпадение текста, но реальные коммиты используют другой синтаксис. Guard сломан в момент деплоя. | — |
+| DP.FM.171 | Ui Visibility Vs Code Access | — | — |
 
 ## SoTA Annotations
 
@@ -773,6 +775,9 @@ generated: true
 | DP.METHOD.102 | Principle Hierarchy Zpf Tpf | Иерархия ZPF→FPF→SPF→TPF→LPF классифицирует принципы по специфичности применения. Поиск: сверху вниз (от универсального к инстансу/носителю). Загрузка в агента: снизу вверх (LPF→ZPF), чтобы специфические перевешивали общие при конфликте. | draft |
 | DP.METHOD.103 | Language Parametric Onboarding Route | — | — |
 | DP.METHOD.104 | Lpf Role Substitution Test | — | — |
+| DP.METHOD.105 | Rule By Function Not Location | — | — |
+| DP.METHOD.106 | Mutation Test Honesty Check | — | — |
+| DP.METHOD.107 | Rule By Template Structure | — | — |
 
 ### NAV
 
@@ -1100,6 +1105,7 @@ generated: true
 - Missing `summary`: DP.D.154 (DP.D.154-iwesys-product-org-topology.md)
 - Missing `summary`: DP.D.155 (DP.D.155-active-day-definition.md)
 - Missing `summary`: DP.D.177 (DP.D.177-proxy-metric-vs-direct.md)
+- Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1355,6 +1361,9 @@ generated: true
 - Missing `summary`: DP.METHOD.062 (DP.METHOD.062-skill-description-scope-guard.md)
 - Missing `summary`: DP.METHOD.103 (DP.METHOD.103-language-parametric-onboarding-route.md)
 - Missing `summary`: DP.METHOD.104 (DP.METHOD.104-lpf-role-substitution-test.md)
+- Missing `summary`: DP.METHOD.105 (DP.METHOD.105-rule-by-function-not-location.md)
+- Missing `summary`: DP.METHOD.106 (DP.METHOD.106-mutation-test-honesty-check.md)
+- Missing `summary`: DP.METHOD.107 (DP.METHOD.107-rule-by-template-structure.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1467,6 +1476,7 @@ generated: true
 - Missing `summary`: DP.FM.167 (DP.FM.167-silent-false-disables-except-fallback.md)
 - Missing `summary`: DP.FM.168 (DP.FM.168-metric-zero-active-user-identity-first.md)
 - Missing `summary`: DP.FM.169 (DP.FM.169-silent-fallback-content-pipeline.md)
+- Missing `summary`: DP.FM.171 (DP.FM.171-ui-visibility-vs-code-access.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
