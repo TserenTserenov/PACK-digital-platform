@@ -116,6 +116,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | D | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | D | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | D | — | active |
+| DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -277,6 +278,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.186 | Append Only Phantom Early Writer | FM | — | — |
 | DP.FM.187 | Raw Template Execution Silent Artifacts | FM | — | — |
 | DP.FM.188 | Shared Db Owner Nonattribution | FM | — | — |
+| DP.FM.192 | Subshell Redirect Silences Exit Code | FM | — | — |
+| DP.FM.193 | Git Dead Hook Core Hookspath | FM | — | — |
+| DP.FM.194 | Launchd Stale Pid Port Occupation | FM | — | — |
+| DP.FM.195 | Retroactive history cleanup to hit deadline (ретроактивная чистка истории ради дедлайна) | FM | — | active |
+| DP.FM.196 | Deferred Sql In Auto Executed Migration File | FM | — | — |
+| DP.FM.197 | Replay Tool Misidentified As Incoming Buffer | FM | — | — |
+| DP.FM.198 | Crypto Shredding Not Gdpr Erasure | FM | — | — |
+| DP.FM.199 | Role Revoke Schema Owner Bypass | FM | — | — |
 | DP.FM.208 | Bash32 Ifs Tab Nosplit | FM | — | draft |
 | DP.FM.209 | Sql Injection Fstring Parameter | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
@@ -634,6 +643,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.113 | Acl Companion Artifact Schema Pipeline | METHOD | — | — |
 | DP.METHOD.114 | Diagnostics On Transient Failure | METHOD | — | — |
 | DP.METHOD.115 | Storage Writer Diagnosis Via Grants | METHOD | — | — |
+| DP.METHOD.118 | Peer Dispute First Source Verification | METHOD | — | — |
+| DP.METHOD.119 | Watchdog check guard order (последовательные guard-условия) | METHOD | — | active |
+| DP.METHOD.120 | Multi-session reconcile gate (явный reconcile-ход при N>2 параллельных сессиях) | METHOD | — | active |
+| DP.METHOD.121 | Admin Delete Immutable Log Session Local Bypass | METHOD | Административное удаление записи из immutable append-only журнала: 4-шаговая атомарная транзакция с SESSION_LOCAL bypass триггера только-для-последней-записи. Применимо к любому append-only хранилищу с GDPR-требованиями. | draft |
 | DP.METHOD.126 | Context Freshness Flag | METHOD | — | — |
 | DP.METHOD.127 | Wp Next Step Guide Block | METHOD | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |

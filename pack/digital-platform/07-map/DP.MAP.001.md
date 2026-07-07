@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 93 |
+| Distinctions (D) | 94 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 161 |
+| Failure Modes (FM) | 169 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 293 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 47 |
+| METHOD (METHOD) | 51 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **888** |
+| **Total** | **901** |
 
 ## Distinctions
 
@@ -140,6 +140,7 @@ generated: true
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | — | active |
+| DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | — | active |
 
 ## Methods
 
@@ -623,6 +624,14 @@ generated: true
 | DP.FM.186 | Append Only Phantom Early Writer | — | — |
 | DP.FM.187 | Raw Template Execution Silent Artifacts | — | — |
 | DP.FM.188 | Shared Db Owner Nonattribution | — | — |
+| DP.FM.192 | Subshell Redirect Silences Exit Code | — | — |
+| DP.FM.193 | Git Dead Hook Core Hookspath | — | — |
+| DP.FM.194 | Launchd Stale Pid Port Occupation | — | — |
+| DP.FM.195 | Retroactive history cleanup to hit deadline (ретроактивная чистка истории ради дедлайна) | — | active |
+| DP.FM.196 | Deferred Sql In Auto Executed Migration File | — | — |
+| DP.FM.197 | Replay Tool Misidentified As Incoming Buffer | — | — |
+| DP.FM.198 | Crypto Shredding Not Gdpr Erasure | — | — |
+| DP.FM.199 | Role Revoke Schema Owner Bypass | — | — |
 | DP.FM.208 | Bash32 Ifs Tab Nosplit | — | draft |
 | DP.FM.209 | Sql Injection Fstring Parameter | — | draft |
 
@@ -794,6 +803,10 @@ generated: true
 | DP.METHOD.113 | Acl Companion Artifact Schema Pipeline | — | — |
 | DP.METHOD.114 | Diagnostics On Transient Failure | — | — |
 | DP.METHOD.115 | Storage Writer Diagnosis Via Grants | — | — |
+| DP.METHOD.118 | Peer Dispute First Source Verification | — | — |
+| DP.METHOD.119 | Watchdog check guard order (последовательные guard-условия) | — | active |
+| DP.METHOD.120 | Multi-session reconcile gate (явный reconcile-ход при N>2 параллельных сессиях) | — | active |
+| DP.METHOD.121 | Admin Delete Immutable Log Session Local Bypass | Административное удаление записи из immutable append-only журнала: 4-шаговая атомарная транзакция с SESSION_LOCAL bypass триггера только-для-последней-записи. Применимо к любому append-only хранилищу с GDPR-требованиями. | draft |
 | DP.METHOD.126 | Context Freshness Flag | — | — |
 | DP.METHOD.127 | Wp Next Step Guide Block | — | — |
 
@@ -1084,6 +1097,7 @@ generated: true
 - Missing `summary`: DP.D.182 (DP.D.182-iwe-work-environment-vs-educational-platform.md)
 - Missing `summary`: DP.D.183 (DP.D.183-machine-precision-zero-vs-measured-zero.md)
 - Missing `summary`: DP.D.184 (DP.D.184-empty-view-vs-no-source-data.md)
+- Missing `summary`: DP.D.187 (DP.D.187-sync-core-vs-inject-hook.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1394,6 +1408,9 @@ generated: true
 - Missing `summary`: DP.METHOD.113 (DP.METHOD.113-acl-companion-artifact-schema-pipeline.md)
 - Missing `summary`: DP.METHOD.114 (DP.METHOD.114-diagnostics-on-transient-failure.md)
 - Missing `summary`: DP.METHOD.115 (DP.METHOD.115-storage-writer-diagnosis-via-grants.md)
+- Missing `summary`: DP.METHOD.118 (DP.METHOD.118-peer-dispute-first-source-verification.md)
+- Missing `summary`: DP.METHOD.119 (DP.METHOD.119-watchdog-check-guard-order.md)
+- Missing `summary`: DP.METHOD.120 (DP.METHOD.120-multi-session-reconcile-gate.md)
 - Missing `summary`: DP.METHOD.126 (DP.METHOD.126-context-freshness-flag.md)
 - Missing `summary`: DP.METHOD.127 (DP.METHOD.127-wp-next-step-guide-block.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
@@ -1512,6 +1529,14 @@ generated: true
 - Missing `summary`: DP.FM.186 (DP.FM.186-append-only-phantom-early-writer.md)
 - Missing `summary`: DP.FM.187 (DP.FM.187-raw-template-execution-silent-artifacts.md)
 - Missing `summary`: DP.FM.188 (DP.FM.188-shared-db-owner-nonattribution.md)
+- Missing `summary`: DP.FM.192 (DP.FM.192-subshell-redirect-silences-exit-code.md)
+- Missing `summary`: DP.FM.193 (DP.FM.193-git-dead-hook-core-hookspath.md)
+- Missing `summary`: DP.FM.194 (DP.FM.194-launchd-stale-pid-port-occupation.md)
+- Missing `summary`: DP.FM.195 (DP.FM.195-retroactive-history-cleanup-data-falsification.md)
+- Missing `summary`: DP.FM.196 (DP.FM.196-deferred-sql-in-auto-executed-migration-file.md)
+- Missing `summary`: DP.FM.197 (DP.FM.197-replay-tool-misidentified-as-incoming-buffer.md)
+- Missing `summary`: DP.FM.198 (DP.FM.198-crypto-shredding-not-gdpr-erasure.md)
+- Missing `summary`: DP.FM.199 (DP.FM.199-role-revoke-schema-owner-bypass.md)
 - Missing `summary`: DP.FM.208 (DP.FM.208-bash32-ifs-tab-nosplit.md)
 - Missing `summary`: DP.FM.209 (DP.FM.209-sql-injection-fstring-parameter.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
