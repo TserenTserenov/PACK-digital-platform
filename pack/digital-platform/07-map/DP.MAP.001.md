@@ -34,14 +34,14 @@ generated: true
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 65 |
+| ROLE (ROLE) | 66 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 138 |
+| SC (SC) | 139 |
 | SoTA Annotations (SOTA) | 31 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **901** |
+| **Total** | **903** |
 
 ## Distinctions
 
@@ -904,6 +904,7 @@ generated: true
 | DP.ROLE.078 | Владелец тира (Tier Authority) | Единственный компонент, который вычисляет и пишет traits.tier. Операционная роль: меняет состояние персоны. Носитель — user-profile-service. | draft |
 | DP.ROLE.079 | Bot Agent Session Orchestrator | Оркестратор live-агентной сессии IWE через Telegram: выбирает исполнителя (Claude/Kimi/Hermes) через factory, ведёт lifecycle сессии (start→run→pause→resume→close), принуждает audit + domain-scope, возвращает артефакты в Telegram. Не путать с Диспетчером очереди задач (DP.ROLE.045). | active |
 | DP.ROLE.080 | Владелец выдачи согласия на анализ данных (Consent Grant Authority) | Единственный компонент, который пишет scope=data_analysis в learning.consent_grant и эмитит consent_granted в public.domain_event. Не отвечает за revoke, не отвечает за text_analysis/typing_tracking (владелец — бот). | draft |
+| DP.ROLE.081 | Ретранслятор канона | Механически переносит содержимое канона (личного шаблона IWE) в публичную английскую проекцию при каждом изменении — переводит документацию, публикует результат, не решает, что и когда публиковать. | draft |
 
 ### RUNBOOK
 
@@ -1054,6 +1055,7 @@ generated: true
 | DP.SC.185 | Владелец тира (Tier Authority) | Единственный authoritative-источник уровня доступа (traits.tier T0-T4). Вычисляет, хранит и поддерживает актуальность тира персоны по lifecycle-событиям: подписка, AI-клиент, GitHub, admin. | draft |
 | DP.SC.186 | Bot Agent Session | — | active |
 | DP.SC.187 | local-gateway-render | — | draft |
+| DP.SC.188 | Синхронизация IWE-шаблона с англоязычной проекцией | Каждое изменение README/docs личного русскоязычного шаблона IWE автоматически появляется переведённым в публичном английском репозитории iwesys/iwe-template — без участия автора и без отдельной команды на публикацию. | draft |
 
 ### SYS
 
