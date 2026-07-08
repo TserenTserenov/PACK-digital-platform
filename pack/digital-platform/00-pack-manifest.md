@@ -316,6 +316,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.216 | Multi Owner Aggregate Policy Granularity | FM | — | draft |
 | DP.FM.217 | Shell Pid Not Agent Session Pid | FM | — | draft |
 | DP.FM.218 | Wrong Diagnosis Hides Real Bug | FM | — | draft |
+| DP.FM.219 | Type Cast In Where Breaks Index | FM | — | — |
+| DP.FM.220 | Health Check Ddl Side Effect False Fail | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -630,6 +632,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.335 | Adversarial Layered Review for Security-Critical Components | M | Для security-critical компонентов первое «полное» решение — baseline для adversarial review, не финал. Peer последовательно ищет attack surface в принятом fix; каждый новый fix открывает следующую поверхность. 2-3 раунда существенно меняют архитектуру решения. | — |
 | DP.M.339 | Break-glass Key Distribution via Agent | M | При создании аварийного (break-glass) ключа агент играет роль генератора и передатчика: приватная часть показывается пилоту один раз, локальная копия удаляется. Хранение break-glass ключа — исключительно за человеком. Агент генерирует автоматический ключ и закрытый аварийный ключ в одной операции, но логика хранения у них разная. | — |
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | M | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
+| DP.M.341 | Verify Existing Security Pattern Before Implement | M | — | — |
+| DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 102 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 189 |
+| Failure Modes (FM) | 191 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 299 |
+| Methods (M) | 301 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 60 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **947** |
+| **Total** | **951** |
 
 ## Distinctions
 
@@ -453,6 +453,8 @@ generated: true
 | DP.M.335 | Adversarial Layered Review for Security-Critical Components | Для security-critical компонентов первое «полное» решение — baseline для adversarial review, не финал. Peer последовательно ищет attack surface в принятом fix; каждый новый fix открывает следующую поверхность. 2-3 раунда существенно меняют архитектуру решения. | — |
 | DP.M.339 | Break-glass Key Distribution via Agent | При создании аварийного (break-glass) ключа агент играет роль генератора и передатчика: приватная часть показывается пилоту один раз, локальная копия удаляется. Хранение break-glass ключа — исключительно за человеком. Агент генерирует автоматический ключ и закрытый аварийный ключ в одной операции, но логика хранения у них разная. | — |
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
+| DP.M.341 | Verify Existing Security Pattern Before Implement | — | — |
+| DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | — | — |
 
 ## Work Products
 
@@ -668,6 +670,8 @@ generated: true
 | DP.FM.216 | Multi Owner Aggregate Policy Granularity | — | draft |
 | DP.FM.217 | Shell Pid Not Agent Session Pid | — | draft |
 | DP.FM.218 | Wrong Diagnosis Hides Real Bug | — | draft |
+| DP.FM.219 | Type Cast In Where Breaks Index | — | — |
+| DP.FM.220 | Health Check Ddl Side Effect False Fail | — | — |
 
 ## SoTA Annotations
 
@@ -1444,6 +1448,8 @@ generated: true
 - Missing `summary`: DP.M.327 (DP.M.327-multi-level-lookup-diagnostic-precision.md)
 - Missing `summary`: DP.M.328 (DP.M.328-yaml-preload-pure-bash-lookup.md)
 - Missing `summary`: DP.M.329 (DP.M.329-webhook-idempotency-db-constraint.md)
+- Missing `summary`: DP.M.341 (DP.M.341-verify-existing-security-pattern-before-implement.md)
+- Missing `summary`: DP.M.342 (DP.M.342-grant-execute-not-direct-table-access-via-security-definer.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1619,6 +1625,8 @@ generated: true
 - Missing `summary`: DP.FM.216 (DP.FM.216-multi-owner-aggregate-policy-granularity.md)
 - Missing `summary`: DP.FM.217 (DP.FM.217-shell-pid-not-agent-session-pid.md)
 - Missing `summary`: DP.FM.218 (DP.FM.218-wrong-diagnosis-hides-real-bug.md)
+- Missing `summary`: DP.FM.219 (DP.FM.219-type-cast-in-where-breaks-index.md)
+- Missing `summary`: DP.FM.220 (DP.FM.220-health-check-ddl-side-effect-false-fail.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
