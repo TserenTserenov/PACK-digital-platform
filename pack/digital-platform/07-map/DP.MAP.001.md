@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 94 |
+| Distinctions (D) | 102 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 169 |
+| Failure Modes (FM) | 189 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 293 |
+| Methods (M) | 299 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 51 |
+| METHOD (METHOD) | 60 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **904** |
+| **Total** | **947** |
 
 ## Distinctions
 
@@ -140,7 +140,15 @@ generated: true
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | — | active |
+| DP.D.186 | Документация снижает вероятность ошибки ≠ инвариант в коде устраняет её физически | — | active |
 | DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | — | active |
+| DP.D.190 | `updated_at` строки-контейнера ≠ актуальность данных внутри строки | — | active |
+| DP.D.191 | Mitigation ≠ Fix: статус дефекта остаётся открытым при снижении риска без устранения причины | — | active |
+| DP.D.192 | Per-event rule engine ≠ stateful accumulation: разные вычислительные модели, разные компоненты | — | active |
+| DP.D.193 | Имя поля/константы ≠ семантика текущей операции | — | active |
+| DP.D.194 | Sanity check ≠ валидация на реальном масштабе | — | active |
+| DP.D.195 | U.Method холоничен — U.Role нехолонична | — | — |
+| DP.D.196 | Org Role Assignment Vs Infra Readiness | — | draft |
 
 ## Methods
 
@@ -439,6 +447,12 @@ generated: true
 | DP.M.328 | Yaml Preload Pure Bash Lookup | — | draft |
 | DP.M.329 | Идемпотентность вебхука на уровне ограничения БД (ON CONFLICT DO NOTHING) | — | active |
 | DP.M.331 | Agent Audit Trail as Append-only Sidecar | Машиночитаемый журнал действий агента хранится как отдельный append-only файл (audit-<id>.jsonl) рядом с человекочитаемым тредом сессии. Записывает события, которых нет в треде: вызовы инструментов, чтение/запись файлов, коммиты. Включается в коммит хода → переживает git reset --hard. | — |
+| DP.M.332 | Sanity-guard quarantine pattern | Guard срабатывает двухслойно: (1) аномальная запись получает статус карантина, не финальный статус; (2) каждое срабатывание оставляет durable-след в инцидент-таблице. Уведомление эфемерно, инцидент-запись — нет. Решение о финализации отделено от детекции. | — |
+| DP.M.333 | Failure mode matrix per event type | Явная таблица 'тип события → режим отказа' как артефакт дизайна до реализации. Юридически значимые события (согласие) при сбое инфраструктуры принимаются в очередь и дозаписываются; привилегии честно ждут. Один дефолт для всей системы = архитектурная ошибка. | — |
+| DP.M.334 | Commented-out code with explanation as primary evidence of intentional disablement | При расследовании silent data gap первый поиск — git log --pickaxe + grep закомментированных строк с объяснением в планировщиках и main entry points. Закомментированный код с явным объяснением = primary evidence того, что компонент намеренно остановлен при миграции. | — |
+| DP.M.335 | Adversarial Layered Review for Security-Critical Components | Для security-critical компонентов первое «полное» решение — baseline для adversarial review, не финал. Peer последовательно ищет attack surface в принятом fix; каждый новый fix открывает следующую поверхность. 2-3 раунда существенно меняют архитектуру решения. | — |
+| DP.M.339 | Break-glass Key Distribution via Agent | При создании аварийного (break-glass) ключа агент играет роль генератора и передатчика: приватная часть показывается пилоту один раз, локальная копия удаляется. Хранение break-glass ключа — исключительно за человеком. Агент генерирует автоматический ключ и закрытый аварийный ключ в одной операции, но логика хранения у них разная. | — |
+| DP.M.340 | Skill Resource Guard: Open-first, Close-last | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 
 ## Work Products
 
@@ -624,6 +638,9 @@ generated: true
 | DP.FM.186 | Append Only Phantom Early Writer | — | — |
 | DP.FM.187 | Raw Template Execution Silent Artifacts | — | — |
 | DP.FM.188 | Shared Db Owner Nonattribution | — | — |
+| DP.FM.189 | Hash Without Prev Chain False Immutability | — | — |
+| DP.FM.190 | Validator No Enforcement Point | — | — |
+| DP.FM.191 | Source-of-truth в смертной папке РП: закрытие РП ломает внешние ссылки | SoT-файл создан внутри рабочей папки РП; при закрытии РП уходит в архив — внешние ссылки из платформенных файлов становятся битыми без сигнала. | active |
 | DP.FM.192 | Subshell Redirect Silences Exit Code | — | — |
 | DP.FM.193 | Git Dead Hook Core Hookspath | — | — |
 | DP.FM.194 | Launchd Stale Pid Port Occupation | — | — |
@@ -632,8 +649,25 @@ generated: true
 | DP.FM.197 | Replay Tool Misidentified As Incoming Buffer | — | — |
 | DP.FM.198 | Crypto Shredding Not Gdpr Erasure | — | — |
 | DP.FM.199 | Role Revoke Schema Owner Bypass | — | — |
+| DP.FM.200 | Audit Log Missing Source Service | — | — |
+| DP.FM.201 | Bsd Gnu Sed Ampersand Escaping | — | — |
+| DP.FM.202 | Multiple Registries One Entity Drift | — | — |
+| DP.FM.203 | Deployed Consensus Not Final Verification | — | — |
+| DP.FM.204 | Multi Row Insert Forks Trigger Chain | — | — |
+| DP.FM.205 | Fsm Intermediate State Without Exit Path | — | — |
+| DP.FM.206 | Ddl In Ensure Schema Locks Every Run | — | — |
+| DP.FM.207 | Grep Keyword Not Anchored To Header False Green | — | — |
 | DP.FM.208 | Bash32 Ifs Tab Nosplit | — | draft |
 | DP.FM.209 | Sql Injection Fstring Parameter | — | draft |
+| DP.FM.210 | Zsh Bsd Grep Multiline False Green | — | draft |
+| DP.FM.211 | Gitignore Env Pattern Incomplete | — | draft |
+| DP.FM.212 | git filter-branch --all уничтожает refs/stash (multi-parent) | — | — |
+| DP.FM.213 | git filter-branch на текущей ветке синхронизирует worktree — файлы физически удаляются | — | — |
+| DP.FM.214 | Zsh Word Split Bsd Grep Multiline False Green | — | draft |
+| DP.FM.215 | Semaphore Agent Id Race Parallel Sessions | — | draft |
+| DP.FM.216 | Multi Owner Aggregate Policy Granularity | — | draft |
+| DP.FM.217 | Shell Pid Not Agent Session Pid | — | draft |
+| DP.FM.218 | Wrong Diagnosis Hides Real Bug | — | draft |
 
 ## SoTA Annotations
 
@@ -803,12 +837,21 @@ generated: true
 | DP.METHOD.113 | Acl Companion Artifact Schema Pipeline | — | — |
 | DP.METHOD.114 | Diagnostics On Transient Failure | — | — |
 | DP.METHOD.115 | Storage Writer Diagnosis Via Grants | — | — |
+| DP.METHOD.116 | Позиционирование user_id в хэш-цепочке при праве на забвение | Позиция user_id внутри vs снаружи хэшируемого содержимого — обязательная развилка дизайна для append-only журнала с PII и требованием GDPR right-to-erasure. | active |
+| DP.METHOD.117 | Мёртвый форк скрипта: верификация grep + прямое удаление | Безопасное устранение расходящейся копии инструмента: grep-верификация отсутствия вызовов + прямое удаление. Wrapper-редирект отклоняется: маскирует ошибку, создаёт ложный легитимный вход. | active |
 | DP.METHOD.118 | Peer Dispute First Source Verification | — | — |
 | DP.METHOD.119 | Watchdog check guard order (последовательные guard-условия) | — | active |
 | DP.METHOD.120 | Multi-session reconcile gate (явный reconcile-ход при N>2 параллельных сессиях) | — | active |
 | DP.METHOD.121 | Admin Delete Immutable Log Session Local Bypass | Административное удаление записи из immutable append-only журнала: 4-шаговая атомарная транзакция с SESSION_LOCAL bypass триггера только-для-последней-записи. Применимо к любому append-only хранилищу с GDPR-требованиями. | draft |
+| DP.METHOD.122 | Month Close Rebuild Strategic Context | — | — |
+| DP.METHOD.123 | Migration Number Collision As Coordination Signal | — | — |
+| DP.METHOD.124 | Stateless Windowed Recompute | — | — |
+| DP.METHOD.125 | Guard Normalized Ratio Not Raw Numerator | — | — |
 | DP.METHOD.126 | Context Freshness Flag | — | — |
 | DP.METHOD.127 | Wp Next Step Guide Block | — | — |
+| DP.METHOD.128 | Detector Selftest Synthetic Regression | — | — |
+| DP.METHOD.129 | Quarterly Cadence Month Close Mod3 | — | — |
+| DP.METHOD.130 | Atomic Upsert On Conflict Race Prevention | — | — |
 
 ### NAV
 
@@ -1100,7 +1143,15 @@ generated: true
 - Missing `summary`: DP.D.182 (DP.D.182-iwe-work-environment-vs-educational-platform.md)
 - Missing `summary`: DP.D.183 (DP.D.183-machine-precision-zero-vs-measured-zero.md)
 - Missing `summary`: DP.D.184 (DP.D.184-empty-view-vs-no-source-data.md)
+- Missing `summary`: DP.D.186 (DP.D.186-doc-reduces-error-probability-invariant-eliminates-it.md)
 - Missing `summary`: DP.D.187 (DP.D.187-sync-core-vs-inject-hook.md)
+- Missing `summary`: DP.D.190 (DP.D.190-container-updated-at-vs-data-freshness.md)
+- Missing `summary`: DP.D.191 (DP.D.191-mitigation-vs-fix-defect-status.md)
+- Missing `summary`: DP.D.192 (DP.D.192-per-event-rule-engine-vs-stateful-accumulation.md)
+- Missing `summary`: DP.D.193 (DP.D.193-field-name-vs-operation-semantics.md)
+- Missing `summary`: DP.D.194 (DP.D.194-sanity-check-vs-scale-validation.md)
+- Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
+- Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1414,8 +1465,15 @@ generated: true
 - Missing `summary`: DP.METHOD.118 (DP.METHOD.118-peer-dispute-first-source-verification.md)
 - Missing `summary`: DP.METHOD.119 (DP.METHOD.119-watchdog-check-guard-order.md)
 - Missing `summary`: DP.METHOD.120 (DP.METHOD.120-multi-session-reconcile-gate.md)
+- Missing `summary`: DP.METHOD.122 (DP.METHOD.122-month-close-rebuild-strategic-context.md)
+- Missing `summary`: DP.METHOD.123 (DP.METHOD.123-migration-number-collision-as-coordination-signal.md)
+- Missing `summary`: DP.METHOD.124 (DP.METHOD.124-stateless-windowed-recompute.md)
+- Missing `summary`: DP.METHOD.125 (DP.METHOD.125-guard-normalized-ratio-not-raw-numerator.md)
 - Missing `summary`: DP.METHOD.126 (DP.METHOD.126-context-freshness-flag.md)
 - Missing `summary`: DP.METHOD.127 (DP.METHOD.127-wp-next-step-guide-block.md)
+- Missing `summary`: DP.METHOD.128 (DP.METHOD.128-detector-selftest-synthetic-regression.md)
+- Missing `summary`: DP.METHOD.129 (DP.METHOD.129-quarterly-cadence-month-close-mod3.md)
+- Missing `summary`: DP.METHOD.130 (DP.METHOD.130-atomic-upsert-on-conflict-race-prevention.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1532,6 +1590,8 @@ generated: true
 - Missing `summary`: DP.FM.186 (DP.FM.186-append-only-phantom-early-writer.md)
 - Missing `summary`: DP.FM.187 (DP.FM.187-raw-template-execution-silent-artifacts.md)
 - Missing `summary`: DP.FM.188 (DP.FM.188-shared-db-owner-nonattribution.md)
+- Missing `summary`: DP.FM.189 (DP.FM.189-hash-without-prev-chain-false-immutability.md)
+- Missing `summary`: DP.FM.190 (DP.FM.190-validator-no-enforcement-point.md)
 - Missing `summary`: DP.FM.192 (DP.FM.192-subshell-redirect-silences-exit-code.md)
 - Missing `summary`: DP.FM.193 (DP.FM.193-git-dead-hook-core-hookspath.md)
 - Missing `summary`: DP.FM.194 (DP.FM.194-launchd-stale-pid-port-occupation.md)
@@ -1540,8 +1600,25 @@ generated: true
 - Missing `summary`: DP.FM.197 (DP.FM.197-replay-tool-misidentified-as-incoming-buffer.md)
 - Missing `summary`: DP.FM.198 (DP.FM.198-crypto-shredding-not-gdpr-erasure.md)
 - Missing `summary`: DP.FM.199 (DP.FM.199-role-revoke-schema-owner-bypass.md)
+- Missing `summary`: DP.FM.200 (DP.FM.200-audit-log-missing-source-service.md)
+- Missing `summary`: DP.FM.201 (DP.FM.201-bsd-gnu-sed-ampersand-escaping.md)
+- Missing `summary`: DP.FM.202 (DP.FM.202-multiple-registries-one-entity-drift.md)
+- Missing `summary`: DP.FM.203 (DP.FM.203-deployed-consensus-not-final-verification.md)
+- Missing `summary`: DP.FM.204 (DP.FM.204-multi-row-insert-forks-trigger-chain.md)
+- Missing `summary`: DP.FM.205 (DP.FM.205-fsm-intermediate-state-without-exit-path.md)
+- Missing `summary`: DP.FM.206 (DP.FM.206-ddl-in-ensure-schema-locks-every-run.md)
+- Missing `summary`: DP.FM.207 (DP.FM.207-grep-keyword-not-anchored-to-header-false-green.md)
 - Missing `summary`: DP.FM.208 (DP.FM.208-bash32-ifs-tab-nosplit.md)
 - Missing `summary`: DP.FM.209 (DP.FM.209-sql-injection-fstring-parameter.md)
+- Missing `summary`: DP.FM.210 (DP.FM.210-zsh-bsd-grep-multiline-false-green.md)
+- Missing `summary`: DP.FM.211 (DP.FM.211-gitignore-env-pattern-incomplete.md)
+- Missing `summary`: DP.FM.212 (DP.FM.212-filter-branch-all-destroys-stash.md)
+- Missing `summary`: DP.FM.213 (DP.FM.213-filter-branch-worktree-sync.md)
+- Missing `summary`: DP.FM.214 (DP.FM.214-zsh-word-split-bsd-grep-multiline-false-green.md)
+- Missing `summary`: DP.FM.215 (DP.FM.215-semaphore-agent-id-race-parallel-sessions.md)
+- Missing `summary`: DP.FM.216 (DP.FM.216-multi-owner-aggregate-policy-granularity.md)
+- Missing `summary`: DP.FM.217 (DP.FM.217-shell-pid-not-agent-session-pid.md)
+- Missing `summary`: DP.FM.218 (DP.FM.218-wrong-diagnosis-hides-real-bug.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)

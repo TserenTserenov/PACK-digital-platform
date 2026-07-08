@@ -116,7 +116,15 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | D | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | D | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | D | — | active |
+| DP.D.186 | Документация снижает вероятность ошибки ≠ инвариант в коде устраняет её физически | D | — | active |
 | DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | D | — | active |
+| DP.D.190 | `updated_at` строки-контейнера ≠ актуальность данных внутри строки | D | — | active |
+| DP.D.191 | Mitigation ≠ Fix: статус дефекта остаётся открытым при снижении риска без устранения причины | D | — | active |
+| DP.D.192 | Per-event rule engine ≠ stateful accumulation: разные вычислительные модели, разные компоненты | D | — | active |
+| DP.D.193 | Имя поля/константы ≠ семантика текущей операции | D | — | active |
+| DP.D.194 | Sanity check ≠ валидация на реальном масштабе | D | — | active |
+| DP.D.195 | U.Method холоничен — U.Role нехолонична | D | — | — |
+| DP.D.196 | Org Role Assignment Vs Infra Readiness | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -278,6 +286,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.186 | Append Only Phantom Early Writer | FM | — | — |
 | DP.FM.187 | Raw Template Execution Silent Artifacts | FM | — | — |
 | DP.FM.188 | Shared Db Owner Nonattribution | FM | — | — |
+| DP.FM.189 | Hash Without Prev Chain False Immutability | FM | — | — |
+| DP.FM.190 | Validator No Enforcement Point | FM | — | — |
+| DP.FM.191 | Source-of-truth в смертной папке РП: закрытие РП ломает внешние ссылки | FM | SoT-файл создан внутри рабочей папки РП; при закрытии РП уходит в архив — внешние ссылки из платформенных файлов становятся битыми без сигнала. | active |
 | DP.FM.192 | Subshell Redirect Silences Exit Code | FM | — | — |
 | DP.FM.193 | Git Dead Hook Core Hookspath | FM | — | — |
 | DP.FM.194 | Launchd Stale Pid Port Occupation | FM | — | — |
@@ -286,8 +297,25 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.197 | Replay Tool Misidentified As Incoming Buffer | FM | — | — |
 | DP.FM.198 | Crypto Shredding Not Gdpr Erasure | FM | — | — |
 | DP.FM.199 | Role Revoke Schema Owner Bypass | FM | — | — |
+| DP.FM.200 | Audit Log Missing Source Service | FM | — | — |
+| DP.FM.201 | Bsd Gnu Sed Ampersand Escaping | FM | — | — |
+| DP.FM.202 | Multiple Registries One Entity Drift | FM | — | — |
+| DP.FM.203 | Deployed Consensus Not Final Verification | FM | — | — |
+| DP.FM.204 | Multi Row Insert Forks Trigger Chain | FM | — | — |
+| DP.FM.205 | Fsm Intermediate State Without Exit Path | FM | — | — |
+| DP.FM.206 | Ddl In Ensure Schema Locks Every Run | FM | — | — |
+| DP.FM.207 | Grep Keyword Not Anchored To Header False Green | FM | — | — |
 | DP.FM.208 | Bash32 Ifs Tab Nosplit | FM | — | draft |
 | DP.FM.209 | Sql Injection Fstring Parameter | FM | — | draft |
+| DP.FM.210 | Zsh Bsd Grep Multiline False Green | FM | — | draft |
+| DP.FM.211 | Gitignore Env Pattern Incomplete | FM | — | draft |
+| DP.FM.212 | git filter-branch --all уничтожает refs/stash (multi-parent) | FM | — | — |
+| DP.FM.213 | git filter-branch на текущей ветке синхронизирует worktree — файлы физически удаляются | FM | — | — |
+| DP.FM.214 | Zsh Word Split Bsd Grep Multiline False Green | FM | — | draft |
+| DP.FM.215 | Semaphore Agent Id Race Parallel Sessions | FM | — | draft |
+| DP.FM.216 | Multi Owner Aggregate Policy Granularity | FM | — | draft |
+| DP.FM.217 | Shell Pid Not Agent Session Pid | FM | — | draft |
+| DP.FM.218 | Wrong Diagnosis Hides Real Bug | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -596,6 +624,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.328 | Yaml Preload Pure Bash Lookup | M | — | draft |
 | DP.M.329 | Идемпотентность вебхука на уровне ограничения БД (ON CONFLICT DO NOTHING) | M | — | active |
 | DP.M.331 | Agent Audit Trail as Append-only Sidecar | M | Машиночитаемый журнал действий агента хранится как отдельный append-only файл (audit-<id>.jsonl) рядом с человекочитаемым тредом сессии. Записывает события, которых нет в треде: вызовы инструментов, чтение/запись файлов, коммиты. Включается в коммит хода → переживает git reset --hard. | — |
+| DP.M.332 | Sanity-guard quarantine pattern | M | Guard срабатывает двухслойно: (1) аномальная запись получает статус карантина, не финальный статус; (2) каждое срабатывание оставляет durable-след в инцидент-таблице. Уведомление эфемерно, инцидент-запись — нет. Решение о финализации отделено от детекции. | — |
+| DP.M.333 | Failure mode matrix per event type | M | Явная таблица 'тип события → режим отказа' как артефакт дизайна до реализации. Юридически значимые события (согласие) при сбое инфраструктуры принимаются в очередь и дозаписываются; привилегии честно ждут. Один дефолт для всей системы = архитектурная ошибка. | — |
+| DP.M.334 | Commented-out code with explanation as primary evidence of intentional disablement | M | При расследовании silent data gap первый поиск — git log --pickaxe + grep закомментированных строк с объяснением в планировщиках и main entry points. Закомментированный код с явным объяснением = primary evidence того, что компонент намеренно остановлен при миграции. | — |
+| DP.M.335 | Adversarial Layered Review for Security-Critical Components | M | Для security-critical компонентов первое «полное» решение — baseline для adversarial review, не финал. Peer последовательно ищет attack surface в принятом fix; каждый новый fix открывает следующую поверхность. 2-3 раунда существенно меняют архитектуру решения. | — |
+| DP.M.339 | Break-glass Key Distribution via Agent | M | При создании аварийного (break-glass) ключа агент играет роль генератора и передатчика: приватная часть показывается пилоту один раз, локальная копия удаляется. Хранение break-glass ключа — исключительно за человеком. Агент генерирует автоматический ключ и закрытый аварийный ключ в одной операции, но логика хранения у них разная. | — |
+| DP.M.340 | Skill Resource Guard: Open-first, Close-last | M | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -643,12 +677,21 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.113 | Acl Companion Artifact Schema Pipeline | METHOD | — | — |
 | DP.METHOD.114 | Diagnostics On Transient Failure | METHOD | — | — |
 | DP.METHOD.115 | Storage Writer Diagnosis Via Grants | METHOD | — | — |
+| DP.METHOD.116 | Позиционирование user_id в хэш-цепочке при праве на забвение | METHOD | Позиция user_id внутри vs снаружи хэшируемого содержимого — обязательная развилка дизайна для append-only журнала с PII и требованием GDPR right-to-erasure. | active |
+| DP.METHOD.117 | Мёртвый форк скрипта: верификация grep + прямое удаление | METHOD | Безопасное устранение расходящейся копии инструмента: grep-верификация отсутствия вызовов + прямое удаление. Wrapper-редирект отклоняется: маскирует ошибку, создаёт ложный легитимный вход. | active |
 | DP.METHOD.118 | Peer Dispute First Source Verification | METHOD | — | — |
 | DP.METHOD.119 | Watchdog check guard order (последовательные guard-условия) | METHOD | — | active |
 | DP.METHOD.120 | Multi-session reconcile gate (явный reconcile-ход при N>2 параллельных сессиях) | METHOD | — | active |
 | DP.METHOD.121 | Admin Delete Immutable Log Session Local Bypass | METHOD | Административное удаление записи из immutable append-only журнала: 4-шаговая атомарная транзакция с SESSION_LOCAL bypass триггера только-для-последней-записи. Применимо к любому append-only хранилищу с GDPR-требованиями. | draft |
+| DP.METHOD.122 | Month Close Rebuild Strategic Context | METHOD | — | — |
+| DP.METHOD.123 | Migration Number Collision As Coordination Signal | METHOD | — | — |
+| DP.METHOD.124 | Stateless Windowed Recompute | METHOD | — | — |
+| DP.METHOD.125 | Guard Normalized Ratio Not Raw Numerator | METHOD | — | — |
 | DP.METHOD.126 | Context Freshness Flag | METHOD | — | — |
 | DP.METHOD.127 | Wp Next Step Guide Block | METHOD | — | — |
+| DP.METHOD.128 | Detector Selftest Synthetic Regression | METHOD | — | — |
+| DP.METHOD.129 | Quarterly Cadence Month Close Mod3 | METHOD | — | — |
+| DP.METHOD.130 | Atomic Upsert On Conflict Race Prevention | METHOD | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |

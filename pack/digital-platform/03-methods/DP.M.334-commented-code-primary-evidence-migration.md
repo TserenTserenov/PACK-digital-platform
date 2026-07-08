@@ -1,0 +1,72 @@
+---
+id: DP.M.334
+name: "Commented-out code with explanation as primary evidence of intentional disablement"
+name_ru: "Закомментированный код с объяснением — первичное доказательство намеренного отключения"
+summary: "При расследовании silent data gap первый поиск — git log --pickaxe + grep закомментированных строк с объяснением в планировщиках и main entry points. Закомментированный код с явным объяснением = primary evidence того, что компонент намеренно остановлен при миграции."
+type: method
+domain: digital-platform
+pack: PACK-digital-platform
+trust: observed
+epistemic_stage: 2
+category: incident-archaeology
+valid_from: 2026-07-06
+related:
+  see_also: [DP.M.260]
+tags: [commented-code, migration-forensics, incident-archaeology, silent-data-gap, scheduler, git-log]
+source: "session-close 2026-07-03, sessions/2026-07/2026-07-03-06-wp290-rcs-recalc-coverage/report.md (тема 3, ход 5; scheduler.py:1153-1156)"
+schema_version: 1
+---
+
+# DP.M.334 — Закомментированный код с объяснением — первичное доказательство намеренного отключения
+
+## Описание
+
+При расследовании silent data gap (данные не поступают, ошибок нет) закомментированная строка кода с явным текстовым объяснением — самый прямой артефакт, указывающий на намеренное отключение компонента при миграции.
+
+## When to use
+
+- Расследуется silent data gap: данных нет, но мониторинг «зелёный»
+- Компонент существует в коде (функция, словарь, класс), но данных от него нет
+- Подозрение на намеренное отключение (миграция базы, переезд инфраструктуры)
+
+## Algorithm
+
+### Step 1: Поиск закомментированного кода в scheduler/entry points
+
+```bash
+# Поиск строк отключения в планировщиках и точках входа
+grep -rn "# disabled\|# removed\|# migration\|# отключено\|# commented" schedulers/ main*.py
+```
+
+### Step 2: git archaeology по имени компонента
+
+```bash
+git log --pickaxe-string "<component_name>" --oneline
+git log --all --grep="disabled\|migration\|stub\|temp" -- schedulers/
+```
+
+### Step 3: Проверить объяснение в комментарии
+
+Если комментарий содержит явную причину («отключено при переезде», «читал views из старой базы») — это primary evidence намеренного отключения, а не баг.
+
+### Step 4: Сопоставить с DP.M.260
+
+Использовать DP.M.260 «Intentional disablement как третья гипотеза» для подтверждения диагноза по трём признакам: структура без запроса, история revert/stub, commit-message с «temp/migration».
+
+## Инвариант
+
+Закомментированный код С объяснением = более сильное свидетельство намеренного отключения, чем закомментированный код без объяснения. Код без объяснения требует дополнительной проверки через git log.
+
+## Тест применимости
+
+«Есть ли в закомментированной строке явное объяснение причины?»
+- Да → primary evidence intentional disablement → проверить DP.M.260 checklist
+- Нет → может быть временный fix или забытый код → дополнительно смотреть git log
+
+## Отличие от DP.M.260
+
+DP.M.260 фокусируется на распознавании гипотезы intentional disablement (три признака). DP.M.334 — на конкретной технике поиска доказательства при migration forensics: комментарий с объяснением как primary evidence, а не один из признаков.
+
+## Связи
+
+- DP.M.260 (Intentional disablement как третья гипотеза) — DP.M.334 является специализацией archaeology-техники для случая миграции
