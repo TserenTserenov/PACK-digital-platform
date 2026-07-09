@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 102 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 191 |
+| Failure Modes (FM) | 192 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 301 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 60 |
+| METHOD (METHOD) | 66 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **951** |
+| **Total** | **958** |
 
 ## Distinctions
 
@@ -672,6 +672,7 @@ generated: true
 | DP.FM.218 | Wrong Diagnosis Hides Real Bug | — | draft |
 | DP.FM.219 | Type Cast In Where Breaks Index | — | — |
 | DP.FM.220 | Health Check Ddl Side Effect False Fail | — | — |
+| DP.FM.224 | Smart Sync Stub Exists Not Local | — | — |
 
 ## SoTA Annotations
 
@@ -856,6 +857,12 @@ generated: true
 | DP.METHOD.128 | Detector Selftest Synthetic Regression | — | — |
 | DP.METHOD.129 | Quarterly Cadence Month Close Mod3 | — | — |
 | DP.METHOD.130 | Atomic Upsert On Conflict Race Prevention | — | — |
+| DP.METHOD.134 | Authored File Deferred Conflict Delivery | — | — |
+| DP.METHOD.135 | Render Checklist Separate Artifact | — | — |
+| DP.METHOD.136 | Archive Integrity Listing Baseline | — | — |
+| DP.METHOD.137 | Staged Migration Read Path Deferred Delete | — | — |
+| DP.METHOD.138 | Knowledge Atom Normal Form Multi Consumer | — | — |
+| DP.METHOD.139 | Methodology Pilot One Document Before Corpus | — | — |
 
 ### NAV
 
@@ -1480,6 +1487,12 @@ generated: true
 - Missing `summary`: DP.METHOD.128 (DP.METHOD.128-detector-selftest-synthetic-regression.md)
 - Missing `summary`: DP.METHOD.129 (DP.METHOD.129-quarterly-cadence-month-close-mod3.md)
 - Missing `summary`: DP.METHOD.130 (DP.METHOD.130-atomic-upsert-on-conflict-race-prevention.md)
+- Missing `summary`: DP.METHOD.134 (DP.METHOD.134-authored-file-deferred-conflict-delivery.md)
+- Missing `summary`: DP.METHOD.135 (DP.METHOD.135-render-checklist-separate-artifact.md)
+- Missing `summary`: DP.METHOD.136 (DP.METHOD.136-archive-integrity-listing-baseline.md)
+- Missing `summary`: DP.METHOD.137 (DP.METHOD.137-staged-migration-read-path-deferred-delete.md)
+- Missing `summary`: DP.METHOD.138 (DP.METHOD.138-knowledge-atom-normal-form-multi-consumer.md)
+- Missing `summary`: DP.METHOD.139 (DP.METHOD.139-methodology-pilot-one-document-before-corpus.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1627,6 +1640,7 @@ generated: true
 - Missing `summary`: DP.FM.218 (DP.FM.218-wrong-diagnosis-hides-real-bug.md)
 - Missing `summary`: DP.FM.219 (DP.FM.219-type-cast-in-where-breaks-index.md)
 - Missing `summary`: DP.FM.220 (DP.FM.220-health-check-ddl-side-effect-false-fail.md)
+- Missing `summary`: DP.FM.224 (DP.FM.224-smart-sync-stub-exists-not-local.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
