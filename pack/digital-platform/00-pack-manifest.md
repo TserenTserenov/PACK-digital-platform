@@ -125,6 +125,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.194 | Sanity check ≠ валидация на реальном масштабе | D | — | active |
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | D | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | D | — | draft |
+| DP.D.204 | Method Map Vs State Axis | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -635,6 +636,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | M | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 | DP.M.341 | Verify Existing Security Pattern Before Implement | M | — | — |
 | DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | M | — | — |
+| DP.M.346 | Dual Lens Publication Verification | M | — | — |
+| DP.M.347 | Portrait First Reference Fallback | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
