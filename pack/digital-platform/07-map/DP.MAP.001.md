@@ -149,7 +149,7 @@ generated: true
 | DP.D.194 | Sanity check ≠ валидация на реальном масштабе | — | active |
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | — | draft |
-| DP.D.204 | Method Map Vs State Axis | — | draft |
+| DP.D.204 | Method Map Vs State Axis | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
 
 ## Methods
 
@@ -456,8 +456,8 @@ generated: true
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 | DP.M.341 | Verify Existing Security Pattern Before Implement | — | — |
 | DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | — | — |
-| DP.M.346 | Dual Lens Publication Verification | — | — |
-| DP.M.347 | Portrait First Reference Fallback | — | — |
+| DP.M.346 | Dual Lens Publication Verification | Два параллельных субагента разной природы (конформность фреймворку / адверсарный SOTA-поиск) перед публикацией — диверсификация линз ловит разные классы ошибок, которые одна проверка не обнаруживает. | — |
+| DP.M.347 | Portrait First Reference Fallback | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
 
 ## Work Products
 
@@ -1166,7 +1166,6 @@ generated: true
 - Missing `summary`: DP.D.194 (DP.D.194-sanity-check-vs-scale-validation.md)
 - Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
 - Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
-- Missing `summary`: DP.D.204 (DP.D.204-method-map-vs-state-axis.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1461,8 +1460,6 @@ generated: true
 - Missing `summary`: DP.M.329 (DP.M.329-webhook-idempotency-db-constraint.md)
 - Missing `summary`: DP.M.341 (DP.M.341-verify-existing-security-pattern-before-implement.md)
 - Missing `summary`: DP.M.342 (DP.M.342-grant-execute-not-direct-table-access-via-security-definer.md)
-- Missing `summary`: DP.M.346 (DP.M.346-dual-lens-publication-verification.md)
-- Missing `summary`: DP.M.347 (DP.M.347-portrait-first-reference-fallback.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)

@@ -1,6 +1,7 @@
 ---
 id: DP.M.347
 title: "Portrait-First Fallback: пользовательский контекст → общий справочник"
+summary: "Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника."
 type: method
 pack: PACK-digital-platform
 domain: digital-platform / personalization
