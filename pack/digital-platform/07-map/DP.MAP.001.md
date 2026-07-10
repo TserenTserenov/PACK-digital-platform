@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 105 |
+| Distinctions (D) | 107 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 200 |
+| Failure Modes (FM) | 202 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 308 |
+| Methods (M) | 318 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 74 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **985** |
+| **Total** | **999** |
 
 ## Distinctions
 
@@ -152,6 +152,8 @@ generated: true
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | — | draft |
 | DP.D.204 | Method Map Vs State Axis | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
+| DP.D.205 | WP-ID vs PII — публичный идентификатор задачи ≠ персональные данные | Номер задачи (WP-\d+) — публичный реестровый идентификатор, не PII. Блокирование WP-номеров PII-guard = false positive. Тест: может ли пользователь сам упомянуть эту строку в публичном чате без раскрытия приватных данных? | active |
+| DP.D.206 | git notes ≠ видимый аудиторский след | — | active |
 
 ## Methods
 
@@ -465,6 +467,16 @@ generated: true
 | DP.M.347 | Portrait First Reference Fallback | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
 | DP.M.348 | Content First Audit Phase Order | — | — |
 | DP.M.349 | Commit Msg Guard Bypass Tags | — | — |
+| DP.M.350 | Idempotent SQL migration: DDL-guards для safe re-run | Каждый DDL-оператор в миграции должен быть idempotent: CREATE TABLE IF NOT EXISTS, DROP IF EXISTS, DO $$ BEGIN ... EXCEPTION WHEN duplicate_object ... END $$ для CREATE ROLE / GRANT. Принцип: миграция безопасна для N-кратного выполнения с одинаковым конечным состоянием. | — |
+| DP.M.351 | Neon pgbouncer advisory lock: 20×30s retry + infinite reconnect outer loop | — | active |
+| DP.M.352 | Pull-based offline-consent handover | При split cloud/local storage с ограниченным consent-режимом: облако пишет stub+TTL, возвращает 'принято в ожидании'; локальный инстанс при reconnect вытягивает и подтверждает. Адаптер stateless. Альтернатива push = потеря данных при offline. | — |
+| DP.M.353 | Event dedup window in routing catalog | Окно дедупликации события (dedup_window) зависит от семантики типа события, а не от архитектуры компонента. Параметр должен жить в routing_catalog.yaml рядом с маршрутами, не хардкодиться в Учётчике/воркере. Тест: можно ли изменить окно без деплоя компонента? | — |
+| DP.M.354 | consent_unverified infra-fault write-path | При недоступности consent-DB на write-path: записывать с меткой consent_unverified, не блокировать запись. Infra-сбой ≠ policy-deny. Fail-closed при infra-сбое = SPOF. Downstream аудитор видит метку и принимает решение. | — |
+| DP.M.355 | Reflex classify-before-llm-invoke dispatcher gate | В двухконтурном диспетчере (рефлекс + LLM) classify() по сигнатуре признаков должна вызываться ДО invoke_claude(). Нарушение: рефлекс-маршрут не экономит токены и не снижает latency. Дополнительный инвариант: confidence=0.0 для LLM-пути (неопределённая уверенность). | — |
+| DP.M.356 | Routing Gate: extend existing convention over parallel structure | При появлении нового типа контента/артефакта — сначала проверить существующую конвенцию (grep по SoT). Если существующий тип можно расширить новым полем frontmatter — расширять, не создавать параллельную структуру. Тест: «добавить поле к существующему типу = тот же результат?» Да → параллельная структура не нужна. | — |
+| DP.M.357 | Multistage pipeline carry-over: starvation guard via accumulators | Накопители между стадиями конвейера держат carry-over между итерациями: неизрасходованные единицы переходят в следующий прогон. Защищает от голодания последующих стадий при сбое предыдущей. Проектировочный инвариант: узкое место = самая медленная производящая стадия → автоматизировать первой. | — |
+| DP.M.358 | Grep existing planning slots before creating new ones | Перед добавлением нового слота/секции в систему планирования (DayPlan, WeekPlan, Strategy) — grep по шаблонам. Если слот с похожим назначением уже есть — наполнять его, не создавать параллельный. Нарушение = дрейф (OwnerIntegrity): два слота с одним смыслом. | — |
+| DP.M.359 | Static delta-aware lint for bare-commit guard | Grep по изменённым .claude/skills/** и scripts/** на bare `git commit -m` без pathspec; срабатывает только при коммите, вносящем новый bare-commit паттерн. Нет lifecycle, нет стейта, ловит регрессию. | — |
 
 ## Work Products
 
@@ -691,6 +703,8 @@ generated: true
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | — | — |
 | DP.FM.227 | Bash set -e: [ cond ] && cmd внутри функции теряет exemption — функция возвращает exit 1 | — | — |
 | DP.FM.228 | Railway liveness probe падает на 401 при /health за auth | — | — |
+| DP.FM.229 | LLM aggregator single-key SPOF: model-fallback список не защищает от ключа с limit | — | draft |
+| DP.FM.230 | return вместо raise в async-воркере маскирует сбой через exit(0) | — | draft |
 
 ## SoTA Annotations
 
@@ -1190,6 +1204,7 @@ generated: true
 - Missing `summary`: DP.D.194 (DP.D.194-sanity-check-vs-scale-validation.md)
 - Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
 - Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
+- Missing `summary`: DP.D.206 (DP.D.206-git-notes-vs-audit-trail.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1491,6 +1506,7 @@ generated: true
 - Missing `summary`: DP.M.345 (DP.M.345-render-checklist-separation-from-generator.md)
 - Missing `summary`: DP.M.348 (DP.M.348-content-first-audit-phase-order.md)
 - Missing `summary`: DP.M.349 (DP.M.349-commit-msg-guard-bypass-tags.md)
+- Missing `summary`: DP.M.351 (DP.M.351-neon-pgbouncer-advisory-lock-retry-reconnect.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1688,6 +1704,8 @@ generated: true
 - Missing `summary`: DP.FM.226 (DP.FM.226-git-worktree-detached-head-push-fail.md)
 - Missing `summary`: DP.FM.227 (DP.FM.227-bash-set-e-function-wrapper-exit-status.md)
 - Missing `summary`: DP.FM.228 (DP.FM.228-railway-liveness-probe-auth-blocks.md)
+- Missing `summary`: DP.FM.229 (DP.FM.229-llm-aggregator-single-key-spof.md)
+- Missing `summary`: DP.FM.230 (DP.FM.230-return-instead-of-raise-masks-exit-zero.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
