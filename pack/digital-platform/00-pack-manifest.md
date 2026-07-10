@@ -114,6 +114,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | D | — | draft |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | D | — | draft |
 | DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | D | — | active |
+| DP.D.181 | Платформенный LLM-кошелёк ≠ личный BYOK-кошелёк | D | — | — |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | D | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | D | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | D | — | active |
@@ -328,6 +329,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.225 | rsync --delete с пустой delta-staging директорией уничтожает все артефакты | FM | — | — |
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | FM | — | — |
 | DP.FM.227 | Bash set -e: [ cond ] && cmd внутри функции теряет exemption — функция возвращает exit 1 | FM | — | — |
+| DP.FM.228 | Railway liveness probe падает на 401 при /health за auth | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -726,6 +728,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.141 | Sota Sheet Lite Before Pack Name | METHOD | — | — |
 | DP.METHOD.142 | Единый реестр для одного типа сущности (Single Registry for Entity Type) | METHOD | — | — |
 | DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | METHOD | — | — |
+| DP.METHOD.144 | Feature flag вместо удаления кода при dual-write cutover | METHOD | — | — |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |

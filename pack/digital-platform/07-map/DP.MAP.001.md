@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 104 |
+| Distinctions (D) | 105 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 199 |
+| Failure Modes (FM) | 200 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 308 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 73 |
+| METHOD (METHOD) | 74 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **981** |
+| **Total** | **984** |
 
 ## Distinctions
 
@@ -138,6 +138,7 @@ generated: true
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | — | draft |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | — | draft |
 | DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | — | active |
+| DP.D.181 | Платформенный LLM-кошелёк ≠ личный BYOK-кошелёк | — | — |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | — | active |
@@ -689,6 +690,7 @@ generated: true
 | DP.FM.225 | rsync --delete с пустой delta-staging директорией уничтожает все артефакты | — | — |
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | — | — |
 | DP.FM.227 | Bash set -e: [ cond ] && cmd внутри функции теряет exemption — функция возвращает exit 1 | — | — |
+| DP.FM.228 | Railway liveness probe падает на 401 при /health за auth | — | — |
 
 ## SoTA Annotations
 
@@ -886,6 +888,7 @@ generated: true
 | DP.METHOD.141 | Sota Sheet Lite Before Pack Name | — | — |
 | DP.METHOD.142 | Единый реестр для одного типа сущности (Single Registry for Entity Type) | — | — |
 | DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | — | — |
+| DP.METHOD.144 | Feature flag вместо удаления кода при dual-write cutover | — | — |
 
 ### NAV
 
@@ -1231,6 +1234,7 @@ generated: true
 - Missing `summary`: DP.D.177 (DP.D.177-proxy-metric-vs-direct.md)
 - Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
 - Missing `summary`: DP.D.180 (DP.D.180-generated-vs-live-file-criterion.md)
+- Missing `summary`: DP.D.181 (DP.D.181-platform-vs-byok-wallet.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1526,6 +1530,7 @@ generated: true
 - Missing `summary`: DP.METHOD.141 (DP.METHOD.141-sota-sheet-lite-before-pack-name.md)
 - Missing `summary`: DP.METHOD.142 (DP.METHOD.142-single-registry-entity-type.md)
 - Missing `summary`: DP.METHOD.143 (DP.METHOD.143-non-fatal-exit-code-explicit-tolerate.md)
+- Missing `summary`: DP.METHOD.144 (DP.METHOD.144-feature-flag-dual-write-cutover.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1681,6 +1686,7 @@ generated: true
 - Missing `summary`: DP.FM.225 (DP.FM.225-rsync-delete-empty-delta-wipe.md)
 - Missing `summary`: DP.FM.226 (DP.FM.226-git-worktree-detached-head-push-fail.md)
 - Missing `summary`: DP.FM.227 (DP.FM.227-bash-set-e-function-wrapper-exit-status.md)
+- Missing `summary`: DP.FM.228 (DP.FM.228-railway-liveness-probe-auth-blocks.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
