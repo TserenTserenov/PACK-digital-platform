@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 103 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 195 |
+| Failure Modes (FM) | 198 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 303 |
+| Methods (M) | 306 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 70 |
+| METHOD (METHOD) | 73 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **968** |
+| **Total** | **977** |
 
 ## Distinctions
 
@@ -456,6 +456,9 @@ generated: true
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 | DP.M.341 | Verify Existing Security Pattern Before Implement | — | — |
 | DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | — | — |
+| DP.M.343 | App User Id Set Local Rls Bridge Shared Role | — | — |
+| DP.M.344 | Pre-apply discovery: фактический delta прода до применения схемы | — | active |
+| DP.M.345 | Render-Checklist Separation from Generator Script | — | active |
 | DP.M.346 | Dual Lens Publication Verification | Два параллельных субагента разной природы (конформность фреймворку / адверсарный SOTA-поиск) перед публикацией — диверсификация линз ловит разные классы ошибок, которые одна проверка не обнаруживает. | — |
 | DP.M.347 | Portrait First Reference Fallback | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
 
@@ -675,6 +678,9 @@ generated: true
 | DP.FM.218 | Wrong Diagnosis Hides Real Bug | — | draft |
 | DP.FM.219 | Type Cast In Where Breaks Index | — | — |
 | DP.FM.220 | Health Check Ddl Side Effect False Fail | — | — |
+| DP.FM.221 | Timezone Msk Utc Date Comparison False Nudge | — | — |
+| DP.FM.222 | Verbal Permission Not Process Env | — | — |
+| DP.FM.223 | Verifier Hallucinated Verdict with Zero Tool Calls | — | active |
 | DP.FM.224 | Smart Sync Stub Exists Not Local | — | — |
 | DP.FM.225 | rsync --delete с пустой delta-staging директорией уничтожает все артефакты | — | — |
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | — | — |
@@ -863,6 +869,9 @@ generated: true
 | DP.METHOD.128 | Detector Selftest Synthetic Regression | — | — |
 | DP.METHOD.129 | Quarterly Cadence Month Close Mod3 | — | — |
 | DP.METHOD.130 | Atomic Upsert On Conflict Race Prevention | — | — |
+| DP.METHOD.131 | IO/calc/store ingest pipeline pattern | Трёхслойный паттерн для идемпотентного data-ingest из внешних источников: IO-слой (чтение сырых данных), calc-слой (нормализация/агрегация без хранения), store-слой (запись только при не-None; transient-контракт: None = 'нет данных за период' → пропустить, не писать нули). Дополнительно: chunking батчей против таймаутов внешнего API. | established |
+| DP.METHOD.132 | GitHub App over fine-grained PAT for team pipelines | При командной разработке (>1 человека имеют доступ к репо) → GitHub App обязателен для постоянных конвейеров. Fine-grained PAT привязан к личному аккаунту — команда не видит, не может ротировать; срок ≤1 год = дополнительный административный долг. GitHub App — org-scoped: видим и ротируется централизованно. | established |
+| DP.METHOD.133 | GitHub Actions workflow permissions declaration | GitHub Actions workflow с `permissions: contents: write` не требует отдельной настройки прав на уровне репо. GITHUB_TOKEN получает права из декларации в workflow. Применимо ко всем workflow с push/commit/release операциями. | established |
 | DP.METHOD.134 | Authored File Deferred Conflict Delivery | — | — |
 | DP.METHOD.135 | Render Checklist Separate Artifact | — | — |
 | DP.METHOD.136 | Archive Integrity Listing Baseline | — | — |
@@ -1467,6 +1476,9 @@ generated: true
 - Missing `summary`: DP.M.329 (DP.M.329-webhook-idempotency-db-constraint.md)
 - Missing `summary`: DP.M.341 (DP.M.341-verify-existing-security-pattern-before-implement.md)
 - Missing `summary`: DP.M.342 (DP.M.342-grant-execute-not-direct-table-access-via-security-definer.md)
+- Missing `summary`: DP.M.343 (DP.M.343-app-user-id-set-local-rls-bridge-shared-role.md)
+- Missing `summary`: DP.M.344 (DP.M.344-pre-apply-prod-state-discovery.md)
+- Missing `summary`: DP.M.345 (DP.M.345-render-checklist-separation-from-generator.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1654,6 +1666,9 @@ generated: true
 - Missing `summary`: DP.FM.218 (DP.FM.218-wrong-diagnosis-hides-real-bug.md)
 - Missing `summary`: DP.FM.219 (DP.FM.219-type-cast-in-where-breaks-index.md)
 - Missing `summary`: DP.FM.220 (DP.FM.220-health-check-ddl-side-effect-false-fail.md)
+- Missing `summary`: DP.FM.221 (DP.FM.221-timezone-msk-utc-date-comparison-false-nudge.md)
+- Missing `summary`: DP.FM.222 (DP.FM.222-verbal-permission-not-process-env.md)
+- Missing `summary`: DP.FM.223 (DP.FM.223-verifier-hallucinated-verdict-zero-tool-calls.md)
 - Missing `summary`: DP.FM.224 (DP.FM.224-smart-sync-stub-exists-not-local.md)
 - Missing `summary`: DP.FM.225 (DP.FM.225-rsync-delete-empty-delta-wipe.md)
 - Missing `summary`: DP.FM.226 (DP.FM.226-git-worktree-detached-head-push-fail.md)

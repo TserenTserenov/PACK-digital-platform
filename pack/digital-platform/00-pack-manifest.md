@@ -319,6 +319,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.218 | Wrong Diagnosis Hides Real Bug | FM | — | draft |
 | DP.FM.219 | Type Cast In Where Breaks Index | FM | — | — |
 | DP.FM.220 | Health Check Ddl Side Effect False Fail | FM | — | — |
+| DP.FM.221 | Timezone Msk Utc Date Comparison False Nudge | FM | — | — |
+| DP.FM.222 | Verbal Permission Not Process Env | FM | — | — |
+| DP.FM.223 | Verifier Hallucinated Verdict with Zero Tool Calls | FM | — | active |
 | DP.FM.224 | Smart Sync Stub Exists Not Local | FM | — | — |
 | DP.FM.225 | rsync --delete с пустой delta-staging директорией уничтожает все артефакты | FM | — | — |
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | FM | — | — |
@@ -639,6 +642,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.340 | Skill Resource Guard: Open-first, Close-last | M | Любой скилл, изменяющий файлы, открывает ресурс-гуард как первый шаг (до первого Write/Edit в сессии) и закрывает как последний шаг (после push, best-effort). Паттерн предотвращает конкурентный доступ нескольких агентов к одним и тем же файлам в мульти-агентной среде. | — |
 | DP.M.341 | Verify Existing Security Pattern Before Implement | M | — | — |
 | DP.M.342 | Grant Execute Not Direct Table Access Via Security Definer | M | — | — |
+| DP.M.343 | App User Id Set Local Rls Bridge Shared Role | M | — | — |
+| DP.M.344 | Pre-apply discovery: фактический delta прода до применения схемы | M | — | active |
+| DP.M.345 | Render-Checklist Separation from Generator Script | M | — | active |
 | DP.M.346 | Dual Lens Publication Verification | M | Два параллельных субагента разной природы (конформность фреймворку / адверсарный SOTA-поиск) перед публикацией — диверсификация линз ловит разные классы ошибок, которые одна проверка не обнаруживает. | — |
 | DP.M.347 | Portrait First Reference Fallback | M | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
@@ -703,6 +709,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.128 | Detector Selftest Synthetic Regression | METHOD | — | — |
 | DP.METHOD.129 | Quarterly Cadence Month Close Mod3 | METHOD | — | — |
 | DP.METHOD.130 | Atomic Upsert On Conflict Race Prevention | METHOD | — | — |
+| DP.METHOD.131 | IO/calc/store ingest pipeline pattern | METHOD | Трёхслойный паттерн для идемпотентного data-ingest из внешних источников: IO-слой (чтение сырых данных), calc-слой (нормализация/агрегация без хранения), store-слой (запись только при не-None; transient-контракт: None = 'нет данных за период' → пропустить, не писать нули). Дополнительно: chunking батчей против таймаутов внешнего API. | established |
+| DP.METHOD.132 | GitHub App over fine-grained PAT for team pipelines | METHOD | При командной разработке (>1 человека имеют доступ к репо) → GitHub App обязателен для постоянных конвейеров. Fine-grained PAT привязан к личному аккаунту — команда не видит, не может ротировать; срок ≤1 год = дополнительный административный долг. GitHub App — org-scoped: видим и ротируется централизованно. | established |
+| DP.METHOD.133 | GitHub Actions workflow permissions declaration | METHOD | GitHub Actions workflow с `permissions: contents: write` не требует отдельной настройки прав на уровне репо. GITHUB_TOKEN получает права из декларации в workflow. Применимо ко всем workflow с push/commit/release операциями. | established |
 | DP.METHOD.134 | Authored File Deferred Conflict Delivery | METHOD | — | — |
 | DP.METHOD.135 | Render Checklist Separate Artifact | METHOD | — | — |
 | DP.METHOD.136 | Archive Integrity Listing Baseline | METHOD | — | — |

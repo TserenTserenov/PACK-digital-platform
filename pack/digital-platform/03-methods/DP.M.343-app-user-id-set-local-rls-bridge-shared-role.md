@@ -1,0 +1,54 @@
+---
+id: DP.M.343
+title: "app.user_id через SET LOCAL: per-row защита при одной служебной роли с пулингом соединений"
+type: method
+pack: PACK-digital-platform
+domain: digital-platform / security-engineering
+trust: draft
+epistemic_stage: observed
+valid_from: 2026-07-05
+source: "session-close 2026-07-05 (WP-457 Ф10)"
+related:
+  see_also: [DP.D.199, DP.D.200, DP.M.342, DP.METHOD.121]
+tags: [postgresql, rls, set-local, row-level-security, connection-pooling, pgbouncer]
+---
+
+# DP.M.343 — app.user_id через SET LOCAL для построчной защиты при одной служебной роли
+
+## Описание
+
+Реализация RLS-политики по user_id, когда все сервисы (бот, воркеры, аналитика) подключаются под одной служебной ролью — без JWT-моста к базе и без разделения ролей.
+
+## Условие применимости
+
+| Условие | Применять? |
+|---------|-----------|
+| Одна служебная роль для всего трафика приложения | Да |
+| pgBouncer или transaction-mode pooling | Да |
+| Нет JWT → Postgres моста | Да |
+| Аналитические роли с BYPASSRLS | Нет (они видят все строки по атрибуту) |
+
+## Механизм
+
+```sql
+-- Приложение выставляет в начале каждой транзакции:
+SET LOCAL app.user_id = '<user_id>';
+
+-- RLS-политика читает:
+USING (user_id = CURRENT_SETTING('app.user_id', true)::uuid)
+```
+
+`SET LOCAL` сбрасывается автоматически при `COMMIT`/`ROLLBACK` — переменная не утекает между транзакциями в пуле соединений.
+
+`true` как второй аргумент `CURRENT_SETTING` не бросает исключение при отсутствии переменной (soft fallback). Для строгой защиты нужен отдельный guard.
+
+## Как применять
+
+1. Найти существующий пример `SET LOCAL app.user_id` в репо (паттерн мог уже использоваться для других таблиц).
+2. Задеплоить RLS-политику на целевую таблицу с условием через `CURRENT_SETTING`.
+3. Обернуть каждый запрос к таблице в транзакцию с `SET LOCAL` перед ним.
+4. Аналитические воркеры с BYPASSRLS — оставить без SET LOCAL (они видят все строки по атрибуту).
+
+## Источник
+
+WP-457 Ф10 (2026-07-05): реализовано на `public.domain_event` в production.
