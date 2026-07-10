@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 103 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 192 |
+| Failure Modes (FM) | 195 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 303 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 68 |
+| METHOD (METHOD) | 70 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **963** |
+| **Total** | **968** |
 
 ## Distinctions
 
@@ -676,6 +676,9 @@ generated: true
 | DP.FM.219 | Type Cast In Where Breaks Index | — | — |
 | DP.FM.220 | Health Check Ddl Side Effect False Fail | — | — |
 | DP.FM.224 | Smart Sync Stub Exists Not Local | — | — |
+| DP.FM.225 | rsync --delete с пустой delta-staging директорией уничтожает все артефакты | — | — |
+| DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | — | — |
+| DP.FM.227 | Bash set -e: [ cond ] && cmd внутри функции теряет exemption — функция возвращает exit 1 | — | — |
 
 ## SoTA Annotations
 
@@ -868,6 +871,8 @@ generated: true
 | DP.METHOD.139 | Methodology Pilot One Document Before Corpus | — | — |
 | DP.METHOD.140 | E2E Pipeline Shakedown | — | — |
 | DP.METHOD.141 | Sota Sheet Lite Before Pack Name | — | — |
+| DP.METHOD.142 | Единый реестр для одного типа сущности (Single Registry for Entity Type) | — | — |
+| DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | — | — |
 
 ### NAV
 
@@ -1500,6 +1505,8 @@ generated: true
 - Missing `summary`: DP.METHOD.139 (DP.METHOD.139-methodology-pilot-one-document-before-corpus.md)
 - Missing `summary`: DP.METHOD.140 (DP.METHOD.140-e2e-pipeline-shakedown.md)
 - Missing `summary`: DP.METHOD.141 (DP.METHOD.141-sota-sheet-lite-before-pack-name.md)
+- Missing `summary`: DP.METHOD.142 (DP.METHOD.142-single-registry-entity-type.md)
+- Missing `summary`: DP.METHOD.143 (DP.METHOD.143-non-fatal-exit-code-explicit-tolerate.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1648,6 +1655,9 @@ generated: true
 - Missing `summary`: DP.FM.219 (DP.FM.219-type-cast-in-where-breaks-index.md)
 - Missing `summary`: DP.FM.220 (DP.FM.220-health-check-ddl-side-effect-false-fail.md)
 - Missing `summary`: DP.FM.224 (DP.FM.224-smart-sync-stub-exists-not-local.md)
+- Missing `summary`: DP.FM.225 (DP.FM.225-rsync-delete-empty-delta-wipe.md)
+- Missing `summary`: DP.FM.226 (DP.FM.226-git-worktree-detached-head-push-fail.md)
+- Missing `summary`: DP.FM.227 (DP.FM.227-bash-set-e-function-wrapper-exit-status.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
