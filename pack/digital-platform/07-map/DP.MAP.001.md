@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 107 |
+| Distinctions (D) | 111 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 202 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 318 |
+| Methods (M) | 320 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 74 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **999** |
+| **Total** | **1005** |
 
 ## Distinctions
 
@@ -154,6 +154,10 @@ generated: true
 | DP.D.204 | Method Map Vs State Axis | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
 | DP.D.205 | WP-ID vs PII — публичный идентификатор задачи ≠ персональные данные | Номер задачи (WP-\d+) — публичный реестровый идентификатор, не PII. Блокирование WP-номеров PII-guard = false positive. Тест: может ли пользователь сам упомянуть эту строку в публичном чате без раскрытия приватных данных? | active |
 | DP.D.206 | git notes ≠ видимый аудиторский след | — | active |
+| DP.D.207 | Config, документирующий себя «для будущей миграции», = заброшенность, не черновик | — | active |
+| DP.D.208 | Проверка, читающая всегда-пустое поле = тавтологический pass (data-blocker) | — | active |
+| DP.D.209 | Дрейф производного реестра = разность множеств (orphan-ID), не regex «найден ID» | — | active |
+| DP.D.210 | Тонкий клиент сигналит через нейтральную шину ≠ тонкий клиент с write к доверенному хранилищу | — | active |
 
 ## Methods
 
@@ -477,6 +481,8 @@ generated: true
 | DP.M.357 | Multistage pipeline carry-over: starvation guard via accumulators | Накопители между стадиями конвейера держат carry-over между итерациями: неизрасходованные единицы переходят в следующий прогон. Защищает от голодания последующих стадий при сбое предыдущей. Проектировочный инвариант: узкое место = самая медленная производящая стадия → автоматизировать первой. | — |
 | DP.M.358 | Grep existing planning slots before creating new ones | Перед добавлением нового слота/секции в систему планирования (DayPlan, WeekPlan, Strategy) — grep по шаблонам. Если слот с похожим назначением уже есть — наполнять его, не создавать параллельный. Нарушение = дрейф (OwnerIntegrity): два слота с одним смыслом. | — |
 | DP.M.359 | Static delta-aware lint for bare-commit guard | Grep по изменённым .claude/skills/** и scripts/** на bare `git commit -m` без pathspec; срабатывает только при коммите, вносящем новый bare-commit паттерн. Нет lifecycle, нет стейта, ловит регрессию. | — |
+| DP.M.360 | Server Side Auth Context Enrichment | — | — |
+| DP.M.361 | Histogram before reclassify | Перед переклассификацией команды/эндпоинта или изменением порога алерта собрать распределение латентности (P50/P90/P99) за N дней. Единичный алерт = выборка из 1, недостаточно для решения. | — |
 
 ## Work Products
 
@@ -1205,6 +1211,10 @@ generated: true
 - Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
 - Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
 - Missing `summary`: DP.D.206 (DP.D.206-git-notes-vs-audit-trail.md)
+- Missing `summary`: DP.D.207 (DP.D.207-self-documenting-migration-config-abandonment.md)
+- Missing `summary`: DP.D.208 (DP.D.208-tautological-pass-always-empty-field.md)
+- Missing `summary`: DP.D.209 (DP.D.209-derived-registry-drift-set-difference.md)
+- Missing `summary`: DP.D.210 (DP.D.210-thin-client-signal-vs-write-trusted-storage.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1507,6 +1517,7 @@ generated: true
 - Missing `summary`: DP.M.348 (DP.M.348-content-first-audit-phase-order.md)
 - Missing `summary`: DP.M.349 (DP.M.349-commit-msg-guard-bypass-tags.md)
 - Missing `summary`: DP.M.351 (DP.M.351-neon-pgbouncer-advisory-lock-retry-reconnect.md)
+- Missing `summary`: DP.M.360 (DP.M.360-server-side-auth-context-enrichment.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
