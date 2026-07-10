@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 103 |
+| Distinctions (D) | 104 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 198 |
+| Failure Modes (FM) | 199 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 306 |
+| Methods (M) | 308 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 73 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **977** |
+| **Total** | **981** |
 
 ## Distinctions
 
@@ -137,6 +137,7 @@ generated: true
 | DP.D.155 | Active Day Definition | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | — | draft |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | — | draft |
+| DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | — | active |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | — | active |
@@ -461,6 +462,8 @@ generated: true
 | DP.M.345 | Render-Checklist Separation from Generator Script | — | active |
 | DP.M.346 | Dual Lens Publication Verification | Два параллельных субагента разной природы (конформность фреймворку / адверсарный SOTA-поиск) перед публикацией — диверсификация линз ловит разные классы ошибок, которые одна проверка не обнаруживает. | — |
 | DP.M.347 | Portrait First Reference Fallback | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
+| DP.M.348 | Content First Audit Phase Order | — | — |
+| DP.M.349 | Commit Msg Guard Bypass Tags | — | — |
 
 ## Work Products
 
@@ -604,6 +607,7 @@ generated: true
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | — | — |
 | DP.FM.129 | Broken Symlink Silent Config Empty | — | — |
 | DP.FM.130 | Os Expanduser No Shell Vars | — | active |
+| DP.FM.131 | Incomplete Lifecycle Tooling Registry Rot | — | active |
 | DP.FM.132 | Microservice Tier Sot Mismatch | — | — |
 | DP.FM.133 | Backup Restore No 3Way Merge | — | active |
 | DP.FM.134 | Vocabulary Split Aux Subsections | — | — |
@@ -1226,6 +1230,7 @@ generated: true
 - Missing `summary`: DP.D.155 (DP.D.155-active-day-definition.md)
 - Missing `summary`: DP.D.177 (DP.D.177-proxy-metric-vs-direct.md)
 - Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
+- Missing `summary`: DP.D.180 (DP.D.180-generated-vs-live-file-criterion.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1479,6 +1484,8 @@ generated: true
 - Missing `summary`: DP.M.343 (DP.M.343-app-user-id-set-local-rls-bridge-shared-role.md)
 - Missing `summary`: DP.M.344 (DP.M.344-pre-apply-prod-state-discovery.md)
 - Missing `summary`: DP.M.345 (DP.M.345-render-checklist-separation-from-generator.md)
+- Missing `summary`: DP.M.348 (DP.M.348-content-first-audit-phase-order.md)
+- Missing `summary`: DP.M.349 (DP.M.349-commit-msg-guard-bypass-tags.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1604,6 +1611,7 @@ generated: true
 - Missing `summary`: DP.FM.128 (DP.FM.128-pytest-collection-error-missing-attribute.md)
 - Missing `summary`: DP.FM.129 (DP.FM.129-broken-symlink-silent-config-empty.md)
 - Missing `summary`: DP.FM.130 (DP.FM.130-os-expanduser-no-shell-vars.md)
+- Missing `summary`: DP.FM.131 (DP.FM.131-incomplete-lifecycle-tooling-registry-rot.md)
 - Missing `summary`: DP.FM.132 (DP.FM.132-microservice-tier-sot-mismatch.md)
 - Missing `summary`: DP.FM.133 (DP.FM.133-backup-restore-no-3way-merge.md)
 - Missing `summary`: DP.FM.134 (DP.FM.134-vocabulary-split-aux-subsections.md)

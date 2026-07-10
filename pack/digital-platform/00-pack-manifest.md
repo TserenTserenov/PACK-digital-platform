@@ -113,6 +113,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.155 | Active Day Definition | D | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | D | — | draft |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | D | — | draft |
+| DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | D | — | active |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | D | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | D | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | D | — | active |
@@ -245,6 +246,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.128 | Pytest: тест не запускается из-за ImportError при collection (Python ≤3.9) | FM | — | — |
 | DP.FM.129 | Broken Symlink Silent Config Empty | FM | — | — |
 | DP.FM.130 | Os Expanduser No Shell Vars | FM | — | active |
+| DP.FM.131 | Incomplete Lifecycle Tooling Registry Rot | FM | — | active |
 | DP.FM.132 | Microservice Tier Sot Mismatch | FM | — | — |
 | DP.FM.133 | Backup Restore No 3Way Merge | FM | — | active |
 | DP.FM.134 | Vocabulary Split Aux Subsections | FM | — | — |
@@ -647,6 +649,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.345 | Render-Checklist Separation from Generator Script | M | — | active |
 | DP.M.346 | Dual Lens Publication Verification | M | Два параллельных субагента разной природы (конформность фреймворку / адверсарный SOTA-поиск) перед публикацией — диверсификация линз ловит разные классы ошибок, которые одна проверка не обнаруживает. | — |
 | DP.M.347 | Portrait First Reference Fallback | M | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
+| DP.M.348 | Content First Audit Phase Order | M | — | — |
+| DP.M.349 | Commit Msg Guard Bypass Tags | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
