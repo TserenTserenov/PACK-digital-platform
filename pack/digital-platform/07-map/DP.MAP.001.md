@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 111 |
+| Distinctions (D) | 116 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 202 |
+| Failure Modes (FM) | 205 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 320 |
+| Methods (M) | 323 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 74 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1005** |
+| **Total** | **1016** |
 
 ## Distinctions
 
@@ -158,6 +158,11 @@ generated: true
 | DP.D.208 | Проверка, читающая всегда-пустое поле = тавтологический pass (data-blocker) | — | active |
 | DP.D.209 | Дрейф производного реестра = разность множеств (orphan-ID), не regex «найден ID» | — | active |
 | DP.D.210 | Тонкий клиент сигналит через нейтральную шину ≠ тонкий клиент с write к доверенному хранилищу | — | active |
+| DP.D.211 | Параметр генерации как машиночитаемое поле-контракт (тестируемо) ≠ инструкция только в промпте | — | active |
+| DP.D.212 | Gateway (требует Bearer для L2) ≠ Прямой бэкенд (отдаёт L2 анонимно) | — | active |
+| DP.D.213 | Категориальный policy-факт (сигнал вышестоящей роли) ≠ Семантика пути чужого домена (контекстное правило) | — | active |
+| DP.D.214 | Durable user-opt-out (у Доставщика) ≠ Time-boxed policy-fact навигатора (в движке) | — | active |
+| DP.D.215 | Асинхронный policy-fact на следующий батч ≠ Синхронный governor (для capped-класса доставки) | — | active |
 
 ## Methods
 
@@ -483,6 +488,9 @@ generated: true
 | DP.M.359 | Static delta-aware lint for bare-commit guard | Grep по изменённым .claude/skills/** и scripts/** на bare `git commit -m` без pathspec; срабатывает только при коммите, вносящем новый bare-commit паттерн. Нет lifecycle, нет стейта, ловит регрессию. | — |
 | DP.M.360 | Server Side Auth Context Enrichment | — | — |
 | DP.M.361 | Histogram before reclassify | Перед переклассификацией команды/эндпоинта или изменением порога алерта собрать распределение латентности (P50/P90/P99) за N дней. Единичный алерт = выборка из 1, недостаточно для решения. | — |
+| DP.M.362 | Prefetch snapshot empty guard | Когда prefetch-запрос возвращает all-empty результаты (сбой сети/сервиса), не перезаписывать рабочий снапшот. Рабочий снапшот сохраняется и используется downstream-конвейером как fallback. | — |
+| DP.M.363 | FSM reset via write-ahead new key | Для сброса FSM-сессии записывать новый ключ с временным суффиксом (write-ahead), а не удалять существующий. Следующее сообщение получает новый session_id → FSM не находит записи → чистый контекст. Исключает race-condition при конкурентных сообщениях. | — |
+| DP.M.364 | Offline-fallback с явным TTL снапшота | При загрузке кеш-снапшота проверить три условия последовательно: отсутствие файла / повреждение JSON / устаревание >TTL. При любом — вернуть None и переключиться на локальные seeds. Инвариант: pipeline никогда не блокируется из-за недоступности снапшота. | — |
 
 ## Work Products
 
@@ -711,6 +719,9 @@ generated: true
 | DP.FM.228 | Railway liveness probe падает на 401 при /health за auth | — | — |
 | DP.FM.229 | LLM aggregator single-key SPOF: model-fallback список не защищает от ключа с limit | — | draft |
 | DP.FM.230 | return вместо raise в async-воркере маскирует сбой через exit(0) | — | draft |
+| DP.FM.231 | Ambiguous parameter name carrying two semantic axes → silent wrong result | — | active |
+| DP.FM.232 | Phantom field: моделировать поле, которого нет в реальном выходе источника | — | draft |
+| DP.FM.233 | Форма записи append-only журнала изменена без подъёма schema_version | — | draft |
 
 ## SoTA Annotations
 
@@ -828,7 +839,7 @@ generated: true
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
-| DP.KR.001 | Маршрутизация знаний IWE | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
+| DP.KR.001 | Маршрутизация знаний IWE | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | active |
 | DP.KR.030 | Принцип триады учёт-доступ-аудит | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. KR.030 = foundation серии (delivered WP-214). KR.031–033 = refinement-принципы каждой ветки; отложены, создаются при отдельном РП по необходимости. Серия KR.030–039 зарезервирована. | active |
 
 ### METHOD
@@ -1215,6 +1226,11 @@ generated: true
 - Missing `summary`: DP.D.208 (DP.D.208-tautological-pass-always-empty-field.md)
 - Missing `summary`: DP.D.209 (DP.D.209-derived-registry-drift-set-difference.md)
 - Missing `summary`: DP.D.210 (DP.D.210-thin-client-signal-vs-write-trusted-storage.md)
+- Missing `summary`: DP.D.211 (DP.D.211-generation-param-machine-readable-contract.md)
+- Missing `summary`: DP.D.212 (DP.D.212-gateway-bearer-vs-direct-backend-anonymous-l2.md)
+- Missing `summary`: DP.D.213 (DP.D.213-categorical-policy-fact-vs-domain-semantic-path.md)
+- Missing `summary`: DP.D.214 (DP.D.214-durable-opt-out-vs-time-boxed-policy-fact.md)
+- Missing `summary`: DP.D.215 (DP.D.215-async-policy-fact-vs-sync-governor.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1717,6 +1733,9 @@ generated: true
 - Missing `summary`: DP.FM.228 (DP.FM.228-railway-liveness-probe-auth-blocks.md)
 - Missing `summary`: DP.FM.229 (DP.FM.229-llm-aggregator-single-key-spof.md)
 - Missing `summary`: DP.FM.230 (DP.FM.230-return-instead-of-raise-masks-exit-zero.md)
+- Missing `summary`: DP.FM.231 (DP.FM.231-ambiguous-param-name-dual-axis-silent-shift.md)
+- Missing `summary`: DP.FM.232 (DP.FM.232-phantom-field-prototype-seam.md)
+- Missing `summary`: DP.FM.233 (DP.FM.233-append-log-schema-version-not-bumped.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
