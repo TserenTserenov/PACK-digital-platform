@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 116 |
+| Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 205 |
+| Failure Modes (FM) | 206 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 323 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 74 |
+| METHOD (METHOD) | 75 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1016** |
+| **Total** | **1021** |
 
 ## Distinctions
 
@@ -163,6 +163,9 @@ generated: true
 | DP.D.213 | Категориальный policy-факт (сигнал вышестоящей роли) ≠ Семантика пути чужого домена (контекстное правило) | — | active |
 | DP.D.214 | Durable user-opt-out (у Доставщика) ≠ Time-boxed policy-fact навигатора (в движке) | — | active |
 | DP.D.215 | Асинхронный policy-fact на следующий батч ≠ Синхронный governor (для capped-класса доставки) | — | active |
+| DP.D.216 | Outcome-DoD (результат работает у получателя) ≠ Output-DoD (артефакт поставлен) | — | active |
+| DP.D.217 | dev-checkout resource ≠ prod-runtime resource → read-side snapshot | — | active |
+| DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | — | active |
 
 ## Methods
 
@@ -722,6 +725,7 @@ generated: true
 | DP.FM.231 | Ambiguous parameter name carrying two semantic axes → silent wrong result | — | active |
 | DP.FM.232 | Phantom field: моделировать поле, которого нет в реальном выходе источника | — | draft |
 | DP.FM.233 | Форма записи append-only журнала изменена без подъёма schema_version | — | draft |
+| DP.FM.234 | Provider migration tail — offline scripts stay on old provider | После миграции online-путей на новый LLM/API-провайдер offline-скрипты (ingestion, cron, переиндексация, инструменты разработчика) молча продолжают использовать старый провайдер, пока не будут запущены вручную. | — |
 
 ## SoTA Annotations
 
@@ -920,6 +924,7 @@ generated: true
 | DP.METHOD.142 | Единый реестр для одного типа сущности (Single Registry for Entity Type) | — | — |
 | DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | — | — |
 | DP.METHOD.144 | Feature flag вместо удаления кода при dual-write cutover | — | — |
+| DP.METHOD.145 | Parse Once Shell Config | Читать конфиг-файл (YAML/JSON) один раз в параллельные bash-массивы; последующие lookup — чистый bash без subprocess. Устраняет N×fork overhead при многократном обращении к одному файлу. | draft |
 
 ### NAV
 
@@ -1231,6 +1236,9 @@ generated: true
 - Missing `summary`: DP.D.213 (DP.D.213-categorical-policy-fact-vs-domain-semantic-path.md)
 - Missing `summary`: DP.D.214 (DP.D.214-durable-opt-out-vs-time-boxed-policy-fact.md)
 - Missing `summary`: DP.D.215 (DP.D.215-async-policy-fact-vs-sync-governor.md)
+- Missing `summary`: DP.D.216 (DP.D.216-outcome-dod-vs-output-dod.md)
+- Missing `summary`: DP.D.217 (DP.D.217-dev-vs-prod-runtime-resource.md)
+- Missing `summary`: DP.D.218 (DP.D.218-regex-data-presence-vs-success-signal.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)

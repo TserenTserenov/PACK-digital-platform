@@ -1,0 +1,59 @@
+---
+id: DP.METHOD.146
+type: method
+domain: PACK-digital-platform
+status: draft
+summary: "Activate-on-prefix: каркасный компонент держится как hot-стаб (1-2 строки: триггер + инструкция); полный контент грузится хуком при обнаружении детерминированного лексического advance-signal в сообщении. Экономит контекст-бюджет."
+created: 2026-06-26
+valid_from: 2026-06-26
+version: v1.0
+source: "session-transcript 2026-06-26 (WP-445 Ф4); git diff IWE .claude/hooks/inject-role-prefixes.sh + .claude/rules-lazy/role-prefixes-full.md (commit e1e077f)"
+related:
+  see_also: [DP.M.273, DP.M.271, DP.D.219, DP.D.220]
+---
+
+# DP.METHOD.146: Activate-on-prefix lazy load каркасного компонента
+
+## Назначение
+
+Снизить eager-стоимость каркасного компонента (роль, скилл, формат-правило, style-guide) в контекст-бюджете: держать в hot-контексте только стаб-триггер, полный контент грузить по запросу.
+
+Лечит DP.FM.235 (eager framework context bloat) для компонентов с явным лексическим сигналом.
+
+## Паттерн «advance-signal lazy»
+
+1. **Hot-стаб (1-2 строки):** триггер + инструкция активации. Постоянно в контексте.
+2. **Детектор (hook):** при обнаружении детерминированного лексического advance-signal в начале сообщения...
+3. **Full-load:** хук инжектит полный контент (~23KB) в контекст этой сессии.
+
+```
+hot-стаб (709 байт) ──advance-signal в сообщении──> hook ──> full content (23 814 байт)
+```
+
+## Условие применимости
+
+**Триггер должен быть детерминированным** — лексический prefix или ключевое слово, распознаваемое ДО того, как контент понадобится.
+
+**Тест:** «Есть ли детерминированный advance-signal, по которому можно решить грузить компонент?»
+- Да → activate-on-prefix lazy.
+- Нет (агент не знает заранее, что понадобится — например, какое из ~147 различений) → не lazy, а split hot/warm (DP.D.219 «Compression ≠ Lazy»).
+
+## Применение в WP-445 (role-prefixes)
+
+`role-prefixes.md` сделан lazy по детекту роль-префикса (хук `inject-role-prefixes.sh`):
+- Экономия ~4 620 токенов/сессию (23 814 → 709 байт hot).
+- Smoke 7/7 триггеров PASS.
+
+Применимо к любому каркасному компоненту с явным лексическим trigger: скиллы, роли, правила форматирования.
+
+## Режим отказа
+
+Если advance-signal не пришёл / хук не отработал — деградация (компонент недоступен в этой сессии), НЕ блокировка работы (DP.D.220).
+
+## Связи
+
+- Лечит: DP.FM.235 (eager framework context bloat)
+- Граница: DP.D.219 (Compression ≠ Lazy) — когда advance-signal недоступен, split вместо lazy
+- Механизм prefix: DP.M.273 (explicit-prefix guard: там prefix→routing, здесь prefix→загрузка контента)
+- Родственный lazy: DP.M.271 (lazy channel-aware resource creation)
+- Контракт отказа: DP.D.220 (деградация ≠ блокировка)
