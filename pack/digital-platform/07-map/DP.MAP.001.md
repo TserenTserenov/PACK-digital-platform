@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 206 |
+| Failure Modes (FM) | 215 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 323 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 75 |
+| METHOD (METHOD) | 88 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1021** |
+| **Total** | **1043** |
 
 ## Distinctions
 
@@ -726,6 +726,15 @@ generated: true
 | DP.FM.232 | Phantom field: моделировать поле, которого нет в реальном выходе источника | — | draft |
 | DP.FM.233 | Форма записи append-only журнала изменена без подъёма schema_version | — | draft |
 | DP.FM.234 | Provider migration tail — offline scripts stay on old provider | После миграции online-путей на новый LLM/API-провайдер offline-скрипты (ingestion, cron, переиндексация, инструменты разработчика) молча продолжают использовать старый провайдер, пока не будут запущены вручную. | — |
+| DP.FM.235 | Eager framework context bloat: служебный каркас агента съедает контекст-бюджет до полезной работы | — | draft |
+| DP.FM.236 | Преждевременная инвалидация кеша: сброс ДО успешного promote | — | draft |
+| DP.FM.237 | Provenance-стейт стража вне репо: решение работает на одной машине, невидимо CI | — | draft |
+| DP.FM.238 | Self-referential exemption: whitelist исключений в одном репо с аудитором | — | draft |
+| DP.FM.239 | Архитектурное решение не зафиксировано в VCS: тихий сбой без видимого следа | — | draft |
+| DP.FM.240 | Откат одного параметра без связанного: риск перетекает в новую ветку | — | draft |
+| DP.FM.241 | Полисемия термина-источника: новое различение наследует двойственность и порождает баг-спутник | — | draft |
+| DP.FM.242 | Ложная аналогия по поверхностному сходству API: вынужденный констрейнт ≠ выбранная настройка | — | draft |
+| DP.FM.243 | Детерминированный расчёт делегирован LLM: правдоподобная заглушка вместо результата | — | draft |
 
 ## SoTA Annotations
 
@@ -925,6 +934,19 @@ generated: true
 | DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | — | — |
 | DP.METHOD.144 | Feature flag вместо удаления кода при dual-write cutover | — | — |
 | DP.METHOD.145 | Parse Once Shell Config | Читать конфиг-файл (YAML/JSON) один раз в параллельные bash-массивы; последующие lookup — чистый bash без subprocess. Устраняет N×fork overhead при многократном обращении к одному файлу. | draft |
+| DP.METHOD.146 | Activate On Prefix Lazy Load | Activate-on-prefix: каркасный компонент держится как hot-стаб (1-2 строки: триггер + инструкция); полный контент грузится хуком при обнаружении детерминированного лексического advance-signal в сообщении. Экономит контекст-бюджет. | draft |
+| DP.METHOD.147 | Cashback Provider Api Strict Sum Validation | При интеграции с API-провайдером, проверяющим сумму по каталогу: передавать полную цену провайдеру, списывать бонусы отдельно после подтверждения (cashback-модель). Не пытаться передавать дисконтированную сумму. | draft |
+| DP.METHOD.148 | Mascot Rest State Silence | Rest state companion/маскота = отсутствие действия, не новое эмоциональное состояние. Любой visible-сигнал покоя (пыль, потускнение) создаёт guilt trigger → disengagement. | draft |
+| DP.METHOD.149 | Derived Artifact Reinterprets Canon Untouched | Когда производный артефакт конфликтует с базовым каноном: переосмысление живёт только в производном, канон не редактируется. Конфликт фиксируется в content-cleanup backlog. | draft |
+| DP.METHOD.150 | Tiered Hot File Split | Разбивка HOT-файла, превышающего лимит (150 строк), на три уровня: Tier-A (полный текст, ≤15 критических позиций), Tier-B (одна строка на позицию, ~20), Tier-C (только имена). Полные тексты Tier-B/C — в warm-файле (lazy). Паттерн применим к любому HOT-файлу: роли, SOTA, чеклисты. | draft |
+| DP.METHOD.151 | Classify Before Count | Перед объявлением объёма миграции (N объектов) — классифицировать весь пул по целевому атрибуту и получить реальный N'. SELECT count(*) WHERE target_attr до start. Предотвращает ложный прогресс: '4/65' при реальном объёме N'=12 читается как 6% вместо 33%. | draft |
+| DP.METHOD.152 | Time Window Content Type Rotation | Time-window эвристика принудительной ротации трудоёмких типов контента: если за последние N дней нет принятого контента типа T_heavy → предложить T_heavy вместо резервного. Предотвращает систематическое вытеснение трудоёмких типов более лёгкими. | draft |
+| DP.METHOD.153 | Semantic Constant Migration Handshake | При поэтапной миграции к новому consumer — вводить семантическую константу в общий контракт (Service Clause) вместо routing по строковым литералам. Константа объявляет намерение на стороне enqueue (legacy) и на стороне matcher (новый consumer). Тест: 'если поменяется строка — нужно менять в двух местах?' Да → нужна константа в контракте. | draft |
+| DP.METHOD.154 | Bypass Class Taxonomy | Bypass-class taxonomy: для каждого класса обхода security-гарда — отдельный regression-тест, подтверждающий, что нужный слой его ловит. Пустой класс = непокрытый вектор атаки. | draft |
+| DP.METHOD.155 | Deadline Triage Date Over Gates | При конфликте дата vs шлюзы vs сигнал — приоритет резки: сначала дата (если не внешнее обязательство), затем дополнительные требования, последним — носитель сигнала и блокирующие предусловия. | draft |
+| DP.METHOD.156 | External Fact Resolution | Когда внутренний спор двух ролей сводится к одному внешнему факту, недоступному ни одной из них — прекратить перетягивание и вынести единственный точечный вопрос носителю факта, оба варианта оформив как готовые исполняемые ветки. | draft |
+| DP.METHOD.157 | Two Axis Distinction Form | Различение, чья суть — 'это две разные оси', записывать двумя отдельными именованными строками + пояснительной строкой 'где:', а не одной слитной. Слитная форма воспроизводит ровно тот синоним, против которого заведено различение. | draft |
+| DP.METHOD.158 | Or Gate Multi Track Maturity | Для систем с двумя независимыми осями прогресса (учебная ступень, квалификационный уровень) использовать OR-гейт с независимым порогом на каждой оси. AND-гейт исключает опытных пользователей, вошедших через альтернативный путь. | draft |
 
 ### NAV
 
@@ -1744,6 +1766,15 @@ generated: true
 - Missing `summary`: DP.FM.231 (DP.FM.231-ambiguous-param-name-dual-axis-silent-shift.md)
 - Missing `summary`: DP.FM.232 (DP.FM.232-phantom-field-prototype-seam.md)
 - Missing `summary`: DP.FM.233 (DP.FM.233-append-log-schema-version-not-bumped.md)
+- Missing `summary`: DP.FM.235 (DP.FM.235-eager-framework-context-bloat.md)
+- Missing `summary`: DP.FM.236 (DP.FM.236-premature-cache-invalidation.md)
+- Missing `summary`: DP.FM.237 (DP.FM.237-provenance-state-outside-repo.md)
+- Missing `summary`: DP.FM.238 (DP.FM.238-self-referential-exemption.md)
+- Missing `summary`: DP.FM.239 (DP.FM.239-arch-decision-unversioned.md)
+- Missing `summary`: DP.FM.240 (DP.FM.240-rollback-single-param-leak.md)
+- Missing `summary`: DP.FM.241 (DP.FM.241-polysemous-term-satellite-bug.md)
+- Missing `summary`: DP.FM.242 (DP.FM.242-false-analogy-forced-constraint.md)
+- Missing `summary`: DP.FM.243 (DP.FM.243-deterministic-calc-delegated-to-llm.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
