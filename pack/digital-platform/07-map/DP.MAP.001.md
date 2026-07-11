@@ -24,24 +24,24 @@ generated: true
 | Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 217 |
+| Failure Modes (FM) | 231 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 323 |
+| Methods (M) | 332 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 93 |
+| METHOD (METHOD) | 99 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 67 |
+| ROLE (ROLE) | 68 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 140 |
-| SoTA Annotations (SOTA) | 31 |
+| SC (SC) | 142 |
+| SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1050** |
+| **Total** | **1084** |
 
 ## Distinctions
 
@@ -494,6 +494,15 @@ generated: true
 | DP.M.362 | Prefetch snapshot empty guard | Когда prefetch-запрос возвращает all-empty результаты (сбой сети/сервиса), не перезаписывать рабочий снапшот. Рабочий снапшот сохраняется и используется downstream-конвейером как fallback. | — |
 | DP.M.363 | FSM reset via write-ahead new key | Для сброса FSM-сессии записывать новый ключ с временным суффиксом (write-ahead), а не удалять существующий. Следующее сообщение получает новый session_id → FSM не находит записи → чистый контекст. Исключает race-condition при конкурентных сообщениях. | — |
 | DP.M.364 | Offline-fallback с явным TTL снапшота | При загрузке кеш-снапшота проверить три условия последовательно: отсутствие файла / повреждение JSON / устаревание >TTL. При любом — вернуть None и переключиться на локальные seeds. Инвариант: pipeline никогда не блокируется из-за недоступности снапшота. | — |
+| DP.M.365 | Граница безопасной компрессии инструктивного файла (peer-review как страж инварианта) | — | active |
+| DP.M.366 | Detector Baseline Forward Only | Ретроспективное сканирование без ground truth даёт ложную уверенность. Baseline нового детектора ставится с даты первого события с явными метками, не с даты создания скрипта. | — |
+| DP.M.367 | Per-Entity Advisory Lock for Concurrent Background Tasks | Два и более фоновых процесса, способных одновременно мутировать один и тот же объект, требуют advisory lock по идентификатору объекта. SELECT ... FOR UPDATE SKIP LOCKED обеспечивает serial execution для одного объекта без deadlock при параллельной обработке очереди. | — |
+| DP.M.368 | Per-file byte/token ratio calibration | MEDIAN_RATIO = медиана (bytes(f)/tokens(f)) по всем файлам выборки — не одиночный вызов токенайзера на конкатенации. Граничные эффекты BPE при склейке дают смещённое effective ratio, а не константу пофайловой нормализации. | — |
+| DP.M.369 | DRR Adequacy Pass | 6-вопросный чеклист ArchGate шаг 4.6: проверяет, что архитектурное/протокольное/продуктовое решение операционализировано, а не только записано. ≥1 ❌ → вернуться к детализации. | — |
+| DP.M.370 | Dual-source behavioral scanner | Детектор поведенческого паттерна в логах с двумя независимыми каналами: tagged (явная метка, confidence=high) + pattern-matched (regex, confidence=low). Каналы репортируются отдельно, не суммируются. Baseline — с даты первого tagged-события, не с даты создания скрипта. | — |
+| DP.M.371 | Байт/5 как прокси токенов при отсутствии API-доступа | — | draft |
+| DP.M.372 | flock: один общий лок на весь проход vs per-item при последовательной внутренней обработке | — | — |
+| DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | — | — |
 
 ## Work Products
 
@@ -737,6 +746,20 @@ generated: true
 | DP.FM.243 | Детерминированный расчёт делегирован LLM: правдоподобная заглушка вместо результата | — | draft |
 | DP.FM.244 | Staged-delete другого агента поглощается коммитом при multi-agent git-работе | — | draft |
 | DP.FM.245 | Inline-комментарий не обходит валидатор присутствия литерала | — | draft |
+| DP.FM.246 | Stale Active Wp In Memory Table | Quick Close не включает шага обновления MEMORY.md — закрытый РП остаётся в таблице «Текущая работа» как активный до следующего явного протокола. | — |
+| DP.FM.247 | Payment Api Ambiguous Terminal Status | — | — |
+| DP.FM.248 | Metric Threshold Unit Rename | — | — |
+| DP.FM.249 | Env-var с устаревшим дефолтом переименованного репо | — | draft |
+| DP.FM.250 | FETCH_HEAD race: параллельные git pull на одном рабочем дереве задваивают файл | — | — |
+| DP.FM.251 | OnBootSec gap collapse: начальный зазор между таймерами схлопывается при долгой uptime | — | — |
+| DP.FM.252 | git pull.rebase=true глобально переопределяет --ff-only, направляя команду в rebase-логику | — | — |
+| DP.FM.253 | Инструмент читает legacy-источник после переезда source of truth — прод не видит новых данных | — | draft |
+| DP.FM.254 | LLM silent truncation: finish_reason=length без проверки записывает частичный вывод | — | draft |
+| DP.FM.255 | Transitive shim dependency: пакет используется только как HTTP-клиент для стороннего провайдера, блокирует CI | — | draft |
+| DP.FM.256 | Conditional LLM cleanup: постобработка зависит от входных данных → частичная утечка разметки | — | draft |
+| DP.FM.257 | Railway project-scoped токен: неверный заголовок `Bearer` вместо `Project-Access-Token` → 401 | — | draft |
+| DP.FM.258 | Parallel agent branch switch in shared checkout | — | — |
+| DP.FM.259 | Measurement gaming — form checklist completion without substance | — | — |
 
 ## SoTA Annotations
 
@@ -773,6 +796,8 @@ generated: true
 | DP.SOTA.030 | Eam Agent Manifest Standard | — | draft |
 | DP.SOTA.031 | Async Factory Deterministic Pipeline | — | draft |
 | DP.SOTA.032 | Semantic Chunking Rag | — | draft |
+| DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | — | draft |
+| DP.SOTA.034 | Bigtech Context Commoditization | — | draft |
 
 ## Maps
 
@@ -954,6 +979,12 @@ generated: true
 | DP.METHOD.161 | Процесс закрытия пишет входные данные для следующего периода | — | — |
 | DP.METHOD.162 | Auth Layering Public Base | При слиянии двух сервисов с разными уровнями доступа — базой выбирать публичный (fail-closed по умолчанию), авторизацию добавлять поверх. Обратный подход (взять приватный и вырезать авторизацию) создаёт fail-open при ошибке конфига. | draft |
 | DP.METHOD.163 | Ci Allowlist Over Blocklist | CI-защита конфигурации через allowlist (явный список разрешённых) надёжнее blocklist (grep по подозрительным именам). Blocklist пропускает нейтрально-именованные нарушения; allowlist блокирует любое имя вне списка. | draft |
+| DP.METHOD.164 | Fail Closed Unknown Service Mode | При отсутствующем или неизвестном значении параметра режима сервиса — отказать с явной ошибкой (HTTP 500 / exit 1), не делать fallback в публичный режим. Тихий fallback = fail-open при ошибке деплоя. | draft |
+| DP.METHOD.165 | Public Showcase Final Result Only | При интеграции личного репо с публичной витриной — ограничивать публикуемую область директорией финальных артефактов (guide/). Сырые данные (inbox, memory, профиль) не должны попадать в публичную область. | draft |
+| DP.METHOD.166 | Read From Canonical Engine Table | Если в системе есть компонент, который пишет канонические данные в БД (engine), — читать оттуда, не из локального файла. Локальный файл для тестирования = кандидат на расхождение с production-путём. | draft |
+| DP.METHOD.167 | Схлопывание однотемных записей MEMORY.md в hub-файл (hub-collapse) | — | — |
+| DP.METHOD.168 | ResidencyGate: статическая декларация потребности данных + динамическое состояние согласия | — | — |
+| DP.METHOD.169 | Corpus dedup prefilter must enumerate all prior passes | — | — |
 
 ### NAV
 
@@ -1051,6 +1082,7 @@ generated: true
 | DP.ROLE.080 | Владелец выдачи согласия на анализ данных (Consent Grant Authority) | Единственный компонент, который пишет scope=data_analysis в learning.consent_grant и эмитит consent_granted в public.domain_event. Не отвечает за revoke, не отвечает за text_analysis/typing_tracking (владелец — бот). | draft |
 | DP.ROLE.081 | Ретранслятор канона | Механически переносит содержимое канона в целевую организацию при каждом изменении — по активному обещанию (перевод или зеркалирование), не решает, что и когда публиковать. | draft |
 | DP.ROLE.082 | Руководитель продвижения | Владелец домена «служба продвижения» (5 систем, артикулированных Алёной 19 апр 2026) — наполняет доменное содержание типов без права менять архитектурный каркас Pack. Первый прецедент роли «владелец домена без архитектурных полномочий» в этом Pack. | draft |
+| DP.ROLE.083 | External Access Grantor (выдающий пропуска внешним ИИ-клиентам) | Выдаёт и отзывает пропуска (ict_ токены) внешним ИИ-клиентам (claude.ai Connector, VS Code) на основе тира пользователя — единственная точка выдачи, что для push-, что для pull-инициации. | draft |
 
 ### RUNBOOK
 
@@ -1203,6 +1235,8 @@ generated: true
 | DP.SC.187 | local-gateway-render | — | draft |
 | DP.SC.188 | Синхронизация IWE-шаблона с англоязычной проекцией | Каждое изменение README/docs личного русскоязычного шаблона IWE автоматически появляется переведённым в публичном английском репозитории iwesys/iwe-template — без участия автора и без отдельной команды на публикацию. | draft |
 | DP.SC.189 | Зеркалирование методического контента aisystant в МИМ | Каждое изменение в одном из 11 методических репозиториев aisystant (docs, guides, main-docs и т.д.) автоматически публикуется как есть (без перевода) в парном репозитории организации МИМ, без штатного git-механизма fork/transfer и без публичного отображения родства между организациями. | draft |
+| DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | draft |
+| DP.SC.191 | Capacity commitment must decompose by load type | — | — |
 
 ### SYS
 
@@ -1571,6 +1605,10 @@ generated: true
 - Missing `summary`: DP.M.349 (DP.M.349-commit-msg-guard-bypass-tags.md)
 - Missing `summary`: DP.M.351 (DP.M.351-neon-pgbouncer-advisory-lock-retry-reconnect.md)
 - Missing `summary`: DP.M.360 (DP.M.360-server-side-auth-context-enrichment.md)
+- Missing `summary`: DP.M.365 (DP.M.365-instruction-file-compression-peer-review.md)
+- Missing `summary`: DP.M.371 (DP.M.371-byte-div5-token-proxy.md)
+- Missing `summary`: DP.M.372 (DP.M.372-flock-single-pass-lock-granularity.md)
+- Missing `summary`: DP.M.373 (DP.M.373-live-reproduction-snapshot-diagnosis.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1615,6 +1653,9 @@ generated: true
 - Missing `summary`: DP.METHOD.159 (DP.METHOD.159-auto-detect-one-question-ambiguity.md)
 - Missing `summary`: DP.METHOD.160 (DP.METHOD.160-additive-router-new-axis-no-regression.md)
 - Missing `summary`: DP.METHOD.161 (DP.METHOD.161-close-writes-tomorrow-inputs.md)
+- Missing `summary`: DP.METHOD.167 (DP.METHOD.167-memory-index-hub-collapse.md)
+- Missing `summary`: DP.METHOD.168 (DP.METHOD.168-residency-gate-data-consent.md)
+- Missing `summary`: DP.METHOD.169 (DP.METHOD.169-corpus-dedup-prefilter-enumerate-passes.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1787,10 +1828,25 @@ generated: true
 - Missing `summary`: DP.FM.243 (DP.FM.243-deterministic-calc-delegated-to-llm.md)
 - Missing `summary`: DP.FM.244 (DP.FM.244-staged-delete-cross-agent-commit.md)
 - Missing `summary`: DP.FM.245 (DP.FM.245-inline-comment-not-literal-validator-bypass.md)
+- Missing `summary`: DP.FM.247 (DP.FM.247-payment-api-ambiguous-terminal-status.md)
+- Missing `summary`: DP.FM.248 (DP.FM.248-metric-threshold-unit-rename.md)
+- Missing `summary`: DP.FM.249 (DP.FM.249-stale-env-var-default-renamed-repo.md)
+- Missing `summary`: DP.FM.250 (DP.FM.250-fetch-head-parallel-git-pull-race.md)
+- Missing `summary`: DP.FM.251 (DP.FM.251-onbootsec-timer-gap-collapse.md)
+- Missing `summary`: DP.FM.252 (DP.FM.252-global-pull-rebase-overrides-ff-only.md)
+- Missing `summary`: DP.FM.253 (DP.FM.253-legacy-read-after-catalog-merge.md)
+- Missing `summary`: DP.FM.254 (DP.FM.254-llm-silent-truncation-finish-reason.md)
+- Missing `summary`: DP.FM.255 (DP.FM.255-transitive-shim-dependency-ci-fail.md)
+- Missing `summary`: DP.FM.256 (DP.FM.256-conditional-llm-cleanup-markup-leak.md)
+- Missing `summary`: DP.FM.257 (DP.FM.257-railway-project-token-wrong-auth-header.md)
+- Missing `summary`: DP.FM.258 (DP.FM.258-parallel-agent-branch-switch-shared-checkout.md)
+- Missing `summary`: DP.FM.259 (DP.FM.259-measurement-gaming-form-without-substance.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
 - Missing `summary`: DP.SOTA.032 (DP.SOTA.032-semantic-chunking-rag.md)
+- Missing `summary`: DP.SOTA.033 (DP.SOTA.033-ai-learning-platform-commoditization-2026.md)
+- Missing `summary`: DP.SOTA.034 (DP.SOTA.034-bigtech-context-commoditization.md)
 - Missing `summary`: DP.MAP.001 (DP.MAP.001.md)
 - Missing `summary`: DP.SC.021 (DP.SC.021-mcp-knowledge-access.md)
 - Missing `summary`: DP.SC.022 (DP.SC.022-personal-knowledge-indexing.md)
@@ -1819,6 +1875,7 @@ generated: true
 - Missing `summary`: DP.SC.184 (DP.SC.184-bot-day-open.md)
 - Missing `summary`: DP.SC.186 (DP.SC.186-bot-agent-session.md)
 - Missing `summary`: DP.SC.187 (DP.SC.187-local-gateway-render.md)
+- Missing `summary`: DP.SC.191 (DP.SC.191-capacity-commitment-decompose-load-type.md)
 
 ## Staleness Warnings (>90 days since update)
 
