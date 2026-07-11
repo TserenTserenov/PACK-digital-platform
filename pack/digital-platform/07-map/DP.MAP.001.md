@@ -129,7 +129,7 @@ generated: true
 | DP.D.129 | Historical Membership Vs Current Channel | — | — |
 | DP.D.130 | Технологическая ось онбординга ≠ Содержательная ось | — | — |
 | DP.D.131 | Костюм ≠ Оснащение (тир) | — | active |
-| DP.D.132 | Первокурсник ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | — | active |
+| DP.D.132 | Стажёр ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | — | active |
 | DP.D.133 | Три уровня изоляции данных в IWE | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | — | active |
@@ -1255,7 +1255,7 @@ generated: true
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
-| DP.VM.001 | P1 P9 Calibration Matrix | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Первокурсника/событие тира). | — |
+| DP.VM.001 | P1 P9 Calibration Matrix | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Стажёра/событие тира). | — |
 
 ## Warnings
 
@@ -1348,7 +1348,7 @@ generated: true
 - Missing `summary`: DP.D.129 (DP.D.129-historical-membership-vs-current-channel.md)
 - Missing `summary`: DP.D.130 (DP.D.130-two-axis-onboarding-model.md)
 - Missing `summary`: DP.D.131 (DP.D.131-costume-vs-equipment.md)
-- Missing `summary`: DP.D.132 (DP.D.132-firstokursnik-vs-member.md)
+- Missing `summary`: DP.D.132 (DP.D.132-stazher-vs-member.md)
 - Missing `summary`: DP.D.154 (DP.D.154-iwesys-product-org-topology.md)
 - Missing `summary`: DP.D.155 (DP.D.155-active-day-definition.md)
 - Missing `summary`: DP.D.177 (DP.D.177-proxy-metric-vs-direct.md)

@@ -129,9 +129,9 @@ wp: WP-418
 
 | # | Шаг | Кто | Сервис |
 |---|-----|-----|--------|
-| 1 | В один тик у пользователя в очереди: занятие (`must-deliver`, prio 2) и нудж (`capped`, prio 4) | марафон + scheduler | NotificationService |
-| 2 | Drain-loop сортирует по приоритету: занятие первым | DP.ROLE.075 | drain-loop |
-| 3 | Занятие вне дневного потолка → доставлен | DP.ROLE.044 | Dispatcher |
+| 1 | В один тик у пользователя в очереди: материал (`must-deliver`, prio 2) и нудж (`capped`, prio 4) | марафон + scheduler | NotificationService |
+| 2 | Drain-loop сортирует по приоритету: материал первым | DP.ROLE.075 | drain-loop |
+| 3 | Материал вне дневного потолка → доставлен | DP.ROLE.044 | Dispatcher |
 | 4 | Нудж проверяется против потолка `capped` отдельно | DP.ROLE.075 | NotificationService |
 
 ## Связь с другими обещаниями
