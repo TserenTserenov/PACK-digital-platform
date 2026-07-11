@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 232 |
+| Failure Modes (FM) | 235 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 332 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 99 |
+| METHOD (METHOD) | 102 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1085** |
+| **Total** | **1091** |
 
 ## Distinctions
 
@@ -761,6 +761,9 @@ generated: true
 | DP.FM.258 | Parallel agent branch switch in shared checkout | — | — |
 | DP.FM.259 | Measurement gaming — form checklist completion without substance | — | — |
 | DP.FM.260 | Check infrastructure path resolution error masked as logic error | — | — |
+| DP.FM.262 | Shared Error Db Env Leak | — | — |
+| DP.FM.263 | Git Copy Instead Of Move Cross Repo | — | — |
+| DP.FM.264 | Housekeeping Semaphore Missing Slug | — | — |
 
 ## SoTA Annotations
 
@@ -986,6 +989,9 @@ generated: true
 | DP.METHOD.167 | Схлопывание однотемных записей MEMORY.md в hub-файл (hub-collapse) | — | — |
 | DP.METHOD.168 | ResidencyGate: статическая декларация потребности данных + динамическое состояние согласия | — | — |
 | DP.METHOD.169 | Corpus dedup prefilter must enumerate all prior passes | — | — |
+| DP.METHOD.170 | Трёхслойная модель сбора персональных данных (privacy-first) | — | — |
+| DP.METHOD.172 | Верификация самодостаточности EN-дистрибуции: три оси | — | — |
+| DP.METHOD.173 | Независимый верификатор с изоляцией контекста | — | active |
 
 ### NAV
 
@@ -1657,6 +1663,9 @@ generated: true
 - Missing `summary`: DP.METHOD.167 (DP.METHOD.167-memory-index-hub-collapse.md)
 - Missing `summary`: DP.METHOD.168 (DP.METHOD.168-residency-gate-data-consent.md)
 - Missing `summary`: DP.METHOD.169 (DP.METHOD.169-corpus-dedup-prefilter-enumerate-passes.md)
+- Missing `summary`: DP.METHOD.170 (DP.METHOD.170-three-layer-data-residency.md)
+- Missing `summary`: DP.METHOD.172 (DP.METHOD.172-en-distribution-self-contained-verification.md)
+- Missing `summary`: DP.METHOD.173 (DP.METHOD.173-context-isolated-verifier.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1843,6 +1852,9 @@ generated: true
 - Missing `summary`: DP.FM.258 (DP.FM.258-parallel-agent-branch-switch-shared-checkout.md)
 - Missing `summary`: DP.FM.259 (DP.FM.259-measurement-gaming-form-without-substance.md)
 - Missing `summary`: DP.FM.260 (DP.FM.260-check-infrastructure-path-resolution-masked-as-logic-error.md)
+- Missing `summary`: DP.FM.262 (DP.FM.262-shared-error-db-env-leak.md)
+- Missing `summary`: DP.FM.263 (DP.FM.263-git-copy-instead-of-move-cross-repo.md)
+- Missing `summary`: DP.FM.264 (DP.FM.264-housekeeping-semaphore-missing-slug.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
