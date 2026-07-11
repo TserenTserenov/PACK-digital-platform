@@ -1,0 +1,58 @@
+---
+id: DP.FM.249
+name: Env-var с устаревшим дефолтом переименованного репо
+type: failure-mode
+pack: digital-platform
+detection_test: "grep ':-' в скриптах IWE → проверить: существует ли путь с дефолтным именем? При переименовании репо обновлять обе точки: экспорт переменной И встроенный дефолт в `:-`."
+severity: medium
+status: draft
+valid_from: 2026-07-03
+source: "git commit b020ddb (fix(day-open): dc_committed guard used a nonexistent repo path)"
+see_also: [DP.FM.016, DP.FM.031]
+---
+
+# DP.FM.249 — Env-var с устаревшим дефолтом переименованного репо
+
+## Описание
+
+Env-var определена с bash-дефолтом `${VAR:-legacy-name}`. При переименовании репо обновляется объявление переменной, но не код, где дефолт встроен inline. `cd "$IWE/${VAR:-legacy-name}"` молча упал — bash `cd` возвращает ненулевой exit code, но скрипт без `set -e` продолжает выполнение в неверном каталоге.
+
+## Симптом
+
+Day Open возвращал «нет данных» для блока commits/WP-closed, хотя данные были. Ошибки нет, скрипт завершается успешно, вывод выглядит корректно. Диагностика без `set -e` затруднена.
+
+## Механизм
+
+```
+T0: экспорт IWE_GOVERNANCE_REPO=DS-strategy
+    cd "$IWE/${IWE_GOVERNANCE_REPO:-DS-strategy}"  →  ✓ работает
+
+T1: репо переименовано → DS-my-strategy
+    Переменная обновлена: IWE_GOVERNANCE_REPO=DS-my-strategy
+    Код скрипта: cd "$IWE/${IWE_GOVERNANCE_REPO:-DS-strategy}"
+                                                          ↑ дефолт не обновлён
+
+Сценарий отказа: переменная не экспортирована в env текущей сессии
+    → bash использует дефолт: DS-strategy
+    → cd "/home/tseren/IWE/DS-strategy" — не существует
+    → exit code ≠ 0, но без set -e → продолжение в текущем каталоге
+```
+
+## Отличие от смежных FM
+
+| FM | Механизм |
+|----|----------|
+| DP.FM.016 | Стареет config-файл с маршрутами (routing.md) |
+| DP.FM.031 | Hardcoded OS-путь (литерал `/home/...`) |
+| DP.FM.249 (этот) | Стареет дефолт `:-` в env-var expansion |
+
+## Профилактика
+
+1. `set -e` в начале скриптов IWE — любой `cd` failure = abort
+2. Явная проверка: `cd "$dir" || { echo "path not found: $dir"; exit 1; }`
+3. При переименовании репо: `grep -rn ":-${OLD_NAME}" ~/IWE/` → обновить все встреченные дефолты
+
+## Связи
+
+- `DP.FM.016` — decay конфигурационных путей в routing.md
+- `DP.FM.031` — hardcoded OS-путь вместо $HOME
