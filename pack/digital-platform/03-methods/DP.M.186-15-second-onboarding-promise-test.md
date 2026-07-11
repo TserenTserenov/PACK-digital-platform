@@ -32,7 +32,7 @@ source: session-transcript 2026-05-27 peer-сессия wp327-points-model-audit
 
 - **Starbucks Rewards** (звёзды → бесплатный кофе) — pass.
 - **Habitica** — fail из-за сложности правил; проиграла mass-market.
-- **WP-327 v4.3** — формулы спрятаны в backend, UI показывает «Выполни 5 уроков → получи 50 ₽».
+- **WP-327 v4.3** — формулы спрятаны в backend, UI показывает «Выполни 5 занятий → получи 50 ₽».
 
 ## Связи
 
