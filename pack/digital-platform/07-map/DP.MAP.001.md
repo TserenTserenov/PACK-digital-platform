@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-07-10
-last_updated: 2026-07-10
+created: 2026-07-11
+last_updated: 2026-07-11
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-07-10. Do not edit manually.
+> Auto-generated from frontmatter on 2026-07-11. Do not edit manually.
 
 ---
 
@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 215 |
+| Failure Modes (FM) | 217 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 323 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 88 |
+| METHOD (METHOD) | 93 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1043** |
+| **Total** | **1050** |
 
 ## Distinctions
 
@@ -735,6 +735,8 @@ generated: true
 | DP.FM.241 | Полисемия термина-источника: новое различение наследует двойственность и порождает баг-спутник | — | draft |
 | DP.FM.242 | Ложная аналогия по поверхностному сходству API: вынужденный констрейнт ≠ выбранная настройка | — | draft |
 | DP.FM.243 | Детерминированный расчёт делегирован LLM: правдоподобная заглушка вместо результата | — | draft |
+| DP.FM.244 | Staged-delete другого агента поглощается коммитом при multi-agent git-работе | — | draft |
+| DP.FM.245 | Inline-комментарий не обходит валидатор присутствия литерала | — | draft |
 
 ## SoTA Annotations
 
@@ -947,6 +949,11 @@ generated: true
 | DP.METHOD.156 | External Fact Resolution | Когда внутренний спор двух ролей сводится к одному внешнему факту, недоступному ни одной из них — прекратить перетягивание и вынести единственный точечный вопрос носителю факта, оба варианта оформив как готовые исполняемые ветки. | draft |
 | DP.METHOD.157 | Two Axis Distinction Form | Различение, чья суть — 'это две разные оси', записывать двумя отдельными именованными строками + пояснительной строкой 'где:', а не одной слитной. Слитная форма воспроизводит ровно тот синоним, против которого заведено различение. | draft |
 | DP.METHOD.158 | Or Gate Multi Track Maturity | Для систем с двумя независимыми осями прогресса (учебная ступень, квалификационный уровень) использовать OR-гейт с независимым порогом на каждой оси. AND-гейт исключает опытных пользователей, вошедших через альтернативный путь. | draft |
+| DP.METHOD.159 | Авто-детект состояния через минимальные сигналы с одним вопросом при неоднозначности | — | — |
+| DP.METHOD.160 | Аддитивный маршрутизатор новой оси без регрессии | — | — |
+| DP.METHOD.161 | Процесс закрытия пишет входные данные для следующего периода | — | — |
+| DP.METHOD.162 | Auth Layering Public Base | При слиянии двух сервисов с разными уровнями доступа — базой выбирать публичный (fail-closed по умолчанию), авторизацию добавлять поверх. Обратный подход (взять приватный и вырезать авторизацию) создаёт fail-open при ошибке конфига. | draft |
+| DP.METHOD.163 | Ci Allowlist Over Blocklist | CI-защита конфигурации через allowlist (явный список разрешённых) надёжнее blocklist (grep по подозрительным именам). Blocklist пропускает нейтрально-именованные нарушения; allowlist блокирует любое имя вне списка. | draft |
 
 ### NAV
 
@@ -1605,6 +1612,9 @@ generated: true
 - Missing `summary`: DP.METHOD.142 (DP.METHOD.142-single-registry-entity-type.md)
 - Missing `summary`: DP.METHOD.143 (DP.METHOD.143-non-fatal-exit-code-explicit-tolerate.md)
 - Missing `summary`: DP.METHOD.144 (DP.METHOD.144-feature-flag-dual-write-cutover.md)
+- Missing `summary`: DP.METHOD.159 (DP.METHOD.159-auto-detect-one-question-ambiguity.md)
+- Missing `summary`: DP.METHOD.160 (DP.METHOD.160-additive-router-new-axis-no-regression.md)
+- Missing `summary`: DP.METHOD.161 (DP.METHOD.161-close-writes-tomorrow-inputs.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1775,6 +1785,8 @@ generated: true
 - Missing `summary`: DP.FM.241 (DP.FM.241-polysemous-term-satellite-bug.md)
 - Missing `summary`: DP.FM.242 (DP.FM.242-false-analogy-forced-constraint.md)
 - Missing `summary`: DP.FM.243 (DP.FM.243-deterministic-calc-delegated-to-llm.md)
+- Missing `summary`: DP.FM.244 (DP.FM.244-staged-delete-cross-agent-commit.md)
+- Missing `summary`: DP.FM.245 (DP.FM.245-inline-comment-not-literal-validator-bypass.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
@@ -1812,9 +1824,10 @@ generated: true
 
 | ID | Days Since Update |
 |----|-------------------|
-| DP.FM.008 | 111 |
-| DP.FM.009 | 91 |
+| DP.FM.008 | 112 |
+| DP.FM.009 | 92 |
+| DP.FM.011 | 91 |
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-07-10*
+*Generated by `scripts/generate-map.py` on 2026-07-11*
