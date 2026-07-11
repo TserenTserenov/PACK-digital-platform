@@ -24,7 +24,7 @@ generated: true
 | Distinctions (D) | 119 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 231 |
+| Failure Modes (FM) | 232 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 332 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1084** |
+| **Total** | **1085** |
 
 ## Distinctions
 
@@ -760,6 +760,7 @@ generated: true
 | DP.FM.257 | Railway project-scoped токен: неверный заголовок `Bearer` вместо `Project-Access-Token` → 401 | — | draft |
 | DP.FM.258 | Parallel agent branch switch in shared checkout | — | — |
 | DP.FM.259 | Measurement gaming — form checklist completion without substance | — | — |
+| DP.FM.260 | Check infrastructure path resolution error masked as logic error | — | — |
 
 ## SoTA Annotations
 
@@ -1235,7 +1236,7 @@ generated: true
 | DP.SC.187 | local-gateway-render | — | draft |
 | DP.SC.188 | Синхронизация IWE-шаблона с англоязычной проекцией | Каждое изменение README/docs личного русскоязычного шаблона IWE автоматически появляется переведённым в публичном английском репозитории iwesys/iwe-template — без участия автора и без отдельной команды на публикацию. | draft |
 | DP.SC.189 | Зеркалирование методического контента aisystant в МИМ | Каждое изменение в одном из 11 методических репозиториев aisystant (docs, guides, main-docs и т.д.) автоматически публикуется как есть (без перевода) в парном репозитории организации МИМ, без штатного git-механизма fork/transfer и без публичного отображения родства между организациями. | draft |
-| DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | draft |
+| DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | active |
 | DP.SC.191 | Capacity commitment must decompose by load type | — | — |
 
 ### SYS
@@ -1841,6 +1842,7 @@ generated: true
 - Missing `summary`: DP.FM.257 (DP.FM.257-railway-project-token-wrong-auth-header.md)
 - Missing `summary`: DP.FM.258 (DP.FM.258-parallel-agent-branch-switch-shared-checkout.md)
 - Missing `summary`: DP.FM.259 (DP.FM.259-measurement-gaming-form-without-substance.md)
+- Missing `summary`: DP.FM.260 (DP.FM.260-check-infrastructure-path-resolution-masked-as-logic-error.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
