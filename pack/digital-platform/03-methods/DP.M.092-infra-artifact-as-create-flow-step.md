@@ -4,12 +4,16 @@ title: Инфраструктурный артефакт как обязател
 type: method
 domain: digital-platform
 tags: [pack, ci, governance, create-flow, infrastructure]
-status: active
+status: superseded
+superseded_by: DP.M.093
+superseded_date: 2026-07-12
 valid_from: 2026-05-18
 schema_version: 1
 ---
 
-# DP.M.086 — Инфраструктурный артефакт как обязательный шаг create-flow
+> **SUPERSEDED 2026-07-12 → [DP.M.093](DP.M.093-ci-artifact-in-create-flow.md).** Тот же метод, записан дважды в соседних KE-коммитах 18 мая (`7a89d39`, затем `a5096fd`). Связи этого файла (DP.M.078, AR.207, feedback_release_gates.md) перенесены в DP.M.093.
+
+# DP.M.092 — Инфраструктурный артефакт как обязательный шаг create-flow
 
 ## Описание
 

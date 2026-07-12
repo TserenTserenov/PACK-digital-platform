@@ -37,3 +37,7 @@ Headless-агент (claude -p) может коммитить свои резу�
 ## Антипаттерн
 
 Dispatcher коммитит сразу после return без `fetch` + `reset --hard` → push конфликт или тихая перезапись агентских коммитов.
+
+## Связи
+
+- Симптом/failure mode: [DP.FM.070](../05-failure-modes/DP.FM.070-dispatcher-git-reset-race-condition.md) — тот же commit-источник (`ea7ead8`), описывает симптом гонки, этот файл — алгоритм фикса

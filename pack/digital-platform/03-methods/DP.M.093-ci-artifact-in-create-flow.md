@@ -8,10 +8,12 @@ valid_from: 2026-05-18
 sources:
   - WP-5 F-pack-ci-auto-setup (commit c277672, pack-new + pack-ci-install.sh), 18 мая 2026
 related:
-  references: []
+  references: [DP.M.078, AR.207]
 ---
 
-# DP.M.086 — CI Artifact in Create-Flow
+# DP.M.093 — CI Artifact in Create-Flow
+
+> **Merged 2026-07-12 с DP.M.092** (тот же метод, записан дважды в соседних KE-коммитах 18 мая — `7a89d39` затем `a5096fd`). DP.M.092 → superseded, эта запись — каноническая.
 
 ## Описание
 
@@ -44,4 +46,10 @@ related:
 
 ## Тест применимости (для FM-каталога)
 
-«Артефакт X обязателен для каждого экземпляра типа репо T, но отсутствует более чем в одном существующем экземпляре?» Да → P10 (отсутствие DP.M.086), решение — встроить X в create-flow T.
+«Артефакт X обязателен для каждого экземпляра типа репо T, но отсутствует более чем в одном существующем экземпляре?» Да → P10, решение — встроить X в create-flow T.
+
+## Связи
+
+- DP.M.078 (architectural-rule-propagation)
+- AR.207 (three-cases-systemic-detector — системный детектор инвариантов)
+- `feedback_release_gates.md` (валидатор без CI = в чужих руках)

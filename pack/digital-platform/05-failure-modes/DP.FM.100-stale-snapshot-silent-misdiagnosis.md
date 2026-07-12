@@ -39,5 +39,5 @@ source: "session-close 2026-05-28 (peer-session 14: WP-309 wave-2 analysis)"
 
 ## Связи
 
-- Метод до fix-а: DP.M.208 diagnostics перед behavioral nudge
+- Метод до fix-а: DP.M.210 diagnostics перед behavioral nudge (DP.M.208 — тот же метод, superseded 2026-07-12)
 - Источник: WP-309 wave-2 analysis, 2026-05-28

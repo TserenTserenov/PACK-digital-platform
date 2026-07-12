@@ -43,3 +43,4 @@ wp: WP-347
 - **Детектор:** `integration-contract-validator.sh` Detector 10
 - **Конвенция:** `И-10` в RELEASE-PROCESS.md
 - **Смотри также:** DP.FM.010 (прыжок в реализацию без IntegrationGate), DP.M.010 (WP lifecycle)
+- **[DP.FM.055](DP.FM.055-deprecated-not-removed-from-runner.md)** — смежный failure mode того же механизма `deprecated_files`, но другой момент сбоя: этот файл — запись ДО удаления зависимостей в коде; DP.FM.055 — запись БЕЗ последующего физического удаления файла. Разные классы ошибок, не дубли.

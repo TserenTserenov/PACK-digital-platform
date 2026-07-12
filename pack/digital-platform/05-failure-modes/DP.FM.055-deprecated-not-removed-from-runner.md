@@ -58,3 +58,7 @@ for f in m.get('deprecated_files', []):
 ## Источник
 
 FMT-exocortex-template, commit e337183. Обнаружено при аудите runtime-runner.
+
+## Связи
+
+- [DP.FM.075](DP.FM.075-deprecated-files-as-todo-tracker.md) — смежный failure mode того же механизма `deprecated_files`, но другой момент сбоя: этот файл — запись в manifest БЕЗ физического удаления; DP.FM.075 — запись в manifest ДО удаления зависимостей в вызывающем коде. Разные классы ошибок, не дубли.

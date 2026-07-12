@@ -5,11 +5,17 @@ type: method
 domain: retention / customer-success / lifecycle
 trust: experiential
 epistemic_stage: confirmed
-status: active
+status: superseded
+superseded_by: DP.M.210
 valid_from: 2026-05-28
+superseded_date: 2026-07-12
 schema_version: 1
 source: "session-close 2026-05-28 (peer-session 15: WP-250 bottleneck-tech)"
 ---
+
+# DP.M.208 Diagnostics до behavioral nudge при stuck-сегменте
+
+> **SUPERSEDED 2026-07-12 → [DP.M.210](DP.M.210-three-tier-stuck-user-segmentation.md).** Тот же метод: оба файла записаны в одном batch-коммите `f02ea01` (28 мая 2026, apply-captures) под разными кодами. Аргументация этого файла (риски слепого нуджа, гибридный подход, границы применимости) перенесена в DP.M.210 — там же операционная часть (SQL по кластерам α/β/γ). Текст ниже остаётся для истории, новые ссылки — на DP.M.210.
 
 # DP.M.208 Diagnostics до behavioral nudge при stuck-сегменте
 

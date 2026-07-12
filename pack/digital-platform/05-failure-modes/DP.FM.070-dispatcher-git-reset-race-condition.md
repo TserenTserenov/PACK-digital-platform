@@ -25,19 +25,7 @@ Headless-диспетчер запускает `claude -p`, агент выпо�
 
 ## Фикс
 
-```bash
-# Сразу после выхода claude -p:
-git fetch origin
-git reset --hard origin/<branch>   # синхронизировать локальное состояние
-
-# Проверить — агент уже написал RESULT?
-if [ -f "tasks/$TASK_ID/RESULT.md" ]; then
-  echo "Agent already wrote result, skipping dispatcher write"
-else
-  # Записать RESULT от диспетчера
-  echo "$RESULT" > "tasks/$TASK_ID/RESULT.md"
-fi
-```
+Канонический алгоритм фикса (fetch+reset, идемпотентная проверка result-файла) — [DP.M.138](../03-methods/DP.M.138-dispatcher-origin-sync-after-headless-agent.md). Не дублируется здесь.
 
 ## Применимость
 
@@ -47,3 +35,4 @@ fi
 
 - Реализован в: `DP.IWE.011-adapters/` (headless-adapter)
 - Контекст: DP.IWE.011 (Runtime Host Contract)
+- Метод фикса: [DP.M.138](../03-methods/DP.M.138-dispatcher-origin-sync-after-headless-agent.md) — тот же commit-источник (`ea7ead8`), этот файл описывает симптом, DP.M.138 — алгоритм

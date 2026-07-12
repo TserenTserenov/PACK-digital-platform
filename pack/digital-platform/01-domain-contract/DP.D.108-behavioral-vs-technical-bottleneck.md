@@ -49,5 +49,4 @@ source: "session-close 2026-05-28 (peer-session 15: WP-250 bottleneck-tech)"
 
 ## Связи
 
-- Метод-применение: DP.M.208 diagnostics до behavioral nudge
-- Сегментация: DP.M.210 α/β/γ трёхуровневая сегментация
+- Метод-применение: DP.M.210 α/β/γ трёхуровневая сегментация (сегментация + diagnostics до behavioral nudge; DP.M.208 — тот же метод, superseded 2026-07-12)
