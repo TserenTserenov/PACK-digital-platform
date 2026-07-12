@@ -263,7 +263,7 @@ generated: true
 | DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | — | draft |
 | DP.M.090 | Mutation Testing для CI Enforcement Guards в Pack-репо | — | draft |
 | DP.M.091 | Scope Guard — enforcement Parliament-модели через enum + schema isolation | — | active |
-| DP.M.092 | Infra Artifact As Create Flow Step | — | active |
+| DP.M.092 | Infra Artifact As Create Flow Step | — | superseded |
 | DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | — | active |
 | DP.M.094 | Dual-signal enforcement gate для ритуального перехода | — | active |
 | DP.M.095 | Atomic cross-repo terminology sync | — | active |
@@ -360,7 +360,7 @@ generated: true
 | DP.M.205 | Gamification Rate Limit by Event Controllability | — | — |
 | DP.M.206 | Fast-fail-and-restart предпочтительнее in-process reconnect когда состояние коннекта = source-of-truth подписки | — | active |
 | DP.M.207 | Explicit choice до stateful default при первом входе | — | active |
-| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | — | active |
+| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | — | superseded |
 | DP.M.209 | Dry-run = 50% production migration: полный checklist с явным блокером | — | active |
 | DP.M.210 | Трёхуровневая сегментация застрявших пользователей (α/β/γ) для диагностики bottleneck | — | active |
 | DP.M.211 | Диагностика L1 FAIL в concept-coverage по регистрационному зазору | — | active |
