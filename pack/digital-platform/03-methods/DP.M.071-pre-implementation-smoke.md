@@ -10,7 +10,7 @@ domain: PACK-digital-platform
 tags: [validation, schema, pre-impl, smoke, sql-draft, walkthrough, contract-vs-schema]
 ---
 
-# DP.M.066: Pre-implementation smoke
+# DP.M.071: Pre-implementation smoke
 
 ## Определение
 

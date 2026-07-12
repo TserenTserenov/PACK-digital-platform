@@ -9,7 +9,7 @@ valid_from: 2026-05-18
 schema_version: 1
 ---
 
-# DP.FM.045 — CF Bot Fight Mode блокирует Python XHR но не curl
+# DP.FM.048 — CF Bot Fight Mode блокирует Python XHR но не curl
 
 ## Симптом
 

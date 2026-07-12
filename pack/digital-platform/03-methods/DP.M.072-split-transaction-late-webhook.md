@@ -12,7 +12,7 @@ related:
   applies_to: [WP-327]
 ---
 
-# DP.M.067: Split-transaction для late-webhook с CHECK constraint
+# DP.M.072: Split-transaction для late-webhook с CHECK constraint
 
 ## Определение
 

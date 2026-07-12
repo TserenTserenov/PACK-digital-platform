@@ -15,7 +15,7 @@ related:
   source: "WP-244 расширение 25 апр (требования R1 информирование пользователей + R2 composite SLA «по девяткам») + ArchGate β"
 ---
 
-# DP.SC.124 — User-Facing Platform Health
+# DP.SC.144 — User-Facing Platform Health
 
 ## Обещание
 

@@ -7,7 +7,7 @@ valid_from: 2026-05-30
 source: peer-session 2026-05-30-05-watchdog-recurring-warnings; commit cc543303 (WP-7 WD)
 ---
 
-# DP.FM.106: Concurrent writers ломают threshold-логику auto-commit
+# DP.FM.119: Concurrent writers ломают threshold-логику auto-commit
 
 ## Симптом
 

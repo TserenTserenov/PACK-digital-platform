@@ -14,7 +14,7 @@ related:
   source: "WP-253 Ф9 MVP-greenfield — IntegrationGate для event-gateway"
 ---
 
-# DP.SC.020 — Event Ingest (единый приёмник доменных событий)
+# DP.SC.044 — Event Ingest (единый приёмник доменных событий)
 
 ## Обещание
 

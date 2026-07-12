@@ -10,7 +10,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-28-tg-session-hang-diagnosis (00-writer.md, гипотеза A)"
 ---
 
-# DP.FM.109 — Spec без impl (спецификация ушла вперёд кода)
+# DP.FM.122 — Spec без impl (спецификация ушла вперёд кода)
 
 ## Описание
 

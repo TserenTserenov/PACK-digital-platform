@@ -15,7 +15,7 @@ related:
     - feedback_fixes_as_phases_not_separate_wp.md  # in-scope фиксы — фазы того же РП; D.071 — две природы deliverable требуют двух РП
 ---
 
-# DP.D.071: Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП
+# DP.D.069: Documentation-WP ≠ Implementation-WP — paired related-WPs, не один РП
 
 ## Различение
 

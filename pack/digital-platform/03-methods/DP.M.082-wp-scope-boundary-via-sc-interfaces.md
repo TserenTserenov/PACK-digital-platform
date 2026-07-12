@@ -12,7 +12,7 @@ source: WP-324 commit ba1902c4 (раздел «Что НЕ входит в эт�
 relates: DP.D.064 (same-vs-different-promise), DP.D.069 (artifact-vs-mode), DP.M.048 (scope-discipline-wp-closure), DP.SC template
 ---
 
-# DP.M.063: WP scope boundary через DP.SC interfaces
+# DP.M.082: WP scope boundary через DP.SC interfaces
 
 ## Когда применять
 

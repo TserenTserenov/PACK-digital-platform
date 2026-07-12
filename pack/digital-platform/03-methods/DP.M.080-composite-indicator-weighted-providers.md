@@ -12,7 +12,7 @@ source: WP-316 Ф8 commit 71f1634b (Honcho-эксперимент для cp.wld/
 relates: HD «Memory provider ≠ Digital Twin» (memory/distinctions-warm.md), FORM.089 §6.1 (assessment), WP-218 multiplier IND.3.2.04
 ---
 
-# DP.M.061: Composite indicator — взвешенная сумма провайдеров
+# DP.M.080: Composite indicator — взвешенная сумма провайдеров
 
 ## Когда применять
 

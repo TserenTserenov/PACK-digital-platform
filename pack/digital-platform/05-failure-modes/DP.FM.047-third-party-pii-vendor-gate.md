@@ -15,7 +15,7 @@ related:
   - DP.FM.038  # PII-related patterns
 ---
 
-# DP.FM.045 — Third-Party LLM PII Vendor Gate
+# DP.FM.047 — Third-Party LLM PII Vendor Gate
 
 ## Описание
 

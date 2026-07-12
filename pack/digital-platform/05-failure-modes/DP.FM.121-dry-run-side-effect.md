@@ -10,7 +10,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-22-wp7-opch6-sovereign-managed (_outcome.md, Critical fix C1)"
 ---
 
-# DP.FM.108 — Dry-run side-effect (нарушение read-only обещания)
+# DP.FM.121 — Dry-run side-effect (нарушение read-only обещания)
 
 ## Описание
 

@@ -14,7 +14,7 @@ related:
     - DP.D.064-same-vs-different-promise-wp-branch  # внутри одного промиса vs между промисами
 ---
 
-# DP.D.070: Discovered-WP ≠ Discoverer-WP при owner-routing бага из audit'а
+# DP.D.068: Discovered-WP ≠ Discoverer-WP при owner-routing бага из audit'а
 
 ## Различение
 

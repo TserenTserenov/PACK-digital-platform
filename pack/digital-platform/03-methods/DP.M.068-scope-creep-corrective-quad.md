@@ -11,7 +11,7 @@ related:
   applies_to: [IntegrationGate, ArchGate]
 ---
 
-# DP.M.063: Scope-creep corrective quad
+# DP.M.068: Scope-creep corrective quad
 
 ## Определение
 

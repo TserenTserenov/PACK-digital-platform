@@ -11,7 +11,7 @@ related:
   applies_to: [linter, cycle-detection, dependency-resolver, ontology-prerequisites, import-cycle errors]
 ---
 
-# DP.M.063: Common-prefix compression в output путей и циклов
+# DP.M.077: Common-prefix compression в output путей и циклов
 
 ## Определение
 

@@ -12,7 +12,7 @@ source: WP-324 commit f3a4c1c1 + ba1902c4 (отказ от «Real-time Орке�
 relates: DP.D.064 (same-vs-different-promise-wp-branch — общий дискриминатор), CLAUDE.md §9 «Именование РП»
 ---
 
-# DP.D.069: Артефакт-режим ≠ артефакт
+# DP.D.070: Артефакт-режим ≠ артефакт
 
 ## Различение
 

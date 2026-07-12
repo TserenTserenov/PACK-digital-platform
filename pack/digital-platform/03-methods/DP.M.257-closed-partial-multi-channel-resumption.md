@@ -7,7 +7,7 @@ valid_from: 2026-05-30
 source: peer-session 2026-05-30-13-wp353-closure-decision-n3; commits 476f4b13, 6daa00e5 (WP-353 Honcho)
 ---
 
-# DP.M.218: `closed-partial` (partial-success) + multi-channel resumption
+# DP.M.257: `closed-partial` (partial-success) + multi-channel resumption
 
 ## Контекст
 

@@ -11,7 +11,7 @@ related:
   applies_to: [ArchGate, IntegrationGate]
 ---
 
-# DP.M.062: Two-pass review — subagent + self-revisit
+# DP.M.067: Two-pass review — subagent + self-revisit
 
 ## Определение
 

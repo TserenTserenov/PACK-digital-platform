@@ -11,7 +11,7 @@ related:
   applies_to: [VR.R.001]
 ---
 
-# DP.M.061: Multi-round verifier с сужающимся scope
+# DP.M.066: Multi-round verifier с сужающимся scope
 
 ## Определение
 

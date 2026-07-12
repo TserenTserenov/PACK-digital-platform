@@ -12,7 +12,7 @@ related:
   expressed_in: [DP.SC.021, DP.SC.022, DP.SC.023]
 ---
 
-# DP.D.037 — Трёхслойная модель MCP в IWE
+# DP.D.074 — Трёхслойная модель MCP в IWE
 
 ## Различение
 

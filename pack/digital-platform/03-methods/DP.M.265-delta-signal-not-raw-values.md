@@ -12,7 +12,7 @@ related:
   - DP.M.223
 ---
 
-# DP.M.224: Auto-collected delta-signal вместо raw values
+# DP.M.265: Auto-collected delta-signal вместо raw values
 
 ## Suspect (когда применять)
 

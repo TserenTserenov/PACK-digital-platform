@@ -12,7 +12,7 @@ related:
   - 01B-distinctions.md#OwnerIntegrity
 ---
 
-# DP.M.223: Pointer-only закрытие развилки vs самостоятельный gate
+# DP.M.256: Pointer-only закрытие развилки vs самостоятельный gate
 
 ## Suspect (когда применять)
 

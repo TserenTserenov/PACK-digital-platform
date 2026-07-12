@@ -12,7 +12,7 @@ related:
   applies_to: [scheduled GH Actions, cron, drift-watcher, security-scan, low-rate watcher]
 ---
 
-# DP.M.061: No-op heartbeat для детекции silent-fail в scheduled workflow
+# DP.M.075: No-op heartbeat для детекции silent-fail в scheduled workflow
 
 ## Определение
 

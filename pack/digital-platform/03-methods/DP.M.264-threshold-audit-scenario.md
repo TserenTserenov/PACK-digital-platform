@@ -10,7 +10,7 @@ source: peer-session 2026-05-30-11-creator-orgdev-roles-design (Тема 6)
 created: 2026-05-30
 ---
 
-# DP.M.216 — Пороговый сценарий аудита (YAGNI для cross-component consistency)
+# DP.M.264 — Пороговый сценарий аудита (YAGNI для cross-component consistency)
 
 ## Назначение
 

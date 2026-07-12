@@ -12,7 +12,7 @@ source: WP-316 Ф8 commit 71f1634b (Honcho-эксперимент на 5 fake-п
 relates: B7.3 Security Gate (CLAUDE.md §2 Pre-action Gates), ArchGate §Б, IntegrationGate (DP.FM.010)
 ---
 
-# DP.M.062: PII Gate через синтетику — bypass для research-фаз
+# DP.M.081: PII Gate через синтетику — bypass для research-фаз
 
 ## Проблема
 

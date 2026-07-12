@@ -13,7 +13,7 @@ sources:
   - commit 9396e057
 ---
 
-# DP.D.108: Type-string runtime drift ≠ File-replace terminology drift
+# DP.D.120: Type-string runtime drift ≠ File-replace terminology drift
 
 > Два класса drift'а вокабуляра между компонентами. Связаны механизмом «разное знание о наборе допустимых значений», но требуют разных контрмер.
 

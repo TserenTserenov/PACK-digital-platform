@@ -9,7 +9,7 @@ epistemic_stage: validated
 source: WP-7 rewards-projection peer-session 2026-05-30-16
 ---
 
-# DP.M.219: Cross-component trigger reasoning через полное body + search_path resolution
+# DP.M.258: Cross-component trigger reasoning через полное body + search_path resolution
 
 ## Назначение
 

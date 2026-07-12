@@ -19,7 +19,7 @@ handoff:
   status: "not-delivered-yet"
 ---
 
-# DP.SC.101 — LMS Subscription Webhook (Bridge-2)
+# DP.SC.143 — LMS Subscription Webhook (Bridge-2)
 
 ## Статус документа
 

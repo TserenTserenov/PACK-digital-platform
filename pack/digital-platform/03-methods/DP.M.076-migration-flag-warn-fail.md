@@ -12,7 +12,7 @@ related:
   applies_to: [lint, type-check, security-scanner, Pack-coherence validator, schema-strict gates]
 ---
 
-# DP.M.062: Migration flag для постепенной валидации (WARN → FAIL)
+# DP.M.076: Migration flag для постепенной валидации (WARN → FAIL)
 
 ## Определение
 

@@ -11,7 +11,7 @@ related:
   applies_to: [WP-218, WP-316]
 ---
 
-# DP.M.061: Двухфазный тест гипотезы (baseline → parameterized)
+# DP.M.070: Двухфазный тест гипотезы (baseline → parameterized)
 
 ## Определение
 

@@ -14,7 +14,7 @@ related:
   applies_to: [WP-327]
 ---
 
-# DP.M.069: Provisional payment_id для late-binding payment APIs
+# DP.M.074: Provisional payment_id для late-binding payment APIs
 
 ## Определение
 

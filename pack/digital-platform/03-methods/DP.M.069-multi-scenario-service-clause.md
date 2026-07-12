@@ -11,7 +11,7 @@ related:
   applies_to: [SC-design, IntegrationGate phase 1]
 ---
 
-# DP.M.064: Multi-scenario Service Clause
+# DP.M.069: Multi-scenario Service Clause
 
 ## Определение
 

@@ -13,7 +13,7 @@ related:
   applies_to: [WP-310]
 ---
 
-# DP.M.068: Pause-before-fix для воркеров с downstream notifications
+# DP.M.073: Pause-before-fix для воркеров с downstream notifications
 
 ## Определение
 

@@ -23,7 +23,7 @@ sources:
   - PD.FORM.103
 ---
 
-# DP.M.060 — Pack-watcher cross-repo trigger
+# DP.M.079 — Pack-watcher cross-repo trigger
 
 ## Контекст
 
