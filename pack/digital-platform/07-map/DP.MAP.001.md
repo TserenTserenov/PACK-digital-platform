@@ -24,12 +24,12 @@ generated: true
 | Distinctions (D) | 120 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 236 |
+| Failure Modes (FM) | 238 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
 | Methods (M) | 332 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 105 |
+| METHOD (METHOD) | 106 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1096** |
+| **Total** | **1099** |
 
 ## Distinctions
 
@@ -766,6 +766,8 @@ generated: true
 | DP.FM.263 | Git Copy Instead Of Move Cross Repo | — | — |
 | DP.FM.264 | Housekeeping Semaphore Missing Slug | — | — |
 | DP.FM.265 | Catch-all exception in fallback function masks systematic errors as normal behaviour | — | active |
+| DP.FM.266 | Exit Code Not Structural Correctness | — | — |
+| DP.FM.267 | Publish Job In Mirror Not Source | — | — |
 
 ## SoTA Annotations
 
@@ -997,6 +999,7 @@ generated: true
 | DP.METHOD.174 | Аварийный рычаг fail-closed: явная фраза-подтверждения, не булев флаг | — | active |
 | DP.METHOD.175 | Взаимозависимые изменения БД деплоятся с наблюдаемым промежутком | — | active |
 | DP.METHOD.176 | N параллельных субагентов с изоляцией контекста как adversarial quality gate | — | active |
+| DP.METHOD.177 | Последовательные раунды верификации с изоляцией контекста | — | active |
 
 ### NAV
 
@@ -1675,6 +1678,7 @@ generated: true
 - Missing `summary`: DP.METHOD.174 (DP.METHOD.174-fail-closed-escape-hatch-explicit-phrase.md)
 - Missing `summary`: DP.METHOD.175 (DP.METHOD.175-coupled-db-changes-observable-gap.md)
 - Missing `summary`: DP.METHOD.176 (DP.METHOD.176-n-parallel-adversarial-verifiers-quality-gate.md)
+- Missing `summary`: DP.METHOD.177 (DP.METHOD.177-sequential-verification-rounds.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1865,6 +1869,8 @@ generated: true
 - Missing `summary`: DP.FM.263 (DP.FM.263-git-copy-instead-of-move-cross-repo.md)
 - Missing `summary`: DP.FM.264 (DP.FM.264-housekeeping-semaphore-missing-slug.md)
 - Missing `summary`: DP.FM.265 (DP.FM.265-catch-all-exception-masks-real-errors.md)
+- Missing `summary`: DP.FM.266 (DP.FM.266-exit-code-not-structural-correctness.md)
+- Missing `summary`: DP.FM.267 (DP.FM.267-publish-job-in-mirror-not-source.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
