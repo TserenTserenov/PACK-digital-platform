@@ -730,6 +730,13 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.371 | Байт/5 как прокси токенов при отсутствии API-доступа | M | — | draft |
 | DP.M.372 | flock: один общий лок на весь проход vs per-item при последовательной внутренней обработке | M | — | — |
 | DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | M | — | — |
+| DP.M.374 | Webhook Jwt Identity Provider Auth | M | — | — |
+| DP.M.375 | Bidirectional Git Sync Split Timers | M | — | — |
+| DP.M.377 | Corpus Fanout Positioning Palette | M | — | forming |
+| DP.M.378 | Triple Check Public Platform Text | M | — | forming |
+| DP.M.379 | Условный запуск дорогостоящих шагов агента | M | — | draft |
+| DP.M.380 | Retry-директива с форматным якорем | M | — | — |
+| DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -912,6 +919,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.082 | Руководитель продвижения | ROLE | Владелец домена «служба продвижения» (5 систем, артикулированных Алёной 19 апр 2026) — наполняет доменное содержание типов без права менять архитектурный каркас Pack. Первый прецедент роли «владелец домена без архитектурных полномочий» в этом Pack. | draft |
 | DP.ROLE.083 | External Access Grantor (выдающий пропуска внешним ИИ-клиентам) | ROLE | Выдаёт и отзывает пропуска (ict_ токены) внешним ИИ-клиентам (claude.ai Connector, VS Code) на основе тира пользователя — единственная точка выдачи, что для push-, что для pull-инициации. | draft |
 | DP.ROLE.085 | Разметчик типов пользовательских данных (Data Structurer) | ROLE | Раскладывает произвольную файловую базу пользователя по типам 2.1-2.4 (устойчивые факты / поток событий / доменные знания / неформализуемый остаток), обязательно карантинируя всё, что не должно попасть в генерацию. Детерминированная программа, LLM — только для явно неоднозначных файлов. | draft |
+| DP.ROLE.086 | Диспетчер отложенного запуска РП (WP Scheduler) | ROLE | Ставит РП в очередь на запуск в заданное время (launchd, будит Мак из сна), запускает выбранного агента headless с жёстким таймаутом, пишет отчёт; падение одного запуска не останавливает очередь. Детерминированная программа, LLM не использует. | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -1058,6 +1066,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.189 | Зеркалирование методического контента aisystant в МИМ | SC | Каждое изменение в одном из 11 методических репозиториев aisystant (docs, guides, main-docs и т.д.) автоматически публикуется как есть (без перевода) в парном репозитории организации МИМ, без штатного git-механизма fork/transfer и без публичного отображения родства между организациями. | draft |
 | DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | SC | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | active |
 | DP.SC.191 | Capacity commitment must decompose by load type | SC | — | — |
+| DP.SC.192 | Scheduled WP launch queue must run unattended with hard resource guards | SC | — | — |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

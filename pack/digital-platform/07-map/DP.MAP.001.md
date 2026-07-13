@@ -27,21 +27,21 @@ generated: true
 | Failure Modes (FM) | 238 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 332 |
+| Methods (M) | 339 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 106 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 69 |
+| ROLE (ROLE) | 70 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 144 |
+| SC (SC) | 145 |
 | SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1102** |
+| **Total** | **1111** |
 
 ## Distinctions
 
@@ -504,6 +504,13 @@ generated: true
 | DP.M.371 | Байт/5 как прокси токенов при отсутствии API-доступа | — | draft |
 | DP.M.372 | flock: один общий лок на весь проход vs per-item при последовательной внутренней обработке | — | — |
 | DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | — | — |
+| DP.M.374 | Webhook Jwt Identity Provider Auth | — | — |
+| DP.M.375 | Bidirectional Git Sync Split Timers | — | — |
+| DP.M.377 | Corpus Fanout Positioning Palette | — | forming |
+| DP.M.378 | Triple Check Public Platform Text | — | forming |
+| DP.M.379 | Условный запуск дорогостоящих шагов агента | — | draft |
+| DP.M.380 | Retry-директива с форматным якорем | — | — |
+| DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | — | draft |
 
 ## Work Products
 
@@ -1099,6 +1106,7 @@ generated: true
 | DP.ROLE.082 | Руководитель продвижения | Владелец домена «служба продвижения» (5 систем, артикулированных Алёной 19 апр 2026) — наполняет доменное содержание типов без права менять архитектурный каркас Pack. Первый прецедент роли «владелец домена без архитектурных полномочий» в этом Pack. | draft |
 | DP.ROLE.083 | External Access Grantor (выдающий пропуска внешним ИИ-клиентам) | Выдаёт и отзывает пропуска (ict_ токены) внешним ИИ-клиентам (claude.ai Connector, VS Code) на основе тира пользователя — единственная точка выдачи, что для push-, что для pull-инициации. | draft |
 | DP.ROLE.085 | Разметчик типов пользовательских данных (Data Structurer) | Раскладывает произвольную файловую базу пользователя по типам 2.1-2.4 (устойчивые факты / поток событий / доменные знания / неформализуемый остаток), обязательно карантинируя всё, что не должно попасть в генерацию. Детерминированная программа, LLM — только для явно неоднозначных файлов. | draft |
+| DP.ROLE.086 | Диспетчер отложенного запуска РП (WP Scheduler) | Ставит РП в очередь на запуск в заданное время (launchd, будит Мак из сна), запускает выбранного агента headless с жёстким таймаутом, пишет отчёт; падение одного запуска не останавливает очередь. Детерминированная программа, LLM не использует. | draft |
 
 ### RUNBOOK
 
@@ -1255,6 +1263,7 @@ generated: true
 | DP.SC.189 | Зеркалирование методического контента aisystant в МИМ | Каждое изменение в одном из 11 методических репозиториев aisystant (docs, guides, main-docs и т.д.) автоматически публикуется как есть (без перевода) в парном репозитории организации МИМ, без штатного git-механизма fork/transfer и без публичного отображения родства между организациями. | draft |
 | DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | active |
 | DP.SC.191 | Capacity commitment must decompose by load type | — | — |
+| DP.SC.192 | Scheduled WP launch queue must run unattended with hard resource guards | — | — |
 
 ### SYS
 
@@ -1628,6 +1637,13 @@ generated: true
 - Missing `summary`: DP.M.371 (DP.M.371-byte-div5-token-proxy.md)
 - Missing `summary`: DP.M.372 (DP.M.372-flock-single-pass-lock-granularity.md)
 - Missing `summary`: DP.M.373 (DP.M.373-live-reproduction-snapshot-diagnosis.md)
+- Missing `summary`: DP.M.374 (DP.M.374-webhook-jwt-identity-provider-auth.md)
+- Missing `summary`: DP.M.375 (DP.M.375-bidirectional-git-sync-split-timers.md)
+- Missing `summary`: DP.M.377 (DP.M.377-corpus-fanout-positioning-palette.md)
+- Missing `summary`: DP.M.378 (DP.M.378-triple-check-public-platform-text.md)
+- Missing `summary`: DP.M.379 (DP.M.379-conditional-expensive-agent-step.md)
+- Missing `summary`: DP.M.380 (DP.M.380-retry-directive-format-anchor.md)
+- Missing `summary`: DP.M.381 (DP.M.381-vdv-dead-output-gap-audit.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1910,6 +1926,7 @@ generated: true
 - Missing `summary`: DP.SC.186 (DP.SC.186-bot-agent-session.md)
 - Missing `summary`: DP.SC.187 (DP.SC.187-local-gateway-render.md)
 - Missing `summary`: DP.SC.191 (DP.SC.191-capacity-commitment-decompose-load-type.md)
+- Missing `summary`: DP.SC.192 (DP.SC.192-scheduled-wp-launch.md)
 
 ## Staleness Warnings (>90 days since update)
 
