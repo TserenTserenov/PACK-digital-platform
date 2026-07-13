@@ -145,7 +145,7 @@ Base LLM (Anthropic Claude / OpenAI GPT / etc.)
 | R6 | **Кодировщик** | Платформа DP | Implementation, Refactoring, Bug-Fix | Архитектура (R5), backlog (R7) | Код (коммиты), captures |
 | R7 | **Триажёр техдолга** | Платформа DP | Auto-Triage, Triage-Session | feedback_triage DB, inbox | Приоритизированный backlog, алерты |
 | R22 | **Оркестратор** | Система персонального развития | Orchestration Dispatch, Rhythm Adaptation | ЦД (состояние, engagement), config | Решение о составе цикла на день |
-| R27 | **Портной** | Система персонального развития | Portion Assembly | Программа, ЦД (профиль, история, стиль), ячейки | Персональная дневная порция |
+| R27 | **Портной** | Система персонального развития | Portion Assembly, Full-Guide Generation | Программа, ЦД (профиль, история, стиль), ячейки — или личная файловая база пользователя (guide-kit, WP-483) | Персональная дневная порция — или полное персональное руководство (6 файлов + портрет + блок табло) |
 | R28 | **Профилировщик** | Система персонального развития | DT Profile Calculation, DT Profile Sync | 2_collected (engagement), learning_history (BKT) | 3_derived в digital_twins (ступень, mastery, gaps, агентность) |
 | R29 | **Декомпозитор** | Экзокортекс | Stage Decomposition, Gap Detection | РП-контекст, формулировка задачи | Этапная карта (md-блок в WP-context, ≤4 этапа, I/O + чеклисты) |
 
@@ -655,6 +655,9 @@ obligations:
   - "Учитывать программу, методику, профиль, историю, стиль, контекст дня"
   - "Адаптировать глубину погружения (Bloom) под текущий уровень"
   - "Подбирать формат подачи (примеры, задачи, теория) под стиль ученика"
+  - "Собирать полное персональное руководство (6-файловый комплект) — из ЦД или из произвольной личной файловой базы пользователя (guide-kit, WP-483)"
+  - "Формировать портрет и блок табло как часть руководства"
+  - "Вести журнал происхождения фактов (decision_log) и честно отказывать при нехватке обязательных данных, не домысливать"
 
 expectations:
   - from: "R16 Ученик"
@@ -673,25 +676,33 @@ inputs:
   6_content: "DS-principles-curriculum/cells/ — доступные ячейки"
   7_style: "ЦД L1 (1_3.21_Стиль_обучения) — предпочтения"
   8_feedback: "ЦД L2 (2_3) — история ошибок от Оценщика"
+  9_personal_base: "guide-kit: файловая база пользователя, типизированная по осям 2.1-2.4 (WP-476) — альтернатива входам 3/4/6/7/8 в портативном контуре без платформы"
 
 methods:
   - name: "Portion Assembly"
     description: "8 входов → выбор ячеек × глубина × формат → персональная дневная порция"
+  - name: "Full-Guide Generation"
+    description: "Профиль (платформенный или личная база) → полное персональное руководство (6 файлов + портрет + блок табло), с журналом происхождения каждого факта"
 
 work_products:
   - product: "Персональная дневная порция (набор материалов × глубина × формат)"
     recipient: "R8 Синхронизатор → I1 Бот → R16 Ученик"
     trigger: "R22 Оркестратор запросил порцию"
+  - product: "Персональное руководство (6-файловый комплект + портрет + блок табло)"
+    recipient: "R16 Ученик — через платформенную доставку или личный репозиторий (guide-kit)"
+    trigger: "Расписание рендера (платформа) или явный запрос пересборки (guide-kit)"
 
 current_holders:
-  - holder: "TBD (Ф1 MVP)"
+  - holder: "guide-kit (agents/tailor/planner.py+horizons.py+prompt.md мигрируют в guide-kit/generator/, WP-483)"
     grade: 2
-    covers_scenarios: [Portion-Assembly]
-    instruments: [TBD]
+    covers_scenarios: [Portion-Assembly, Full-Guide-Generation]
+    instruments: [planner.py, horizons.py, prompt.md, adapter.py]
+    note: "Целевое состояние — guide-kit единственный носитель роли. Факт на 13.07.2026: guide-kit только что создан (Ф1, WP-483), никуда ещё не подключён; render-pilot-guides.py (DS-autonomous-agents) остаётся ЕДИНСТВЕННЫМ действующим носителем в проде (своя, не форкнутая копия planner.py/horizons.py, работает по cron с 2026-05-04) — до миграции на общее ядро guide-kit через платформенный переходник (Ф1.5, WP-483, ещё не начата). Не читать как «render-pilot-guides.py уже переходный»."
 
 failure_modes:
   - "Level Mismatch — глубина не соответствует уровню ученика"
   - "Content Gap — запрошена ячейка, которой нет в curriculum"
+  - "Silent Invention — факт в руководстве без источника вместо честного пробела (закрывается hard-fail policy в adapter.py, WP-483)"
 
 related_roles:
   - role: "R22 Оркестратор"
@@ -1246,7 +1257,7 @@ Level 2: Domain-specific (PD/MIM/*)  ← привязаны к одному до
 | **I1 Бот** | R13 Проводник | 1 | aiogram FSM, middleware, TG Bot API, Neon DB (user_profiles) | FSM-Routing, Access-Control, Tier-Gating |
 | **I1 Бот + I9** | R21 Публикатор | 1 | handlers/discourse.py, Discourse API, GitHub API, Neon DB, TG Bot API | All scenarios |
 | **TBD** | R22 Оркестратор | 2 | TBD (Ф3 MVP) | Orchestration-Dispatch, Rhythm-Adaptation |
-| **TBD** | R27 Портной | 2 | TBD (Ф1 MVP) | Portion-Assembly |
+| **guide-kit** | R27 Портной | 2 | planner.py, horizons.py, prompt.md, adapter.py | Portion-Assembly, Full-Guide-Generation |
 | **A2 Пользователь** | R14-R20 | 4 | TG, Claude Code CLI, VS Code, бумага | Все пользовательские сценарии |
 
 **Статистика РА:** 2 агента (A1 Claude, A2 Пользователь) × 23 роли → ~26 уникальных назначений, 10 инструментов (I1-I10).
