@@ -2,27 +2,26 @@
 id: DP.WP.005
 name: WeekReport
 type: work-product
-status: deprecated
-summary: "DEPRECATED: итоги недели теперь записываются в секцию «Итоги W{N-1}» внутри WeekPlan (DP.WP.004). Отдельный файл WeekReport больше не создаётся."
+status: active
+summary: "Итоги недели (WeekReport) — отдельный документ недельного отчёта. *Примечание: в марте 2026 указан deprecated как prerejection для ОПТ-5, но впоследствии (РП297) формат восстановлен — используется как расчётный тайл панели F5."
 created: 2026-02-25
-deprecated: 2026-03-25
 trust:
   F: 2
   G: domain
   R: 0.5
 epistemic_stage: emerging
 related:
-  replaced_by: [DP.WP.004]
   produced_by: [S03]
   consumed_by: []
   services: [S03]
 ---
 
-# WeekReport (DEPRECATED)
+# WeekReport
 
-> **Решение от 2026-03-25:** WeekReport как отдельный файл упразднён.
-> Итоги недели записываются в секцию «Итоги W{N-1}» внутри **WeekPlan W{N}** (DP.WP.004).
-> Причина: дублирование данных — секция итогов в WeekPlan содержала те же данные, что и WeekReport.
+> **История статуса:**
+> - 2026-03-25 — объявлен deprecated (prerejection ОПТ-5), предполагалось слияние в WeekPlan.
+> - 2026-05-20 — статус восстановлен (РП297): WeekReport используется как расчётный тайл панели F5; формат сохранён.
+> - Текущий статус: active, используется S03.
 
 ## Куда перенесено
 
