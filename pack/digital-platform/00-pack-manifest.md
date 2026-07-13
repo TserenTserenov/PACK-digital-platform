@@ -128,6 +128,21 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | D | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | D | — | draft |
 | DP.D.204 | Method Map Vs State Axis | D | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
+| DP.D.205 | WP-ID vs PII — публичный идентификатор задачи ≠ персональные данные | D | Номер задачи (WP-\d+) — публичный реестровый идентификатор, не PII. Блокирование WP-номеров PII-guard = false positive. Тест: может ли пользователь сам упомянуть эту строку в публичном чате без раскрытия приватных данных? | active |
+| DP.D.206 | git notes ≠ видимый аудиторский след | D | — | active |
+| DP.D.207 | Config, документирующий себя «для будущей миграции», = заброшенность, не черновик | D | — | active |
+| DP.D.208 | Проверка, читающая всегда-пустое поле = тавтологический pass (data-blocker) | D | — | active |
+| DP.D.209 | Дрейф производного реестра = разность множеств (orphan-ID), не regex «найден ID» | D | — | active |
+| DP.D.210 | Тонкий клиент сигналит через нейтральную шину ≠ тонкий клиент с write к доверенному хранилищу | D | — | active |
+| DP.D.211 | Параметр генерации как машиночитаемое поле-контракт (тестируемо) ≠ инструкция только в промпте | D | — | active |
+| DP.D.212 | Gateway (требует Bearer для L2) ≠ Прямой бэкенд (отдаёт L2 анонимно) | D | — | active |
+| DP.D.213 | Категориальный policy-факт (сигнал вышестоящей роли) ≠ Семантика пути чужого домена (контекстное правило) | D | — | active |
+| DP.D.214 | Durable user-opt-out (у Доставщика) ≠ Time-boxed policy-fact навигатора (в движке) | D | — | active |
+| DP.D.215 | Асинхронный policy-fact на следующий батч ≠ Синхронный governor (для capped-класса доставки) | D | — | active |
+| DP.D.216 | Outcome-DoD (результат работает у получателя) ≠ Output-DoD (артефакт поставлен) | D | — | active |
+| DP.D.217 | dev-checkout resource ≠ prod-runtime resource → read-side snapshot | D | — | active |
+| DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | D | — | active |
+| DP.D.240 | domain event ≠ interpretation of fact in immutable log | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -330,6 +345,44 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.226 | git worktree add из remote-ветки создаёт detached HEAD — push без явного refspec падает | FM | — | — |
 | DP.FM.227 | Bash set -e: [ cond ] && cmd внутри функции теряет exemption — функция возвращает exit 1 | FM | — | — |
 | DP.FM.228 | Railway liveness probe падает на 401 при /health за auth | FM | — | — |
+| DP.FM.229 | LLM aggregator single-key SPOF: model-fallback список не защищает от ключа с limit | FM | — | draft |
+| DP.FM.230 | return вместо raise в async-воркере маскирует сбой через exit(0) | FM | — | draft |
+| DP.FM.231 | Ambiguous parameter name carrying two semantic axes → silent wrong result | FM | — | active |
+| DP.FM.232 | Phantom field: моделировать поле, которого нет в реальном выходе источника | FM | — | draft |
+| DP.FM.233 | Форма записи append-only журнала изменена без подъёма schema_version | FM | — | draft |
+| DP.FM.234 | Provider migration tail — offline scripts stay on old provider | FM | После миграции online-путей на новый LLM/API-провайдер offline-скрипты (ingestion, cron, переиндексация, инструменты разработчика) молча продолжают использовать старый провайдер, пока не будут запущены вручную. | — |
+| DP.FM.235 | Eager framework context bloat: служебный каркас агента съедает контекст-бюджет до полезной работы | FM | — | draft |
+| DP.FM.236 | Преждевременная инвалидация кеша: сброс ДО успешного promote | FM | — | draft |
+| DP.FM.237 | Provenance-стейт стража вне репо: решение работает на одной машине, невидимо CI | FM | — | draft |
+| DP.FM.238 | Self-referential exemption: whitelist исключений в одном репо с аудитором | FM | — | draft |
+| DP.FM.239 | Архитектурное решение не зафиксировано в VCS: тихий сбой без видимого следа | FM | — | draft |
+| DP.FM.240 | Откат одного параметра без связанного: риск перетекает в новую ветку | FM | — | draft |
+| DP.FM.241 | Полисемия термина-источника: новое различение наследует двойственность и порождает баг-спутник | FM | — | draft |
+| DP.FM.242 | Ложная аналогия по поверхностному сходству API: вынужденный констрейнт ≠ выбранная настройка | FM | — | draft |
+| DP.FM.243 | Детерминированный расчёт делегирован LLM: правдоподобная заглушка вместо результата | FM | — | draft |
+| DP.FM.244 | Staged-delete другого агента поглощается коммитом при multi-agent git-работе | FM | — | draft |
+| DP.FM.245 | Inline-комментарий не обходит валидатор присутствия литерала | FM | — | draft |
+| DP.FM.246 | Stale Active Wp In Memory Table | FM | Quick Close не включает шага обновления MEMORY.md — закрытый РП остаётся в таблице «Текущая работа» как активный до следующего явного протокола. | — |
+| DP.FM.247 | Payment Api Ambiguous Terminal Status | FM | — | — |
+| DP.FM.248 | Metric Threshold Unit Rename | FM | — | — |
+| DP.FM.249 | Env-var с устаревшим дефолтом переименованного репо | FM | — | draft |
+| DP.FM.250 | FETCH_HEAD race: параллельные git pull на одном рабочем дереве задваивают файл | FM | — | — |
+| DP.FM.251 | OnBootSec gap collapse: начальный зазор между таймерами схлопывается при долгой uptime | FM | — | — |
+| DP.FM.252 | git pull.rebase=true глобально переопределяет --ff-only, направляя команду в rebase-логику | FM | — | — |
+| DP.FM.253 | Инструмент читает legacy-источник после переезда source of truth — прод не видит новых данных | FM | — | draft |
+| DP.FM.254 | LLM silent truncation: finish_reason=length без проверки записывает частичный вывод | FM | — | draft |
+| DP.FM.255 | Transitive shim dependency: пакет используется только как HTTP-клиент для стороннего провайдера, блокирует CI | FM | — | draft |
+| DP.FM.256 | Conditional LLM cleanup: постобработка зависит от входных данных → частичная утечка разметки | FM | — | draft |
+| DP.FM.257 | Railway project-scoped токен: неверный заголовок `Bearer` вместо `Project-Access-Token` → 401 | FM | — | draft |
+| DP.FM.258 | Parallel agent branch switch in shared checkout | FM | — | — |
+| DP.FM.259 | Measurement gaming — form checklist completion without substance | FM | — | — |
+| DP.FM.260 | Check infrastructure path resolution error masked as logic error | FM | — | — |
+| DP.FM.262 | Shared Error Db Env Leak | FM | — | — |
+| DP.FM.263 | Git Copy Instead Of Move Cross Repo | FM | — | — |
+| DP.FM.264 | Housekeeping Semaphore Missing Slug | FM | — | — |
+| DP.FM.265 | Catch-all exception in fallback function masks systematic errors as normal behaviour | FM | — | active |
+| DP.FM.266 | Exit Code Not Structural Correctness | FM | — | — |
+| DP.FM.267 | Publish Job In Mirror Not Source | FM | — | — |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -343,7 +396,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.IWE.011 | IWE Runtime Host Contract | IWE | — | draft |
 | DP.IWE.011-adapter-claude-code | Claude Code Adapter for IWE Host Contract | IWE | — | active |
 | DP.IWE.011-adapter-headless | Headless Adapter for IWE Host Contract | IWE | — | active |
-| DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | draft |
+| DP.KR.001 | Маршрутизация знаний IWE | KR | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | active |
 | DP.KR.030 | Принцип триады учёт-доступ-аудит | KR | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. KR.030 = foundation серии (delivered WP-214). KR.031–033 = refinement-принципы каждой ветки; отложены, создаются при отдельном РП по необходимости. Серия KR.030–039 зарезервирована. | active |
 | DP.M.001 | Извлечение знаний | M | Трансформация сырой информации в Pack-совместимые сущности и DS docs/ через обнаружение, классификацию, двойной routing и формализацию | draft |
 | DP.M.002 | Применение стратегического DDD | M | Метод применения стратегического DDD к Pack и экзокортексу: BC mapping, UL extraction, Context Map для inter-agent integration | draft |
@@ -436,7 +489,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.089 | Ф0-исследование cost baseline перед LLM-оптимизацией | M | — | draft |
 | DP.M.090 | Mutation Testing для CI Enforcement Guards в Pack-репо | M | — | draft |
 | DP.M.091 | Scope Guard — enforcement Parliament-модели через enum + schema isolation | M | — | active |
-| DP.M.092 | Infra Artifact As Create Flow Step | M | — | active |
+| DP.M.092 | Infra Artifact As Create Flow Step | M | — | superseded |
 | DP.M.093 | CI артефакт встраивается в create-flow, не отдельная задача | M | — | active |
 | DP.M.094 | Dual-signal enforcement gate для ритуального перехода | M | — | active |
 | DP.M.095 | Atomic cross-repo terminology sync | M | — | active |
@@ -533,7 +586,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.205 | Gamification Rate Limit by Event Controllability | M | — | — |
 | DP.M.206 | Fast-fail-and-restart предпочтительнее in-process reconnect когда состояние коннекта = source-of-truth подписки | M | — | active |
 | DP.M.207 | Explicit choice до stateful default при первом входе | M | — | active |
-| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | M | — | active |
+| DP.M.208 | Diagnostics до behavioral nudge при stuck-сегменте | M | — | superseded |
 | DP.M.209 | Dry-run = 50% production migration: полный checklist с явным блокером | M | — | active |
 | DP.M.210 | Трёхуровневая сегментация застрявших пользователей (α/β/γ) для диагностики bottleneck | M | — | active |
 | DP.M.211 | Диагностика L1 FAIL в concept-coverage по регистрационному зазору | M | — | active |
@@ -653,6 +706,30 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.347 | Portrait First Reference Fallback | M | Рендер персонализированного артефакта: сначала читается пользовательский контекст (portrait), при отсутствии — graceful fallback на общий справочник. Интерфейс результата одинаков независимо от источника. | — |
 | DP.M.348 | Content First Audit Phase Order | M | — | — |
 | DP.M.349 | Commit Msg Guard Bypass Tags | M | — | — |
+| DP.M.350 | Idempotent SQL migration: DDL-guards для safe re-run | M | Каждый DDL-оператор в миграции должен быть idempotent: CREATE TABLE IF NOT EXISTS, DROP IF EXISTS, DO $$ BEGIN ... EXCEPTION WHEN duplicate_object ... END $$ для CREATE ROLE / GRANT. Принцип: миграция безопасна для N-кратного выполнения с одинаковым конечным состоянием. | — |
+| DP.M.351 | Neon pgbouncer advisory lock: 20×30s retry + infinite reconnect outer loop | M | — | active |
+| DP.M.352 | Pull-based offline-consent handover | M | При split cloud/local storage с ограниченным consent-режимом: облако пишет stub+TTL, возвращает 'принято в ожидании'; локальный инстанс при reconnect вытягивает и подтверждает. Адаптер stateless. Альтернатива push = потеря данных при offline. | — |
+| DP.M.353 | Event dedup window in routing catalog | M | Окно дедупликации события (dedup_window) зависит от семантики типа события, а не от архитектуры компонента. Параметр должен жить в routing_catalog.yaml рядом с маршрутами, не хардкодиться в Учётчике/воркере. Тест: можно ли изменить окно без деплоя компонента? | — |
+| DP.M.354 | consent_unverified infra-fault write-path | M | При недоступности consent-DB на write-path: записывать с меткой consent_unverified, не блокировать запись. Infra-сбой ≠ policy-deny. Fail-closed при infra-сбое = SPOF. Downstream аудитор видит метку и принимает решение. | — |
+| DP.M.355 | Reflex classify-before-llm-invoke dispatcher gate | M | В двухконтурном диспетчере (рефлекс + LLM) classify() по сигнатуре признаков должна вызываться ДО invoke_claude(). Нарушение: рефлекс-маршрут не экономит токены и не снижает latency. Дополнительный инвариант: confidence=0.0 для LLM-пути (неопределённая уверенность). | — |
+| DP.M.356 | Routing Gate: extend existing convention over parallel structure | M | При появлении нового типа контента/артефакта — сначала проверить существующую конвенцию (grep по SoT). Если существующий тип можно расширить новым полем frontmatter — расширять, не создавать параллельную структуру. Тест: «добавить поле к существующему типу = тот же результат?» Да → параллельная структура не нужна. | — |
+| DP.M.357 | Multistage pipeline carry-over: starvation guard via accumulators | M | Накопители между стадиями конвейера держат carry-over между итерациями: неизрасходованные единицы переходят в следующий прогон. Защищает от голодания последующих стадий при сбое предыдущей. Проектировочный инвариант: узкое место = самая медленная производящая стадия → автоматизировать первой. | — |
+| DP.M.358 | Grep existing planning slots before creating new ones | M | Перед добавлением нового слота/секции в систему планирования (DayPlan, WeekPlan, Strategy) — grep по шаблонам. Если слот с похожим назначением уже есть — наполнять его, не создавать параллельный. Нарушение = дрейф (OwnerIntegrity): два слота с одним смыслом. | — |
+| DP.M.359 | Static delta-aware lint for bare-commit guard | M | Grep по изменённым .claude/skills/** и scripts/** на bare `git commit -m` без pathspec; срабатывает только при коммите, вносящем новый bare-commit паттерн. Нет lifecycle, нет стейта, ловит регрессию. | — |
+| DP.M.360 | Server Side Auth Context Enrichment | M | — | — |
+| DP.M.361 | Histogram before reclassify | M | Перед переклассификацией команды/эндпоинта или изменением порога алерта собрать распределение латентности (P50/P90/P99) за N дней. Единичный алерт = выборка из 1, недостаточно для решения. | — |
+| DP.M.362 | Prefetch snapshot empty guard | M | Когда prefetch-запрос возвращает all-empty результаты (сбой сети/сервиса), не перезаписывать рабочий снапшот. Рабочий снапшот сохраняется и используется downstream-конвейером как fallback. | — |
+| DP.M.363 | FSM reset via write-ahead new key | M | Для сброса FSM-сессии записывать новый ключ с временным суффиксом (write-ahead), а не удалять существующий. Следующее сообщение получает новый session_id → FSM не находит записи → чистый контекст. Исключает race-condition при конкурентных сообщениях. | — |
+| DP.M.364 | Offline-fallback с явным TTL снапшота | M | При загрузке кеш-снапшота проверить три условия последовательно: отсутствие файла / повреждение JSON / устаревание >TTL. При любом — вернуть None и переключиться на локальные seeds. Инвариант: pipeline никогда не блокируется из-за недоступности снапшота. | — |
+| DP.M.365 | Граница безопасной компрессии инструктивного файла (peer-review как страж инварианта) | M | — | active |
+| DP.M.366 | Detector Baseline Forward Only | M | Ретроспективное сканирование без ground truth даёт ложную уверенность. Baseline нового детектора ставится с даты первого события с явными метками, не с даты создания скрипта. | — |
+| DP.M.367 | Per-Entity Advisory Lock for Concurrent Background Tasks | M | Два и более фоновых процесса, способных одновременно мутировать один и тот же объект, требуют advisory lock по идентификатору объекта. SELECT ... FOR UPDATE SKIP LOCKED обеспечивает serial execution для одного объекта без deadlock при параллельной обработке очереди. | — |
+| DP.M.368 | Per-file byte/token ratio calibration | M | MEDIAN_RATIO = медиана (bytes(f)/tokens(f)) по всем файлам выборки — не одиночный вызов токенайзера на конкатенации. Граничные эффекты BPE при склейке дают смещённое effective ratio, а не константу пофайловой нормализации. | — |
+| DP.M.369 | DRR Adequacy Pass | M | 6-вопросный чеклист ArchGate шаг 4.6: проверяет, что архитектурное/протокольное/продуктовое решение операционализировано, а не только записано. ≥1 ❌ → вернуться к детализации. | — |
+| DP.M.370 | Dual-source behavioral scanner | M | Детектор поведенческого паттерна в логах с двумя независимыми каналами: tagged (явная метка, confidence=high) + pattern-matched (regex, confidence=low). Каналы репортируются отдельно, не суммируются. Baseline — с даты первого tagged-события, не с даты создания скрипта. | — |
+| DP.M.371 | Байт/5 как прокси токенов при отсутствии API-доступа | M | — | draft |
+| DP.M.372 | flock: один общий лок на весь проход vs per-item при последовательной внутренней обработке | M | — | — |
+| DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | M | — | — |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -729,6 +806,38 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.142 | Единый реестр для одного типа сущности (Single Registry for Entity Type) | METHOD | — | — |
 | DP.METHOD.143 | Явная tolerate нефатального exit code в CI-скрипте | METHOD | — | — |
 | DP.METHOD.144 | Feature flag вместо удаления кода при dual-write cutover | METHOD | — | — |
+| DP.METHOD.145 | Parse Once Shell Config | METHOD | Читать конфиг-файл (YAML/JSON) один раз в параллельные bash-массивы; последующие lookup — чистый bash без subprocess. Устраняет N×fork overhead при многократном обращении к одному файлу. | draft |
+| DP.METHOD.146 | Activate On Prefix Lazy Load | METHOD | Activate-on-prefix: каркасный компонент держится как hot-стаб (1-2 строки: триггер + инструкция); полный контент грузится хуком при обнаружении детерминированного лексического advance-signal в сообщении. Экономит контекст-бюджет. | draft |
+| DP.METHOD.147 | Cashback Provider Api Strict Sum Validation | METHOD | При интеграции с API-провайдером, проверяющим сумму по каталогу: передавать полную цену провайдеру, списывать бонусы отдельно после подтверждения (cashback-модель). Не пытаться передавать дисконтированную сумму. | draft |
+| DP.METHOD.148 | Mascot Rest State Silence | METHOD | Rest state companion/маскота = отсутствие действия, не новое эмоциональное состояние. Любой visible-сигнал покоя (пыль, потускнение) создаёт guilt trigger → disengagement. | draft |
+| DP.METHOD.149 | Derived Artifact Reinterprets Canon Untouched | METHOD | Когда производный артефакт конфликтует с базовым каноном: переосмысление живёт только в производном, канон не редактируется. Конфликт фиксируется в content-cleanup backlog. | draft |
+| DP.METHOD.150 | Tiered Hot File Split | METHOD | Разбивка HOT-файла, превышающего лимит (150 строк), на три уровня: Tier-A (полный текст, ≤15 критических позиций), Tier-B (одна строка на позицию, ~20), Tier-C (только имена). Полные тексты Tier-B/C — в warm-файле (lazy). Паттерн применим к любому HOT-файлу: роли, SOTA, чеклисты. | draft |
+| DP.METHOD.151 | Classify Before Count | METHOD | Перед объявлением объёма миграции (N объектов) — классифицировать весь пул по целевому атрибуту и получить реальный N'. SELECT count(*) WHERE target_attr до start. Предотвращает ложный прогресс: '4/65' при реальном объёме N'=12 читается как 6% вместо 33%. | draft |
+| DP.METHOD.152 | Time Window Content Type Rotation | METHOD | Time-window эвристика принудительной ротации трудоёмких типов контента: если за последние N дней нет принятого контента типа T_heavy → предложить T_heavy вместо резервного. Предотвращает систематическое вытеснение трудоёмких типов более лёгкими. | draft |
+| DP.METHOD.153 | Semantic Constant Migration Handshake | METHOD | При поэтапной миграции к новому consumer — вводить семантическую константу в общий контракт (Service Clause) вместо routing по строковым литералам. Константа объявляет намерение на стороне enqueue (legacy) и на стороне matcher (новый consumer). Тест: 'если поменяется строка — нужно менять в двух местах?' Да → нужна константа в контракте. | draft |
+| DP.METHOD.154 | Bypass Class Taxonomy | METHOD | Bypass-class taxonomy: для каждого класса обхода security-гарда — отдельный regression-тест, подтверждающий, что нужный слой его ловит. Пустой класс = непокрытый вектор атаки. | draft |
+| DP.METHOD.155 | Deadline Triage Date Over Gates | METHOD | При конфликте дата vs шлюзы vs сигнал — приоритет резки: сначала дата (если не внешнее обязательство), затем дополнительные требования, последним — носитель сигнала и блокирующие предусловия. | draft |
+| DP.METHOD.156 | External Fact Resolution | METHOD | Когда внутренний спор двух ролей сводится к одному внешнему факту, недоступному ни одной из них — прекратить перетягивание и вынести единственный точечный вопрос носителю факта, оба варианта оформив как готовые исполняемые ветки. | draft |
+| DP.METHOD.157 | Two Axis Distinction Form | METHOD | Различение, чья суть — 'это две разные оси', записывать двумя отдельными именованными строками + пояснительной строкой 'где:', а не одной слитной. Слитная форма воспроизводит ровно тот синоним, против которого заведено различение. | draft |
+| DP.METHOD.158 | Or Gate Multi Track Maturity | METHOD | Для систем с двумя независимыми осями прогресса (учебная ступень, квалификационный уровень) использовать OR-гейт с независимым порогом на каждой оси. AND-гейт исключает опытных пользователей, вошедших через альтернативный путь. | draft |
+| DP.METHOD.159 | Авто-детект состояния через минимальные сигналы с одним вопросом при неоднозначности | METHOD | — | — |
+| DP.METHOD.160 | Аддитивный маршрутизатор новой оси без регрессии | METHOD | — | — |
+| DP.METHOD.161 | Процесс закрытия пишет входные данные для следующего периода | METHOD | — | — |
+| DP.METHOD.162 | Auth Layering Public Base | METHOD | При слиянии двух сервисов с разными уровнями доступа — базой выбирать публичный (fail-closed по умолчанию), авторизацию добавлять поверх. Обратный подход (взять приватный и вырезать авторизацию) создаёт fail-open при ошибке конфига. | draft |
+| DP.METHOD.163 | Ci Allowlist Over Blocklist | METHOD | CI-защита конфигурации через allowlist (явный список разрешённых) надёжнее blocklist (grep по подозрительным именам). Blocklist пропускает нейтрально-именованные нарушения; allowlist блокирует любое имя вне списка. | draft |
+| DP.METHOD.164 | Fail Closed Unknown Service Mode | METHOD | При отсутствующем или неизвестном значении параметра режима сервиса — отказать с явной ошибкой (HTTP 500 / exit 1), не делать fallback в публичный режим. Тихий fallback = fail-open при ошибке деплоя. | draft |
+| DP.METHOD.165 | Public Showcase Final Result Only | METHOD | При интеграции личного репо с публичной витриной — ограничивать публикуемую область директорией финальных артефактов (guide/). Сырые данные (inbox, memory, профиль) не должны попадать в публичную область. | draft |
+| DP.METHOD.166 | Read From Canonical Engine Table | METHOD | Если в системе есть компонент, который пишет канонические данные в БД (engine), — читать оттуда, не из локального файла. Локальный файл для тестирования = кандидат на расхождение с production-путём. | draft |
+| DP.METHOD.167 | Схлопывание однотемных записей MEMORY.md в hub-файл (hub-collapse) | METHOD | — | — |
+| DP.METHOD.168 | ResidencyGate: статическая декларация потребности данных + динамическое состояние согласия | METHOD | — | — |
+| DP.METHOD.169 | Corpus dedup prefilter must enumerate all prior passes | METHOD | — | — |
+| DP.METHOD.170 | Трёхслойная модель сбора персональных данных (privacy-first) | METHOD | — | — |
+| DP.METHOD.172 | Верификация самодостаточности EN-дистрибуции: три оси | METHOD | — | — |
+| DP.METHOD.173 | Независимый верификатор с изоляцией контекста | METHOD | — | active |
+| DP.METHOD.174 | Аварийный рычаг fail-closed: явная фраза-подтверждения, не булев флаг | METHOD | — | active |
+| DP.METHOD.175 | Взаимозависимые изменения БД деплоятся с наблюдаемым промежутком | METHOD | — | active |
+| DP.METHOD.176 | N параллельных субагентов с изоляцией контекста как adversarial quality gate | METHOD | — | active |
+| DP.METHOD.177 | Последовательные раунды верификации с изоляцией контекста | METHOD | — | active |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
@@ -801,6 +910,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.080 | Владелец выдачи согласия на анализ данных (Consent Grant Authority) | ROLE | Единственный компонент, который пишет scope=data_analysis в learning.consent_grant и эмитит consent_granted в public.domain_event. Не отвечает за revoke, не отвечает за text_analysis/typing_tracking (владелец — бот). | draft |
 | DP.ROLE.081 | Ретранслятор канона | ROLE | Механически переносит содержимое канона в целевую организацию при каждом изменении — по активному обещанию (перевод или зеркалирование), не решает, что и когда публиковать. | draft |
 | DP.ROLE.082 | Руководитель продвижения | ROLE | Владелец домена «служба продвижения» (5 систем, артикулированных Алёной 19 апр 2026) — наполняет доменное содержание типов без права менять архитектурный каркас Pack. Первый прецедент роли «владелец домена без архитектурных полномочий» в этом Pack. | draft |
+| DP.ROLE.083 | External Access Grantor (выдающий пропуска внешним ИИ-клиентам) | ROLE | Выдаёт и отзывает пропуска (ict_ токены) внешним ИИ-клиентам (claude.ai Connector, VS Code) на основе тира пользователя — единственная точка выдачи, что для push-, что для pull-инициации. | draft |
+| DP.ROLE.085 | Разметчик типов пользовательских данных (Data Structurer) | ROLE | Раскладывает произвольную файловую базу пользователя по типам 2.1-2.4 (устойчивые факты / поток событий / доменные знания / неформализуемый остаток), обязательно карантинируя всё, что не должно попасть в генерацию. Детерминированная программа, LLM — только для явно неоднозначных файлов. | draft |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
@@ -856,6 +967,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.051 | Совместный недельный ритуал Стратега и Плановика | SC | Недельное планирование — совместный ритуал R1 Стратега (DP.ROLE.012) и Плановика (DP.ROLE.066): Плановик ведёт упаковку приоритетов в неделю; Стратег подключается, только если приоритеты устарели или состояние пилота изменилось. | active |
 | DP.SC.052 | vdv-skill | SC | Генерирует описание стадийного процесса по методу ВДВ или проверяет готовое описание по 6 принципам сцепки входов-выходов | active |
 | DP.SC.053 | Локальная сборка персонального руководства (приватный IWE-контур) | SC | Для пользователя со своим IWE и строгим приватным контуром персональное руководство собирается ЛОКАЛЬНО (в среде пользователя), а не на платформе: сырой личный контент (РП, рефлексии, captures, current_request) не покидает контур пользователя. Платформа отдаёт только производные (derived) данные и универсальное знание через MCP-шлюз под явным consent. Один метод DP.M.241, исполняемый в IWE-локусе; managed-обещание платформы — DP.SC.164. | draft |
+| DP.SC.054 | Process Runner | SC | — | draft |
+| DP.SC.055 | Разметка пользовательской базы знаний по типам данных | SC | Для человека с произвольной файловой базой (Obsidian/Notion-экспорт/plain files/своя БД) — зарегистрированного в IWE или нет — Разметчик раскладывает материал по типам 2.1-2.4 (устойчивые факты / поток событий / доменные знания / неформализуемый остаток) и обязательно карантинирует всё, что не должно попасть в генерацию (чужие PII, секреты, платёжные данные). Работает полностью локально, без наших серверов. | draft |
 | DP.SC.101 | Вход и онбординг на платформе | SC | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | SC | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
 | DP.SC.103 | Работа над целевыми системами | SC | Участник применяет методологию FPF к реальным проектам — от учёбы к созиданию | draft |
@@ -911,7 +1024,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.154 | Мульти-агентная диалоговая сессия | SC | Пилот ставит задачу команде из 2+ peer-агентов разных вендоров; они многотурово обсуждают её, согласуют единый отчёт; любой может эскалировать к пилоту при принципиальном несогласии. | draft |
 | DP.SC.155 | Маршрут оснащения (Setup Journey) | SC | Пилот R2 на T1 открывает /setup и получает актуальный дашборд прогресса по пути T1→T4: текущий тир, ступень мастерства, что подключено, следующий шаг с CTA. Дашборд читает свежие данные (tier_detector + cp_assessments + onboarding_state) через asyncio.gather. Guided flow проводит шаг за шагом без повторных нажатий (double-tap protection). Последнее CTA-действие пишет last_nudge_at — предотвращает дубль от onboarding_controller в течение 24h. | draft |
 | DP.SC.156 | Обнаружение возможностей уровня (Что ещё?) | SC | Пользователь T1-T4 получает список доступных команд своего уровня одним нажатием из tier-экрана | draft |
-| DP.SC.157 | Оптимизированный вход в марафон | SC | T1-пользователь получает первый урок марафона за 4 действия от /start, без ручного ввода команд | draft |
+| DP.SC.157 | Оптимизированный вход в марафон | SC | T1-пользователь получает первое занятие марафона за 4 действия от /start, без ручного ввода команд | draft |
 | DP.SC.158 | Канон tier-сообщений бота | SC | Пользователь T1-T4 видит единообразное сообщение об уровне по шаблону с номером тира и описанием доступного | draft |
 | DP.SC.159 | Маршрутизатор задач IWE | SC | Пилот или агент получает: единственного исполнителя для любой входящей задачи — детерминированного (скрипт) или рассуждающего (LLM/скилл) — в соответствии с routing-тегом, проставленным WP Gate или Артефактором. | draft |
 | DP.SC.160 | Артефактор-Постановщик задач IWE | SC | Пилот или Маршрутизатор получает: из сырого запроса — структурированный РП с routing-тегом (task_type, class, artifact, budget_estimate), готовый к lookup в executor-catalog. | draft |
@@ -943,6 +1056,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.187 | local-gateway-render | SC | — | draft |
 | DP.SC.188 | Синхронизация IWE-шаблона с англоязычной проекцией | SC | Каждое изменение README/docs личного русскоязычного шаблона IWE автоматически появляется переведённым в публичном английском репозитории iwesys/iwe-template — без участия автора и без отдельной команды на публикацию. | draft |
 | DP.SC.189 | Зеркалирование методического контента aisystant в МИМ | SC | Каждое изменение в одном из 11 методических репозиториев aisystant (docs, guides, main-docs и т.д.) автоматически публикуется как есть (без перевода) в парном репозитории организации МИМ, без штатного git-механизма fork/transfer и без публичного отображения родства между организациями. | draft |
+| DP.SC.190 | Подключение внешнего ИИ-клиента к персональным знаниям | SC | Человек с оплаченной подпиской (T3/T4) подключает claude.ai Connector или расширение VS Code к своим знаниям платформы одним действием — без ручной возни с токенами и конфигами. | active |
+| DP.SC.191 | Capacity commitment must decompose by load type | SC | — | — |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
@@ -974,13 +1089,15 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.030 | Eam Agent Manifest Standard | SOTA | — | draft |
 | DP.SOTA.031 | Async Factory Deterministic Pipeline | SOTA | — | draft |
 | DP.SOTA.032 | Semantic Chunking Rag | SOTA | — | draft |
+| DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | SOTA | — | draft |
+| DP.SOTA.034 | Bigtech Context Commoditization | SOTA | — | draft |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.VM.001 | P1 P9 Calibration Matrix | VM | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Стажёра/событие тира). | — |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
 | DP.WP.002 | Ubiquitous Language | WP | Единый язык домена: глоссарий терминов, прорастающий во все артефакты — код, UI, документацию, тикеты, планы | draft |
 | DP.WP.003 | DayPlan | WP | Ежедневный план работы: приоритеты, бюджеты, carry-over с предыдущего дня | draft |
 | DP.WP.004 | WeekPlan | WP | Еженедельный план: итоги прошлой недели, РП текущей, бюджеты, контент-план, сверка со стратегией | draft |
-| DP.WP.005 | WeekReport | WP | DEPRECATED: итоги недели теперь записываются в секцию «Итоги W{N-1}» внутри WeekPlan (DP.WP.004). Отдельный файл WeekReport больше не создаётся. | deprecated |
+| DP.WP.005 | WeekReport | WP | Итоги недели (WeekReport) — отдельный документ недельного отчёта. *Примечание: в марте 2026 указан deprecated как prerejection для ОПТ-5, но впоследствии (РП297) формат восстановлен — используется как расчётный тайл панели F5. | active |
 | DP.WP.006 | Fleeting Notes | WP | Быстрые заметки пользователя: мысли, задачи, наблюдения — сырьё для Note Review и экстракции | draft |
 | DP.WP.007 | Consistency Report | WP | Отчёт проверки согласованности Pack-репо и downstream: расхождения, битые ссылки, дупликаты | draft |
 | DP.WP.008 | Code Scan Report | WP | Ежедневный отчёт по коммитам за 24ч: репо, авторы, ключевые изменения, TG-нотификация | draft |
@@ -993,4 +1110,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-07-10*
+> *Auto-generated by `generate-map.py` on 2026-07-13*
