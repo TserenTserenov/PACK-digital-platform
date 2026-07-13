@@ -24,10 +24,10 @@ generated: true
 | Distinctions (D) | 120 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 238 |
+| Failure Modes (FM) | 249 |
 | IWE (IWE) | 13 |
 | KR (KR) | 2 |
-| Methods (M) | 339 |
+| Methods (M) | 340 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 106 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1111** |
+| **Total** | **1123** |
 
 ## Distinctions
 
@@ -511,6 +511,7 @@ generated: true
 | DP.M.379 | Условный запуск дорогостоящих шагов агента | — | draft |
 | DP.M.380 | Retry-директива с форматным якорем | — | — |
 | DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | — | draft |
+| DP.M.382 | Squash-коммит с атрибуцией автора при публикации в публичный репо | — | draft |
 
 ## Work Products
 
@@ -775,6 +776,17 @@ generated: true
 | DP.FM.265 | Catch-all exception in fallback function masks systematic errors as normal behaviour | — | active |
 | DP.FM.266 | Exit Code Not Structural Correctness | — | — |
 | DP.FM.267 | Publish Job In Mirror Not Source | — | — |
+| DP.FM.268 | Checkout Persist Credentials Overrides App Token | — | — |
+| DP.FM.269 | Time Window Scope Gate Parallel Agents | — | — |
+| DP.FM.270 | Bootstrap Migration Drift Multi Version | — | — |
+| DP.FM.271 | Автоматический ремонт перезаписывает файлы с owner:user | — | — |
+| DP.FM.272 | mtime как критерий scope-gate недостаточен при headless-операциях | — | — |
+| DP.FM.273 | GitHub List API обрезает результат при превышении page size без явной ошибки | — | — |
+| DP.FM.274 | psql без ON_ERROR_STOP=1 в heredoc: SQL-ошибка не останавливает скрипт | — | active |
+| DP.FM.275 | Serverless DB cold-start: первый запрос после паузы транзиентно падает | — | active |
+| DP.FM.276 | Regex верификатора LLM-вывода не учитывает вариативность пунктуации → ложный негатив | — | active |
+| DP.FM.277 | Dispatch по структурному тегу вместо содержимого секции: ветка никогда не срабатывает | — | active |
+| DP.FM.278 | Cloudflare AI Workers getEmbedding: HTTP 500 при таймауте — не логическая ошибка | — | active |
 
 ## SoTA Annotations
 
@@ -1644,6 +1656,7 @@ generated: true
 - Missing `summary`: DP.M.379 (DP.M.379-conditional-expensive-agent-step.md)
 - Missing `summary`: DP.M.380 (DP.M.380-retry-directive-format-anchor.md)
 - Missing `summary`: DP.M.381 (DP.M.381-vdv-dead-output-gap-audit.md)
+- Missing `summary`: DP.M.382 (DP.M.382-cross-repo-publish-attributed-squash-commit.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1890,6 +1903,17 @@ generated: true
 - Missing `summary`: DP.FM.265 (DP.FM.265-catch-all-exception-masks-real-errors.md)
 - Missing `summary`: DP.FM.266 (DP.FM.266-exit-code-not-structural-correctness.md)
 - Missing `summary`: DP.FM.267 (DP.FM.267-publish-job-in-mirror-not-source.md)
+- Missing `summary`: DP.FM.268 (DP.FM.268-checkout-persist-credentials-overrides-app-token.md)
+- Missing `summary`: DP.FM.269 (DP.FM.269-time-window-scope-gate-parallel-agents.md)
+- Missing `summary`: DP.FM.270 (DP.FM.270-bootstrap-migration-drift-multi-version.md)
+- Missing `summary`: DP.FM.271 (DP.FM.271-stale-repair-overwrites-user-owned-files.md)
+- Missing `summary`: DP.FM.272 (DP.FM.272-mtime-scope-gate-fails-for-headless-ops.md)
+- Missing `summary`: DP.FM.273 (DP.FM.273-github-list-api-silent-truncation.md)
+- Missing `summary`: DP.FM.274 (DP.FM.274-psql-heredoc-silent-sql-error.md)
+- Missing `summary`: DP.FM.275 (DP.FM.275-serverless-db-first-request-transient-fail.md)
+- Missing `summary`: DP.FM.276 (DP.FM.276-llm-output-regex-punctuation-variance.md)
+- Missing `summary`: DP.FM.277 (DP.FM.277-dispatch-key-structural-tag-vs-content.md)
+- Missing `summary`: DP.FM.278 (DP.FM.278-cloudflare-ai-workers-http500-transient.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)

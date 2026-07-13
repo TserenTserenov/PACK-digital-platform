@@ -383,6 +383,17 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.265 | Catch-all exception in fallback function masks systematic errors as normal behaviour | FM | — | active |
 | DP.FM.266 | Exit Code Not Structural Correctness | FM | — | — |
 | DP.FM.267 | Publish Job In Mirror Not Source | FM | — | — |
+| DP.FM.268 | Checkout Persist Credentials Overrides App Token | FM | — | — |
+| DP.FM.269 | Time Window Scope Gate Parallel Agents | FM | — | — |
+| DP.FM.270 | Bootstrap Migration Drift Multi Version | FM | — | — |
+| DP.FM.271 | Автоматический ремонт перезаписывает файлы с owner:user | FM | — | — |
+| DP.FM.272 | mtime как критерий scope-gate недостаточен при headless-операциях | FM | — | — |
+| DP.FM.273 | GitHub List API обрезает результат при превышении page size без явной ошибки | FM | — | — |
+| DP.FM.274 | psql без ON_ERROR_STOP=1 в heredoc: SQL-ошибка не останавливает скрипт | FM | — | active |
+| DP.FM.275 | Serverless DB cold-start: первый запрос после паузы транзиентно падает | FM | — | active |
+| DP.FM.276 | Regex верификатора LLM-вывода не учитывает вариативность пунктуации → ложный негатив | FM | — | active |
+| DP.FM.277 | Dispatch по структурному тегу вместо содержимого секции: ветка никогда не срабатывает | FM | — | active |
+| DP.FM.278 | Cloudflare AI Workers getEmbedding: HTTP 500 при таймауте — не логическая ошибка | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -737,6 +748,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.379 | Условный запуск дорогостоящих шагов агента | M | — | draft |
 | DP.M.380 | Retry-директива с форматным якорем | M | — | — |
 | DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | M | — | draft |
+| DP.M.382 | Squash-коммит с атрибуцией автора при публикации в публичный репо | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
