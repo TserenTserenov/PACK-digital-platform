@@ -7,6 +7,7 @@ trust: experiential
 epistemic_stage: confirmed
 status: active
 valid_from: 2026-05-28
+last_updated: 2026-07-14
 schema_version: 1
 source: "session-close 2026-05-28 (peer-session 13: stall fix)"
 ---
@@ -16,6 +17,16 @@ source: "session-close 2026-05-28 (peer-session 13: stall fix)"
 ## Решение
 
 При детекции мёртвого коннекта (явный `is_closed()`, неудачный `SELECT 1` с таймаутом) бросать исключение и полагаться на host-уровневый рестарт (Railway, systemd, K8s, supervisord), вместо in-process reconnect с восстановлением подписок и состояния.
+
+## Forces
+
+_(Optional, WP-448 Ф12) Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Простота восстановления ↔ стоимость рестарта | Полный bootstrap через host-рестарт убирает класс багов in-process reconnect (race conditions, частичное состояние), но стоит restart-latency и требует идемпотентности — бесплатного восстановления нет |
+| Надёжность состояния ↔ доступность сервиса | Fail-fast гарантирует чистое состояние подписки, но роняет процесс; in-process reconnect держит доступность ценой риска рассинхрона скрытого состояния |
+| Доверие к host ↔ контроль внутри процесса | Передача рестарта supervisor'у (Railway/K8s/systemd) упрощает код, но отдаёт timing восстановления внешней системе, которую не контролируешь |
 
 ## Условия применимости
 
@@ -50,7 +61,20 @@ Reconnect внутри процесса требует воспроизведе�
 - Bootstrap не идемпотентен (например, миграции при старте) → restart создаст inconsistency
 - Downstream не идемпотентен → повторная обработка вызовет дубликаты
 
+## Bias-Annotation
+
+_(Optional, WP-448 Ф12) Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| «Restart всегда проще» | Внимание съезжает на видимую простоту «убил → поднял» и прочь от проверки предпосылок (идемпотентность bootstrap/downstream, restart-latency host): метод применяется там, где reconnect объективно дешевле (stateless-воркер) — см. Анти-применение |
+| Игнор скрытого состояния | При оценке «жив ли коннект» внимание на явных ошибках (`is_closed`, `SELECT 1` timeout), а скрытое состояние подписки (half-open TCP, advisory lock у предыдущего owner) недооценивается: рестарт без retry-with-backoff ловит race на lock |
+
 ## Связи
 
 - Failure mode, который этот метод митигирует: DP.FM.099 NOTIFY-подписка живёт на коннекте
 - Источник: WP-200 (projection-worker stall fix, 2026-05-28)
+
+---
+
+> 2026-07-14 — пилотная миграция на обогащённый формат карточки (Forces + Bias-Annotation), WP-448 Ф12. Эталон формата: `SPF/pack-template/03-methods/_method-card-template.md`.
