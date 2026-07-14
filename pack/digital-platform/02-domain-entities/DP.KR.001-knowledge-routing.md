@@ -128,6 +128,9 @@ DS (instrument/governance/surface) ← производное (код, план�
 | **Bug-отчёт** (дефект, обнаруженный агентом/пилотом в ходе сессии, локальный к репо/РП) | `<repo>/inbox/bugs/bug-YYYY-MM-DD-slug.md` | Не кросс-экосистемный сбой (тот — Incident, §5.7, governance-репо); фиксация конкретного найденного дефекта для последующего фикса, привязана к сессии/WP, не агрегируется по экосистеме |
 | **Extraction-report / KE-захват** (сырой результат Knowledge Extraction, ждёт решения) | `<repo>/inbox/extraction-reports/YYYY-MM-DD-*.md` | Status `pending-review` — не готовое знание, а кандидат; переезжает в Pack/memory только через R15-решение (`/apply-captures`), сам файл остаётся как журнал решения |
 | **Сессионный отчёт** (лог состоявшегося хода агента: что делали, что решили) | `<repo>/sessions/YYYY-MM-DD-<тема>.md` (или `sessions/YYYY-MM/`) | Фиксация факта сессии (обязательна для DS-my-strategy — Rule 3 репо-CLAUDE.md); не «Урок» (§5.2 выше) — урок кросс-сессионный вывод в memory/lessons_\*.md, сессионный отчёт — сырой лог одного хода. Не «Log» (§5.7) — Log это машинный stdout-поток исполнения скрипта, сессионный отчёт — нарративный markdown, пишет и читает человек |
+| **Новый реестр** (любой, с собственной схемой кодов) | SoT реестра — по типу его содержимого (эта таблица) + строка в каталоге реестров: источник `DS-ecosystem-development/0.OPS/0.9.Inbox/WP-419-registry-catalog-draft.yaml`, читаемый вид `DS-my-strategy/docs/registry-catalog.md` | Создал реестр → зарегистрировал в каталоге в том же акте, не «потом» (WP-442 Ф5) |
+
+**Мета-уровень — реестр реестров (WP-442 Ф5).** Эта карта маршрутизирует типы контента, но не отвечает на вопрос «где список всех существующих реестров» — он живёт отдельно: источник `DS-ecosystem-development/0.OPS/0.9.Inbox/WP-419-registry-catalog-draft.yaml`, читаемый markdown `DS-my-strategy/docs/registry-catalog.md` (генерируется `DS-ecosystem-development/0.OPS/scripts/registry-catalog.py --markdown`, дрейф ловит `registry-catalog-drift-check.sh`). Единица каталога — реестр, а не код: реестра без схемы кодов не бывает, но код — следствие реестра, не наоборот.
 
 ### 5.3. WP-контекст vs материал к обсуждению
 
@@ -272,6 +275,7 @@ DS (instrument/governance/surface) ← производное (код, план�
 | memory/navigation.md | Lookup-таблица (куда идти за файлом) |
 | DP.SC.036 | Обещание Knowledge Routing Gate (триггер, каскад, свидетельства) |
 | memory/routing-vocab.md | L0 fast-path словарь (проекция §5.2-§5.7) |
+| DS-my-strategy/docs/registry-catalog.md | Каталог всех реестров IWE (читаемый вид; источник — `0.OPS/0.9.Inbox/WP-419-registry-catalog-draft.yaml` в DS-ecosystem-development) |
 
 ---
 
@@ -279,3 +283,4 @@ DS (instrument/governance/surface) ← производное (код, план�
 *Обновлено: 2026-05-12 (WP-216 Ф4): §8 пробелы 7-8 (fast-path, омонимия «повестки»); §9 ссылки на SC.036 + routing-vocab.md.*
 *Обновлено: 2026-07-10 (WP-477 Ф1): `status` draft→active (карта уже source-of-truth на практике); §5.2 — 3 новые строки по итогам сверки с фактическим контентом за 2 месяца (bug-отчёт, extraction-report, сессионный отчёт); §8 п.1 — привязан к открытому РП, статус «в работе».*
 *Обновлено: 2026-07-10 (WP-477 Ф2, закрытие РП): §8 п.1 закрыт — встроен регулярный триггер ревизии в Week/Month Close extensions; `epistemic_stage` emerging→established (закрытый цикл проверки: сверка + встроенный процесс).*
+*Обновлено: 2026-07-14 (WP-5 backlog #32, источник WP-442 Ф5): §5.2 — строка «Новый реестр» + пояснение мета-уровня «реестр реестров»; §9 — ссылка на каталог реестров.*
