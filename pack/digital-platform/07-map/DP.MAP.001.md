@@ -36,12 +36,12 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 71 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 148 |
+| SC (SC) | 149 |
 | SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1127** |
+| **Total** | **1128** |
 
 ## Distinctions
 
@@ -1280,6 +1280,7 @@ generated: true
 | DP.SC.192 | Scheduled WP launch queue must run unattended with hard resource guards | — | — |
 | DP.SC.193 | Generated domain content must pass an ontological-vs-lexical specificity lens before acceptance | — | — |
 | DP.SC.194 | Конвейер личного бренда (Personal Brand Pipeline) | Пользователь ступени Мастер+ получает управляемый контур личного бренда: репо бренда из шаблона, setup-сессию самоописания, регулярный сбор кандидатов на темы из его платформенного и публичного следа — с разбором живым владельцем и без выдуманных фактов | draft |
+| DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | — | — |
 
 ### SYS
 
@@ -1956,6 +1957,7 @@ generated: true
 - Missing `summary`: DP.SC.191 (DP.SC.191-capacity-commitment-decompose-load-type.md)
 - Missing `summary`: DP.SC.192 (DP.SC.192-scheduled-wp-launch.md)
 - Missing `summary`: DP.SC.193 (DP.SC.193-ontological-specificity-lens.md)
+- Missing `summary`: DP.SC.195 (DP.SC.195-drr-pack-replenishment-gate.md)
 
 ## Staleness Warnings (>90 days since update)
 
