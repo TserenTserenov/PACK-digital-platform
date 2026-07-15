@@ -21,12 +21,12 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 120 |
+| Distinctions (D) | 121 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 249 |
 | IWE (IWE) | 13 |
-| KR (KR) | 2 |
+| KR (KR) | 3 |
 | Methods (M) | 340 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 106 |
@@ -36,12 +36,12 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 71 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 149 |
+| SC (SC) | 150 |
 | SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1128** |
+| **Total** | **1131** |
 
 ## Distinctions
 
@@ -167,6 +167,7 @@ generated: true
 | DP.D.217 | dev-checkout resource ≠ prod-runtime resource → read-side snapshot | — | active |
 | DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | — | active |
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | — | active |
+| DP.D.246 | indexable knowledge ≠ pointer record | — | active |
 
 ## Methods
 
@@ -907,6 +908,7 @@ generated: true
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
 | DP.KR.001 | Маршрутизация знаний IWE | Полная карта маршрутизации: какой тип контента куда записывать — от ZP до memory/, от Pack до 0.9.Inbox. Единый source-of-truth для агента и пользователя | active |
+| DP.KR.002 | Пользовательская карта маршрутизации знаний | Карта маршрутизации разнотипного материала пользователя (4 онтологических класса + Praxis) → дом + режим (index/pointer/external). Отличие от DP.KR.001: та — агентская, ~22 платформенных типа; эта — пользовательская: материал жизни и работы. | active |
 | DP.KR.030 | Принцип триады учёт-доступ-аудит | Три функции институционального контроля — Учёт, Доступ, Аудит — должны быть структурно разделены. Совмещение любых двух из трёх в одной роли нарушает принцип независимости контроля. KR.030 = foundation серии (delivered WP-214). KR.031–033 = refinement-принципы каждой ветки; отложены, создаются при отдельном РП по необходимости. Серия KR.030–039 зарезервирована. | active |
 
 ### METHOD
@@ -1188,6 +1190,7 @@ generated: true
 | DP.SC.054 | Process Runner | — | draft |
 | DP.SC.055 | Разметка пользовательской базы знаний по типам данных | Для человека с произвольной файловой базой (Obsidian/Notion-экспорт/plain files/своя БД) — зарегистрированного в IWE или нет — Разметчик раскладывает материал по типам 2.1-2.4 (устойчивые факты / поток событий / доменные знания / неформализуемый остаток) и обязательно карантинирует всё, что не должно попасть в генерацию (чужие PII, секреты, платёжные данные). Работает полностью локально, без наших серверов. | draft |
 | DP.SC.056 | Портативная сборка персонального руководства без серверов | Для любого человека с размеченной базой (выход DP.SC.055) портативный исполнитель роли Портной (R27) собирает персональное руководство полностью локально: ноль обязательных серверов и честный provenance — каждый факт руководства атрибутирован источником в журнале решений (decision_log); при нехватке обязательных данных исполнитель отказывает с диагностикой, никогда не выдумывает. | draft |
+| DP.SC.057 | Маршрутизация знаний пользователя | На вопрос «куда положить X» IWE отвечает: дом + режим (index/pointer/external) + обоснование по карте DP.KR.002 — или честное «вне карты», не выдумывает дом. | draft |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
 | DP.SC.103 | Работа над целевыми системами | Участник применяет методологию FPF к реальным проектам — от учёбы к созиданию | draft |
@@ -1347,6 +1350,7 @@ generated: true
 - Missing `summary`: DP.D.217 (DP.D.217-dev-vs-prod-runtime-resource.md)
 - Missing `summary`: DP.D.218 (DP.D.218-regex-data-presence-vs-success-signal.md)
 - Missing `summary`: DP.D.240 (DP.D.240-domain-event-vs-interpretation-immutable-log.md)
+- Missing `summary`: DP.D.246 (DP.D.246-indexable-knowledge-vs-pointer-record.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
