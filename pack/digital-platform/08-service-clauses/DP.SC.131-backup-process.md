@@ -169,7 +169,9 @@ bash ~/IWE/scripts/backup-stress-test.sh
 
 ## Связи
 
-- Роль: `DP.ROLE.NNN-backup-process` (создать в Ф3)
+- Исполнитель: systemd-таймеры + restic (детерминированная инфраструктура). Роль не требуется: у процесса нет потребителя роли (ни код, ни LLM-агент её не читают) — решение WP-486, peer-сессия 2026-07-15-08-backup-role-decision
+- alert_owner: пилот (BetterStack → email/push) — сбои бэкапов
+- stress_test_owner: пилот [активируется после Ф4 WP-486, сейчас не покрыт] — пропуск еженедельного стресс-теста
 - Runbook восстановления: `DS-ecosystem-development/.../Runbooks/DP.RUNBOOK.NNN-restore.md`
 - Стресс-тестер: `~/IWE/scripts/backup-stress-test.sh`
 - Мониторинг: BetterStack heartbeat `restic-backups-neon-dbs`
