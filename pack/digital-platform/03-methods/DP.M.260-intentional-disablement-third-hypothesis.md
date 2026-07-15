@@ -10,7 +10,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-17-pulse-daily-report-zeros (report.md Тема 1, эволюция позиций)"
 ---
 
-# DP.M.216 Intentional disablement как третья гипотеза
+# DP.M.260 Intentional disablement как третья гипотеза
 
 ## Проблема
 

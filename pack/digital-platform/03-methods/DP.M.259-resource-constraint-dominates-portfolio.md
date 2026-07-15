@@ -10,7 +10,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-26-wp250-bottleneck-review (report.md Тема 3+решение)"
 ---
 
-# DP.M.215 Resource constraint доминирует в портфеле при одном исполнителе
+# DP.M.259 Resource constraint доминирует в портфеле при одном исполнителе
 
 ## Правило
 

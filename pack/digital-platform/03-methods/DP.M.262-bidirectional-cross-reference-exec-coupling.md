@@ -12,7 +12,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-27-wp-364-fork4-ale-calibration (03-peer.md)"
 ---
 
-# DP.M.219 Bidirectional cross-reference для shared exec-mechanism
+# DP.M.262 Bidirectional cross-reference для shared exec-mechanism
 
 ## Описание
 

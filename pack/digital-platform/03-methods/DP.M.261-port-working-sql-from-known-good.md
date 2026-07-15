@@ -12,7 +12,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-17-pulse-daily-report-zeros (report.md Тема 3, fix Bug 1)"
 ---
 
-# DP.M.218 Port working SQL из known-good источника
+# DP.M.261 Port working SQL из known-good источника
 
 ## Описание
 

@@ -10,7 +10,7 @@ schema_version: 1
 source: "peer-session 2026-05-30-17-pulse-daily-report-zeros (report.md Тема 1+3)"
 ---
 
-# DP.FM.106 Маскировка нулей вместо root-fix
+# DP.FM.120 Маскировка нулей вместо root-fix
 
 ## Симптом
 
