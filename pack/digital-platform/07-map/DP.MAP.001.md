@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 121 |
+| Distinctions (D) | 122 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 249 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1133** |
+| **Total** | **1134** |
 
 ## Distinctions
 
@@ -168,6 +168,7 @@ generated: true
 | DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | — | active |
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | — | active |
+| DP.D.247 | local user compute ≠ AI/human work in our zone | — | active |
 
 ## Methods
 
@@ -1353,6 +1354,7 @@ generated: true
 - Missing `summary`: DP.D.218 (DP.D.218-regex-data-presence-vs-success-signal.md)
 - Missing `summary`: DP.D.240 (DP.D.240-domain-event-vs-interpretation-immutable-log.md)
 - Missing `summary`: DP.D.246 (DP.D.246-indexable-knowledge-vs-pointer-record.md)
+- Missing `summary`: DP.D.247 (DP.D.247-local-user-compute-vs-our-zone-ai-work.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)

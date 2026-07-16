@@ -144,6 +144,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | D | — | active |
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | D | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | D | — | active |
+| DP.D.247 | local user compute ≠ AI/human work in our zone | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
