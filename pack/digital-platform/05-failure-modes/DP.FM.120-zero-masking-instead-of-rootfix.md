@@ -27,7 +27,7 @@ source: "peer-session 2026-05-30-17-pulse-daily-report-zeros (report.md Тема
 При нулевой метрике в отчёте — три гипотезы:
 1. **Реальный ноль** (актуальное состояние)
 2. **Сломанная агрегация** (есть данные, неверный SQL)
-3. **Intentional disablement** (поспешный fix в прошлом отключил сбор — см. DP.M.216)
+3. **Intentional disablement** (поспешный fix в прошлом отключил сбор — см. DP.M.260)
 
 Только после определения категории — действие.
 
@@ -48,4 +48,4 @@ source: "peer-session 2026-05-30-17-pulse-daily-report-zeros (report.md Тема
 
 ## Связи
 
-- DP.M.216 (Intentional disablement как третья гипотеза) — частный случай (3) выше
+- DP.M.260 (Intentional disablement как третья гипотеза) — частный случай (3) выше

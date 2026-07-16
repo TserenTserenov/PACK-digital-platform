@@ -3,7 +3,7 @@ id: DP.M.260
 name: "Intentional disablement как третья гипотеза при пустой/нулевой функции"
 type: method
 domain: digital-platform
-pack_refs: [DP.FM.106]
+pack_refs: [DP.FM.120]
 status: active
 valid_from: 2026-05-30
 schema_version: 1
@@ -50,4 +50,4 @@ git blame <line>
 
 ## Связи
 
-- DP.FM.106 (Маскировка нулей вместо root-fix) — FM-сторона того же класса
+- DP.FM.120 (Маскировка нулей вместо root-fix) — FM-сторона того же класса
