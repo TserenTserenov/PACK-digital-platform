@@ -1137,6 +1137,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.193 | Generated domain content must pass an ontological-vs-lexical specificity lens before acceptance | SC | — | — |
 | DP.SC.194 | Конвейер личного бренда (Personal Brand Pipeline) | SC | Пользователь ступени Мастер+ получает управляемый контур личного бренда: репо бренда из шаблона, setup-сессию самоописания, регулярный сбор кандидатов на темы из его платформенного и публичного следа — с разбором живым владельцем и без выдуманных фактов | draft |
 | DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | SC | — | — |
+| DP.SC.196 | Content-cleanup signal registry must never lose a registered signal | SC | — | — |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |

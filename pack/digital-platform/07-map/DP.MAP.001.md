@@ -36,12 +36,12 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 73 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 151 |
+| SC (SC) | 152 |
 | SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1181** |
+| **Total** | **1182** |
 
 ## Distinctions
 
@@ -1334,6 +1334,7 @@ generated: true
 | DP.SC.193 | Generated domain content must pass an ontological-vs-lexical specificity lens before acceptance | — | — |
 | DP.SC.194 | Конвейер личного бренда (Personal Brand Pipeline) | Пользователь ступени Мастер+ получает управляемый контур личного бренда: репо бренда из шаблона, setup-сессию самоописания, регулярный сбор кандидатов на темы из его платформенного и публичного следа — с разбором живым владельцем и без выдуманных фактов | draft |
 | DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | — | — |
+| DP.SC.196 | Content-cleanup signal registry must never lose a registered signal | — | — |
 
 ### SYS
 
@@ -2051,6 +2052,7 @@ generated: true
 - Missing `summary`: DP.SC.192 (DP.SC.192-scheduled-wp-launch.md)
 - Missing `summary`: DP.SC.193 (DP.SC.193-ontological-specificity-lens.md)
 - Missing `summary`: DP.SC.195 (DP.SC.195-drr-pack-replenishment-gate.md)
+- Missing `summary`: DP.SC.196 (DP.SC.196-content-cleanup-signal-registry.md)
 
 ## Staleness Warnings (>90 days since update)
 
