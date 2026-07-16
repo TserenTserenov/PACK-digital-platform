@@ -2,7 +2,7 @@
 id: DP.ROLE.087
 name: Куратор личного бренда (Personal Brand Curator)
 type: role-description
-status: draft
+status: active           # ревью пилота принято 2026-07-16 (WP-472 Ф1)
 valid_from: 2026-07-15
 summary: "Собирает кандидатов на темы и факты личного бренда из платформенного и публичного следа человека, ведёт профиль его бренд-репо (setup, идемпотентный мерж, cross-reference) и кладёт всё на разбор живому владельцу; решений о публикации не принимает"
 related:
@@ -10,7 +10,7 @@ related:
   realizes: [DP.SC.194]
   uses: [DP.AISYS.013]
 created: 2026-07-15
-updated: 2026-07-15
+updated: 2026-07-16
 wp: WP-472
 ---
 
