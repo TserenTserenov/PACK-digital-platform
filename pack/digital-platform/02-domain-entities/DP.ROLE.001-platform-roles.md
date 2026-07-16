@@ -697,7 +697,7 @@ current_holders:
     grade: 2
     covers_scenarios: [Portion-Assembly, Full-Guide-Generation]
     instruments: [planner.py, horizons.py, prompt.md, adapter.py]
-    note: "Целевое состояние — guide-kit единственный носитель роли. Факт на 13.07.2026: guide-kit только что создан (Ф1, WP-483), никуда ещё не подключён; render-pilot-guides.py (DS-autonomous-agents) остаётся ЕДИНСТВЕННЫМ действующим носителем в проде (своя, не форкнутая копия planner.py/horizons.py, работает по cron с 2026-05-04) — до миграции на общее ядро guide-kit через платформенный переходник (Ф1.5, WP-483, ещё не начата). Не читать как «render-pilot-guides.py уже переходный»."
+    note: "Целевое состояние — guide-kit единственный носитель роли. Факт на 16.07.2026: платформенный переходник задеплоен и cron переключён на guide-kit как основной движок (15.07, DS-autonomous-agents@78223e2 + `GUIDE_KIT_HOME` в `/etc/iwe/env`) — render-pilot-guides.py (DS-autonomous-agents) теперь вызывает ядро guide-kit, а не свою копию. Старая тройка (agents/tailor/planner.py+horizons.py+prompt.md) физически ещё не удалена — вывод из эксплуатации заблокирован решением пилота (Ф1.5, WP-483, найдено архитектурное расхождение ядер на синтетическом крайнем случае: пустой mastery_by_area+bottleneck=M1, зависит от незаданного `GUIDE_KIT_CURRICULUM_PATH`)."
 
 failure_modes:
   - "Level Mismatch — глубина не соответствует уровню ученика"
