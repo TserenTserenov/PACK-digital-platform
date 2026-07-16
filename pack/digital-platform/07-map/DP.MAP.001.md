@@ -20,28 +20,28 @@ generated: true
 | AISYS (AISYS) | 4 |
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
-| CONCEPT (CONCEPT) | 3 |
-| Distinctions (D) | 122 |
+| CONCEPT (CONCEPT) | 4 |
+| Distinctions (D) | 123 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 249 |
+| Failure Modes (FM) | 268 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 340 |
+| Methods (M) | 344 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 106 |
+| METHOD (METHOD) | 127 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 72 |
+| ROLE (ROLE) | 73 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 151 |
 | SoTA Annotations (SOTA) | 33 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1134** |
+| **Total** | **1181** |
 
 ## Distinctions
 
@@ -169,6 +169,7 @@ generated: true
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | — | active |
+| DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | — | active |
 
 ## Methods
 
@@ -508,12 +509,16 @@ generated: true
 | DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | — | — |
 | DP.M.374 | Webhook Jwt Identity Provider Auth | — | — |
 | DP.M.375 | Bidirectional Git Sync Split Timers | — | — |
+| DP.M.376 | Source Scoped Candidate Pool Retrieval | — | — |
 | DP.M.377 | Corpus Fanout Positioning Palette | — | forming |
 | DP.M.378 | Triple Check Public Platform Text | — | forming |
 | DP.M.379 | Условный запуск дорогостоящих шагов агента | — | draft |
 | DP.M.380 | Retry-директива с форматным якорем | — | — |
 | DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | — | draft |
 | DP.M.382 | Squash-коммит с атрибуцией автора при публикации в публичный репо | — | draft |
+| DP.M.383 | Onboarding Work-Not-Learn Frame (Онбординг-фрейм «ты работаешь, не учишься») | — | active |
+| DP.M.384 | Close Known Gap Immediately During Review (Немедленное закрытие known-gap при ревью) | — | active |
+| DP.M.385 | Independent Agent Convergence as Confidence Signal (Совпадение независимых агентов = confidence signal) | — | active |
 
 ## Work Products
 
@@ -789,6 +794,25 @@ generated: true
 | DP.FM.276 | Regex верификатора LLM-вывода не учитывает вариативность пунктуации → ложный негатив | — | active |
 | DP.FM.277 | Dispatch по структурному тегу вместо содержимого секции: ветка никогда не срабатывает | — | active |
 | DP.FM.278 | Cloudflare AI Workers getEmbedding: HTTP 500 при таймауте — не логическая ошибка | — | active |
+| DP.FM.279 | Day Open hook не транзитивно вызывает дочерние скрипты | — | active |
+| DP.FM.280 | Cross Db Staging Tables Must Exist On Both Ends | — | candidate |
+| DP.FM.281 | Iterative Edit Regression in Untouched Parts (Регрессия конкретности при итеративной правке) | При итеративной правке текста проверяется только дельта изменений, а не весь текст целиком. В результате нетронутые фрагменты регрессируют: ранее конкретные формулировки становятся абстрактными, потому что правка одного блока восстанавливает абстракцию в соседнем. | active |
+| DP.FM.282 | github.event.commits Null on workflow_dispatch (Отсутствие commits при ручном триггере) | При запуске GitHub Actions через workflow_dispatch поле github.event.commits отсутствует (null), а не пустой массив. toJSON(null) возвращает строку «null», и jq .[] завершается ошибкой вместо пустого результата. | active |
+| DP.FM.283 | Dead Pipeline Step with No Output Consumer (Мёртвый шаг конвейера: выход без потребителя) | Шаг конвейера объявляет Выход, но потребителя этого Выхода внутри контура нет. Шаг становится мёртвым: он выполняется, но его результат никем не используется. Типичный сценарий — нарушение порядка refresh → read: мёртвый шаг стоит между обновлением данных и их чтением. | active |
+| DP.FM.284 | Dead Env Var with Live Secret (Мёртвая env-переменная с живым значением секрета) | При ротации или переключении LLM-бэкенда старый API-ключ остаётся как env-переменная в деплой-платформе. Код уже переключился на новый бэкенд и ключ не читает, но ключ живёт в сервисе: ненужный доступ, ложное ощущение безопасности. | active |
+| DP.FM.285 | hasExtraUsageEnabled Invisible Overage (Невидимое автосписание за превышение квоты Claude Max) | Флаг hasExtraUsageEnabled: true в ~/.claude.json разрешает Anthropic автоматически списывать за превышение квоты подписки Claude Max. Флаг не виден в Claude Code UI — нужно проверять Anthropic Console. При расследовании регулярных API-расходов без явного кода-потребителя проверять этот флаг в первую очередь. | active |
+| DP.FM.286 | Silent Semantic Loss on Hot-File Compression (Тихая потеря смысла при сжатии hot-файла) | При LLM-сжатии hot-файлов (CLAUDE.md, distinctions.md) агент теряет семантику правил или различений — без явной ошибки. Детектор противоречий фиксирует только downstream-симптом (путаницу терминов в действиях агента), а не upstream-событие (момент сжатия). Разрыв между потерей и обнаружением = 1-2 хода. | active |
+| DP.FM.287 | Параллельное авторство одного Pack-файла двумя агентами → тихий дрейф версий | — | active |
+| DP.FM.288 | Shell-гейт: NUL-разделитель не сгенерирован → цикл выполняет 0 итераций → exit 0 | — | active |
+| DP.FM.289 | SQLite date() возвращает NULL: offset без двоеточия (+HHMM) не распознаётся | — | active |
+| DP.FM.290 | Apple Health resting_heart_rate: несколько строк на дату — выбирать по received_at DESC | — | active |
+| DP.FM.291 | Промпт/скрипт не мигрирован в service-репо при переезде протокола — тихая развилка версий | — | active |
+| DP.FM.292 | JWT-single-flag: достаточен для 1 продукта, ломается при N типах | — | active |
+| DP.FM.296 | Некорректный путь в routing-vocab молча блокирует KE — defer вместо accept | — | active |
+| DP.FM.297 | Денормализованный счётчик/enum в шапке артефакта молча дрейфует от таблицы-факта в теле | — | active |
+| DP.FM.298 | Lifecycle-скрипт ищет по устаревшему glob-паттерну — молчаливый no-op при смене конвенции | — | active |
+| DP.FM.299 | Критерий верификатора без описанного addressed-пути делает механический PASS недостижимым | — | active |
+| DP.FM.300 | Исключение кода retry-механизма поглощается внешним try/except | — | active |
 
 ## SoTA Annotations
 
@@ -873,6 +897,7 @@ generated: true
 | DP.CONCEPT.001 | Концепция платформы | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
 | DP.CONCEPT.003 | Адаптивная персонализация | Принцип и механизм платформы: адаптируется под человека через три слоя — персонализацию, индивидуализацию и адаптивность | active |
 | DP.CONCEPT.004 | Three Layers Ai Work | 3 слоя работы с ИИ: разовый запрос (нет контекста) → роль и инструкция (постоянный системный контекст) → накопленная среда (история решений, документы, проекты). Переход между слоями определяется объёмом переданного контекста, а не моделью или промпт-техникой | draft |
+| DP.CONCEPT.005 | User Data Pipeline Types | 4 типа конвейеров личных данных: 2.1 биометрика/устройства, 2.2 поведенческие следы платформы, 2.3 агентские следы и знания, 2.4 персональный контекст для агентских решений. Каждый конвейер требует отдельной политики хранения, согласия и residency. | draft |
 
 ### ECON
 
@@ -1022,6 +1047,27 @@ generated: true
 | DP.METHOD.175 | Взаимозависимые изменения БД деплоятся с наблюдаемым промежутком | — | active |
 | DP.METHOD.176 | N параллельных субагентов с изоляцией контекста как adversarial quality gate | — | active |
 | DP.METHOD.177 | Последовательные раунды верификации с изоляцией контекста | — | active |
+| DP.METHOD.178 | User-facing tool closure requires live acceptance test | — | active |
+| DP.METHOD.179 | SoTA-check at Pack creation step 1.5 to prevent domain fragmentation | — | active |
+| DP.METHOD.180 | Pre Promotion Peer Gate | — | candidate |
+| DP.METHOD.181 | Трёхуровневый вердикт проверки согласованности знаний: clear / moved-to-cold / gone | — | active |
+| DP.METHOD.182 | Commit-time pre-commit hook как точка shift-left enforcement инварианта знаний | — | active |
+| DP.METHOD.183 | Cache miss rate как первичная метрика наблюдаемости LLM-системы с prompt caching | — | active |
+| DP.METHOD.184 | Optional-executable hook: L1 вызывает L3-расширение через проверку [ -x ] | — | active |
+| DP.METHOD.185 | Subsection вместо самостоятельной команды при расширении инструментария | — | active |
+| DP.METHOD.186 | FSM Read-Model как альтернатива permission-системе при N состояниях на пользователя | — | active |
+| DP.METHOD.188 | Три поля реестра: tier / target_tier / migration_trigger | — | active |
+| DP.METHOD.189 | Operator-first rollout: новая фича/модель — сначала на операторском аккаунте | — | active |
+| DP.METHOD.190 | Retry-once-then-alert: алерт после одного retry для немедленной детекции регрессии качества | — | active |
+| DP.METHOD.191 | Cherry-pick recovery: восстановление коммита с чужой ветки при параллельном merge | — | active |
+| DP.METHOD.194 | R30 Assembly/Hybrid: различение-кандидаты — только из собственных SoTA-источников Pack | — | active |
+| DP.METHOD.195 | Apply-captures session как триггер регистрации нового Pack и применения defer-кандидатов | — | active |
+| DP.METHOD.196 | ArchGate: прецедент инцидента в том же артефакте весомее общего правила | — | active |
+| DP.METHOD.197 | ArchGate: функциональная регрессия оператора перевешивает архитектурную чистоту | — | active |
+| DP.METHOD.198 | Dual-writer с дизъюнктными диапазонами ID — управляемый паттерн | — | active |
+| DP.METHOD.199 | Smoke-тест миграции под реальной ролью, не суперпользователем | — | active |
+| DP.METHOD.200 | Backport в upstream-ветку как критерий закрытия хотфикса | Хотфикс считается закрытым только после backport в upstream/staging-ветку + verify-скрипт перед каждой волной доставки. | active |
+| DP.METHOD.201 | Gate-consistency + детерминированный rerunner для автономного протокола | Идемпотентный scheduled protocol: перед запуском проверить существование артефактов (gate-consistency), при повторном прогоне с теми же входными — тот же результат без дублирования. | active |
 
 ### NAV
 
@@ -1124,6 +1170,7 @@ generated: true
 | DP.ROLE.086 | Диспетчер отложенного запуска РП (WP Scheduler) | Ставит РП в очередь на запуск в заданное время (launchd, будит Мак из сна), запускает выбранного агента headless с жёстким таймаутом, пишет отчёт; падение одного запуска не останавливает очередь. Детерминированная программа, LLM не использует. | draft |
 | DP.ROLE.087 | Куратор личного бренда (Personal Brand Curator) | Собирает кандидатов на темы и факты личного бренда из платформенного и публичного следа человека, ведёт профиль его бренд-репо (setup, идемпотентный мерж, cross-reference) и кладёт всё на разбор живому владельцу; решений о публикации не принимает | draft |
 | DP.ROLE.088 | Router — Маршрутизатор материала пользователя | — | draft |
+| DP.ROLE.089 | Владелец домена без архитектурных полномочий (Domain Owner, No Arch Authority) | Принимает операционные решения по конкретным системам домена без права вводить новые типы сущностей или менять архитектуру — эти решения требуют явного архитектурного ревью. | active |
 
 ### RUNBOOK
 
@@ -1355,6 +1402,7 @@ generated: true
 - Missing `summary`: DP.D.240 (DP.D.240-domain-event-vs-interpretation-immutable-log.md)
 - Missing `summary`: DP.D.246 (DP.D.246-indexable-knowledge-vs-pointer-record.md)
 - Missing `summary`: DP.D.247 (DP.D.247-local-user-compute-vs-our-zone-ai-work.md)
+- Missing `summary`: DP.D.248 (DP.D.248-last-verified-vs-actual-verification.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1665,12 +1713,16 @@ generated: true
 - Missing `summary`: DP.M.373 (DP.M.373-live-reproduction-snapshot-diagnosis.md)
 - Missing `summary`: DP.M.374 (DP.M.374-webhook-jwt-identity-provider-auth.md)
 - Missing `summary`: DP.M.375 (DP.M.375-bidirectional-git-sync-split-timers.md)
+- Missing `summary`: DP.M.376 (DP.M.376-source-scoped-candidate-pool-retrieval.md)
 - Missing `summary`: DP.M.377 (DP.M.377-corpus-fanout-positioning-palette.md)
 - Missing `summary`: DP.M.378 (DP.M.378-triple-check-public-platform-text.md)
 - Missing `summary`: DP.M.379 (DP.M.379-conditional-expensive-agent-step.md)
 - Missing `summary`: DP.M.380 (DP.M.380-retry-directive-format-anchor.md)
 - Missing `summary`: DP.M.381 (DP.M.381-vdv-dead-output-gap-audit.md)
 - Missing `summary`: DP.M.382 (DP.M.382-cross-repo-publish-attributed-squash-commit.md)
+- Missing `summary`: DP.M.383 (DP.M.383-onboarding-work-not-learn-frame.md)
+- Missing `summary`: DP.M.384 (DP.M.384-close-known-gap-immediately.md)
+- Missing `summary`: DP.M.385 (DP.M.385-independent-agent-convergence-confidence.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -1725,6 +1777,25 @@ generated: true
 - Missing `summary`: DP.METHOD.175 (DP.METHOD.175-coupled-db-changes-observable-gap.md)
 - Missing `summary`: DP.METHOD.176 (DP.METHOD.176-n-parallel-adversarial-verifiers-quality-gate.md)
 - Missing `summary`: DP.METHOD.177 (DP.METHOD.177-sequential-verification-rounds.md)
+- Missing `summary`: DP.METHOD.178 (DP.METHOD.178-user-facing-tool-closure-criterion.md)
+- Missing `summary`: DP.METHOD.179 (DP.METHOD.179-pack-creation-sota-check-step-1-5.md)
+- Missing `summary`: DP.METHOD.180 (DP.METHOD.180-pre-promotion-peer-gate.md)
+- Missing `summary`: DP.METHOD.181 (DP.METHOD.181-three-state-consistency-verdict.md)
+- Missing `summary`: DP.METHOD.182 (DP.METHOD.182-commit-time-hook-shift-left.md)
+- Missing `summary`: DP.METHOD.183 (DP.METHOD.183-cache-miss-rate-llm-observability.md)
+- Missing `summary`: DP.METHOD.184 (DP.METHOD.184-optional-executable-hook-l1-l3.md)
+- Missing `summary`: DP.METHOD.185 (DP.METHOD.185-subsection-over-standalone-command.md)
+- Missing `summary`: DP.METHOD.186 (DP.METHOD.186-fsm-read-model-permission-alternative.md)
+- Missing `summary`: DP.METHOD.188 (DP.METHOD.188-registry-current-vs-target-tier-three-fields.md)
+- Missing `summary`: DP.METHOD.189 (DP.METHOD.189-operator-first-rollout-deployment-safety.md)
+- Missing `summary`: DP.METHOD.190 (DP.METHOD.190-retry-once-then-alert-quality-regression.md)
+- Missing `summary`: DP.METHOD.191 (DP.METHOD.191-cherry-pick-recovery-parallel-agent-branch-switch.md)
+- Missing `summary`: DP.METHOD.194 (DP.METHOD.194-r30-assembly-distinctions-source.md)
+- Missing `summary`: DP.METHOD.195 (DP.METHOD.195-apply-captures-pack-registration-trigger.md)
+- Missing `summary`: DP.METHOD.196 (DP.METHOD.196-archgate-incident-history-over-general-rule.md)
+- Missing `summary`: DP.METHOD.197 (DP.METHOD.197-archgate-operator-regression-over-purity.md)
+- Missing `summary`: DP.METHOD.198 (DP.METHOD.198-dual-writer-disjoint-id-ranges.md)
+- Missing `summary`: DP.METHOD.199 (DP.METHOD.199-migration-smoke-under-real-role.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -1928,6 +1999,19 @@ generated: true
 - Missing `summary`: DP.FM.276 (DP.FM.276-llm-output-regex-punctuation-variance.md)
 - Missing `summary`: DP.FM.277 (DP.FM.277-dispatch-key-structural-tag-vs-content.md)
 - Missing `summary`: DP.FM.278 (DP.FM.278-cloudflare-ai-workers-http500-transient.md)
+- Missing `summary`: DP.FM.279 (DP.FM.279-day-open-hook-transitive-call.md)
+- Missing `summary`: DP.FM.280 (DP.FM.280-cross-db-staging-tables-must-exist-on-both-ends.md)
+- Missing `summary`: DP.FM.287 (DP.FM.287-parallel-agent-pack-authoring-drift.md)
+- Missing `summary`: DP.FM.288 (DP.FM.288-shell-gate-zero-iteration-silent-pass.md)
+- Missing `summary`: DP.FM.289 (DP.FM.289-sqlite-date-null-nonstandard-tz-offset.md)
+- Missing `summary`: DP.FM.290 (DP.FM.290-apple-health-multiple-rows-per-date.md)
+- Missing `summary`: DP.FM.291 (DP.FM.291-prompt-not-migrated-to-service-repo.md)
+- Missing `summary`: DP.FM.292 (DP.FM.292-jwt-single-flag-n-products-breakdown.md)
+- Missing `summary`: DP.FM.296 (DP.FM.296-routing-vocab-stale-path-ke-silent-defer.md)
+- Missing `summary`: DP.FM.297 (DP.FM.297-denormalized-header-drifts-from-body.md)
+- Missing `summary`: DP.FM.298 (DP.FM.298-lifecycle-script-stale-glob-pattern-silent-noop.md)
+- Missing `summary`: DP.FM.299 (DP.FM.299-verifier-criterion-missing-addressed-path.md)
+- Missing `summary`: DP.FM.300 (DP.FM.300-retry-handler-exception-swallowed.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)

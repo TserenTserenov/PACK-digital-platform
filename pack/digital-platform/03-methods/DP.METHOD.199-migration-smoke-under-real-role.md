@@ -1,0 +1,76 @@
+---
+id: DP.METHOD.199
+name: "Smoke-тест миграции под реальной ролью, не суперпользователем"
+type: method
+pack: PACK-digital-platform
+domain: digital-platform / database-migration
+kind: Method
+status: active
+created: 2026-07-15
+trust: confirmed
+epistemic_stage: observed
+valid_from: 2026-07-10
+sources:
+  - "session-close 2026-07-10; WP-183 ArchGate Directus (report.md §6, миграция 014, commit 9e43924)"
+related:
+  see_also: [DP.METHOD.198]
+schema_version: 1
+---
+
+# DP.METHOD.199 — Smoke-тест миграции под реальной ролью, не суперпользователем
+
+## Определение
+
+Проверка корректности миграции/деплоя БД **обязательно выполняется под целевой рабочей ролью** (не admin/superuser). Перенос схемы не переносит GRANT'ы автоматически — дефект невидим под суперпользователем.
+
+## IPO
+
+- **Вход:** применённая миграция + целевая роль-потребитель
+- **Процесс:** полный CRUD-цикл в транзакции с откатом под реальной ролью
+- **Выход:** либо успешная проверка, либо обнаруженный дефект прав → компенсирующая миграция
+
+## Алгоритм smoke-теста
+
+```sql
+-- 013-smoke-test.sql: выполнять под целевой ролью directus_admin
+BEGIN;
+
+-- 1. Чтение схемы
+SELECT column_name FROM information_schema.columns
+WHERE table_name = 'target_table';
+
+-- 2. INSERT в ожидаемый диапазон
+INSERT INTO target_table (id, ...) VALUES (900000001, ...);
+
+-- 3. UPDATE
+UPDATE target_table SET col = 'test' WHERE id = 900000001;
+
+-- 4. DELETE
+DELETE FROM target_table WHERE id = 900000001;
+
+ROLLBACK; -- всегда откатить, не оставлять тестовых данных
+```
+
+## Почему перенос схемы ≠ перенос прав
+
+При `pg_dump + pg_restore` или ручном `CREATE TABLE` GRANT'ы на роль не включаются в структуру схемы по умолчанию. Следствие:
+- Под суперпользователем всё работает (superuser обходит GRANT-проверки).
+- Под рабочей ролью — `permission denied` при первом реальном запросе.
+
+**Дефект проявляется только в production под реальной ролью.**
+
+## Fix при обнаружении
+
+Отдельная компенсирующая миграция (не правка уже применённых файлов):
+
+```sql
+-- 014-grant-directus-role.sql
+GRANT SELECT, INSERT, UPDATE, DELETE ON target_table TO directus_admin;
+GRANT USAGE, SELECT ON SEQUENCE directus_entries_seq TO directus_admin;
+```
+
+## Применимость
+
+- Перенос схемы между базами Postgres (staging → prod, prod → backup)
+- Добавление новых таблиц/последовательностей в existing schema
+- Любая миграция с ролевым доступом (Directus, Hasura, application-specific roles)

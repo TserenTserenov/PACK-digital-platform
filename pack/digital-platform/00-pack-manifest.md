@@ -23,6 +23,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.CONCEPT.001 | Концепция платформы | CONCEPT | Концепция ИТ-платформы экосистемы: цифровой двойник, ИИ-системы, интеграции, отчуждаемость | active |
 | DP.CONCEPT.003 | Адаптивная персонализация | CONCEPT | Принцип и механизм платформы: адаптируется под человека через три слоя — персонализацию, индивидуализацию и адаптивность | active |
 | DP.CONCEPT.004 | Three Layers Ai Work | CONCEPT | 3 слоя работы с ИИ: разовый запрос (нет контекста) → роль и инструкция (постоянный системный контекст) → накопленная среда (история решений, документы, проекты). Переход между слоями определяется объёмом переданного контекста, а не моделью или промпт-техникой | draft |
+| DP.CONCEPT.005 | User Data Pipeline Types | CONCEPT | 4 типа конвейеров личных данных: 2.1 биометрика/устройства, 2.2 поведенческие следы платформы, 2.3 агентские следы и знания, 2.4 персональный контекст для агентских решений. Каждый конвейер требует отдельной политики хранения, согласия и residency. | draft |
 | DP.D.025 | Harness ≠ Agent | D | Harness (упряжь/обвязка) определяет результат больше, чем мощность агента/модели | active |
 | DP.D.027 | Content Budget Model (3 оси) | D | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | D | Данные пользователя растут с тиром платформы: T0 без Ory (telegram_id) → T1 с Ory (UUID) → T2 (активная подписка) профиль + история + универсальные руководства (одинаковые для всех) → T3 (подключён любой AI-клиент: claude.ai / Claude Code / VS Code / Telegram) персональные артефакты — персональное руководство (WP-149) + Гермес знает историю (Память.Derived) → T4 (+ GitHub) личный Pack + ИИ-агенты (со-мыслитель). T3-условие = AI-клиент подключён, НЕ «ЦД заполнен» (устаревшее, см. DP.D.052; семантика T3 — консенсус WP-406 Ф13). Ортогональные оси: TM (наставник), TA (администратор), TD (разработчик) | active |
@@ -145,6 +146,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | D | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | D | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | D | — | active |
+| DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -396,6 +398,25 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.276 | Regex верификатора LLM-вывода не учитывает вариативность пунктуации → ложный негатив | FM | — | active |
 | DP.FM.277 | Dispatch по структурному тегу вместо содержимого секции: ветка никогда не срабатывает | FM | — | active |
 | DP.FM.278 | Cloudflare AI Workers getEmbedding: HTTP 500 при таймауте — не логическая ошибка | FM | — | active |
+| DP.FM.279 | Day Open hook не транзитивно вызывает дочерние скрипты | FM | — | active |
+| DP.FM.280 | Cross Db Staging Tables Must Exist On Both Ends | FM | — | candidate |
+| DP.FM.281 | Iterative Edit Regression in Untouched Parts (Регрессия конкретности при итеративной правке) | FM | При итеративной правке текста проверяется только дельта изменений, а не весь текст целиком. В результате нетронутые фрагменты регрессируют: ранее конкретные формулировки становятся абстрактными, потому что правка одного блока восстанавливает абстракцию в соседнем. | active |
+| DP.FM.282 | github.event.commits Null on workflow_dispatch (Отсутствие commits при ручном триггере) | FM | При запуске GitHub Actions через workflow_dispatch поле github.event.commits отсутствует (null), а не пустой массив. toJSON(null) возвращает строку «null», и jq .[] завершается ошибкой вместо пустого результата. | active |
+| DP.FM.283 | Dead Pipeline Step with No Output Consumer (Мёртвый шаг конвейера: выход без потребителя) | FM | Шаг конвейера объявляет Выход, но потребителя этого Выхода внутри контура нет. Шаг становится мёртвым: он выполняется, но его результат никем не используется. Типичный сценарий — нарушение порядка refresh → read: мёртвый шаг стоит между обновлением данных и их чтением. | active |
+| DP.FM.284 | Dead Env Var with Live Secret (Мёртвая env-переменная с живым значением секрета) | FM | При ротации или переключении LLM-бэкенда старый API-ключ остаётся как env-переменная в деплой-платформе. Код уже переключился на новый бэкенд и ключ не читает, но ключ живёт в сервисе: ненужный доступ, ложное ощущение безопасности. | active |
+| DP.FM.285 | hasExtraUsageEnabled Invisible Overage (Невидимое автосписание за превышение квоты Claude Max) | FM | Флаг hasExtraUsageEnabled: true в ~/.claude.json разрешает Anthropic автоматически списывать за превышение квоты подписки Claude Max. Флаг не виден в Claude Code UI — нужно проверять Anthropic Console. При расследовании регулярных API-расходов без явного кода-потребителя проверять этот флаг в первую очередь. | active |
+| DP.FM.286 | Silent Semantic Loss on Hot-File Compression (Тихая потеря смысла при сжатии hot-файла) | FM | При LLM-сжатии hot-файлов (CLAUDE.md, distinctions.md) агент теряет семантику правил или различений — без явной ошибки. Детектор противоречий фиксирует только downstream-симптом (путаницу терминов в действиях агента), а не upstream-событие (момент сжатия). Разрыв между потерей и обнаружением = 1-2 хода. | active |
+| DP.FM.287 | Параллельное авторство одного Pack-файла двумя агентами → тихий дрейф версий | FM | — | active |
+| DP.FM.288 | Shell-гейт: NUL-разделитель не сгенерирован → цикл выполняет 0 итераций → exit 0 | FM | — | active |
+| DP.FM.289 | SQLite date() возвращает NULL: offset без двоеточия (+HHMM) не распознаётся | FM | — | active |
+| DP.FM.290 | Apple Health resting_heart_rate: несколько строк на дату — выбирать по received_at DESC | FM | — | active |
+| DP.FM.291 | Промпт/скрипт не мигрирован в service-репо при переезде протокола — тихая развилка версий | FM | — | active |
+| DP.FM.292 | JWT-single-flag: достаточен для 1 продукта, ломается при N типах | FM | — | active |
+| DP.FM.296 | Некорректный путь в routing-vocab молча блокирует KE — defer вместо accept | FM | — | active |
+| DP.FM.297 | Денормализованный счётчик/enum в шапке артефакта молча дрейфует от таблицы-факта в теле | FM | — | active |
+| DP.FM.298 | Lifecycle-скрипт ищет по устаревшему glob-паттерну — молчаливый no-op при смене конвенции | FM | — | active |
+| DP.FM.299 | Критерий верификатора без описанного addressed-пути делает механический PASS недостижимым | FM | — | active |
+| DP.FM.300 | Исключение кода retry-механизма поглощается внешним try/except | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -746,12 +767,16 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.373 | Живое воспроизведение + снимок артефакта: детерминированное закрытие альтернативной гипотезы | M | — | — |
 | DP.M.374 | Webhook Jwt Identity Provider Auth | M | — | — |
 | DP.M.375 | Bidirectional Git Sync Split Timers | M | — | — |
+| DP.M.376 | Source Scoped Candidate Pool Retrieval | M | — | — |
 | DP.M.377 | Corpus Fanout Positioning Palette | M | — | forming |
 | DP.M.378 | Triple Check Public Platform Text | M | — | forming |
 | DP.M.379 | Условный запуск дорогостоящих шагов агента | M | — | draft |
 | DP.M.380 | Retry-директива с форматным якорем | M | — | — |
 | DP.M.381 | ВДВ-аудит конвейера на мёртвые Выходы | M | — | draft |
 | DP.M.382 | Squash-коммит с атрибуцией автора при публикации в публичный репо | M | — | draft |
+| DP.M.383 | Onboarding Work-Not-Learn Frame (Онбординг-фрейм «ты работаешь, не учишься») | M | — | active |
+| DP.M.384 | Close Known Gap Immediately During Review (Немедленное закрытие known-gap при ревью) | M | — | active |
+| DP.M.385 | Independent Agent Convergence as Confidence Signal (Совпадение независимых агентов = confidence signal) | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -860,6 +885,27 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.175 | Взаимозависимые изменения БД деплоятся с наблюдаемым промежутком | METHOD | — | active |
 | DP.METHOD.176 | N параллельных субагентов с изоляцией контекста как adversarial quality gate | METHOD | — | active |
 | DP.METHOD.177 | Последовательные раунды верификации с изоляцией контекста | METHOD | — | active |
+| DP.METHOD.178 | User-facing tool closure requires live acceptance test | METHOD | — | active |
+| DP.METHOD.179 | SoTA-check at Pack creation step 1.5 to prevent domain fragmentation | METHOD | — | active |
+| DP.METHOD.180 | Pre Promotion Peer Gate | METHOD | — | candidate |
+| DP.METHOD.181 | Трёхуровневый вердикт проверки согласованности знаний: clear / moved-to-cold / gone | METHOD | — | active |
+| DP.METHOD.182 | Commit-time pre-commit hook как точка shift-left enforcement инварианта знаний | METHOD | — | active |
+| DP.METHOD.183 | Cache miss rate как первичная метрика наблюдаемости LLM-системы с prompt caching | METHOD | — | active |
+| DP.METHOD.184 | Optional-executable hook: L1 вызывает L3-расширение через проверку [ -x ] | METHOD | — | active |
+| DP.METHOD.185 | Subsection вместо самостоятельной команды при расширении инструментария | METHOD | — | active |
+| DP.METHOD.186 | FSM Read-Model как альтернатива permission-системе при N состояниях на пользователя | METHOD | — | active |
+| DP.METHOD.188 | Три поля реестра: tier / target_tier / migration_trigger | METHOD | — | active |
+| DP.METHOD.189 | Operator-first rollout: новая фича/модель — сначала на операторском аккаунте | METHOD | — | active |
+| DP.METHOD.190 | Retry-once-then-alert: алерт после одного retry для немедленной детекции регрессии качества | METHOD | — | active |
+| DP.METHOD.191 | Cherry-pick recovery: восстановление коммита с чужой ветки при параллельном merge | METHOD | — | active |
+| DP.METHOD.194 | R30 Assembly/Hybrid: различение-кандидаты — только из собственных SoTA-источников Pack | METHOD | — | active |
+| DP.METHOD.195 | Apply-captures session как триггер регистрации нового Pack и применения defer-кандидатов | METHOD | — | active |
+| DP.METHOD.196 | ArchGate: прецедент инцидента в том же артефакте весомее общего правила | METHOD | — | active |
+| DP.METHOD.197 | ArchGate: функциональная регрессия оператора перевешивает архитектурную чистоту | METHOD | — | active |
+| DP.METHOD.198 | Dual-writer с дизъюнктными диапазонами ID — управляемый паттерн | METHOD | — | active |
+| DP.METHOD.199 | Smoke-тест миграции под реальной ролью, не суперпользователем | METHOD | — | active |
+| DP.METHOD.200 | Backport в upstream-ветку как критерий закрытия хотфикса | METHOD | Хотфикс считается закрытым только после backport в upstream/staging-ветку + verify-скрипт перед каждой волной доставки. | active |
+| DP.METHOD.201 | Gate-consistency + детерминированный rerunner для автономного протокола | METHOD | Идемпотентный scheduled protocol: перед запуском проверить существование артефактов (gate-consistency), при повторном прогоне с теми же входными — тот же результат без дублирования. | active |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
@@ -937,6 +983,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.ROLE.086 | Диспетчер отложенного запуска РП (WP Scheduler) | ROLE | Ставит РП в очередь на запуск в заданное время (launchd, будит Мак из сна), запускает выбранного агента headless с жёстким таймаутом, пишет отчёт; падение одного запуска не останавливает очередь. Детерминированная программа, LLM не использует. | draft |
 | DP.ROLE.087 | Куратор личного бренда (Personal Brand Curator) | ROLE | Собирает кандидатов на темы и факты личного бренда из платформенного и публичного следа человека, ведёт профиль его бренд-репо (setup, идемпотентный мерж, cross-reference) и кладёт всё на разбор живому владельцу; решений о публикации не принимает | draft |
 | DP.ROLE.088 | Router — Маршрутизатор материала пользователя | ROLE | — | draft |
+| DP.ROLE.089 | Владелец домена без архитектурных полномочий (Domain Owner, No Arch Authority) | ROLE | Принимает операционные решения по конкретным системам домена без права вводить новые типы сущностей или менять архитектуру — эти решения требуют явного архитектурного ревью. | active |
 | DP.RUNBOOK.001 | Runbook: Aist Bot Errors | RUNBOOK | Операционный runbook. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.SC.001 | Планирование дня | SC | Пользователь получает ясный план работы на день к началу рабочего дня | draft |
 | DP.SC.002 | Планирование и ревью недели | SC | Пользователь получает план недели на основе стратегии и итоги прошедшей недели | draft |
