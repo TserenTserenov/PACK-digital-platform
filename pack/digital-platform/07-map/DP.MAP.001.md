@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 123 |
+| Distinctions (D) | 126 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 268 |
+| Failure Modes (FM) | 272 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
 | Methods (M) | 344 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 127 |
+| METHOD (METHOD) | 128 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1185** |
+| **Total** | **1193** |
 
 ## Distinctions
 
@@ -170,6 +170,9 @@ generated: true
 | DP.D.246 | indexable knowledge ≠ pointer record | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | — | active |
 | DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | — | active |
+| DP.D.249 | Синхронизированный файл ≠ локальный файл | — | — |
+| DP.D.250 | PaaS под управлением пользователя ≠ SaaS-агрегатор | — | — |
+| DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | — | — |
 
 ## Methods
 
@@ -813,6 +816,10 @@ generated: true
 | DP.FM.298 | Lifecycle-скрипт ищет по устаревшему glob-паттерну — молчаливый no-op при смене конвенции | — | active |
 | DP.FM.299 | Критерий верификатора без описанного addressed-пути делает механический PASS недостижимым | — | active |
 | DP.FM.300 | Исключение кода retry-механизма поглощается внешним try/except | — | active |
+| DP.FM.334 | Network hang in iterator loop | — | active |
+| DP.FM.335 | Install/update скрипт безусловно перезаписывает конфиг пользователя | — | active |
+| DP.FM.336 | Resource-picker отбирает по recency без фильтра active-status | — | active |
+| DP.FM.337 | ArchGate проверяет новую функцию, не регрессию соседних сервисов | — | active |
 
 ## SoTA Annotations
 
@@ -1068,6 +1075,7 @@ generated: true
 | DP.METHOD.199 | Smoke-тест миграции под реальной ролью, не суперпользователем | — | active |
 | DP.METHOD.200 | Backport в upstream-ветку как критерий закрытия хотфикса | Хотфикс считается закрытым только после backport в upstream/staging-ветку + verify-скрипт перед каждой волной доставки. | active |
 | DP.METHOD.201 | Gate-consistency + детерминированный rerunner для автономного протокола | Идемпотентный scheduled protocol: перед запуском проверить существование артефактов (gate-consistency), при повторном прогоне с теми же входными — тот же результат без дублирования. | active |
+| DP.METHOD.202 | Manifest-only version check | Pre-release gate: сравнить version в манифесте с первой строкой CHANGELOG, чтобы поймать забытый generate-manifest.sh до публикации. | active |
 
 ### NAV
 
@@ -1453,6 +1461,9 @@ generated: true
 - Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
 - Missing `summary`: DP.D.180 (DP.D.180-generated-vs-live-file-criterion.md)
 - Missing `summary`: DP.D.181 (DP.D.181-platform-vs-byok-wallet.md)
+- Missing `summary`: DP.D.249 (DP.D.249-synchronized-file-invariant.md)
+- Missing `summary`: DP.D.250 (DP.D.250-paas-vs-saas.md)
+- Missing `summary`: DP.D.251 (DP.D.251-service-clause-vs-process.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2016,6 +2027,10 @@ generated: true
 - Missing `summary`: DP.FM.298 (DP.FM.298-lifecycle-script-stale-glob-pattern-silent-noop.md)
 - Missing `summary`: DP.FM.299 (DP.FM.299-verifier-criterion-missing-addressed-path.md)
 - Missing `summary`: DP.FM.300 (DP.FM.300-retry-handler-exception-swallowed.md)
+- Missing `summary`: DP.FM.334 (DP.FM.334-network-hang-in-loop.md)
+- Missing `summary`: DP.FM.335 (DP.FM.335-install-script-unconditional-config-overwrite.md)
+- Missing `summary`: DP.FM.336 (DP.FM.336-resource-picker-recency-without-active-status.md)
+- Missing `summary`: DP.FM.337 (DP.FM.337-archgate-new-feature-regression-blind-spot.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
