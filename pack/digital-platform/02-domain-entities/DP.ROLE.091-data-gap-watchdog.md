@@ -49,4 +49,4 @@ related:
 
 ## Реализация
 
-`DS-my-strategy/scripts/data-gap-watchdog.sh` — **реализован 17.07 (WP-476 Ф4б).** Обещание — DP.SC.059. Self-test пройден (canary + false-positive проверка), живой прогон против реальных данных нашёл настоящий разрыв 260ч в потоке `health-mac-sync` и отправил алерт пилоту. Периодический запуск (launchd, каждые 6ч) подготовлен (`exocortex/launchd/com.iwe.data-gap-watchdog.plist`, зарегистрирован в `install-launchd.sh`), но не активирован — ждёт разового запуска пилотом (`bash DS-my-strategy/scripts/install-launchd.sh`).
+`DS-my-strategy/scripts/data-gap-watchdog.sh` — **реализован 17.07 (WP-476 Ф4б).** Обещание — DP.SC.059. Self-test пройден (canary + false-positive проверка), живой прогон против реальных данных нашёл настоящий разрыв 260ч в потоке `health-mac-sync` и отправил алерт пилоту. Периодический запуск активирован 17.07 (launchd, каждые 6ч; `exocortex/launchd/com.iwe.data-gap-watchdog.plist`, зарегистрирован в `install-launchd.sh` и загружен через него).
