@@ -401,6 +401,7 @@
 ---
 
 ### DP.D.034: Platform (L2) ≠ IWE Template (L3) ≠ Personal IWE (L4) — контуры системы
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.034 совпадает с файлом `01-domain-contract/DP.D.034-access-control-model.md` (другое содержание). Ссылки на «DP.D.034» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Platform (L2) | IWE Template (L3) | Personal IWE (L4) |
 |---------------|--------------------|--------------------|
@@ -418,6 +419,7 @@
 ---
 
 ### DP.D.035: Контуры (L1-L4) ≠ Тиры (T0-T4 + TM/TA/TD)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.035 совпадает с файлом `01-domain-contract/DP.D.035-data-policy.md` (другое содержание). Ссылки на «DP.D.035» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Контуры (L) | Тиры (4-осевая модель) |
 |-------------|----------|
@@ -437,6 +439,7 @@
 ---
 
 ### DP.D.036: Method (уровень роли) ≠ Instrument (уровень назначения)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.036 совпадает с файлом `01-domain-contract/DP.D.036-byob-knowledge-architecture.md` (другое содержание). Ссылки на «DP.D.036» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Method (метод) | Instrument (инструмент) |
 |----------------|-------------------------|
@@ -455,6 +458,7 @@
 ---
 
 ### DP.D.037: Кастомизация агента (Harness Engineering) ≠ Дообучение (Fine-Tuning)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.037 совпадает с файлом `01-domain-contract/DP.D.037-work-product-as-connection-instrument.md` (другое содержание). Ссылки на «DP.D.037» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Harness Engineering (кастомизация) | Fine-Tuning (дообучение модели) |
 |--------------------------------------|-------------------------------|
@@ -704,6 +708,7 @@
 ---
 
 ### DP.D.050: Баллы (геймификация) ≠ Бонусы (лояльность) ≠ Ступень (квалификация)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.050 совпадает с файлом `01-domain-contract/DP.D.050-creator-roles.md` (другое содержание). Ссылки на «DP.D.050» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 > Три системы учёта одной пользовательской активности. Один источник событий (Activity Hub) — разные правила обработки, разные потребители.
 
@@ -745,6 +750,7 @@
 ---
 
 ### DP.D.054: Context Engineering ≠ Prompt Engineering
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.054 совпадает с файлом `01-domain-contract/DP.D.054-dashboard-audience-projections.md` (другое содержание). Ссылки на «DP.D.054» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Аспект | Prompt Engineering | Context Engineering |
 |--------|-------------------|---------------------|
@@ -951,6 +957,7 @@ created: 2026-05-22
 ---
 
 ### DP.D.103: In-memory session state (auto-cleanup on redeploy) ≠ Persistent session state без TTL (zombie accumulation)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.103 совпадает с файлом `02-domain-entities/DP.D.103-specialization-context-vs-finetuning.md` (другое содержание). Ссылки на «DP.D.103» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | Аспект | In-memory state | Persistent без TTL |
 |--------|-----------------|-------------------|
@@ -972,6 +979,7 @@ created: 2026-05-22
 ---
 
 ### DP.D.113: pool.acquire(timeout) ≠ command_timeout в asyncpg
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.113 совпадает с файлом `02-domain-entities/DP.D.113-and-vs-or-multi-storage-state.md` (другое содержание). Ссылки на «DP.D.113» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 - **pool.acquire(timeout) ≠ command_timeout в asyncpg** (DP.D.113). `command_timeout` защищает SQL-исполнение, НЕ ожидание в очереди соединений (`pool.acquire()`). При half-open TCP worker зависает на `acquire()`, а не на SQL → добавлять явный `pool.acquire(timeout=X)` во всех checkout-точках. Типичный gap: 4 места в 3 файлах (listener.py, db.py, matcher.py).
 
@@ -1017,7 +1025,8 @@ created: 2026-05-22
 **Источник:** session-transcript 2026-05-27 (peer-сессия 21 wp358-archgate, Тема 4 — switching B → A).
 
 
-### DP.D.106: «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах)
+### DP.D.260: «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах)
+> ⚠️ **Перенумеровано 2026-07-18: DP.D.106 → DP.D.260.** Эта секция была вторым вхождением номера 106 внутри 01B (первая — «Trigger по состоянию ≠ Trigger по счётчику»). Ссылки на «DP.D.106» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Источник:** peer-session 2026-05-30-07-gap-list-day-open (Тема 2), WP-356.
 
@@ -1037,6 +1046,7 @@ created: 2026-05-22
 ---
 
 ### DP.D.107: Косметический баг ≠ Operational alert
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.107 совпадает с файлом `02-domain-entities/DP.D.107-ui-ack-vs-side-effect.md` (другое содержание). Ссылки на «DP.D.107» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Тест:** будит ли неверный output оператора?
 
@@ -1057,6 +1067,7 @@ created: 2026-05-22
 
 
 ### DP.D.104: content_role ≠ process_position (двухосная модель роли в multi-agent peer-сессии)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.104 совпадает с файлом `02-domain-entities/DP.D.104-progress-to-reward-vs-balance.md` (другое содержание). Ссылки на «DP.D.104» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Источник:** WP-367 Ф5, peer-session 2026-05-30-06, DP.SC.154 v4 (commit a65df76).
 **Standalone-определение:** см. [DP.SC.154 §3.1, §6.2, §13](../08-service-clauses/DP.SC.154-multi-agent-conversational-session.md).
@@ -1083,7 +1094,8 @@ created: 2026-05-22
 ---
 
 
-### DP.D.105: scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания)
+### DP.D.259: scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания)
+> ⚠️ **Перенумеровано 2026-07-18: DP.D.105 → DP.D.259.** Эта секция была вторым вхождением номера 105 внутри 01B (первая — «Pack-internal frontmatter check ≠ DS-level prose check»). Ссылки на «DP.D.105» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Источник:** WP-369, peer-session 2026-05-30-11-creator-orgdev-roles-design.
 
@@ -1155,6 +1167,7 @@ Aisystant = оператор переменных сервисов на этой
 ---
 
 ### DP.D.124: IWE-в-браузере ≠ перенос в Claude.ai ≠ урезанная копия VS Code
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.124 совпадает с файлом `02-domain-entities/DP.D.124-agent-persona-vs-runtime.md` (другое содержание). Ссылки на «DP.D.124» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 | IWE через MCP (правильный фрейм) | IWE как «браузерная версия» (неверный фрейм) |
 |----------------------------------|-----------------------------------------------|
@@ -1174,6 +1187,7 @@ Aisystant = оператор переменных сервисов на этой
 ---
 
 ### DP.D.125: Стратегическая доменная роль ≠ infrastructure-agent
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.125 совпадает с файлом `02-domain-entities/DP.D.125-two-orthogonal-axes-vs-matrix.md` (другое содержание). Ссылки на «DP.D.125» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Конвенция Pack: тип `infrastructure-agent`**
 
@@ -1198,6 +1212,7 @@ Aisystant = оператор переменных сервисов на этой
 ---
 
 ### DP.D.126: Negative definition ≠ Positive definition (для кодификации craft)
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.126 совпадает с файлом `02-domain-entities/DP.D.126-interface-vs-tier.md` (другое содержание). Ссылки на «DP.D.126» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 Кодификация craft-знания (вкус, стиль, мастерство) допускает два способа определения. Они не равноценны: для воспроизводимости выигрывает negative.
 
@@ -1223,6 +1238,7 @@ Aisystant = оператор переменных сервисов на этой
 ---
 
 ### DP.D.133: Голос (Voice) ≠ Тон (Tone) агента
+> ⚠️ **Дрейф ID (зафиксирован 2026-07-18):** номер DP.D.133 совпадает с файлом `02-domain-entities/DP.D.133-three-levels-data-isolation.md` (другое содержание). Ссылки на «DP.D.133» до этой даты неоднозначны. Реестр: `DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md`.
 
 **Голос** — стабильная подпись агента: неизменяемые свойства (ритм, лексика, метафоры). Всегда включён; пользователь не конфигурирует. Живёт в base-промпте.
 
