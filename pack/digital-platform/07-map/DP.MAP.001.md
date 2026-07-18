@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 127 |
+| Distinctions (D) | 128 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 272 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1194** |
+| **Total** | **1195** |
 
 ## Distinctions
 
@@ -174,6 +174,7 @@ generated: true
 | DP.D.250 | PaaS под управлением пользователя ≠ SaaS-агрегатор | — | — |
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | — | active |
+| DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | — | active |
 
 ## Methods
 
@@ -1466,6 +1467,7 @@ generated: true
 - Missing `summary`: DP.D.249 (DP.D.249-synchronized-file-invariant.md)
 - Missing `summary`: DP.D.250 (DP.D.250-paas-vs-saas.md)
 - Missing `summary`: DP.D.251 (DP.D.251-service-clause-vs-process.md)
+- Missing `summary`: DP.D.253 (DP.D.253-object-tiering-model.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
