@@ -21,15 +21,15 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 128 |
+| Distinctions (D) | 131 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 272 |
+| Failure Modes (FM) | 274 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
 | Methods (M) | 344 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 128 |
+| METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1195** |
+| **Total** | **1204** |
 
 ## Distinctions
 
@@ -175,6 +175,9 @@ generated: true
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | — | active |
+| DP.D.254 | PublicShelf (только published) ≠ Workshop (черновики + мастерская) — split контент-репо по lifecycle-статусу | — | active |
+| DP.D.255 | Один механизм в двух местах ≠ два слоя defense-in-depth (барьеры независимы только при семантической разнице) | — | active |
+| DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | — | active |
 
 ## Methods
 
@@ -822,6 +825,8 @@ generated: true
 | DP.FM.335 | Install/update скрипт безусловно перезаписывает конфиг пользователя | — | active |
 | DP.FM.336 | Resource-picker отбирает по recency без фильтра active-status | — | active |
 | DP.FM.337 | ArchGate проверяет новую функцию, не регрессию соседних сервисов | — | active |
+| DP.FM.338 | Month-Range Set Filter Drops Middle Months | set{from.month, to.month} фильтрация пропускает средние месяцы при 30-дневном окне, охватывающем 3+ календарных месяца. Исправление: walk с инкрементом месяца и year rollover. | draft |
+| DP.FM.339 | Diff-aware guard слеп к indirect-обходу (запрещённый вызов рождается в рантайме через переменную/генерацию) | — | draft |
 
 ## SoTA Annotations
 
@@ -1078,6 +1083,10 @@ generated: true
 | DP.METHOD.200 | Backport в upstream-ветку как критерий закрытия хотфикса | Хотфикс считается закрытым только после backport в upstream/staging-ветку + verify-скрипт перед каждой волной доставки. | active |
 | DP.METHOD.201 | Gate-consistency + детерминированный rerunner для автономного протокола | Идемпотентный scheduled protocol: перед запуском проверить существование артефактов (gate-consistency), при повторном прогоне с теми же входными — тот же результат без дублирования. | active |
 | DP.METHOD.202 | Manifest-only version check | Pre-release gate: сравнить version в манифесте с первой строкой CHANGELOG, чтобы поймать забытый generate-manifest.sh до публикации. | active |
+| DP.METHOD.203 | Status Field As Production Gate | Поле status в трекере backlog'а как формальный production gate: только записи со status=accepted попадают в pipeline исполнения. Rejected-записи не удаляются — формируют anti-pattern corpus. Применимо к любому конвейеру с регулярными артефактами. | draft |
+| DP.METHOD.204 | Unified Collector Over Precomputed Cache | Если live-данные и historical-данные требуют одинакового парсинга — единый сборщик, читающий сырые данные при каждом запросе, дешевле, чем предкомпьютинг + дублирующий live-путь. Тест: 'нужна ли та же логика для live-данных?' | draft |
+| DP.METHOD.205 | Acceptance Sampling для LLM Batch Output (30 проб, порог 90%) | — | draft |
+| DP.METHOD.206 | Nullable draft_path как разделитель Intent-Accepted vs Artifact-Exists | — | draft |
 
 ### NAV
 
@@ -1418,6 +1427,9 @@ generated: true
 - Missing `summary`: DP.D.247 (DP.D.247-local-user-compute-vs-our-zone-ai-work.md)
 - Missing `summary`: DP.D.248 (DP.D.248-last-verified-vs-actual-verification.md)
 - Missing `summary`: DP.D.252 (DP.D.252-stage-vs-qualification-degree.md)
+- Missing `summary`: DP.D.254 (DP.D.254-public-shelf-vs-workshop-lifecycle-split.md)
+- Missing `summary`: DP.D.255 (DP.D.255-one-mechanism-two-places-vs-defense-in-depth.md)
+- Missing `summary`: DP.D.256 (DP.D.256-enforcement-field-vs-convention.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
@@ -1815,6 +1827,8 @@ generated: true
 - Missing `summary`: DP.METHOD.197 (DP.METHOD.197-archgate-operator-regression-over-purity.md)
 - Missing `summary`: DP.METHOD.198 (DP.METHOD.198-dual-writer-disjoint-id-ranges.md)
 - Missing `summary`: DP.METHOD.199 (DP.METHOD.199-migration-smoke-under-real-role.md)
+- Missing `summary`: DP.METHOD.205 (DP.METHOD.205-acceptance-sampling-llm-batch.md)
+- Missing `summary`: DP.METHOD.206 (DP.METHOD.206-nullable-draft-path-intent-vs-artifact.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -2035,6 +2049,7 @@ generated: true
 - Missing `summary`: DP.FM.335 (DP.FM.335-install-script-unconditional-config-overwrite.md)
 - Missing `summary`: DP.FM.336 (DP.FM.336-resource-picker-recency-without-active-status.md)
 - Missing `summary`: DP.FM.337 (DP.FM.337-archgate-new-feature-regression-blind-spot.md)
+- Missing `summary`: DP.FM.339 (DP.FM.339-diff-aware-guard-indirect-bypass-blind.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)

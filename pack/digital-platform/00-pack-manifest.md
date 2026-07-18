@@ -152,6 +152,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | D | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | D | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | D | — | active |
+| DP.D.254 | PublicShelf (только published) ≠ Workshop (черновики + мастерская) — split контент-репо по lifecycle-статусу | D | — | active |
+| DP.D.255 | Один механизм в двух местах ≠ два слоя defense-in-depth (барьеры независимы только при семантической разнице) | D | — | active |
+| DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -426,6 +429,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.335 | Install/update скрипт безусловно перезаписывает конфиг пользователя | FM | — | active |
 | DP.FM.336 | Resource-picker отбирает по recency без фильтра active-status | FM | — | active |
 | DP.FM.337 | ArchGate проверяет новую функцию, не регрессию соседних сервисов | FM | — | active |
+| DP.FM.338 | Month-Range Set Filter Drops Middle Months | FM | set{from.month, to.month} фильтрация пропускает средние месяцы при 30-дневном окне, охватывающем 3+ календарных месяца. Исправление: walk с инкрементом месяца и year rollover. | draft |
+| DP.FM.339 | Diff-aware guard слеп к indirect-обходу (запрещённый вызов рождается в рантайме через переменную/генерацию) | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -916,6 +921,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.METHOD.200 | Backport в upstream-ветку как критерий закрытия хотфикса | METHOD | Хотфикс считается закрытым только после backport в upstream/staging-ветку + verify-скрипт перед каждой волной доставки. | active |
 | DP.METHOD.201 | Gate-consistency + детерминированный rerunner для автономного протокола | METHOD | Идемпотентный scheduled protocol: перед запуском проверить существование артефактов (gate-consistency), при повторном прогоне с теми же входными — тот же результат без дублирования. | active |
 | DP.METHOD.202 | Manifest-only version check | METHOD | Pre-release gate: сравнить version в манифесте с первой строкой CHANGELOG, чтобы поймать забытый generate-manifest.sh до публикации. | active |
+| DP.METHOD.203 | Status Field As Production Gate | METHOD | Поле status в трекере backlog'а как формальный production gate: только записи со status=accepted попадают в pipeline исполнения. Rejected-записи не удаляются — формируют anti-pattern corpus. Применимо к любому конвейеру с регулярными артефактами. | draft |
+| DP.METHOD.204 | Unified Collector Over Precomputed Cache | METHOD | Если live-данные и historical-данные требуют одинакового парсинга — единый сборщик, читающий сырые данные при каждом запросе, дешевле, чем предкомпьютинг + дублирующий live-путь. Тест: 'нужна ли та же логика для live-данных?' | draft |
+| DP.METHOD.205 | Acceptance Sampling для LLM Batch Output (30 проб, порог 90%) | METHOD | — | draft |
+| DP.METHOD.206 | Nullable draft_path как разделитель Intent-Accepted vs Artifact-Exists | METHOD | — | draft |
 | DP.NAV.001 | Навигация знаний | NAV | 4-уровневая навигация знаний между репозиториями: FPF → SPF → Pack → Downstream | draft |
 | DP.ONT.001 | Онтология платформы | ONT | Единая онтология домена «Цифровая платформа развития интеллекта»: 5 первичных родов сущностей (Созидатель, ИТ-система, Действие, Организация, Артефакт), маршрутизация описаний (type-level → Pack, instance-level → Neon/DS/R2/Legacy), виды сущностей по SPF.SPEC.001, глоссарий, отношения, иерархия типов, кросс-Pack связи, реестр различений, аббревиатуры. | active |
 | DP.ORG.001 | Организация (род сущности) | ORG | Организация — коллективный субъект платформы: юр.лицо или сообщество со службами, сотрудниками, процессами. Первичный род наряду с Созидателем, ИТ-системой, Действием, Артефактом. Подтипы: МИМ, Aisystant, ШСМ. Целевая физ.реализация — схема platform-core #1 Neon (organizations/departments/employments) через ArchGate при первом FK. | draft |
