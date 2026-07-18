@@ -170,14 +170,14 @@ generated: true
 | DP.D.246 | indexable knowledge ≠ pointer record | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | — | active |
 | DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | — | active |
-| DP.D.249 | Синхронизированный файл ≠ локальный файл | — | — |
-| DP.D.250 | PaaS под управлением пользователя ≠ SaaS-агрегатор | — | — |
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | — | active |
 | DP.D.254 | PublicShelf (только published) ≠ Workshop (черновики + мастерская) — split контент-репо по lifecycle-статусу | — | active |
 | DP.D.255 | Один механизм в двух местах ≠ два слоя defense-in-depth (барьеры независимы только при семантической разнице) | — | active |
 | DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | — | active |
+| DP.D.257 | Синхронизированный файл ≠ локальный файл | — | — |
+| DP.D.258 | PaaS под управлением пользователя ≠ SaaS-агрегатор | — | — |
 
 ## Methods
 
@@ -1478,8 +1478,8 @@ generated: true
 - Missing `summary`: DP.D.181 (DP.D.181-platform-vs-byok-wallet.md)
 - Missing `summary`: DP.D.251 (DP.D.251-service-layer-permission-vs-execution-obligation.md)
 - Missing `summary`: DP.D.253 (DP.D.253-object-tiering-model.md)
-- Missing `summary`: DP.D.249 (DP.D.257-synchronized-file-invariant.md)
-- Missing `summary`: DP.D.250 (DP.D.258-paas-vs-saas.md)
+- Missing `summary`: DP.D.257 (DP.D.257-synchronized-file-invariant.md)
+- Missing `summary`: DP.D.258 (DP.D.258-paas-vs-saas.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)

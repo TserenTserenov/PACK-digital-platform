@@ -1,5 +1,5 @@
 ---
-id: DP.D.250
+id: DP.D.258
 name: "PaaS под управлением пользователя ≠ SaaS-агрегатор"
 type: distinction
 pack: PACK-digital-platform
@@ -12,7 +12,7 @@ see_also: [DP.D.035]
 schema_version: 1
 ---
 
-# DP.D.250 — PaaS под управлением пользователя ≠ SaaS-агрегатор
+# DP.D.258 — PaaS под управлением пользователя ≠ SaaS-агрегатор
 
 ## Различение
 

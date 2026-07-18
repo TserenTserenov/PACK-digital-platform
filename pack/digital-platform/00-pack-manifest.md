@@ -147,14 +147,14 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.246 | indexable knowledge ≠ pointer record | D | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | D | — | active |
 | DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | D | — | active |
-| DP.D.249 | Синхронизированный файл ≠ локальный файл | D | — | — |
-| DP.D.250 | PaaS под управлением пользователя ≠ SaaS-агрегатор | D | — | — |
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | D | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | D | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | D | — | active |
 | DP.D.254 | PublicShelf (только published) ≠ Workshop (черновики + мастерская) — split контент-репо по lifecycle-статусу | D | — | active |
 | DP.D.255 | Один механизм в двух местах ≠ два слоя defense-in-depth (барьеры независимы только при семантической разнице) | D | — | active |
 | DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | D | — | active |
+| DP.D.257 | Синхронизированный файл ≠ локальный файл | D | — | — |
+| DP.D.258 | PaaS под управлением пользователя ≠ SaaS-агрегатор | D | — | — |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
