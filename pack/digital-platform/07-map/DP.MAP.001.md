@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-07-18
-last_updated: 2026-07-18
+created: 2026-07-19
+last_updated: 2026-07-19
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-07-18. Do not edit manually.
+> Auto-generated from frontmatter on 2026-07-19. Do not edit manually.
 
 ---
 
@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 131 |
+| Distinctions (D) | 246 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 274 |
@@ -41,13 +41,38 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1204** |
+| **Total** | **1319** |
 
 ## Distinctions
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
+| DP.D.001 | Объект ≠ Модель | — | active |
+| DP.D.002 | Модель ≠ Данные | — | active |
+| DP.D.003 | Данные ≠ Представление (view) | — | active |
+| DP.D.004 | Индикатор ≠ Факт | — | active |
+| DP.D.005 | Входной индикатор ≠ Производный индикатор | — | active |
+| DP.D.006 | Генеративный текст ≠ Source-of-truth | — | active |
+| DP.D.007 | Качество модели ≠ Качество данных | — | active |
+| DP.D.008 | Синхронизация ≠ Копирование | — | active |
+| DP.D.009 | ИИ-агент ≠ ИИ-ассистент (режимы одной системы, не разные типы) | — | active |
+| DP.D.010 | Архитектурная характеристика ≠ Архитектурный принцип | — | active |
+| DP.D.011 | Platform-space ≠ User-space | — | active |
+| DP.D.012 | Знание ≠ Информация | — | active |
+| DP.D.013 | Навигация ≠ Поиск | — | active |
+| DP.D.014 | Оперативная память ≠ Справочник | — | active |
+| DP.D.015 | ИИ-система ≠ ИТ-система | — | active |
+| DP.D.016 | Capture-to-Pack ≠ Knowledge Extraction | — | active |
+| DP.D.017 | Стратегический DDD ≠ Тактический DDD | — | active |
+| DP.D.018 | Model ≠ View (3 паттерна) | — | active |
+| DP.D.019 | DSL ≠ DSLM | — | active |
+| DP.D.020 | Capture During-Work ≠ After-Work | — | active |
+| DP.D.021 | Вайб-моделирование ≠ Профессиональное моделирование | — | active |
+| DP.D.022 | Три уровня проверяемости (формальная ≠ семантическая ≠ операционная) | — | active |
+| DP.D.023 | Роль ≠ Агент; Агент ≠ Инструмент | — | active |
+| DP.D.024 | Semantic Search ≠ Keyword Search | — | active |
 | DP.D.025 | Harness ≠ Agent | Harness (упряжь/обвязка) определяет результат больше, чем мощность агента/модели | active |
+| DP.D.026 | Хранимый счётчик ≠ Вычисляемая проекция | — | active |
 | DP.D.027 | Content Budget Model (3 оси) | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | Данные пользователя растут с тиром платформы: T0 без Ory (telegram_id) → T1 с Ory (UUID) → T2 (активная подписка) профиль + история + универсальные руководства (одинаковые для всех) → T3 (подключён любой AI-клиент: claude.ai / Claude Code / VS Code / Telegram) персональные артефакты — персональное руководство (WP-149) + Гермес знает историю (Память.Derived) → T4 (+ GitHub) личный Pack + ИИ-агенты (со-мыслитель). T3-условие = AI-клиент подключён, НЕ «ЦД заполнен» (устаревшее, см. DP.D.052; семантика T3 — консенсус WP-406 Ф13). Ортогональные оси: TM (наставник), TA (администратор), TD (разработчик) | active |
 | DP.D.029 | Language Model ≠ World Model | LLM = пассивные знания о мире из текстов (кабинетный учёный). World Model = активная модель, обновляемая из взаимодействия с реальностью (инженер). Критерий: замыкает ли система цикл действие-измерение-обновление | active |
@@ -59,7 +84,18 @@ generated: true
 | DP.D.035 | Data Policy — политика данных IWE | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007 | active |
 | DP.D.036 | BYOB Knowledge Architecture | Различение BYOB (Bring Your Own Backend) vs Managed: данные пользователя хранятся на его ресурсах, платформа даёт код и L2-знания. Связано с MCP Hub (ADR-018 v2) и контурами L2/L4. | draft |
 | DP.D.037 | Рабочий продукт как инструмент связи | РП — не красиво оформленные данные, а инструмент, показывающий связь между элементами и работающий на достижение миссии | active |
+| DP.D.038 | Обучение (Pre-Training) ≠ Онбординг (Context Engineering, НЕ HR-процесс) | — | active |
+| DP.D.039 | Обещание (= сценарий использования) ≠ Описание метода ≠ Сервис | — | active |
 | DP.D.040 | Мировоззрение → Pack: аналогия художника | Художник кодирует мировоззрение в произведение. Профессионал кодирует доменное знание в Pack. Оба трансформируют внутреннее в описание | active |
+| DP.D.041 | Статистическое знание (AI) ≠ Верифицированное знание (Pack) | — | active |
+| DP.D.042 | Генерация паттернов (AI) ≠ Генерация смысла (человек) | — | active |
+| DP.D.043 | Рынок знания (commodity) ≠ Рынок компиляции (растёт) | — | active |
+| DP.D.044 | Смена роли в диалоге ≠ Расширение промпта | — | active |
+| DP.D.045 | ЦД-CEO (Executive) ≠ ЦД-Model (Passive Replica) | — | active |
+| DP.D.046 | Экзоскелет (Exoskeleton) ≠ Автопилот (Autopilot) | — | active |
+| DP.D.047 | Квалификация (стадия развития) ≠ Тир (уровень оснащения) | — | active |
+| DP.D.048 | Скрипт ≠ Агент | — | active |
+| DP.D.049 | Лог ≠ Инцидент ≠ State file | — | active |
 | DP.D.050 | Роли Созидателя | 5 ролей Созидателя (Ученик, Интеллектуал, Профессионал, Исследователь, Просветитель). Каждый человек выполняет все 5 одновременно. Внутри каждой роли — ступени мастерства. Основа траектории персонального развития. | active |
 | DP.D.052 | Различение: Персона / Память / Контекст | Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = distributed-entity (identity-anchor + Git declarations + Neon refs), Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. v2: разделены оси Writer / Identity-anchor / State-storage / Snapshot-unit (вместо склейки Owner+Артефакт); добавлено различение Носитель ≠ Персона ≠ Декларация Персоны (§10). | active |
 | DP.D.053 | Problem Task Workflow | — | active |
@@ -90,6 +126,11 @@ generated: true
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | — | active |
 | DP.D.080 | Контрольная роль ≠ Операционная роль | — | active |
+| DP.D.083 | Persistent TaskTracker (filesystem) ≠ Ephemeral TodoWrite (session memory) | — | active |
+| DP.D.084 | Workspace-координация peer'ов ≠ Conversational-сессия peer'ов | — | active |
+| DP.D.086 | Дистрибутив-bundle ≠ Дистрибутив-coupling | — | active |
+| DP.D.087 | OAuth pending state in-memory ≠ OAuth pending state externalized (БД) | — | active |
+| DP.D.088 | `environment.d` (декларативный, persistent) ≠ `systemctl --user set-environment` (императивный, ephemeral) | — | active |
 | DP.D.089 | Cascading failure ≠ Independent failures | — | active |
 | DP.D.090 | Structural smoke ≠ E2E smoke (по типу данных) | — | active |
 | DP.D.091 | Выровненные на boundary шкалы ≠ Параллельные с tandem-стыком | — | — |
@@ -101,10 +142,13 @@ generated: true
 | DP.D.097 | Loop control у вызывающей роли, не у вызываемой | — | active |
 | DP.D.098 | Ground truth ≠ Self-assessment для валидации proxy-моделей | — | active |
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | — | — |
+| DP.D.100 | IWE как платформа доказательств ценности ≠ система продуктивности | — | active |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | — | active |
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
 | DP.D.104 | Прогресс к награде ≠ Показ баланса | — | — |
+| DP.D.105 | Pack-internal frontmatter check ≠ DS-level prose check (scope линтера) | — | active |
+| DP.D.106 | Trigger по состоянию ≠ Trigger по счётчику (для архитектурных переключений) | — | active |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
@@ -131,19 +175,53 @@ generated: true
 | DP.D.131 | Костюм ≠ Оснащение (тир) | — | active |
 | DP.D.132 | Стажёр ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | — | active |
 | DP.D.133 | Три уровня изоляции данных в IWE | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
+| DP.D.134 | Logout (Kratos login-сессия) ≠ Отзыв OAuth-grant (Hydra) | — | active |
+| DP.D.135 | Метод входа (authentication method) ≠ LLM-аккаунт (ресурсная подписка) | — | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | — | active |
+| DP.D.138 | Локализация-как-derived-only ≠ Два параллельных продукта | — | active |
+| DP.D.139 | JIT provisioning через client-mediated flow ≠ direct-link flow | — | active |
+| DP.D.140 | Наблюдатель-сторож (observability) ≠ Сервис доставки | — | active |
+| DP.D.141 | Источник доставки ≠ Политика-на-место ≠ Физический транспорт | — | active |
+| DP.D.142 | Тело контента (рендер-в-место) ≠ Уведомление о контенте (сообщение) | — | active |
+| DP.D.143 | Интеграция как архитектурная конвенция ≠ Интеграция в открытом зонтике | — | active |
+| DP.D.144 | Пустой output контрольной роли ≠ «нет находок» | — | active |
+| DP.D.145 | Probe-канал (прямая проверка) ≠ Cascade detection (обнаружение через следствия) | — | active |
+| DP.D.146 | Бизнес-алерт ≠ Технический алерт | — | active |
+| DP.D.147 | Минимальный содержательный барьер (GREEN скрипта) ≠ Полное качество артефакта | — | active |
+| DP.D.148 | Разбор «на бумаге» (walkthrough) ≠ Наблюдаемый артефакт (smoke) | — | active |
+| DP.D.149 | Git (декларативный слой) ≠ Neon (операционный слой) ≠ Session (эфемерный слой) | — | active |
+| DP.D.150 | Детерминированное пост-условие (в движок) ≠ Семантическое пост-условие (в Haiku) | — | active |
+| DP.D.151 | Распределённая шина захвата следов ≠ Локальная шина (Local Gateway) | — | active |
+| DP.D.152 | Corpus-split строчный тег (decision-уровень) ≠ Сессионный тег (session-уровень) | — | active |
+| DP.D.153 | ICT-токен (ict_...) ≠ Ory OAuth (claude.ai / VS Code коннектор) | — | active |
 | DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | — | draft |
 | DP.D.155 | Active Day Definition | — | active |
+| DP.D.156 | Операция агента, воспроизводимая ядром без него ≠ Авторитетная новая суть, закреплённая агентом | — | active |
+| DP.D.157 | Прокси-на-пути (роутинг/расходы) ≠ Наблюдаемость-сбоку (трассировка/оценка качества) | — | active |
+| DP.D.158 | Основное бизнес-событие ≠ Сторонний best-effort захват (деградация без блокировки) | — | active |
+| DP.D.159 | Последовательная выкатка по направлению зависимости ≠ Параллельная выкатка (аддитивная фича через слои в разных репо) | — | active |
+| DP.D.160 | Типизация (is-a, отнесение к роду) ≠ Синонимия (is-named) — семантика specializes в графе понятий | — | active |
+| DP.D.161 | Выход фазы для машины-потребителя = структура в БД (VIEW) ≠ человекочитаемый отчёт | — | active |
+| DP.D.164 | Метрика покрытия N/A (неприменима) ≠ Coverage PASS (критерий выполнен) | — | active |
+| DP.D.165 | SPF (фреймворк вторых/доменных принципов) ≠ Pack (результат применения SPF) | — | active |
+| DP.D.166 | Ось происхождения (Base/Pack/DS) ≠ Ось охвата (FPF/DPF/LPF) | — | active |
+| DP.D.174 | Локальный pre-push хук ≠ серверный branch-protection | — | active |
+| DP.D.175 | Зона суверенитета данных = машина владельца, не managed cloud | — | active |
+| DP.D.176 | Учебный контент (guide/) ≠ Операционный контент (panel/) | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | — | draft |
+| DP.D.178 | LPF — сквозная классификация фрагментов ≠ физический контейнер (папка, репо) | — | active |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | — | draft |
 | DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | — | active |
 | DP.D.181 | Платформенный LLM-кошелёк ≠ личный BYOK-кошелёк | — | — |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | — | active |
+| DP.D.185 | Разделение прав = сдерживание (containment), ≠ устранение причины | — | active |
 | DP.D.186 | Документация снижает вероятность ошибки ≠ инвариант в коде устраняет её физически | — | active |
 | DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | — | active |
+| DP.D.188 | Возраст процесса ≠ Зависание процесса | — | active |
+| DP.D.189 | no ≠ conditional-no ≠ defer (три статуса готовности системы к охвату) | — | active |
 | DP.D.190 | `updated_at` строки-контейнера ≠ актуальность данных внутри строки | — | active |
 | DP.D.191 | Mitigation ≠ Fix: статус дефекта остаётся открытым при снижении риска без устранения причины | — | active |
 | DP.D.192 | Per-event rule engine ≠ stateful accumulation: разные вычислительные модели, разные компоненты | — | active |
@@ -151,6 +229,12 @@ generated: true
 | DP.D.194 | Sanity check ≠ валидация на реальном масштабе | — | active |
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | — | draft |
+| DP.D.198 | Вычисляемый статус ≠ характеристика (строка таблицы критериев) | — | active |
+| DP.D.199 | RLS-политика ≠ Защита для роли с BYPASSRLS | — | active |
+| DP.D.200 | FORCE ROW LEVEL SECURITY ≠ Защита от роли с атрибутом BYPASSRLS | — | active |
+| DP.D.201 | Защита-в-коде (флаг + тест) ≠ Требование-в-документе | — | active |
+| DP.D.202 | Логическое «готово» ≠ Операционное «готово» | — | active |
+| DP.D.203 | iCloud app container ≠ iCloud Drive — данные iOS-приложений доступны только через API | — | active |
 | DP.D.204 | Method Map Vs State Axis | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
 | DP.D.205 | WP-ID vs PII — публичный идентификатор задачи ≠ персональные данные | Номер задачи (WP-\d+) — публичный реестровый идентификатор, не PII. Блокирование WP-номеров PII-guard = false positive. Тест: может ли пользователь сам упомянуть эту строку в публичном чате без раскрытия приватных данных? | active |
 | DP.D.206 | git notes ≠ видимый аудиторский след | — | active |
@@ -166,10 +250,38 @@ generated: true
 | DP.D.216 | Outcome-DoD (результат работает у получателя) ≠ Output-DoD (артефакт поставлен) | — | active |
 | DP.D.217 | dev-checkout resource ≠ prod-runtime resource → read-side snapshot | — | active |
 | DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | — | active |
+| DP.D.219 | Compression ≠ Lazy — различения без advance-signal требуют split hot/warm, а не lazy-load | — | active |
+| DP.D.220 | Режим отказа lazy-компонента = деградация (capability недоступна в сессии) ≠ блокировка работы | — | active |
+| DP.D.221 | Качественный порог мастерства ≠ Счётчик очков/частоты | — | active |
+| DP.D.222 | Non-blocking аудит (рекомендательный канал) ≠ Слой защиты (blocking-by-default) | — | active |
+| DP.D.223 | Видимое узкое место (наглядный дефицит) ≠ Связывающее ограничение (TOC bottleneck) | — | active |
+| DP.D.224 | Сужение объёма (scope) как дешёвый рычаг ≠ Сужение объёма, когда объём = носитель сигнала | — | active |
+| DP.D.225 | Просроченный шлюз — блокирующее предусловие (сбой) ≠ Восполнимая разведка (задержка) | — | active |
+| DP.D.226 | Уровень принципов (степень общности: ZPF/FPF/SPF/TPF) ≠ Слой репозиториев (место хранения: Base/Pack/DS) | — | active |
+| DP.D.227 | Singular-ресурс (0..1 на владельца) ≠ Plural-ресурс (0..N на владельца): безопасность confirm-скопом зависит от кардинальности | — | active |
+| DP.D.228 | Способ исполнения как поле-данные авторитетного каталога ≠ магическая строка/конвенция имени файла в коде | — | active |
+| DP.D.229 | Жёсткий отказ при отсутствии обещанного исполнителя ≠ тихий fallback в дорогую модель | — | active |
+| DP.D.230 | Тест на гард/валидацию обязан падать без фикса ≠ тест декорирует гард (зелёный ≠ гард работает) | — | active |
+| DP.D.231 | Owned узкий контракт enqueue (producer → API/RPC) ≠ raw cross-service SQL write | — | active |
+| DP.D.232 | Единый писатель append-only журнала (один writer-модуль) ≠ N независимых писателей | — | active |
+| DP.D.233 | Тихое исключение при деплое (silent-exclude) ≠ Уведомление об устаревании (notify-deprecate) | — | active |
+| DP.D.234 | Метод сборки (логика компиляции) ≠ Место исполнения (резидентность данных) ≠ Поверхность отображения (витрина/репо) | — | active |
+| DP.D.235 | Создание артефакта-руководства (единоразовая работа) ≠ Конвейер его обновления (recurring process) | — | active |
+| DP.D.236 | Доставка обучения к рабочему контексту ≠ Производственное действие как шаг развития | — | active |
+| DP.D.237 | Уникальный элемент связки ≠ Уникальная связка как целое (Bundle Moat) | — | active |
+| DP.D.238 | Смещённый прокси ≠ честное «не знаем» | — | active |
+| DP.D.239 | Pack-тип ≠ DB-таблица ≠ DB-строка | — | active |
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | — | active |
+| DP.D.241 | Реестр (registry) ≠ Продовое состояние (production state) | — | active |
+| DP.D.242 | Событие перехода (per-transition) ≠ Событие состояния (per-state) | — | active |
+| DP.D.243 | Контур IWE ≠ Физическое место ≠ Доверие/Контроль (Substrate Criterion) | — | active |
+| DP.D.244 | Формализуемое знание (Pack/FPF/SPF) ≠ LPF-знание (встроено в личный опыт носителя роли) | — | active |
+| DP.D.245 | Владение (универсальное ≠ персональное) ≠ Держатель (мы курируем ≠ пользователь принёс) — источники Портного | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | — | active |
 | DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | — | active |
+| DP.D.249 | SC (Service Clause) ≠ Метод верификации (Verification Method) | — | active |
+| DP.D.250 | Владелец домена с архитектурными полномочиями ≠ Владелец домена без архитектурных полномочий | — | active |
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | — | active |
@@ -178,6 +290,9 @@ generated: true
 | DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | — | active |
 | DP.D.257 | Синхронизированный файл ≠ локальный файл | — | — |
 | DP.D.258 | PaaS под управлением пользователя ≠ SaaS-агрегатор | — | — |
+| DP.D.259 | scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания) | — | active |
+| DP.D.260 | «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах) | — | active |
+| DP.D.261 | Parliament Model (Платформа) ≠ Local Coordination Hub (IWE) | — | active |
 
 ## Methods
 
@@ -1431,6 +1546,42 @@ generated: true
 - Missing `summary`: DP.D.255 (DP.D.255-one-mechanism-two-places-vs-defense-in-depth.md)
 - Missing `summary`: DP.D.256 (DP.D.256-enforcement-field-vs-convention.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
+- Missing `summary`: DP.D.001 (DP.D.001-obekt-vs-model.md)
+- Missing `summary`: DP.D.002 (DP.D.002-model-vs-dannye.md)
+- Missing `summary`: DP.D.003 (DP.D.003-dannye-vs-predstavlenie-view.md)
+- Missing `summary`: DP.D.004 (DP.D.004-indikator-vs-fakt.md)
+- Missing `summary`: DP.D.005 (DP.D.005-vhodnoi-indikator-vs-proizvodnyi.md)
+- Missing `summary`: DP.D.006 (DP.D.006-generativnyi-tekst-vs-source.md)
+- Missing `summary`: DP.D.007 (DP.D.007-kachestvo-modeli-vs-kachestvo.md)
+- Missing `summary`: DP.D.008 (DP.D.008-sinhronizaciya-vs-kopirovanie.md)
+- Missing `summary`: DP.D.009 (DP.D.009-ii-agent-vs-ii.md)
+- Missing `summary`: DP.D.010 (DP.D.010-arhitekturnaya-harakteristika-vs-arhitekturnyi.md)
+- Missing `summary`: DP.D.011 (DP.D.011-platform-space-vs-user.md)
+- Missing `summary`: DP.D.012 (DP.D.012-znanie-vs-informaciya.md)
+- Missing `summary`: DP.D.013 (DP.D.013-navigaciya-vs-poisk.md)
+- Missing `summary`: DP.D.014 (DP.D.014-operativnaya-pamyat-vs-spravochnik.md)
+- Missing `summary`: DP.D.015 (DP.D.015-ii-sistema-vs-it.md)
+- Missing `summary`: DP.D.016 (DP.D.016-capture-to-pack-vs.md)
+- Missing `summary`: DP.D.017 (DP.D.017-strategicheskii-ddd-vs-takticheskii.md)
+- Missing `summary`: DP.D.018 (DP.D.018-model-vs-view-3.md)
+- Missing `summary`: DP.D.019 (DP.D.019-dsl-vs-dslm.md)
+- Missing `summary`: DP.D.020 (DP.D.020-capture-during-work-vs.md)
+- Missing `summary`: DP.D.021 (DP.D.021-vai-b-modelirovanie-vs.md)
+- Missing `summary`: DP.D.022 (DP.D.022-tri-urovnya-proveryaemosti-formalnaya.md)
+- Missing `summary`: DP.D.023 (DP.D.023-rol-vs-agent-agent.md)
+- Missing `summary`: DP.D.024 (DP.D.024-semantic-search-vs-keyword.md)
+- Missing `summary`: DP.D.026 (DP.D.026-hranimyi-sche-tchik-vs.md)
+- Missing `summary`: DP.D.038 (DP.D.038-obuchenie-pre-training-vs.md)
+- Missing `summary`: DP.D.039 (DP.D.039-obeschanie-scenarii-ispolzovaniya-vs.md)
+- Missing `summary`: DP.D.041 (DP.D.041-statisticheskoe-znanie-ai-vs.md)
+- Missing `summary`: DP.D.042 (DP.D.042-generaciya-patternov-ai-vs.md)
+- Missing `summary`: DP.D.043 (DP.D.043-rynok-znaniya-commodity-vs.md)
+- Missing `summary`: DP.D.044 (DP.D.044-smena-roli-dialoge-vs.md)
+- Missing `summary`: DP.D.045 (DP.D.045-cd-ceo-executive-vs.md)
+- Missing `summary`: DP.D.046 (DP.D.046-ekzoskelet-exoskeleton-vs-avtopilot.md)
+- Missing `summary`: DP.D.047 (DP.D.047-kvalifikaciya-stadiya-razvitiya-vs.md)
+- Missing `summary`: DP.D.048 (DP.D.048-skript-vs-agent.md)
+- Missing `summary`: DP.D.049 (DP.D.049-log-vs-incident-vs.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
 - Missing `summary`: DP.D.069 (DP.D.069-doc-wp-vs-impl-wp.md)
@@ -1442,6 +1593,11 @@ generated: true
 - Missing `summary`: DP.D.078 (DP.D.078-value-vs-technical-language.md)
 - Missing `summary`: DP.D.079 (DP.D.079-smoke-technical-vs-processing-signal.md)
 - Missing `summary`: DP.D.080 (DP.D.080-control-vs-operation.md)
+- Missing `summary`: DP.D.083 (DP.D.083-persistent-tasktracker-filesystem-vs.md)
+- Missing `summary`: DP.D.084 (DP.D.084-workspace-koordinaciya-peer-ov.md)
+- Missing `summary`: DP.D.086 (DP.D.086-distributiv-bundle-vs-distributiv.md)
+- Missing `summary`: DP.D.087 (DP.D.087-oauth-pending-state-in.md)
+- Missing `summary`: DP.D.088 (DP.D.088-environment-d-deklarativnyi-persistent.md)
 - Missing `summary`: DP.D.089 (DP.D.089-cascading-vs-independent-failure.md)
 - Missing `summary`: DP.D.090 (DP.D.090-structural-smoke-vs-e2e-smoke.md)
 - Missing `summary`: DP.D.091 (DP.D.091-aligned-boundary-vs-tandem-scales.md)
@@ -1452,7 +1608,10 @@ generated: true
 - Missing `summary`: DP.D.096 (DP.D.096-parliament-model-agent-memory.md)
 - Missing `summary`: DP.D.097 (DP.D.097-loop-control-at-caller-not-callee.md)
 - Missing `summary`: DP.D.098 (DP.D.098-ground-truth-vs-self-assessment.md)
+- Missing `summary`: DP.D.100 (DP.D.100-iwe-kak-platforma-dokazatelstv.md)
 - Missing `summary`: DP.D.101 (DP.D.101-shared-module-sharing-symlink-submodule-vendor.md)
+- Missing `summary`: DP.D.105 (DP.D.105-pack-internal-frontmatter-check.md)
+- Missing `summary`: DP.D.106 (DP.D.106-trigger-sostoyaniyu-vs-trigger.md)
 - Missing `summary`: DP.D.114 (DP.D.114-software-factory-vs-platform.md)
 - Missing `summary`: DP.D.115 (DP.D.115-distributed-vs-monolithic-orchestration.md)
 - Missing `summary`: DP.D.116 (DP.D.116-semantic-compiler-vs-ssg.md)
@@ -1470,16 +1629,87 @@ generated: true
 - Missing `summary`: DP.D.130 (DP.D.130-two-axis-onboarding-model.md)
 - Missing `summary`: DP.D.131 (DP.D.131-costume-vs-equipment.md)
 - Missing `summary`: DP.D.132 (DP.D.132-stazher-vs-member.md)
+- Missing `summary`: DP.D.134 (DP.D.134-logout-kratos-login-sessiya.md)
+- Missing `summary`: DP.D.135 (DP.D.135-metod-vhoda-authentication-method.md)
+- Missing `summary`: DP.D.138 (DP.D.138-lokalizaciya-kak-derived-only.md)
+- Missing `summary`: DP.D.139 (DP.D.139-jit-provisioning-cherez-client.md)
+- Missing `summary`: DP.D.140 (DP.D.140-nablyudatel-storozh-observability-vs.md)
+- Missing `summary`: DP.D.141 (DP.D.141-istochnik-dostavki-vs-politika.md)
+- Missing `summary`: DP.D.142 (DP.D.142-telo-kontenta-render-mesto.md)
+- Missing `summary`: DP.D.143 (DP.D.143-integraciya-kak-arhitekturnaya-konvenciya.md)
+- Missing `summary`: DP.D.144 (DP.D.144-pustoi-output-kontrolnoi-roli.md)
+- Missing `summary`: DP.D.145 (DP.D.145-probe-kanal-pryamaya-proverka.md)
+- Missing `summary`: DP.D.146 (DP.D.146-biznes-alert-vs-tehnicheskii.md)
+- Missing `summary`: DP.D.147 (DP.D.147-minimalnyi-soderzhatelnyi-barer-green.md)
+- Missing `summary`: DP.D.148 (DP.D.148-razbor-bumage-walkthrough-vs.md)
+- Missing `summary`: DP.D.149 (DP.D.149-git-deklarativnyi-sloi-vs.md)
+- Missing `summary`: DP.D.150 (DP.D.150-determinirovannoe-post-uslovie-dvizhok.md)
+- Missing `summary`: DP.D.151 (DP.D.151-raspredele-nnaya-shina-zahvata.md)
+- Missing `summary`: DP.D.152 (DP.D.152-corpus-split-strochnyi-teg.md)
+- Missing `summary`: DP.D.153 (DP.D.153-ict-token-ict-vs.md)
 - Missing `summary`: DP.D.154 (DP.D.154-iwesys-product-org-topology.md)
 - Missing `summary`: DP.D.155 (DP.D.155-active-day-definition.md)
+- Missing `summary`: DP.D.156 (DP.D.156-operaciya-agenta-vosproizvodimaya-yadrom.md)
+- Missing `summary`: DP.D.157 (DP.D.157-proksi-puti-routing-rashody.md)
+- Missing `summary`: DP.D.158 (DP.D.158-osnovnoe-biznes-sobytie-vs.md)
+- Missing `summary`: DP.D.159 (DP.D.159-posledovatelnaya-vykatka-napravleniyu-zavisimost.md)
+- Missing `summary`: DP.D.160 (DP.D.160-tipizaciya-is-otnesenie-rodu.md)
+- Missing `summary`: DP.D.161 (DP.D.161-vyhod-fazy-dlya-mashiny.md)
+- Missing `summary`: DP.D.164 (DP.D.164-metrika-pokrytiya-n-neprimenima.md)
+- Missing `summary`: DP.D.165 (DP.D.165-spf-frei-mvork-vtoryh.md)
+- Missing `summary`: DP.D.166 (DP.D.166-os-proishozhdeniya-base-pack.md)
+- Missing `summary`: DP.D.174 (DP.D.174-lokalnyi-pre-push-huk.md)
+- Missing `summary`: DP.D.175 (DP.D.175-zona-suvereniteta-dannyh-mashina.md)
+- Missing `summary`: DP.D.176 (DP.D.176-uchebnyi-kontent-guide-vs.md)
 - Missing `summary`: DP.D.177 (DP.D.177-proxy-metric-vs-direct.md)
+- Missing `summary`: DP.D.178 (DP.D.178-lpf-skvoznaya-klassifikaciya-fragmentov.md)
 - Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
 - Missing `summary`: DP.D.180 (DP.D.180-generated-vs-live-file-criterion.md)
 - Missing `summary`: DP.D.181 (DP.D.181-platform-vs-byok-wallet.md)
+- Missing `summary`: DP.D.185 (DP.D.185-razdelenie-prav-sderzhivanie-containment.md)
+- Missing `summary`: DP.D.188 (DP.D.188-vozrast-processa-vs-zavisanie.md)
+- Missing `summary`: DP.D.189 (DP.D.189-vs-conditional-vs-defer.md)
+- Missing `summary`: DP.D.198 (DP.D.198-vychislyaemyi-status-vs-harakteristika.md)
+- Missing `summary`: DP.D.199 (DP.D.199-rls-politika-vs-zaschita.md)
+- Missing `summary`: DP.D.200 (DP.D.200-force-row-level-security.md)
+- Missing `summary`: DP.D.201 (DP.D.201-zaschita-kode-flag-test.md)
+- Missing `summary`: DP.D.202 (DP.D.202-logicheskoe-gotovo-vs-operacionnoe.md)
+- Missing `summary`: DP.D.203 (DP.D.203-icloud-app-container-vs.md)
+- Missing `summary`: DP.D.219 (DP.D.219-compression-vs-lazy-razlicheniya.md)
+- Missing `summary`: DP.D.220 (DP.D.220-rezhim-otkaza-lazy-komponenta.md)
+- Missing `summary`: DP.D.221 (DP.D.221-kachestvennyi-porog-masterstva-vs.md)
+- Missing `summary`: DP.D.222 (DP.D.222-non-blocking-audit-rekomendatelnyi.md)
+- Missing `summary`: DP.D.223 (DP.D.223-vidimoe-uzkoe-mesto-naglyadnyi.md)
+- Missing `summary`: DP.D.224 (DP.D.224-suzhenie-obe-ma-scope.md)
+- Missing `summary`: DP.D.225 (DP.D.225-prosrochennyi-shlyuz-blokiruyuschee-preduslovie.md)
+- Missing `summary`: DP.D.226 (DP.D.226-uroven-principov-stepen-obschnosti.md)
+- Missing `summary`: DP.D.227 (DP.D.227-singular-resurs-0-1.md)
+- Missing `summary`: DP.D.228 (DP.D.228-sposob-ispolneniya-kak-pole.md)
+- Missing `summary`: DP.D.229 (DP.D.229-zhe-stkii-otkaz-pri.md)
+- Missing `summary`: DP.D.230 (DP.D.230-test-gard-validaciyu-obyazan.md)
+- Missing `summary`: DP.D.231 (DP.D.231-owned-uzkii-kontrakt-enqueue.md)
+- Missing `summary`: DP.D.232 (DP.D.232-edinyi-pisatel-append-only.md)
+- Missing `summary`: DP.D.233 (DP.D.233-tihoe-isklyuchenie-pri-deploe.md)
+- Missing `summary`: DP.D.234 (DP.D.234-metod-sborki-logika-kompilyacii.md)
+- Missing `summary`: DP.D.235 (DP.D.235-sozdanie-artefakta-rukovodstva-edinorazovaya.md)
+- Missing `summary`: DP.D.236 (DP.D.236-dostavka-obucheniya-rabochemu-kontekstu.md)
+- Missing `summary`: DP.D.237 (DP.D.237-unikalnyi-element-svyazki-vs.md)
+- Missing `summary`: DP.D.238 (DP.D.238-smesche-nnyi-proksi-vs.md)
+- Missing `summary`: DP.D.239 (DP.D.239-pack-tip-vs-db.md)
+- Missing `summary`: DP.D.241 (DP.D.241-reestr-registry-vs-prodovoe.md)
+- Missing `summary`: DP.D.242 (DP.D.242-sobytie-perehoda-per-transition.md)
+- Missing `summary`: DP.D.243 (DP.D.243-kontur-iwe-vs-fizicheskoe.md)
+- Missing `summary`: DP.D.244 (DP.D.244-formalizuemoe-znanie-pack-fpf.md)
+- Missing `summary`: DP.D.245 (DP.D.245-vladenie-universalnoe-vs-personalnoe.md)
+- Missing `summary`: DP.D.249 (DP.D.249-sc-service-clause-vs.md)
+- Missing `summary`: DP.D.250 (DP.D.250-vladelec-domena-arhitekturnymi-polnomochiyami.md)
 - Missing `summary`: DP.D.251 (DP.D.251-service-layer-permission-vs-execution-obligation.md)
 - Missing `summary`: DP.D.253 (DP.D.253-object-tiering-model.md)
 - Missing `summary`: DP.D.257 (DP.D.257-synchronized-file-invariant.md)
 - Missing `summary`: DP.D.258 (DP.D.258-paas-vs-saas.md)
+- Missing `summary`: DP.D.259 (DP.D.259-scaffold-iniciaciya-vs-point.md)
+- Missing `summary`: DP.D.260 (DP.D.260-obnaruzhenie-dei-stvie-kontur.md)
+- Missing `summary`: DP.D.261 (DP.D.261-parliament-model-platforma-vs.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2095,12 +2325,12 @@ generated: true
 
 | ID | Days Since Update |
 |----|-------------------|
-| DP.FM.008 | 119 |
-| DP.FM.009 | 99 |
-| DP.FM.011 | 98 |
-| DP.FM.012 | 97 |
-| DP.FM.010 | 92 |
+| DP.FM.008 | 120 |
+| DP.FM.009 | 100 |
+| DP.FM.011 | 99 |
+| DP.FM.012 | 98 |
+| DP.FM.010 | 93 |
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-07-18*
+*Generated by `scripts/generate-map.py` on 2026-07-19*

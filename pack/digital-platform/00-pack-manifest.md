@@ -24,7 +24,32 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.CONCEPT.003 | Адаптивная персонализация | CONCEPT | Принцип и механизм платформы: адаптируется под человека через три слоя — персонализацию, индивидуализацию и адаптивность | active |
 | DP.CONCEPT.004 | Three Layers Ai Work | CONCEPT | 3 слоя работы с ИИ: разовый запрос (нет контекста) → роль и инструкция (постоянный системный контекст) → накопленная среда (история решений, документы, проекты). Переход между слоями определяется объёмом переданного контекста, а не моделью или промпт-техникой | draft |
 | DP.CONCEPT.005 | User Data Pipeline Types | CONCEPT | 4 типа конвейеров личных данных: 2.1 биометрика/устройства, 2.2 поведенческие следы платформы, 2.3 агентские следы и знания, 2.4 персональный контекст для агентских решений. Каждый конвейер требует отдельной политики хранения, согласия и residency. | draft |
+| DP.D.001 | Объект ≠ Модель | D | — | active |
+| DP.D.002 | Модель ≠ Данные | D | — | active |
+| DP.D.003 | Данные ≠ Представление (view) | D | — | active |
+| DP.D.004 | Индикатор ≠ Факт | D | — | active |
+| DP.D.005 | Входной индикатор ≠ Производный индикатор | D | — | active |
+| DP.D.006 | Генеративный текст ≠ Source-of-truth | D | — | active |
+| DP.D.007 | Качество модели ≠ Качество данных | D | — | active |
+| DP.D.008 | Синхронизация ≠ Копирование | D | — | active |
+| DP.D.009 | ИИ-агент ≠ ИИ-ассистент (режимы одной системы, не разные типы) | D | — | active |
+| DP.D.010 | Архитектурная характеристика ≠ Архитектурный принцип | D | — | active |
+| DP.D.011 | Platform-space ≠ User-space | D | — | active |
+| DP.D.012 | Знание ≠ Информация | D | — | active |
+| DP.D.013 | Навигация ≠ Поиск | D | — | active |
+| DP.D.014 | Оперативная память ≠ Справочник | D | — | active |
+| DP.D.015 | ИИ-система ≠ ИТ-система | D | — | active |
+| DP.D.016 | Capture-to-Pack ≠ Knowledge Extraction | D | — | active |
+| DP.D.017 | Стратегический DDD ≠ Тактический DDD | D | — | active |
+| DP.D.018 | Model ≠ View (3 паттерна) | D | — | active |
+| DP.D.019 | DSL ≠ DSLM | D | — | active |
+| DP.D.020 | Capture During-Work ≠ After-Work | D | — | active |
+| DP.D.021 | Вайб-моделирование ≠ Профессиональное моделирование | D | — | active |
+| DP.D.022 | Три уровня проверяемости (формальная ≠ семантическая ≠ операционная) | D | — | active |
+| DP.D.023 | Роль ≠ Агент; Агент ≠ Инструмент | D | — | active |
+| DP.D.024 | Semantic Search ≠ Keyword Search | D | — | active |
 | DP.D.025 | Harness ≠ Agent | D | Harness (упряжь/обвязка) определяет результат больше, чем мощность агента/модели | active |
+| DP.D.026 | Хранимый счётчик ≠ Вычисляемая проекция | D | — | active |
 | DP.D.027 | Content Budget Model (3 оси) | D | Длина, глубина и персонализация контента — три независимые оси, управляемые раздельно | active |
 | DP.D.028 | User Data Tiers — тирование данных пользователя | D | Данные пользователя растут с тиром платформы: T0 без Ory (telegram_id) → T1 с Ory (UUID) → T2 (активная подписка) профиль + история + универсальные руководства (одинаковые для всех) → T3 (подключён любой AI-клиент: claude.ai / Claude Code / VS Code / Telegram) персональные артефакты — персональное руководство (WP-149) + Гермес знает историю (Память.Derived) → T4 (+ GitHub) личный Pack + ИИ-агенты (со-мыслитель). T3-условие = AI-клиент подключён, НЕ «ЦД заполнен» (устаревшее, см. DP.D.052; семантика T3 — консенсус WP-406 Ф13). Ортогональные оси: TM (наставник), TA (администратор), TD (разработчик) | active |
 | DP.D.029 | Language Model ≠ World Model | D | LLM = пассивные знания о мире из текстов (кабинетный учёный). World Model = активная модель, обновляемая из взаимодействия с реальностью (инженер). Критерий: замыкает ли система цикл действие-измерение-обновление | active |
@@ -36,7 +61,18 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.035 | Data Policy — политика данных IWE | D | Единая политика данных платформы: что собирается, где хранится, кому доступно, как удалить. Принятие — при установке шаблона (setup.sh). Агрегирует DP.D.028, DP.D.031, DP.ARCH.005, DP.ARCH.006, DP.ARCH.007 | active |
 | DP.D.036 | BYOB Knowledge Architecture | D | Различение BYOB (Bring Your Own Backend) vs Managed: данные пользователя хранятся на его ресурсах, платформа даёт код и L2-знания. Связано с MCP Hub (ADR-018 v2) и контурами L2/L4. | draft |
 | DP.D.037 | Рабочий продукт как инструмент связи | D | РП — не красиво оформленные данные, а инструмент, показывающий связь между элементами и работающий на достижение миссии | active |
+| DP.D.038 | Обучение (Pre-Training) ≠ Онбординг (Context Engineering, НЕ HR-процесс) | D | — | active |
+| DP.D.039 | Обещание (= сценарий использования) ≠ Описание метода ≠ Сервис | D | — | active |
 | DP.D.040 | Мировоззрение → Pack: аналогия художника | D | Художник кодирует мировоззрение в произведение. Профессионал кодирует доменное знание в Pack. Оба трансформируют внутреннее в описание | active |
+| DP.D.041 | Статистическое знание (AI) ≠ Верифицированное знание (Pack) | D | — | active |
+| DP.D.042 | Генерация паттернов (AI) ≠ Генерация смысла (человек) | D | — | active |
+| DP.D.043 | Рынок знания (commodity) ≠ Рынок компиляции (растёт) | D | — | active |
+| DP.D.044 | Смена роли в диалоге ≠ Расширение промпта | D | — | active |
+| DP.D.045 | ЦД-CEO (Executive) ≠ ЦД-Model (Passive Replica) | D | — | active |
+| DP.D.046 | Экзоскелет (Exoskeleton) ≠ Автопилот (Autopilot) | D | — | active |
+| DP.D.047 | Квалификация (стадия развития) ≠ Тир (уровень оснащения) | D | — | active |
+| DP.D.048 | Скрипт ≠ Агент | D | — | active |
+| DP.D.049 | Лог ≠ Инцидент ≠ State file | D | — | active |
 | DP.D.050 | Роли Созидателя | D | 5 ролей Созидателя (Ученик, Интеллектуал, Профессионал, Исследователь, Просветитель). Каждый человек выполняет все 5 одновременно. Внутри каждой роли — ступени мастерства. Основа траектории персонального развития. | active |
 | DP.D.052 | Различение: Персона / Память / Контекст | D | Три слоя пользовательской модели — замена legacy-термина «ЦД». Критерий разделения = writer + owner (source-of-truth), не когнитивный и не по TTL. Персона = distributed-entity (identity-anchor + Git declarations + Neon refs), Память = platform-owned Neon, Контекст (= Проекция) = runtime-ephemeral. v2: разделены оси Writer / Identity-anchor / State-storage / Snapshot-unit (вместо склейки Owner+Артефакт); добавлено различение Носитель ≠ Персона ≠ Декларация Персоны (§10). | active |
 | DP.D.053 | Problem Task Workflow | D | — | active |
@@ -67,6 +103,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.078 | Ценностный язык ≠ Технический язык (в user-facing копии) | D | — | active |
 | DP.D.079 | Smoke Technical Vs Processing Signal | D | — | active |
 | DP.D.080 | Контрольная роль ≠ Операционная роль | D | — | active |
+| DP.D.083 | Persistent TaskTracker (filesystem) ≠ Ephemeral TodoWrite (session memory) | D | — | active |
+| DP.D.084 | Workspace-координация peer'ов ≠ Conversational-сессия peer'ов | D | — | active |
+| DP.D.086 | Дистрибутив-bundle ≠ Дистрибутив-coupling | D | — | active |
+| DP.D.087 | OAuth pending state in-memory ≠ OAuth pending state externalized (БД) | D | — | active |
+| DP.D.088 | `environment.d` (декларативный, persistent) ≠ `systemctl --user set-environment` (императивный, ephemeral) | D | — | active |
 | DP.D.089 | Cascading failure ≠ Independent failures | D | — | active |
 | DP.D.090 | Structural smoke ≠ E2E smoke (по типу данных) | D | — | active |
 | DP.D.091 | Выровненные на boundary шкалы ≠ Параллельные с tandem-стыком | D | — | — |
@@ -78,10 +119,13 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.097 | Loop control у вызывающей роли, не у вызываемой | D | — | active |
 | DP.D.098 | Ground truth ≠ Self-assessment для валидации proxy-моделей | D | — | active |
 | DP.D.099 | Метрика чтения ≠ метрика downstream-эффекта | D | — | — |
+| DP.D.100 | IWE как платформа доказательств ценности ≠ система продуктивности | D | — | active |
 | DP.D.101 | Shared Module Sharing: Symlink (α) ≠ Submodule (β) ≠ Vendor Copy (γ / γ-prime) | D | — | active |
 | DP.D.102 | Четыре канала событий IWE по семантике | D | — | active |
 | DP.D.103 | Специализация агента через контекст ≠ специализация через дообучение | D | Два уровня специализированного агента: уровень 1 — универсальное LLM-ядро + роль в контексте (Pack + промпт); уровень 2 — дообученное LLM-ядро, роль запечена в веса. Разные оси: где живёт доменное знание. | active |
 | DP.D.104 | Прогресс к награде ≠ Показ баланса | D | — | — |
+| DP.D.105 | Pack-internal frontmatter check ≠ DS-level prose check (scope линтера) | D | — | active |
+| DP.D.106 | Trigger по состоянию ≠ Trigger по счётчику (для архитектурных переключений) | D | — | active |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | D | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | D | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | D | — | active |
@@ -108,19 +152,53 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.131 | Костюм ≠ Оснащение (тир) | D | — | active |
 | DP.D.132 | Стажёр ≠ Участник сообщества (промежуточное состояние входа ≠ полная готовность) | D | — | active |
 | DP.D.133 | Три уровня изоляции данных в IWE | D | Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим. | active |
+| DP.D.134 | Logout (Kratos login-сессия) ≠ Отзыв OAuth-grant (Hydra) | D | — | active |
+| DP.D.135 | Метод входа (authentication method) ≠ LLM-аккаунт (ресурсная подписка) | D | — | active |
 | DP.D.136 | Предиктор выживания схемы ≠ качество дизайна | D | — | active |
 | DP.D.137 | exocortex/CLAUDE.md slot (workspace-root backup) ≠ governance CLAUDE.md | D | — | active |
+| DP.D.138 | Локализация-как-derived-only ≠ Два параллельных продукта | D | — | active |
+| DP.D.139 | JIT provisioning через client-mediated flow ≠ direct-link flow | D | — | active |
+| DP.D.140 | Наблюдатель-сторож (observability) ≠ Сервис доставки | D | — | active |
+| DP.D.141 | Источник доставки ≠ Политика-на-место ≠ Физический транспорт | D | — | active |
+| DP.D.142 | Тело контента (рендер-в-место) ≠ Уведомление о контенте (сообщение) | D | — | active |
+| DP.D.143 | Интеграция как архитектурная конвенция ≠ Интеграция в открытом зонтике | D | — | active |
+| DP.D.144 | Пустой output контрольной роли ≠ «нет находок» | D | — | active |
+| DP.D.145 | Probe-канал (прямая проверка) ≠ Cascade detection (обнаружение через следствия) | D | — | active |
+| DP.D.146 | Бизнес-алерт ≠ Технический алерт | D | — | active |
+| DP.D.147 | Минимальный содержательный барьер (GREEN скрипта) ≠ Полное качество артефакта | D | — | active |
+| DP.D.148 | Разбор «на бумаге» (walkthrough) ≠ Наблюдаемый артефакт (smoke) | D | — | active |
+| DP.D.149 | Git (декларативный слой) ≠ Neon (операционный слой) ≠ Session (эфемерный слой) | D | — | active |
+| DP.D.150 | Детерминированное пост-условие (в движок) ≠ Семантическое пост-условие (в Haiku) | D | — | active |
+| DP.D.151 | Распределённая шина захвата следов ≠ Локальная шина (Local Gateway) | D | — | active |
+| DP.D.152 | Corpus-split строчный тег (decision-уровень) ≠ Сессионный тег (session-уровень) | D | — | active |
+| DP.D.153 | ICT-токен (ict_...) ≠ Ory OAuth (claude.ai / VS Code коннектор) | D | — | active |
 | DP.D.154 | Топология орг-структуры IWE: iwesys ≠ aisystant ≠ mimecosys | D | — | draft |
 | DP.D.155 | Active Day Definition | D | — | active |
+| DP.D.156 | Операция агента, воспроизводимая ядром без него ≠ Авторитетная новая суть, закреплённая агентом | D | — | active |
+| DP.D.157 | Прокси-на-пути (роутинг/расходы) ≠ Наблюдаемость-сбоку (трассировка/оценка качества) | D | — | active |
+| DP.D.158 | Основное бизнес-событие ≠ Сторонний best-effort захват (деградация без блокировки) | D | — | active |
+| DP.D.159 | Последовательная выкатка по направлению зависимости ≠ Параллельная выкатка (аддитивная фича через слои в разных репо) | D | — | active |
+| DP.D.160 | Типизация (is-a, отнесение к роду) ≠ Синонимия (is-named) — семантика specializes в графе понятий | D | — | active |
+| DP.D.161 | Выход фазы для машины-потребителя = структура в БД (VIEW) ≠ человекочитаемый отчёт | D | — | active |
+| DP.D.164 | Метрика покрытия N/A (неприменима) ≠ Coverage PASS (критерий выполнен) | D | — | active |
+| DP.D.165 | SPF (фреймворк вторых/доменных принципов) ≠ Pack (результат применения SPF) | D | — | active |
+| DP.D.166 | Ось происхождения (Base/Pack/DS) ≠ Ось охвата (FPF/DPF/LPF) | D | — | active |
+| DP.D.174 | Локальный pre-push хук ≠ серверный branch-protection | D | — | active |
+| DP.D.175 | Зона суверенитета данных = машина владельца, не managed cloud | D | — | active |
+| DP.D.176 | Учебный контент (guide/) ≠ Операционный контент (panel/) | D | — | active |
 | DP.D.177 | Прокси-метрика ≠ прямая метрика | D | — | draft |
+| DP.D.178 | LPF — сквозная классификация фрагментов ≠ физический контейнер (папка, репо) | D | — | active |
 | DP.D.179 | Политика при сбое ≠ видимость сбоя в мониторинге | D | — | draft |
 | DP.D.180 | Сгенерированный файл ≠ Живой файл — машиночитаемый критерий | D | — | active |
 | DP.D.181 | Платформенный LLM-кошелёк ≠ личный BYOK-кошелёк | D | — | — |
 | DP.D.182 | IWE как рабочая среда ≠ образовательная платформа | D | — | active |
 | DP.D.183 | Машинный ноль в измеренном поле ≠ результат измерения «ноль» | D | — | active |
 | DP.D.184 | Пустая витрина ≠ отсутствие данных в источнике | D | — | active |
+| DP.D.185 | Разделение прав = сдерживание (containment), ≠ устранение причины | D | — | active |
 | DP.D.186 | Документация снижает вероятность ошибки ≠ инвариант в коде устраняет её физически | D | — | active |
 | DP.D.187 | SYNC-CORE (общее ядро инструкций) ≠ Claude-specific inject-hook | D | — | active |
+| DP.D.188 | Возраст процесса ≠ Зависание процесса | D | — | active |
+| DP.D.189 | no ≠ conditional-no ≠ defer (три статуса готовности системы к охвату) | D | — | active |
 | DP.D.190 | `updated_at` строки-контейнера ≠ актуальность данных внутри строки | D | — | active |
 | DP.D.191 | Mitigation ≠ Fix: статус дефекта остаётся открытым при снижении риска без устранения причины | D | — | active |
 | DP.D.192 | Per-event rule engine ≠ stateful accumulation: разные вычислительные модели, разные компоненты | D | — | active |
@@ -128,6 +206,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.194 | Sanity check ≠ валидация на реальном масштабе | D | — | active |
 | DP.D.195 | U.Method холоничен — U.Role нехолонична | D | — | — |
 | DP.D.196 | Org Role Assignment Vs Infra Readiness | D | — | draft |
+| DP.D.198 | Вычисляемый статус ≠ характеристика (строка таблицы критериев) | D | — | active |
+| DP.D.199 | RLS-политика ≠ Защита для роли с BYPASSRLS | D | — | active |
+| DP.D.200 | FORCE ROW LEVEL SECURITY ≠ Защита от роли с атрибутом BYPASSRLS | D | — | active |
+| DP.D.201 | Защита-в-коде (флаг + тест) ≠ Требование-в-документе | D | — | active |
+| DP.D.202 | Логическое «готово» ≠ Операционное «готово» | D | — | active |
+| DP.D.203 | iCloud app container ≠ iCloud Drive — данные iOS-приложений доступны только через API | D | — | active |
 | DP.D.204 | Method Map Vs State Axis | D | Каталог методов изменения состояния объекта — слой рычагов внутри существующей оси, не новое измерение модели состояний. Тест: это состояние объекта или инструмент воздействия на состояние? | draft |
 | DP.D.205 | WP-ID vs PII — публичный идентификатор задачи ≠ персональные данные | D | Номер задачи (WP-\d+) — публичный реестровый идентификатор, не PII. Блокирование WP-номеров PII-guard = false positive. Тест: может ли пользователь сам упомянуть эту строку в публичном чате без раскрытия приватных данных? | active |
 | DP.D.206 | git notes ≠ видимый аудиторский след | D | — | active |
@@ -143,10 +227,38 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.216 | Outcome-DoD (результат работает у получателя) ≠ Output-DoD (артефакт поставлен) | D | — | active |
 | DP.D.217 | dev-checkout resource ≠ prod-runtime resource → read-side snapshot | D | — | active |
 | DP.D.218 | regex 'has-data-in-format' ≠ 'success-without-data' in shell output detection | D | — | active |
+| DP.D.219 | Compression ≠ Lazy — различения без advance-signal требуют split hot/warm, а не lazy-load | D | — | active |
+| DP.D.220 | Режим отказа lazy-компонента = деградация (capability недоступна в сессии) ≠ блокировка работы | D | — | active |
+| DP.D.221 | Качественный порог мастерства ≠ Счётчик очков/частоты | D | — | active |
+| DP.D.222 | Non-blocking аудит (рекомендательный канал) ≠ Слой защиты (blocking-by-default) | D | — | active |
+| DP.D.223 | Видимое узкое место (наглядный дефицит) ≠ Связывающее ограничение (TOC bottleneck) | D | — | active |
+| DP.D.224 | Сужение объёма (scope) как дешёвый рычаг ≠ Сужение объёма, когда объём = носитель сигнала | D | — | active |
+| DP.D.225 | Просроченный шлюз — блокирующее предусловие (сбой) ≠ Восполнимая разведка (задержка) | D | — | active |
+| DP.D.226 | Уровень принципов (степень общности: ZPF/FPF/SPF/TPF) ≠ Слой репозиториев (место хранения: Base/Pack/DS) | D | — | active |
+| DP.D.227 | Singular-ресурс (0..1 на владельца) ≠ Plural-ресурс (0..N на владельца): безопасность confirm-скопом зависит от кардинальности | D | — | active |
+| DP.D.228 | Способ исполнения как поле-данные авторитетного каталога ≠ магическая строка/конвенция имени файла в коде | D | — | active |
+| DP.D.229 | Жёсткий отказ при отсутствии обещанного исполнителя ≠ тихий fallback в дорогую модель | D | — | active |
+| DP.D.230 | Тест на гард/валидацию обязан падать без фикса ≠ тест декорирует гард (зелёный ≠ гард работает) | D | — | active |
+| DP.D.231 | Owned узкий контракт enqueue (producer → API/RPC) ≠ raw cross-service SQL write | D | — | active |
+| DP.D.232 | Единый писатель append-only журнала (один writer-модуль) ≠ N независимых писателей | D | — | active |
+| DP.D.233 | Тихое исключение при деплое (silent-exclude) ≠ Уведомление об устаревании (notify-deprecate) | D | — | active |
+| DP.D.234 | Метод сборки (логика компиляции) ≠ Место исполнения (резидентность данных) ≠ Поверхность отображения (витрина/репо) | D | — | active |
+| DP.D.235 | Создание артефакта-руководства (единоразовая работа) ≠ Конвейер его обновления (recurring process) | D | — | active |
+| DP.D.236 | Доставка обучения к рабочему контексту ≠ Производственное действие как шаг развития | D | — | active |
+| DP.D.237 | Уникальный элемент связки ≠ Уникальная связка как целое (Bundle Moat) | D | — | active |
+| DP.D.238 | Смещённый прокси ≠ честное «не знаем» | D | — | active |
+| DP.D.239 | Pack-тип ≠ DB-таблица ≠ DB-строка | D | — | active |
 | DP.D.240 | domain event ≠ interpretation of fact in immutable log | D | — | active |
+| DP.D.241 | Реестр (registry) ≠ Продовое состояние (production state) | D | — | active |
+| DP.D.242 | Событие перехода (per-transition) ≠ Событие состояния (per-state) | D | — | active |
+| DP.D.243 | Контур IWE ≠ Физическое место ≠ Доверие/Контроль (Substrate Criterion) | D | — | active |
+| DP.D.244 | Формализуемое знание (Pack/FPF/SPF) ≠ LPF-знание (встроено в личный опыт носителя роли) | D | — | active |
+| DP.D.245 | Владение (универсальное ≠ персональное) ≠ Держатель (мы курируем ≠ пользователь принёс) — источники Портного | D | — | active |
 | DP.D.246 | indexable knowledge ≠ pointer record | D | — | active |
 | DP.D.247 | local user compute ≠ AI/human work in our zone | D | — | active |
 | DP.D.248 | `last_verified` timestamp ≠ доказательство реальной верификации | D | — | active |
+| DP.D.249 | SC (Service Clause) ≠ Метод верификации (Verification Method) | D | — | active |
+| DP.D.250 | Владелец домена с архитектурными полномочиями ≠ Владелец домена без архитектурных полномочий | D | — | active |
 | DP.D.251 | Service-Layer Permission ≠ Execution-Layer Obligation | D | — | — |
 | DP.D.252 | Ступень (stage) ≠ Степень квалификации (qualification degree) | D | — | active |
 | DP.D.253 | Модель тиров объектов IWE (платформенное / командное / личное) | D | — | active |
@@ -155,6 +267,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.256 | Поле-принуждение в редактируемом конфиге = договорённость, не принуждение (схема проверяет формат, не provenance) | D | — | active |
 | DP.D.257 | Синхронизированный файл ≠ локальный файл | D | — | — |
 | DP.D.258 | PaaS под управлением пользователя ≠ SaaS-агрегатор | D | — | — |
+| DP.D.259 | scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания) | D | — | active |
+| DP.D.260 | «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах) | D | — | active |
+| DP.D.261 | Parliament Model (Платформа) ≠ Local Coordination Hub (IWE) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -1212,4 +1327,4 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.WP.015 | WP-Registry | WP | Реестр всех рабочих продуктов (РП) стратегии: номер, название, статус — единое место для навигации по всей истории работы | draft |
 | DP.WP.016 | Stage Dependency Map (Карта этапов с зависимостями) | WP | Формат рабочего продукта Аналитика ограничений (DP.ROLE.054): план работы по устранению ограничения, представленный как dependency graph без дат и часов. Узлы = этапы (внутри узла — параллельные работы и РП), рёбра = жёсткая зависимость («следующий этап начинается только после завершения предыдущего»), external-рёбра = зависимости от работ в других РП / репо. | draft |
 
-> *Auto-generated by `generate-map.py` on 2026-07-18*
+> *Auto-generated by `generate-map.py` on 2026-07-19*
