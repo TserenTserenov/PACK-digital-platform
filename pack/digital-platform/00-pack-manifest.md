@@ -270,6 +270,20 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.259 | scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания) | D | — | active |
 | DP.D.260 | «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах) | D | — | active |
 | DP.D.261 | Parliament Model (Платформа) ≠ Local Coordination Hub (IWE) | D | — | active |
+| DP.D.262 | Platform (L2) ≠ IWE Template (L3) ≠ Personal IWE (L4) — контуры системы | D | — | active |
+| DP.D.263 | Контуры (L1-L4) ≠ Тиры (T0-T4 + TM/TA/TD) | D | — | active |
+| DP.D.264 | Method (уровень роли) ≠ Instrument (уровень назначения) | D | — | active |
+| DP.D.265 | Кастомизация агента (Harness Engineering) ≠ Дообучение (Fine-Tuning) | D | — | active |
+| DP.D.266 | Баллы (геймификация) ≠ Бонусы (лояльность) ≠ Ступень (квалификация) | D | — | active |
+| DP.D.267 | Context Engineering ≠ Prompt Engineering | D | — | active |
+| DP.D.268 | In-memory session state (auto-cleanup on redeploy) ≠ Persistent session state без TTL (zombie accumulation) | D | — | active |
+| DP.D.269 | content_role ≠ process_position (двухосная модель роли в multi-agent peer-сессии) | D | — | active |
+| DP.D.270 | Косметический баг ≠ Operational alert | D | — | active |
+| DP.D.271 | pool.acquire(timeout) ≠ command_timeout в asyncpg | D | — | active |
+| DP.D.272 | IWE-в-браузере ≠ перенос в Claude.ai ≠ урезанная копия VS Code | D | — | active |
+| DP.D.273 | Стратегическая доменная роль ≠ infrastructure-agent | D | — | active |
+| DP.D.274 | Negative definition ≠ Positive definition (для кодификации craft) | D | — | active |
+| DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |

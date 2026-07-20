@@ -4,7 +4,7 @@ name: "Каскад Pack-расширения через ad-hoc → snapshot →
 type: method
 status: current
 domains: [governance, pack-extension, role-formalization]
-distinction_refs: [DP.D.104]
+distinction_refs: [DP.D.269]
 wp_refs: []
 source: peer-session 2026-05-30-06 (WP-367 Ф5), DP.SC.154 v4
 created: 2026-05-30
@@ -64,7 +64,7 @@ created: 2026-05-30
 
 ## Связи
 
-- **Distinction:** [DP.D.104](../01-domain-contract/01B-distinctions.md#dpd104) — content_role ≠ process_position (двухосная модель)
+- **Distinction:** [DP.D.269](../02-domain-entities/DP.D.269-content-role-vs.md) — content_role ≠ process_position (двухосная модель; до 2026-07-19 — DP.D.104)
 - **Service Clause:** [DP.SC.154 v4](../08-service-clauses/DP.SC.154-multi-agent-conversational-session.md) — применение для peer-сессий
 - **Контрольная роль (аудит):** [DP.D.080](../02-domain-entities/DP.D.080-control-vs-operation.md) — контрольная ≠ операционная (аудит не вмешивается)
 

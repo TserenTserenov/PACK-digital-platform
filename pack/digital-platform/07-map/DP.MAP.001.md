@@ -21,7 +21,7 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 246 |
+| Distinctions (D) | 260 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 274 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1325** |
+| **Total** | **1339** |
 
 ## Distinctions
 
@@ -293,6 +293,20 @@ generated: true
 | DP.D.259 | scaffold-инициация ≠ point-capture ≠ онтологическая интеграция (три роли производства Pack-знания) | — | active |
 | DP.D.260 | «Обнаружение → действие» контур ≠ «литерал → вычисленное» (диагностика gap-ов в скаффолдах) | — | active |
 | DP.D.261 | Parliament Model (Платформа) ≠ Local Coordination Hub (IWE) | — | active |
+| DP.D.262 | Platform (L2) ≠ IWE Template (L3) ≠ Personal IWE (L4) — контуры системы | — | active |
+| DP.D.263 | Контуры (L1-L4) ≠ Тиры (T0-T4 + TM/TA/TD) | — | active |
+| DP.D.264 | Method (уровень роли) ≠ Instrument (уровень назначения) | — | active |
+| DP.D.265 | Кастомизация агента (Harness Engineering) ≠ Дообучение (Fine-Tuning) | — | active |
+| DP.D.266 | Баллы (геймификация) ≠ Бонусы (лояльность) ≠ Ступень (квалификация) | — | active |
+| DP.D.267 | Context Engineering ≠ Prompt Engineering | — | active |
+| DP.D.268 | In-memory session state (auto-cleanup on redeploy) ≠ Persistent session state без TTL (zombie accumulation) | — | active |
+| DP.D.269 | content_role ≠ process_position (двухосная модель роли в multi-agent peer-сессии) | — | active |
+| DP.D.270 | Косметический баг ≠ Operational alert | — | active |
+| DP.D.271 | pool.acquire(timeout) ≠ command_timeout в asyncpg | — | active |
+| DP.D.272 | IWE-в-браузере ≠ перенос в Claude.ai ≠ урезанная копия VS Code | — | active |
+| DP.D.273 | Стратегическая доменная роль ≠ infrastructure-agent | — | active |
+| DP.D.274 | Negative definition ≠ Positive definition (для кодификации craft) | — | active |
+| DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | — | active |
 
 ## Methods
 
@@ -1716,6 +1730,20 @@ generated: true
 - Missing `summary`: DP.D.259 (DP.D.259-scaffold-iniciaciya-vs-point.md)
 - Missing `summary`: DP.D.260 (DP.D.260-obnaruzhenie-dei-stvie-kontur.md)
 - Missing `summary`: DP.D.261 (DP.D.261-parliament-model-platforma-vs.md)
+- Missing `summary`: DP.D.262 (DP.D.262-platform-l2-vs.md)
+- Missing `summary`: DP.D.263 (DP.D.263-kontury-l1-l4.md)
+- Missing `summary`: DP.D.264 (DP.D.264-method-uroven-roli.md)
+- Missing `summary`: DP.D.265 (DP.D.265-kastomizaciya-agenta-harness.md)
+- Missing `summary`: DP.D.266 (DP.D.266-bally-gei-mifikaciya.md)
+- Missing `summary`: DP.D.267 (DP.D.267-context-engineering-vs.md)
+- Missing `summary`: DP.D.268 (DP.D.268-in-memory-session.md)
+- Missing `summary`: DP.D.269 (DP.D.269-content-role-vs.md)
+- Missing `summary`: DP.D.270 (DP.D.270-kosmeticheskii-bag-vs.md)
+- Missing `summary`: DP.D.271 (DP.D.271-pool-acquire-timeout.md)
+- Missing `summary`: DP.D.272 (DP.D.272-iwe-brauzere-vs.md)
+- Missing `summary`: DP.D.273 (DP.D.273-strategicheskaya-domennaya-rol.md)
+- Missing `summary`: DP.D.274 (DP.D.274-negative-definition-vs.md)
+- Missing `summary`: DP.D.275 (DP.D.275-golos-voice-vs.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
