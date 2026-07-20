@@ -1279,6 +1279,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SC.194 | Конвейер личного бренда (Personal Brand Pipeline) | SC | Пользователь ступени Мастер+ получает управляемый контур личного бренда: репо бренда из шаблона, setup-сессию самоописания, регулярный сбор кандидатов на темы из его платформенного и публичного следа — с разбором живым владельцем и без выдуманных фактов | active |
 | DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | SC | — | — |
 | DP.SC.196 | Content-cleanup signal registry must never lose a registered signal | SC | — | — |
+| DP.SC.197 | Наставник (Режим 2) — оперативная помощь в чате | SC | Пилот в любой момент описывает своё текущее состояние своими словами в чате → Наставник (MIM.R.001, Режим 2 — связка Диагност⊗Навигатор⊗Преподаватель-предметник⊗Преподаватель-лидер) ставит диагноз и даёт рекомендацию, опираясь на известное о пилоте, или честно говорит, что знаний не хватает / даёт универсальный ответ | draft |
 | DP.SOTA.001 | DDD Strategic (Khononov) | SOTA | Стратегический DDD: Bounded Context, Context Map, Ubiquitous Language — метод добычи и инженерной реализации доменного ядра | active |
 | DP.SOTA.002 | Context Engineering | SOTA | Дисциплина курирования контекста ИИ-агента: Write/Select/Compress/Isolate — что попадает в окно, в каком формате, как обновляется | active |
 | DP.SOTA.003 | Open API Specifications | SOTA | Экосистема открытых спецификаций интерфейсов: OpenAPI (sync), AsyncAPI (event-driven), CloudEvents (envelope) + Arazzo (workflows) | active |
@@ -1312,6 +1313,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.032 | Semantic Chunking Rag | SOTA | — | draft |
 | DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | SOTA | — | draft |
 | DP.SOTA.034 | Bigtech Context Commoditization | SOTA | — | draft |
+| DP.SOTA.035 | Always-on AI Mentor — Honest Degradation Under Thin Context | SOTA | Диагноз+рекомендация в чате по запросу, поверх личного профиля: field-паттерн — многошаговый orchestration (не один вызов модели), context-sufficiency gate ДО генерации (не самоотчёт модели inline), и системный риск — персонализация усиливает уверенные ложные ответы при скудном контексте, а не снижает | active |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.VM.001 | P1 P9 Calibration Matrix | VM | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Стажёра/событие тира). | — |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |

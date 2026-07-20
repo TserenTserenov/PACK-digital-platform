@@ -36,12 +36,12 @@ generated: true
 | ROADMAP (ROADMAP) | 2 |
 | ROLE (ROLE) | 76 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 156 |
-| SoTA Annotations (SOTA) | 33 |
+| SC (SC) | 157 |
+| SoTA Annotations (SOTA) | 34 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1323** |
+| **Total** | **1325** |
 
 ## Distinctions
 
@@ -980,6 +980,7 @@ generated: true
 | DP.SOTA.032 | Semantic Chunking Rag | — | draft |
 | DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | — | draft |
 | DP.SOTA.034 | Bigtech Context Commoditization | — | draft |
+| DP.SOTA.035 | Always-on AI Mentor — Honest Degradation Under Thin Context | Диагноз+рекомендация в чате по запросу, поверх личного профиля: field-паттерн — многошаговый orchestration (не один вызов модели), context-sufficiency gate ДО генерации (не самоотчёт модели inline), и системный риск — персонализация усиливает уверенные ложные ответы при скудном контексте, а не снижает | active |
 
 ## Maps
 
@@ -1476,6 +1477,7 @@ generated: true
 | DP.SC.194 | Конвейер личного бренда (Personal Brand Pipeline) | Пользователь ступени Мастер+ получает управляемый контур личного бренда: репо бренда из шаблона, setup-сессию самоописания, регулярный сбор кандидатов на темы из его платформенного и публичного следа — с разбором живым владельцем и без выдуманных фактов | active |
 | DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | — | — |
 | DP.SC.196 | Content-cleanup signal registry must never lose a registered signal | — | — |
+| DP.SC.197 | Наставник (Режим 2) — оперативная помощь в чате | Пилот в любой момент описывает своё текущее состояние своими словами в чате → Наставник (MIM.R.001, Режим 2 — связка Диагност⊗Навигатор⊗Преподаватель-предметник⊗Преподаватель-лидер) ставит диагноз и даёт рекомендацию, опираясь на известное о пилоте, или честно говорит, что знаний не хватает / даёт универсальный ответ | draft |
 
 ### SYS
 
