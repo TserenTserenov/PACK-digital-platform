@@ -906,6 +906,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.383 | Onboarding Work-Not-Learn Frame (Онбординг-фрейм «ты работаешь, не учишься») | M | — | active |
 | DP.M.384 | Close Known Gap Immediately During Review (Немедленное закрытие known-gap при ревью) | M | — | active |
 | DP.M.385 | Independent Agent Convergence as Confidence Signal (Совпадение независимых агентов = confidence signal) | M | — | active |
+| DP.M.386 | Mentor Context-Sufficiency Gate (Наставник: единый гейт достаточности контекста — маршрутизация + grounding) | M | RAG-поиск grounding-источника ДО генерации + диспетчер-промпт маршрутизации между 4 ролями-компонентами Наставника собраны в один явный шаг, не самоотчёт модели inline | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
