@@ -284,6 +284,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.273 | Стратегическая доменная роль ≠ infrastructure-agent | D | — | active |
 | DP.D.274 | Negative definition ≠ Positive definition (для кодификации craft) | D | — | active |
 | DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | D | — | active |
+| DP.D.276 | «Двери» ≠ «Полосы» в сегментации аудиторий | D | — | active |
+| DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | D | — | active |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -560,6 +562,9 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.337 | ArchGate проверяет новую функцию, не регрессию соседних сервисов | FM | — | active |
 | DP.FM.338 | Month-Range Set Filter Drops Middle Months | FM | set{from.month, to.month} фильтрация пропускает средние месяцы при 30-дневном окне, охватывающем 3+ календарных месяца. Исправление: walk с инкрементом месяца и year rollover. | draft |
 | DP.FM.339 | Diff-aware guard слеп к indirect-обходу (запрещённый вызов рождается в рантайме через переменную/генерацию) | FM | — | draft |
+| DP.FM.340 | Cross-repo импорт на уровне модуля без checkout-guard | FM | — | active |
+| DP.FM.341 | Шлюз согласия с отброшенным возвращаемым значением | FM | — | active |
+| DP.FM.342 | Exact-token replace без ограничения строкой H1 даёт ложные срабатывания при выравнивании ID | FM | — | active |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -921,6 +926,15 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.384 | Close Known Gap Immediately During Review (Немедленное закрытие known-gap при ревью) | M | — | active |
 | DP.M.385 | Independent Agent Convergence as Confidence Signal (Совпадение независимых агентов = confidence signal) | M | — | active |
 | DP.M.386 | Mentor Context-Sufficiency Gate | M | — | draft |
+| DP.M.387 | Row Digest без mutable-полей для GDPR-совместимого ретро-якорения | M | — | active |
+| DP.M.388 | Backward compat при rename ключа Digital Twin | M | — | active |
+| DP.M.389 | Диагностика OAuth через последовательное исключение гипотез | M | — | active |
+| DP.M.390 | Keyword-триаж как масштабируемый batch-метод Knowledge Extraction | M | — | active |
+| DP.M.391 | M-мем антитезис как структурный крючок контента | M | — | active |
+| DP.M.392 | Встраивать паттерн из каталога в текст без называния кода | M | — | active |
+| DP.M.393 | T0-guard: условная активация сервисной клаузы | M | — | active |
+| DP.M.394 | 2-ступенчатый гейт совпадения в routing-vocab | M | — | active |
+| DP.M.395 | --build-host обязателен при деплое Docker-образа с Apple Silicon в Railway | M | — | active |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 260 |
+| Distinctions (D) | 262 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 274 |
+| Failure Modes (FM) | 277 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 345 |
+| Methods (M) | 354 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1341** |
+| **Total** | **1355** |
 
 ## Distinctions
 
@@ -307,6 +307,8 @@ generated: true
 | DP.D.273 | Стратегическая доменная роль ≠ infrastructure-agent | — | active |
 | DP.D.274 | Negative definition ≠ Positive definition (для кодификации craft) | — | active |
 | DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | — | active |
+| DP.D.276 | «Двери» ≠ «Полосы» в сегментации аудиторий | — | active |
+| DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | — | active |
 
 ## Methods
 
@@ -657,6 +659,15 @@ generated: true
 | DP.M.384 | Close Known Gap Immediately During Review (Немедленное закрытие known-gap при ревью) | — | active |
 | DP.M.385 | Independent Agent Convergence as Confidence Signal (Совпадение независимых агентов = confidence signal) | — | active |
 | DP.M.386 | Mentor Context-Sufficiency Gate | — | draft |
+| DP.M.387 | Row Digest без mutable-полей для GDPR-совместимого ретро-якорения | — | active |
+| DP.M.388 | Backward compat при rename ключа Digital Twin | — | active |
+| DP.M.389 | Диагностика OAuth через последовательное исключение гипотез | — | active |
+| DP.M.390 | Keyword-триаж как масштабируемый batch-метод Knowledge Extraction | — | active |
+| DP.M.391 | M-мем антитезис как структурный крючок контента | — | active |
+| DP.M.392 | Встраивать паттерн из каталога в текст без называния кода | — | active |
+| DP.M.393 | T0-guard: условная активация сервисной клаузы | — | active |
+| DP.M.394 | 2-ступенчатый гейт совпадения в routing-vocab | — | active |
+| DP.M.395 | --build-host обязателен при деплое Docker-образа с Apple Silicon в Railway | — | active |
 
 ## Work Products
 
@@ -957,6 +968,9 @@ generated: true
 | DP.FM.337 | ArchGate проверяет новую функцию, не регрессию соседних сервисов | — | active |
 | DP.FM.338 | Month-Range Set Filter Drops Middle Months | set{from.month, to.month} фильтрация пропускает средние месяцы при 30-дневном окне, охватывающем 3+ календарных месяца. Исправление: walk с инкрементом месяца и year rollover. | draft |
 | DP.FM.339 | Diff-aware guard слеп к indirect-обходу (запрещённый вызов рождается в рантайме через переменную/генерацию) | — | draft |
+| DP.FM.340 | Cross-repo импорт на уровне модуля без checkout-guard | — | active |
+| DP.FM.341 | Шлюз согласия с отброшенным возвращаемым значением | — | active |
+| DP.FM.342 | Exact-token replace без ограничения строкой H1 даёт ложные срабатывания при выравнивании ID | — | active |
 
 ## SoTA Annotations
 
@@ -1746,6 +1760,8 @@ generated: true
 - Missing `summary`: DP.D.273 (DP.D.273-strategicheskaya-domennaya-rol.md)
 - Missing `summary`: DP.D.274 (DP.D.274-negative-definition-vs.md)
 - Missing `summary`: DP.D.275 (DP.D.275-golos-voice-vs.md)
+- Missing `summary`: DP.D.276 (DP.D.276-doors-vs-lanes-audience-segmentation.md)
+- Missing `summary`: DP.D.277 (DP.D.277-p2w-problem-to-work-canonical-term.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2021,6 +2037,15 @@ generated: true
 - Missing `summary`: DP.M.384 (DP.M.384-close-known-gap-immediately.md)
 - Missing `summary`: DP.M.385 (DP.M.385-independent-agent-convergence-confidence.md)
 - Missing `summary`: DP.M.386 (DP.M.386-mentor-context-sufficiency-gate.md)
+- Missing `summary`: DP.M.387 (DP.M.387-row-digest-gdpr-stable-anchor.md)
+- Missing `summary`: DP.M.388 (DP.M.388-key-rename-backward-compat-fallback.md)
+- Missing `summary`: DP.M.389 (DP.M.389-oauth-hypothesis-exclusion-diagnostic.md)
+- Missing `summary`: DP.M.390 (DP.M.390-keyword-triage-batch-knowledge-extraction.md)
+- Missing `summary`: DP.M.391 (DP.M.391-mmem-antithesis-content-hook.md)
+- Missing `summary`: DP.M.392 (DP.M.392-pattern-in-action-without-code-name.md)
+- Missing `summary`: DP.M.393 (DP.M.393-t0-guard-service-clause-conditional-activation.md)
+- Missing `summary`: DP.M.394 (DP.M.394-routing-vocab-two-stage-matching-gate.md)
+- Missing `summary`: DP.M.395 (DP.M.395-docker-apple-silicon-build-host.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2317,6 +2342,9 @@ generated: true
 - Missing `summary`: DP.FM.336 (DP.FM.336-resource-picker-recency-without-active-status.md)
 - Missing `summary`: DP.FM.337 (DP.FM.337-archgate-new-feature-regression-blind-spot.md)
 - Missing `summary`: DP.FM.339 (DP.FM.339-diff-aware-guard-indirect-bypass-blind.md)
+- Missing `summary`: DP.FM.340 (DP.FM.340-cross-repo-import-missing-checkout-guard.md)
+- Missing `summary`: DP.FM.341 (DP.FM.341-consent-gate-return-value-discarded.md)
+- Missing `summary`: DP.FM.342 (DP.FM.342-exact-token-replace-H1-only.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
