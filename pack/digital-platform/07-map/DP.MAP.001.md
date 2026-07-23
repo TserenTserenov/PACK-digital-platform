@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 266 |
+| Distinctions (D) | 267 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 287 |
+| Failure Modes (FM) | 292 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 366 |
+| Methods (M) | 368 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -37,11 +37,11 @@ generated: true
 | ROLE (ROLE) | 76 |
 | RUNBOOK (RUNBOOK) | 1 |
 | SC (SC) | 158 |
-| SoTA Annotations (SOTA) | 34 |
+| SoTA Annotations (SOTA) | 35 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1381** |
+| **Total** | **1390** |
 
 ## Distinctions
 
@@ -313,6 +313,7 @@ generated: true
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | — | draft |
 | DP.D.281 | Разграничение upstream/downstream в data-pipeline: Разметчик vs Генератор | — | draft |
+| DP.D.284 | `--allowedTools` в headless Claude Code принимает только полные namespaced имена MCP-инструментов | — | draft |
 
 ## Methods
 
@@ -684,6 +685,8 @@ generated: true
 | DP.M.405 | Post-write самопроверка в shell-скриптах устраняет тихие пропуски | — | draft |
 | DP.M.407 | Тест L4-Personal vs L2-Platform: работает ли компонент без нашей инфраструктуры? | — | draft |
 | DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | — | draft |
+| DP.M.410 | Pull-only паттерн при разделении GitHub-организации: новая org тянет, не получает push | — | draft |
+| DP.M.411 | Override env-var для переиспользования guard в соседнем контексте без смены дефолта | — | draft |
 
 ## Work Products
 
@@ -997,6 +1000,11 @@ generated: true
 | DP.FM.353 | Ошибочный путь env-var маскируется локальной копией скрипта | — | draft |
 | DP.FM.354 | Сравнение хэшей для 3-way-merge файлов структурно не работает без базового хэша | — | draft |
 | DP.FM.355 | Moonshot прямой API-ключ умер 401 — рабочий fallback: OAuth-подписка kimi login | — | draft |
+| DP.FM.356 | Cron-конвейер с неявным пропуском strategy_day — нужен явный лог пропуска | — | draft |
+| DP.FM.357 | Массовая архивация РП удаляет активные runtime-кэши, если они лежат в inbox/WP-N/cache/ | — | draft |
+| DP.FM.358 | git worktree не открывает одну ветку дважды — для параллельных агентов нужна per-session branch | — | draft |
+| DP.FM.359 | PENDING-инструкции в headless-скаффолде не выполняются — нужен детерминированный скрипт-забор | — | draft |
+| DP.FM.360 | Прод-сервис вызывает LLM-провайдера напрямую в обход прокси — невидимые расходы | — | draft |
 
 ## SoTA Annotations
 
@@ -1036,6 +1044,7 @@ generated: true
 | DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | — | draft |
 | DP.SOTA.034 | Bigtech Context Commoditization | — | draft |
 | DP.SOTA.035 | Always-on AI Mentor — Honest Degradation Under Thin Context | Диагноз+рекомендация в чате по запросу, поверх личного профиля: field-паттерн — многошаговый orchestration (не один вызов модели), context-sufficiency gate ДО генерации (не самоотчёт модели inline), и системный риск — персонализация усиливает уверенные ложные ответы при скудном контексте, а не снижает | active |
+| DP.SOTA.036 | Типология шагов процессного конвейера: рефлекс/ИИ/пилот/интеграция + трёхэтапная кристаллизация | Сравнение платформенной типизации шагов процесса (4 типа исполнителя + формальная FSM + трёхэтапная кристаллизация) с индустриальным SOTA декларативной типизации шагов (BPMN/Camunda/Zeebe) | current |
 
 ## Maps
 
@@ -1792,6 +1801,7 @@ generated: true
 - Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
 - Missing `summary`: DP.D.280 (DP.D.280-two-assessments-need-matching-methodology.md)
 - Missing `summary`: DP.D.281 (DP.D.281-marker-vs-generator-upstream-downstream.md)
+- Missing `summary`: DP.D.284 (DP.D.284-allowedtools-requires-full-namespaced-mcp-name.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2088,6 +2098,8 @@ generated: true
 - Missing `summary`: DP.M.405 (DP.M.405-post-write-self-check-shell-scripts.md)
 - Missing `summary`: DP.M.407 (DP.M.407-l4-personal-vs-l2-platform-infra-test.md)
 - Missing `summary`: DP.M.409 (DP.M.409-check-adjacent-wp-implementation-at-closure.md)
+- Missing `summary`: DP.M.410 (DP.M.410-pull-only-github-org-split.md)
+- Missing `summary`: DP.M.411 (DP.M.411-guard-override-env-var-reuse.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2397,6 +2409,11 @@ generated: true
 - Missing `summary`: DP.FM.353 (DP.FM.353-wrong-env-var-path-masked-by-local-copy.md)
 - Missing `summary`: DP.FM.354 (DP.FM.354-hash-comparison-fails-3way-merge-without-base.md)
 - Missing `summary`: DP.FM.355 (DP.FM.355-moonshot-direct-key-dead-oauth-fallback.md)
+- Missing `summary`: DP.FM.356 (DP.FM.356-cron-silent-skip-strategy-day.md)
+- Missing `summary`: DP.FM.357 (DP.FM.357-archival-deletes-active-runtime-cache.md)
+- Missing `summary`: DP.FM.358 (DP.FM.358-git-worktree-cannot-open-branch-twice.md)
+- Missing `summary`: DP.FM.359 (DP.FM.359-headless-scaffold-ignores-pending-instructions.md)
+- Missing `summary`: DP.FM.360 (DP.FM.360-prod-service-bypasses-llm-proxy.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)

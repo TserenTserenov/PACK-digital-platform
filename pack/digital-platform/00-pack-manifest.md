@@ -290,6 +290,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | D | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | D | — | draft |
 | DP.D.281 | Разграничение upstream/downstream в data-pipeline: Разметчик vs Генератор | D | — | draft |
+| DP.D.284 | `--allowedTools` в headless Claude Code принимает только полные namespaced имена MCP-инструментов | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -579,6 +580,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.353 | Ошибочный путь env-var маскируется локальной копией скрипта | FM | — | draft |
 | DP.FM.354 | Сравнение хэшей для 3-way-merge файлов структурно не работает без базового хэша | FM | — | draft |
 | DP.FM.355 | Moonshot прямой API-ключ умер 401 — рабочий fallback: OAuth-подписка kimi login | FM | — | draft |
+| DP.FM.356 | Cron-конвейер с неявным пропуском strategy_day — нужен явный лог пропуска | FM | — | draft |
+| DP.FM.357 | Массовая архивация РП удаляет активные runtime-кэши, если они лежат в inbox/WP-N/cache/ | FM | — | draft |
+| DP.FM.358 | git worktree не открывает одну ветку дважды — для параллельных агентов нужна per-session branch | FM | — | draft |
+| DP.FM.359 | PENDING-инструкции в headless-скаффолде не выполняются — нужен детерминированный скрипт-забор | FM | — | draft |
+| DP.FM.360 | Прод-сервис вызывает LLM-провайдера напрямую в обход прокси — невидимые расходы | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -961,6 +967,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.405 | Post-write самопроверка в shell-скриптах устраняет тихие пропуски | M | — | draft |
 | DP.M.407 | Тест L4-Personal vs L2-Platform: работает ли компонент без нашей инфраструктуры? | M | — | draft |
 | DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | M | — | draft |
+| DP.M.410 | Pull-only паттерн при разделении GitHub-организации: новая org тянет, не получает push | M | — | draft |
+| DP.M.411 | Override env-var для переиспользования guard в соседнем контексте без смены дефолта | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |
@@ -1370,6 +1378,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.SOTA.033 | Ai Learning Platform Commoditization 2026 | SOTA | — | draft |
 | DP.SOTA.034 | Bigtech Context Commoditization | SOTA | — | draft |
 | DP.SOTA.035 | Always-on AI Mentor — Honest Degradation Under Thin Context | SOTA | Диагноз+рекомендация в чате по запросу, поверх личного профиля: field-паттерн — многошаговый orchestration (не один вызов модели), context-sufficiency gate ДО генерации (не самоотчёт модели inline), и системный риск — персонализация усиливает уверенные ложные ответы при скудном контексте, а не снижает | active |
+| DP.SOTA.036 | Типология шагов процессного конвейера: рефлекс/ИИ/пилот/интеграция + трёхэтапная кристаллизация | SOTA | Сравнение платформенной типизации шагов процесса (4 типа исполнителя + формальная FSM + трёхэтапная кристаллизация) с индустриальным SOTA декларативной типизации шагов (BPMN/Camunda/Zeebe) | current |
 | DP.SYS.001 | Детерминированные системы | SYS | Реестр детерминированных подсистем. Перенесено в DS-ecosystem-development → C2.IT-Platform | moved |
 | DP.VM.001 | P1 P9 Calibration Matrix | VM | Девять промежуточных польз новичка: как система засекает достижение каждой (прокси/БД) и как Онбордер ведёт к ней (доставка/предусловие/характеристика Стажёра/событие тира). | — |
 | DP.WP.001 | Отчёт экстракции | WP | Структурированный отчёт экстракции знаний с классификациями, предложениями и валидацией | draft |
