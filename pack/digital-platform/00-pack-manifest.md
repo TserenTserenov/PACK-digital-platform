@@ -286,6 +286,8 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | D | — | active |
 | DP.D.276 | «Двери» ≠ «Полосы» в сегментации аудиторий | D | — | active |
 | DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | D | — | active |
+| DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | D | — | draft |
+| DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -565,6 +567,12 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.FM.340 | Cross-repo импорт на уровне модуля без checkout-guard | FM | — | active |
 | DP.FM.341 | Шлюз согласия с отброшенным возвращаемым значением | FM | — | active |
 | DP.FM.342 | Exact-token replace без ограничения строкой H1 даёт ложные срабатывания при выравнивании ID | FM | — | active |
+| DP.FM.346 | wp-sync-bundle.sh слепой к markdown-зачёркиванию: done-строка выглядит как pending | FM | — | draft |
+| DP.FM.347 | Partial fix одного экземпляра bug-класса: создаёт иллюзию безопасности при живых соседних экземплярах | FM | — | draft |
+| DP.FM.348 | re.sub: пользовательский текст с backslash в replacement → crash (invalid backreference) | FM | — | draft |
+| DP.FM.349 | Lookup по значению поля YAML: count > 1 → молчаливый выбор случайного файла | FM | — | draft |
+| DP.FM.350 | Нетранзакционный DELETE+INSERT в индексаторе чанков теряет данные при прерывании | FM | — | draft |
+| DP.FM.351 | ON CONFLICT DO NOTHING молча обрывает цепочку parent-chunk | FM | — | draft |
 | DP.IWE.001 | Intellectual Work Environment (IWE) | IWE | IWE — персональная интегрированная среда для интеллектуальной работы. Описывается через 5 архитектурных видов (ISO 42010): системы (U.System), описания (U.Description), роли (U.RoleAssignment), методы (U.MethodDescription), рабочие продукты (U.Work). Триада A.7: Роль → Метод → Рабочий продукт. Позиционирование: почему именно IWE, а не агенты/экзокортекс/FPF по отдельности. | draft |
 | DP.IWE.002 | IWE Template & Setup | IWE | Практическое знание о шаблоне IWE: установка, ежедневная работа (ОРЗ), кастомизация (strategy_day, AUTHOR-ONLY зоны, конфиги), роли, обновление, FAQ. Source-of-truth для бота и MCP. | draft |
 | DP.IWE.003 | Gateway-архитектура IWE | IWE | — | active |
@@ -935,6 +943,11 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.393 | T0-guard: условная активация сервисной клаузы | M | — | active |
 | DP.M.394 | 2-ступенчатый гейт совпадения в routing-vocab | M | — | active |
 | DP.M.395 | --build-host обязателен при деплое Docker-образа с Apple Silicon в Railway | M | — | active |
+| DP.M.396 | Карта целевой аудитории как инструмент контент-решений (Audience-Map-Driven Communication) | M | — | draft |
+| DP.M.397 | Терминологическая миграция «работа, не образование» (Terminology Migration: Work Not Learn) | M | — | draft |
+| DP.M.398 | Разные пути подключения к БД в одном репо — диагностика риска конфликта | M | — | draft |
+| DP.M.399 | Checkpoint и resume-on-crash для batch-прогонов с внешним API | M | — | draft |
+| DP.M.400 | BIGSERIAL-монотонность как tip-детектор без графового обхода | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 262 |
+| Distinctions (D) | 264 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 277 |
+| Failure Modes (FM) | 283 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 354 |
+| Methods (M) | 359 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1355** |
+| **Total** | **1368** |
 
 ## Distinctions
 
@@ -309,6 +309,8 @@ generated: true
 | DP.D.275 | Голос (Voice) ≠ Тон (Tone) агента | — | active |
 | DP.D.276 | «Двери» ≠ «Полосы» в сегментации аудиторий | — | active |
 | DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | — | active |
+| DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | — | draft |
+| DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
 
 ## Methods
 
@@ -668,6 +670,11 @@ generated: true
 | DP.M.393 | T0-guard: условная активация сервисной клаузы | — | active |
 | DP.M.394 | 2-ступенчатый гейт совпадения в routing-vocab | — | active |
 | DP.M.395 | --build-host обязателен при деплое Docker-образа с Apple Silicon в Railway | — | active |
+| DP.M.396 | Карта целевой аудитории как инструмент контент-решений (Audience-Map-Driven Communication) | — | draft |
+| DP.M.397 | Терминологическая миграция «работа, не образование» (Terminology Migration: Work Not Learn) | — | draft |
+| DP.M.398 | Разные пути подключения к БД в одном репо — диагностика риска конфликта | — | draft |
+| DP.M.399 | Checkpoint и resume-on-crash для batch-прогонов с внешним API | — | draft |
+| DP.M.400 | BIGSERIAL-монотонность как tip-детектор без графового обхода | — | draft |
 
 ## Work Products
 
@@ -971,6 +978,12 @@ generated: true
 | DP.FM.340 | Cross-repo импорт на уровне модуля без checkout-guard | — | active |
 | DP.FM.341 | Шлюз согласия с отброшенным возвращаемым значением | — | active |
 | DP.FM.342 | Exact-token replace без ограничения строкой H1 даёт ложные срабатывания при выравнивании ID | — | active |
+| DP.FM.346 | wp-sync-bundle.sh слепой к markdown-зачёркиванию: done-строка выглядит как pending | — | draft |
+| DP.FM.347 | Partial fix одного экземпляра bug-класса: создаёт иллюзию безопасности при живых соседних экземплярах | — | draft |
+| DP.FM.348 | re.sub: пользовательский текст с backslash в replacement → crash (invalid backreference) | — | draft |
+| DP.FM.349 | Lookup по значению поля YAML: count > 1 → молчаливый выбор случайного файла | — | draft |
+| DP.FM.350 | Нетранзакционный DELETE+INSERT в индексаторе чанков теряет данные при прерывании | — | draft |
+| DP.FM.351 | ON CONFLICT DO NOTHING молча обрывает цепочку parent-chunk | — | draft |
 
 ## SoTA Annotations
 
@@ -1762,6 +1775,8 @@ generated: true
 - Missing `summary`: DP.D.275 (DP.D.275-golos-voice-vs.md)
 - Missing `summary`: DP.D.276 (DP.D.276-doors-vs-lanes-audience-segmentation.md)
 - Missing `summary`: DP.D.277 (DP.D.277-p2w-problem-to-work-canonical-term.md)
+- Missing `summary`: DP.D.278 (DP.D.278-intermittent-failure-vs-continuous-degradation.md)
+- Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2046,6 +2061,11 @@ generated: true
 - Missing `summary`: DP.M.393 (DP.M.393-t0-guard-service-clause-conditional-activation.md)
 - Missing `summary`: DP.M.394 (DP.M.394-routing-vocab-two-stage-matching-gate.md)
 - Missing `summary`: DP.M.395 (DP.M.395-docker-apple-silicon-build-host.md)
+- Missing `summary`: DP.M.396 (DP.M.396-audience-map-driven-communication.md)
+- Missing `summary`: DP.M.397 (DP.M.397-terminology-migration-work-not-learn.md)
+- Missing `summary`: DP.M.398 (DP.M.398-multiple-db-connection-paths-risk.md)
+- Missing `summary`: DP.M.399 (DP.M.399-batch-checkpoint-resume-external-api.md)
+- Missing `summary`: DP.M.400 (DP.M.400-bigserial-monotonic-tip-detector.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2345,6 +2365,12 @@ generated: true
 - Missing `summary`: DP.FM.340 (DP.FM.340-cross-repo-import-missing-checkout-guard.md)
 - Missing `summary`: DP.FM.341 (DP.FM.341-consent-gate-return-value-discarded.md)
 - Missing `summary`: DP.FM.342 (DP.FM.342-exact-token-replace-H1-only.md)
+- Missing `summary`: DP.FM.346 (DP.FM.346-registry-strikethrough-parsed-as-pending.md)
+- Missing `summary`: DP.FM.347 (DP.FM.347-partial-fix-same-bug-class-leaves-gaps.md)
+- Missing `summary`: DP.FM.348 (DP.FM.348-re-sub-unescaped-replacement-crash.md)
+- Missing `summary`: DP.FM.349 (DP.FM.349-duplicate-field-value-silent-ambiguous-selection.md)
+- Missing `summary`: DP.FM.350 (DP.FM.350-non-transactional-delete-insert-data-loss.md)
+- Missing `summary`: DP.FM.351 (DP.FM.351-on-conflict-nothing-breaks-parent-chain.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
