@@ -289,7 +289,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | D | — | draft |
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | D | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | D | — | draft |
-| DP.D.281 | Разграничение upstream/downstream в data-pipeline: Разметчик vs Генератор | D | — | draft |
 | DP.D.284 | `--allowedTools` в headless Claude Code принимает только полные namespaced имена MCP-инструментов | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
@@ -964,7 +963,6 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.402 | World-research фаза перед дизайном нового типа конвейера — обязательна как Ф1 | M | — | draft |
 | DP.M.403 | Наблюдаемый сигнал подтверждения State-Transition Gate | M | — | draft |
 | DP.M.404 | Явный предмет рассуждения в Ритуале согласования | M | — | draft |
-| DP.M.405 | Post-write самопроверка в shell-скриптах устраняет тихие пропуски | M | — | draft |
 | DP.M.407 | Тест L4-Personal vs L2-Platform: работает ли компонент без нашей инфраструктуры? | M | — | draft |
 | DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | M | — | draft |
 | DP.M.410 | Pull-only паттерн при разделении GitHub-организации: новая org тянет, не получает push | M | — | draft |

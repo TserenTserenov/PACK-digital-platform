@@ -47,3 +47,7 @@ Backup-операция фотографирует state-файл в момен�
 ## Источник
 
 session-transcript 2026-06-05-13-actualize-wp-356 (Claude + Kimi); git diff DS-my-strategy commit 9be3a104b
+
+## Связи
+
+- `DP.FM.354` (сравнение хэшей без базового хэша ломает 3-way-merge в update.sh) — тот же общий принцип «двустороннее сравнение не работает без базового снапшота», в контексте upstream-sync, не backup-restore

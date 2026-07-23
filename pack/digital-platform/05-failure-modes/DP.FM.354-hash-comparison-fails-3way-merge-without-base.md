@@ -7,6 +7,8 @@ status: draft
 valid_from: 2026-07-22
 sources:
   - "session-transcript, triage 2026-07-22 batch7"
+related:
+  see_also: [DP.FM.133]
 tags: [update-sh, 3-way-merge, hash-comparison, base-hash, structural-bug]
 ---
 
@@ -36,3 +38,4 @@ tags: [update-sh, 3-way-merge, hash-comparison, base-hash, structural-bug]
 ## Связи
 
 - Смежная тема: `DP.FM.078` (сравнение хэшей в update.sh — другая грань той же области)
+- `DP.FM.133` (backup-restore без 3-way merge затирает live state) — тот же общий принцип «двустороннее сравнение не работает там, где нужен базовый снапшот», в другом контексте (backup/restore, не upstream-sync)

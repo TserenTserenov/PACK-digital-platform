@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 267 |
+| Distinctions (D) | 266 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 292 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 368 |
+| Methods (M) | 367 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1390** |
+| **Total** | **1388** |
 
 ## Distinctions
 
@@ -312,7 +312,6 @@ generated: true
 | DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | — | draft |
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | — | draft |
-| DP.D.281 | Разграничение upstream/downstream в data-pipeline: Разметчик vs Генератор | — | draft |
 | DP.D.284 | `--allowedTools` в headless Claude Code принимает только полные namespaced имена MCP-инструментов | — | draft |
 
 ## Methods
@@ -682,7 +681,6 @@ generated: true
 | DP.M.402 | World-research фаза перед дизайном нового типа конвейера — обязательна как Ф1 | — | draft |
 | DP.M.403 | Наблюдаемый сигнал подтверждения State-Transition Gate | — | draft |
 | DP.M.404 | Явный предмет рассуждения в Ритуале согласования | — | draft |
-| DP.M.405 | Post-write самопроверка в shell-скриптах устраняет тихие пропуски | — | draft |
 | DP.M.407 | Тест L4-Personal vs L2-Platform: работает ли компонент без нашей инфраструктуры? | — | draft |
 | DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | — | draft |
 | DP.M.410 | Pull-only паттерн при разделении GitHub-организации: новая org тянет, не получает push | — | draft |
@@ -1800,7 +1798,6 @@ generated: true
 - Missing `summary`: DP.D.278 (DP.D.278-intermittent-failure-vs-continuous-degradation.md)
 - Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
 - Missing `summary`: DP.D.280 (DP.D.280-two-assessments-need-matching-methodology.md)
-- Missing `summary`: DP.D.281 (DP.D.281-marker-vs-generator-upstream-downstream.md)
 - Missing `summary`: DP.D.284 (DP.D.284-allowedtools-requires-full-namespaced-mcp-name.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
@@ -2095,7 +2092,6 @@ generated: true
 - Missing `summary`: DP.M.402 (DP.M.402-world-research-phase-before-pipeline-design.md)
 - Missing `summary`: DP.M.403 (DP.M.403-observable-signal-for-state-transition-gate.md)
 - Missing `summary`: DP.M.404 (DP.M.404-explicit-subject-in-agreement-ritual.md)
-- Missing `summary`: DP.M.405 (DP.M.405-post-write-self-check-shell-scripts.md)
 - Missing `summary`: DP.M.407 (DP.M.407-l4-personal-vs-l2-platform-infra-test.md)
 - Missing `summary`: DP.M.409 (DP.M.409-check-adjacent-wp-implementation-at-closure.md)
 - Missing `summary`: DP.M.410 (DP.M.410-pull-only-github-org-split.md)
