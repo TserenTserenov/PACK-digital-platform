@@ -144,7 +144,7 @@ related:
 | [SC.010](../08-service-clauses/DP.SC.010-work-rhythm.md) | Рабочий ритм (ОРЗ) | S01, S02, S03, S04, S05, S42, S44, S09 |
 | [SC.011](../08-service-clauses/DP.SC.011-strategizing.md) | Стратегирование | S02, S03, S05, S06, S07, S08, S41 |
 | [SC.012](../08-service-clauses/DP.SC.012-onboarding.md) | Онбординг | S12, S23, S24 |
-| [SC.019](../08-service-clauses/DP.SC.043-template-update.md) | Обновление экзокортекса | S50 |
+| [SC.043](../08-service-clauses/DP.SC.043-template-update.md) | Обновление экзокортекса | S50 |
 | [SC.013](../08-service-clauses/DP.SC.013-work-session.md) | Рабочая сессия с Claude Code | S06, S09, S10, S40 |
 | [SC.014](../08-service-clauses/DP.SC.014-pack-formalization.md) | Формализация знаний (Pack) | S09, S11, S38 |
 | [SC.015](../08-service-clauses/DP.SC.015-system-development.md) | Развитие системы (DS) | S06, S20, S24, S30 |
