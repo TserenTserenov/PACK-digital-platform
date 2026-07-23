@@ -57,11 +57,26 @@ schema_version: 1
 - **Browser-flow без интервенции клиента:** если клиент не управляет authorize-URL (например, deep-link), параметр не добавится
 - **Кэш на стороне браузера/MCP-клиента:** некоторые клиенты кэшируют authorize-URL без `prompt`
 
+## Отличие от refresh-token ошибки
+
+`prompt=login` в Authorize URL = OAuth/Ory-сервер намеренно требует повторный логин. Это нормальное поведение новой OAuth-сессии, а не баг refresh-токена.
+
+| Признак | `prompt=login` | Refresh-token баг |
+|---------|----------------|-------------------|
+| Причина | Истекла browser-cookie сессия, смена IP/fingerprint, явная политика `max_age` | `access_token` истёк и `refresh_token grant` упал |
+| Решение | Добавить `prompt=login` к authorize-URL | Чинить refresh flow / ротировать токены |
+| Сессия | Новая OAuth-сессия в браузере | Та же сессия, проблема в grant |
+
+WP-479: после длительного простоя Kimi показывал `prompt=login` — диагностика пришла к «наблюдать», не фиксить.
+
 ## Тест применимости
 
 «Видит ли connector окно входа после reconnect?» Нет → grant жив; добавить `prompt=login`. Да → защита работает.
+
+«Это ошибка refresh-токена или сервер требует re-authentication?» Если сервер возвращает `prompt=login` — это второе.
 
 ## Связи
 
 - Различение «Переподключение клиента ≠ отзыв OAuth-grant» (WP-411 Ф5, 2026-06-11) — обосновывает почему disconnect/reconnect недостаточен
 - Различение «Kratos browser flow ≠ Kratos API flow» — параметр работает в обоих, прикладывается к authorize-URL
+- Capture WP-479 2026-07-12 — `prompt=login` как маркер истёкшей browser-сессии, не баг refresh
