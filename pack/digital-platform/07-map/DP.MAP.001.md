@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 265 |
+| Distinctions (D) | 266 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 283 |
+| Failure Modes (FM) | 287 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 363 |
+| Methods (M) | 366 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1373** |
+| **Total** | **1381** |
 
 ## Distinctions
 
@@ -312,6 +312,7 @@ generated: true
 | DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | — | draft |
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | — | draft |
+| DP.D.281 | Разграничение upstream/downstream в data-pipeline: Разметчик vs Генератор | — | draft |
 
 ## Methods
 
@@ -680,6 +681,9 @@ generated: true
 | DP.M.402 | World-research фаза перед дизайном нового типа конвейера — обязательна как Ф1 | — | draft |
 | DP.M.403 | Наблюдаемый сигнал подтверждения State-Transition Gate | — | draft |
 | DP.M.404 | Явный предмет рассуждения в Ритуале согласования | — | draft |
+| DP.M.405 | Post-write самопроверка в shell-скриптах устраняет тихие пропуски | — | draft |
+| DP.M.407 | Тест L4-Personal vs L2-Platform: работает ли компонент без нашей инфраструктуры? | — | draft |
+| DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | — | draft |
 
 ## Work Products
 
@@ -989,6 +993,10 @@ generated: true
 | DP.FM.349 | Lookup по значению поля YAML: count > 1 → молчаливый выбор случайного файла | — | draft |
 | DP.FM.350 | Нетранзакционный DELETE+INSERT в индексаторе чанков теряет данные при прерывании | — | draft |
 | DP.FM.351 | ON CONFLICT DO NOTHING молча обрывает цепочку parent-chunk | — | draft |
+| DP.FM.352 | Живая интерактивная сессия агента вступает в гонку с headless-вызовами за OAuth-токен | — | draft |
+| DP.FM.353 | Ошибочный путь env-var маскируется локальной копией скрипта | — | draft |
+| DP.FM.354 | Сравнение хэшей для 3-way-merge файлов структурно не работает без базового хэша | — | draft |
+| DP.FM.355 | Moonshot прямой API-ключ умер 401 — рабочий fallback: OAuth-подписка kimi login | — | draft |
 
 ## SoTA Annotations
 
@@ -1783,6 +1791,7 @@ generated: true
 - Missing `summary`: DP.D.278 (DP.D.278-intermittent-failure-vs-continuous-degradation.md)
 - Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
 - Missing `summary`: DP.D.280 (DP.D.280-two-assessments-need-matching-methodology.md)
+- Missing `summary`: DP.D.281 (DP.D.281-marker-vs-generator-upstream-downstream.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2076,6 +2085,9 @@ generated: true
 - Missing `summary`: DP.M.402 (DP.M.402-world-research-phase-before-pipeline-design.md)
 - Missing `summary`: DP.M.403 (DP.M.403-observable-signal-for-state-transition-gate.md)
 - Missing `summary`: DP.M.404 (DP.M.404-explicit-subject-in-agreement-ritual.md)
+- Missing `summary`: DP.M.405 (DP.M.405-post-write-self-check-shell-scripts.md)
+- Missing `summary`: DP.M.407 (DP.M.407-l4-personal-vs-l2-platform-infra-test.md)
+- Missing `summary`: DP.M.409 (DP.M.409-check-adjacent-wp-implementation-at-closure.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2381,6 +2393,10 @@ generated: true
 - Missing `summary`: DP.FM.349 (DP.FM.349-duplicate-field-value-silent-ambiguous-selection.md)
 - Missing `summary`: DP.FM.350 (DP.FM.350-non-transactional-delete-insert-data-loss.md)
 - Missing `summary`: DP.FM.351 (DP.FM.351-on-conflict-nothing-breaks-parent-chain.md)
+- Missing `summary`: DP.FM.352 (DP.FM.352-live-session-races-headless-for-oauth-token.md)
+- Missing `summary`: DP.FM.353 (DP.FM.353-wrong-env-var-path-masked-by-local-copy.md)
+- Missing `summary`: DP.FM.354 (DP.FM.354-hash-comparison-fails-3way-merge-without-base.md)
+- Missing `summary`: DP.FM.355 (DP.FM.355-moonshot-direct-key-dead-oauth-fallback.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
