@@ -288,6 +288,7 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | D | — | active |
 | DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | D | — | draft |
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | D | — | draft |
+| DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | D | — | draft |
 | DP.ECON.001 | Points Engine — движок начисления баллов | ECON | Доменная модель системы баллов: сущности, инварианты, формула, потоки. Source-of-truth для Points Engine (WP-121, WP-311). Текущая реализация: база rewards (Neon). | draft |
 | DP.EXOCORTEX.001 | Модульный экзокортекс | EXOCORTEX | 3-слойная архитектура инструкций ИИ-агентов: CLAUDE.md + Memory + repo-CLAUDE.md | draft |
 | DP.FM.001 | Информация как знание | FM | Необработанная информация ошибочно принимается за формализованное знание без экстракции | draft |
@@ -948,6 +949,10 @@ Manifest updated: /Users/tserentserenov/IWE/PACK-digital-platform/pack/digital-p
 | DP.M.398 | Разные пути подключения к БД в одном репо — диагностика риска конфликта | M | — | draft |
 | DP.M.399 | Checkpoint и resume-on-crash для batch-прогонов с внешним API | M | — | draft |
 | DP.M.400 | BIGSERIAL-монотонность как tip-детектор без графового обхода | M | — | draft |
+| DP.M.401 | «Какой ход открылся» — явный вопрос при закрытии РП | M | — | draft |
+| DP.M.402 | World-research фаза перед дизайном нового типа конвейера — обязательна как Ф1 | M | — | draft |
+| DP.M.403 | Наблюдаемый сигнал подтверждения State-Transition Gate | M | — | draft |
+| DP.M.404 | Явный предмет рассуждения в Ритуале согласования | M | — | draft |
 | DP.MAP.001 | Pack Navigation Map | MAP | — | — |
 | DP.MAP.002 | IWE Service Catalog | MAP | Кросс-системный каталог всех сервисов IWE: сервис → роль → вход → выход → потребитель → исполнитель → триггер | draft |
 | DP.METHOD.010 | Kinds + Owner Roles | METHOD | Формальная процедура старта онтологической работы: сначала определить Kinds (типы сущностей) и Owner Roles (кто source-of-truth), только потом выравнивать лексику. Предотвращает DP.FM.012. | active |

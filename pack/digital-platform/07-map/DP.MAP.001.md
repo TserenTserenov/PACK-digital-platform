@@ -21,13 +21,13 @@ generated: true
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 264 |
+| Distinctions (D) | 265 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
 | Failure Modes (FM) | 283 |
 | IWE (IWE) | 13 |
 | KR (KR) | 3 |
-| Methods (M) | 359 |
+| Methods (M) | 363 |
 | Maps (MAP) | 2 |
 | METHOD (METHOD) | 132 |
 | NAV (NAV) | 1 |
@@ -41,7 +41,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1368** |
+| **Total** | **1373** |
 
 ## Distinctions
 
@@ -311,6 +311,7 @@ generated: true
 | DP.D.277 | P2W: «Principles-to-Work» (deprecated) ≠ «Problem-to-Work» (canonical) | — | active |
 | DP.D.278 | Прерывистый отказ ≠ Непрерывная деградация | — | draft |
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
+| DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | — | draft |
 
 ## Methods
 
@@ -675,6 +676,10 @@ generated: true
 | DP.M.398 | Разные пути подключения к БД в одном репо — диагностика риска конфликта | — | draft |
 | DP.M.399 | Checkpoint и resume-on-crash для batch-прогонов с внешним API | — | draft |
 | DP.M.400 | BIGSERIAL-монотонность как tip-детектор без графового обхода | — | draft |
+| DP.M.401 | «Какой ход открылся» — явный вопрос при закрытии РП | — | draft |
+| DP.M.402 | World-research фаза перед дизайном нового типа конвейера — обязательна как Ф1 | — | draft |
+| DP.M.403 | Наблюдаемый сигнал подтверждения State-Transition Gate | — | draft |
+| DP.M.404 | Явный предмет рассуждения в Ритуале согласования | — | draft |
 
 ## Work Products
 
@@ -1777,6 +1782,7 @@ generated: true
 - Missing `summary`: DP.D.277 (DP.D.277-p2w-problem-to-work-canonical-term.md)
 - Missing `summary`: DP.D.278 (DP.D.278-intermittent-failure-vs-continuous-degradation.md)
 - Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
+- Missing `summary`: DP.D.280 (DP.D.280-two-assessments-need-matching-methodology.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2066,6 +2072,10 @@ generated: true
 - Missing `summary`: DP.M.398 (DP.M.398-multiple-db-connection-paths-risk.md)
 - Missing `summary`: DP.M.399 (DP.M.399-batch-checkpoint-resume-external-api.md)
 - Missing `summary`: DP.M.400 (DP.M.400-bigserial-monotonic-tip-detector.md)
+- Missing `summary`: DP.M.401 (DP.M.401-closure-what-move-opened-question.md)
+- Missing `summary`: DP.M.402 (DP.M.402-world-research-phase-before-pipeline-design.md)
+- Missing `summary`: DP.M.403 (DP.M.403-observable-signal-for-state-transition-gate.md)
+- Missing `summary`: DP.M.404 (DP.M.404-explicit-subject-in-agreement-ritual.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
