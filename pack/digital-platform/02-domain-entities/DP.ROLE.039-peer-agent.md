@@ -7,14 +7,15 @@ valid_from: 2026-05-11
 summary: "Peer-агент в multi-agent IWE сессии: работает в одном из двух режимов — (A) workspace-координация через Local Gateway lock + peer-status, (B) conversational-сессия через журнал реплик с позициями писатель/напарник. Конкретные инстансы: Claude Code, Kimikode, Aider и т.п."
 related:
   specializes: [U.RoleAssignment]
-  realizes: [DP.SC.034, DP.SC.035, DP.SC.154]
+  realizes: [DP.SC.034, DP.SC.035, DP.SC.063, DP.SC.154]
   uses:
     - DP.SC.034   # Local MCP Gateway (workspace-режим)
     - DP.SC.035   # peer-agent choreography (workspace-режим)
+    - DP.SC.063   # agent connect & select (подключение агента, до координации)
     - DP.SC.154   # multi-agent conversational session (conversational-режим)
 created: 2026-05-11
-updated: 2026-05-30
-wp: WP-150 Ф7, WP-337-З-Ф1, WP-367 Ф5
+updated: 2026-07-23
+wp: WP-150 Ф7, WP-337-З-Ф1, WP-367 Ф5, WP-499 Ф3
 ---
 
 # Peer Agent (DP.ROLE.039)
@@ -105,10 +106,10 @@ wp: WP-150 Ф7, WP-337-З-Ф1, WP-367 Ф5
 
 ## 8. Связи
 
-- **Реализует:** [DP.SC.034](../08-service-clauses/DP.SC.034-local-mcp-gateway.md) (Local Gateway), [DP.SC.035](../08-service-clauses/DP.SC.035-peer-agent-choreography.md) (choreography)
+- **Реализует:** [DP.SC.034](../08-service-clauses/DP.SC.034-local-mcp-gateway.md) (Local Gateway), [DP.SC.035](../08-service-clauses/DP.SC.035-peer-agent-choreography.md) (choreography), [DP.SC.063](../08-service-clauses/DP.SC.063-agent-connect-and-select.md) (agent connect & select — подключение агента, на шаг раньше координации DP.SC.035; WP-499 Ф3 подтвердил: новая роль под подключение не заводится, носитель — тот же Peer Agent)
 - **Использует:** DP.IWE.005 (Local Gateway Pack-сущность)
 - **Не подчиняется:** другому DP.ROLE.039 (peer = равные)
-- **WP:** WP-150 Ф7
+- **WP:** WP-150 Ф7, WP-499 Ф3
 
 ## 9. Различение vs другие роли
 
