@@ -45,13 +45,13 @@ promotion_plan: "L3 → L2 после обкатки 3-4 нед (W19-W22); пр�
 
 **Режим отказа:**
 - Нет WeekPlan → оценка без R/S контекста; пометить: «контекст недели недоступен, рекомендации по тексту черновика».
-- Нет черновиков → сообщить: «Черновики не найдены в DS-my-strategy/drafts/».
+- Нет черновиков → сообщить: «Черновики не найдены в DS-Tseren-Brand/content/posts/».
 - Нет постов готово в Index → сигнал не выдаётся (не ошибка).
 
 ## Алгоритм оценки
 
 ### Вход
-1. `DS-my-strategy/drafts/D-NNN-*.md` — frontmatter (`created`, `ttl`, `updated`, `target`) + полный текст
+1. `DS-Tseren-Brand/content/posts/D-NNN-*.md` — frontmatter (`created`, `ttl`, `updated`, `target`) + полный текст
 2. `DS-my-strategy/current/WeekPlan W{N}.md` — R-таблица + S-таблица + активные сессии
 3. `DS-Knowledge-Index-Tseren` — посты со статусом «готово»
 
@@ -87,7 +87,7 @@ promotion_plan: "L3 → L2 после обкатки 3-4 нед (W19-W22); пр�
 | Условие | Проверка |
 |---------|---------|
 | Есть WeekPlan активной недели | `current/WeekPlan W{N}.md` существует |
-| Есть ≥1 черновик в drafts/ | `drafts/D-*.md` существует |
+| Есть ≥1 черновик в content/posts/ | `DS-Tseren-Brand/content/posts/D-*.md` существует |
 
 **Полномочия:**
 

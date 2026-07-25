@@ -69,7 +69,7 @@ updated: 2026-05-26
 
 ## 4. Полномочия
 
-- **Читает** `DS-my-strategy/drafts/D-NNN-*.md`, `DS-Knowledge-Index-Tseren/docs/` и `WP-249` (read-only).
+- **Читает** `DS-Tseren-Brand/content/posts/D-NNN-*.md`, `DS-Knowledge-Index-Tseren/docs/` и `WP-249` (read-only).
 - **Пишет** в `talks/YYYY-MM-event-slug/` (Marp MD, PDF, notes).
 - **Запрашивает review** у Автора (Tseren) или Редактора (DP.ROLE.033).
 - **Не меняет** суть идеи без согласования с Автором.
