@@ -22,6 +22,15 @@ related:
 
 Scheduled workflow (cron, drift-watcher, scheduled audit) при штатном «нечего делать» проходит без notification — на radar'е не отличается от «workflow не запускался вовсе» (cron broken, schedule disabled, branch protection ругается). Класс ошибок симметричен «errors>0 → exit 1 в systemd» — там детект через negative-signal, здесь через positive.
 
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Экономия сигнала (лог только когда реально что-то найдено) ↔ наблюдаемость «процесс жив» | Обычный лог минимизирует шум для non-events, но именно это делает «нечего делать» неотличимым от «cron сломан/schedule disabled»; heartbeat намеренно добавляет шум в null-результат ради этого различения |
+| Простота сигнала (одна строка) ↔ полнота метаданных (timestamp, source_hash, trigger, run_url, result) | Каждое дополнительное поле облегчает диагностику «на каком состоянии проверяли», но каждое поле — это то, что должно синхронно обновляться с реальностью источника, иначе heartbeat формально есть, а диагностической ценности не несёт |
+
 ## Триггер применимости
 
 > «Есть ли scheduled job, у которого "всё нормально" выглядит как "не запускался"?»
@@ -45,6 +54,15 @@ Scheduled workflow (cron, drift-watcher, scheduled audit) при штатном 
 
 **Heartbeat ≠ positive-result logging.** Heartbeat нужен именно в «no-op» ветке, не вместо normal output. Если есть события — обычный лог. Если событий 0 — heartbeat.
 
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Логирование тянется к normal-path, не к no-op ветке | Внимание естественно идёт туда, где «видно результат» (события найдены, drift обнаружен), и недооценивает именно null-путь (`result: no-op`) — ветку добавляют в последнюю очередь или забывают, потому что «там же ничего не произошло» |
+| Создание сигнала подменяет реакцию на его отсутствие | После того как heartbeat реализован, внимание смещается на следующую задачу и не доходит до настройки alert'а «heartbeat отсутствует > expected interval» — сам факт наличия строки в логе ошибочно воспринимается как решённая проблема детекции silent-fail |
+
 ## Применимость
 
 - Scheduled GH Actions, GitLab CI cron jobs.
@@ -57,3 +75,7 @@ Scheduled workflow (cron, drift-watcher, scheduled audit) при штатном 
 - **Дополняет:** feedback_silent_projection_fail.md (silent UPSERT fail в projection-worker).
 - **Дополняет:** feedback_alerter_writer_sampling_drift.md (idle ≠ stuck без backlog-проверки).
 - **Дополняет:** DP.M.028 (cursor pattern) — там exit-code на errors>0; здесь positive signal на drift=0.
+
+---
+
+> 2026-07-27 — миграция на обогащённый формат карточки (Forces + Bias-Annotation), WP-448 Ф12 Батч 3 (суб-батч 3). Эталон формата: `SPF/pack-template/03-methods/_method-card-template.md`.
