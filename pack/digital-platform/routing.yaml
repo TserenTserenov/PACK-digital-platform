@@ -1,0 +1,280 @@
+# Машинный контракт маршрутизации знаний (WP-429 Ф6.1)
+# SoT для размещения записей этого Pack. Заменяет прозаические копии в:
+#   DP.KR.001 §5, memory/routing-vocab.md, memory/repo-type-rules.md, apply-captures/SKILL.md шаг 4в.
+# memory/routing-vocab.md — производная авто-собираемая проекция поверх этого файла, не редактировать вручную.
+#
+# PACK-digital-platform — САМЫЙ КРУПНЫЙ Pack (1487 .md-файлов под pack/digital-platform/ на момент
+# составления контракта, 2026-07-27). Поле frontmatter — "type" (как PACK-systems-art/rhetoric),
+# НЕ "kind" (как PACK-verification). Построено эмпирически: id_pattern и frontmatter_check per-kind
+# выведены из статистики по ВСЕМ файлам каждого kind (grep + python), не по выборке из 1-2.
+#
+# ВНИМАНИЕ (drift-сигналы, НЕ устраняются этим контрактом — Drift Reporting, CLAUDE.md):
+#
+# 1. DP.D физически существует в ДВУХ директориях: 193 файла в 02-domain-entities/ (канон —
+#    CLAUDE.md §6: "новое различение создаётся отдельным файлом DP.D.NNN-slug.md в
+#    02-domain-entities/") и 77 файлов в 01-domain-contract/ (создан напрямую там же, где
+#    01A/01B, даты created: февраль 2026 — ДО правила "index+card" от 18.07.2026 и ДО массовой
+#    миграции 193 файлов 02-domain-entities датированной created: 2026-07-19). Контракт ниже
+#    объявляет канон = 02-domain-entities/ — 77 файлов в 01-domain-contract/ будут падать на
+#    проверке директории (BLOCK) при полном прогоне линтера. Это ожидаемо и связано (хотя не
+#    тождественно) с уже задокументированным в CLAUDE.md §6 дрейфом "14 старых пар файл≠секция
+#    с разными номерами" (DS-my-strategy/inbox/bugs/drift-2026-07-18-dpd-numbering-collisions.md).
+#    Не трогать без отдельного РП — риск ссылок.
+#
+# 2. DP.IWE.011 — двойная структура: основной файл DP.IWE.011-runtime-host-contract.md (в
+#    02-domain-entities/, под контрактом) + соседняя директория DP.IWE.011-adapters/ с
+#    ДВУМЯ доп. файлами (headless-adapter.md, claude-code-adapter.md; id внутри:
+#    DP.IWE.011-adapter-headless / -claude-code). Имена файлов НЕ начинаются с "DP.IWE." —
+#    вне юрисдикции линтера (kind_of матчит только по литеральному префиксу имени файла),
+#    не блокируются и не распознаются контрактом. Единственный случай в Pack, где ID расширен
+#    директорией-неймспейсом с непронумерованными файлами внутри.
+#
+# 3. DP.ROLE.012 — целая поддиректория DP.ROLE.012-strategist/ (16 файлов: 00-role-passport.md,
+#    scenarios/00-scenarios-index.md + scenarios/{scheduled,on-demand}/*.md с id вида
+#    DP.ROLE.012.SC.0N, templates/*.md + templates/reviews/*.md). Ни один файл внутри не
+#    начинается с "DP.ROLE." в имени — та же ситуация, что и DP.IWE.011-adapters/, но в
+#    большем масштабе (единственная роль из 66, разложенная в целое дерево сценариев+шаблонов).
+#    Вне юрисдикции контракта, не блокируется.
+#
+# 4. 09-value-milestones/ содержит РОВНО один файл — P1-P9-calibration-matrix.md — с
+#    frontmatter id: DP.VM.001, но ИМЯ ФАЙЛА не следует конвенции "DP.VM.NNN-slug.md" вообще
+#    (нет префикса DP.VM в имени). Контракт ниже объявляет kind DP.VM по стандартной конвенции
+#    (на будущее, для новых файлов) — единственный существующий файл при этом останется
+#    нераспознанным (orphaned), не заблокированным, до отдельного переименования.
+#
+# 5. DP.FM.342-exact-token-replace-H1-only.md — единственный файл во всём Pack с заглавными
+#    буквами внутри slug ("H1"). id_pattern для DP.FM ниже расширен на [A-Za-z0-9-] вместо
+#    строгого [a-z0-9-], чтобы не блокировать этот легитимный (не опечатка — "H1" смысловое)
+#    реальный файл.
+#
+# 6. DP.MAP.001.md — без slug после номера (только "DP.MAP.001.md"), как RHE.MAP.001 в
+#    PACK-rhetoric: auto-generated индекс (generated: true, генерируется generate-map.py,
+#    CLAUDE.md §7). id_pattern для DP.MAP делает slug опциональным.
+#
+# 7. Минимум 4 файла (DP.IWE.012-talk-mode.md, DP.M.216, DP.M.221, DP.M.222) содержат
+#    "id:"/"type:" без ОТКРЫВАЮЩЕГО "---" перед ними (закрывающий "---" есть, открывающего
+#    нет) — реальный parser-level баг форматирования, не отсутствие полей по сути. И линтер
+#    (read_frontmatter_field), и этот анализ читают такие файлы как "frontmatter отсутствует"
+#    (actual_value: None) — попадают в статистику "нет type" ниже, не чинится этим контрактом.
+#
+# 8. 00-pack-manifest.md, 01A-bounded-context.md, 01B-distinctions.md, 01C/01D/01E-adr-*.md
+#    (01-domain-contract/), MCP-NAMESPACE.md (03-methods/), _SC-template.md (08-service-clauses/,
+#    литеральный id: DP.SC.NNN — шаблон, не реальная запись), communication-style-base.md и
+#    engineering-code-style-base.md (02-domain-entities/, L0 code-style базы без ID-схемы) —
+#    структурные/референсные файлы без Pack-ID, намеренно вне юрисдикции контракта (как
+#    00-manifest/01A/01B в остальных 8 Pack — сверено с их routing.yaml).
+schema_version: 1
+pack: digital-platform
+
+kinds:
+  # --- 01-domain-contract/ ---
+  DP.ONT:
+    dir: pack/digital-platform/01-domain-contract/
+    id_pattern: 'DP\.ONT\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: ontology}
+    storage: file
+
+  # --- DP.D — канон 02-domain-entities/, см. ВНИМАНИЕ п.1 (77 файлов-исключений в 01-domain-contract/) ---
+  DP.D:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.D\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: distinction}
+    # реальность: 262/270 файлов (везде, обе директории) type: distinction. 8 исключений —
+    # 4 файла только с kind: Distinction (без type), 3 файла type: domain-entity, 1 файл
+    # без обоих полей — не чинится, задокументировано.
+    storage: file
+
+  # --- 02-domain-entities/ (мелкие kind, все type: domain-entity почти без исключений) ---
+  DP.AISYS:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.AISYS\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: ai-system-passport}
+    storage: file
+
+  DP.ARCH:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ARCH\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    # реальность: 8/9 domain-entity, 1 исключение — DP.ARCH.009-decisions.md, type: decisions-log
+    # (лог решений при архитектурной сущности — легитимный отдельный под-тип, не опечатка).
+    storage: file
+
+  DP.ASSIST:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ASSIST\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.CHR:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.CHR\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.CONCEPT:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.CONCEPT\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    # реальность: 3/4 domain-entity, 1 исключение — DP.CONCEPT.003-adaptive-personalization.md,
+    # type: concept.
+    storage: file
+
+  DP.ECON:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ECON\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.EXOCORTEX:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.EXOCORTEX\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.IWE:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.IWE\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    # реальность: 9/12 domain-entity, 3 исключения — DP.IWE.006 (type: entity),
+    # DP.IWE.011-runtime-host-contract.md (type: concept), DP.IWE.012-talk-mode.md (см.
+    # ВНИМАНИЕ п.7 — открывающий "--- " отсутствует, читается как "нет frontmatter").
+    # Соседняя DP.IWE.011-adapters/ вне юрисдикции — см. ВНИМАНИЕ п.2.
+    storage: file
+
+  DP.KR:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.KR\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.NAV:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.NAV\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.ORG:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ORG\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.ROADMAP:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ROADMAP\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: null
+    # реальность: только 2 файла, оба с РАЗНЫМИ и оба легитимными значениями —
+    # DP.ROADMAP.001 type: roadmap (основной план), DP.ROADMAP.002 type: roadmap-variant
+    # (параллельный вариант, явно помечен как parent: DP.ROADMAP.001-neon-migration) —
+    # не дрейф, осознанное различение основного плана и его варианта.
+    storage: file
+
+  DP.ROLE:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.ROLE\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: null
+    # реальность: 66 файлов, устоявшийся разброс БЕЗ единого канона — 48 type: role-description
+    # (историческое большинство, 73%), 10 type: agential (новая под-классификация для
+    # ИИ-исполняемых ролей, поле kind: у части из них — произвольный русскоязычный текст,
+    # не контролируемый словарь), 5 type: role (короткая форма), 1 type: domain-entity
+    # (DP.ROLE.001-platform-roles.md — это РЕЕСТР ролей, не карточка роли, отсюда другой тип),
+    # 1 без type (DP.ROLE.065, kind: FSM-executor). Аналог AR.NNN (PACK-agent-rules) — легитимно
+    # многозначное поле, не чинится. Соседняя DP.ROLE.012-strategist/ (16 файлов) вне
+    # юрисдикции контракта — см. ВНИМАНИЕ п.3.
+    storage: file
+
+  DP.RUNBOOK:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.RUNBOOK\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  DP.SYS:
+    dir: pack/digital-platform/02-domain-entities/
+    id_pattern: 'DP\.SYS\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: domain-entity}
+    storage: file
+
+  # --- 03-methods/ — ДВА разных kind в одной директории (DP.M исторический, DP.METHOD новее) ---
+  DP.M:
+    dir: pack/digital-platform/03-methods/
+    id_pattern: 'DP\.M\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: method}
+    # реальность: 339/372 (91%) type: method. 33 исключения: часть только с kind: Method/METHOD
+    # (без type), 3 файла type: architectural-pattern, 1 type: domain-entity, ~5 без полей
+    # вовсе (в т.ч. DP.M.216/221/222 — см. ВНИМАНИЕ п.7, открывающий "---" отсутствует).
+    storage: file
+
+  DP.METHOD:
+    dir: pack/digital-platform/03-methods/
+    id_pattern: 'DP\.METHOD\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: method}
+    # реальность: 173/177 (98%) type: method — существенно чище DP.M. 4 исключения (2 только
+    # kind: method без type, 1 без обоих полей, 1 type: METHOD — регистр).
+    storage: file
+
+  # --- 04-work-products/ ---
+  DP.WP:
+    dir: pack/digital-platform/04-work-products/
+    id_pattern: 'DP\.WP\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: work-product}
+    storage: file
+
+  # --- 05-failure-modes/ ---
+  DP.FM:
+    dir: pack/digital-platform/05-failure-modes/
+    id_pattern: 'DP\.FM\.\d{3}-[A-Za-z0-9-]+\.md$'   # заглавные буквы в slug — см. ВНИМАНИЕ п.5
+    frontmatter_check: null
+    # реальность: 315 файлов, историческое многолетнее расхождение написания без единого
+    # канона — type: failure-mode (216, 69%, самое частое, но не большинство "по праву"),
+    # type: fm (28), type: failure_mode (23), поле отсутствует вовсе (35), поле kind: вместо
+    # type: (12, значения FM/FailureMode/failure-mode), type: FM (1). Слишком разрозненно для
+    # единого значения (в отличие от DP.M/DP.METHOD, где >90% сходится) — null, как AR.NNN.
+    # Не чинится этим контрактом; кандидат на отдельный РП очистки, если пилот решит.
+    storage: file
+
+  # --- 06-sota/ ---
+  DP.SOTA:
+    dir: pack/digital-platform/06-sota/
+    id_pattern: 'DP\.SOTA\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: sota}
+    # реальность: 34/35 type: sota, 1 исключение — DP.SOTA.036, без поля type вовсе.
+    storage: file
+
+  # --- 07-map/ ---
+  DP.MAP:
+    dir: pack/digital-platform/07-map/
+    id_pattern: 'DP\.MAP\.\d{3}(-[a-z0-9-]+)?\.md$'   # slug опционален — см. ВНИМАНИЕ п.6
+    frontmatter_check: null
+    # реальность: только 2 файла — DP.MAP.001.md (auto-generated, generated: true, без поля
+    # type, см. MAP.002↔04-work-products правило в CLAUDE.md §7) и DP.MAP.002-iwe-service-catalog.md
+    # (type: map). Как RHE.MAP в PACK-rhetoric — null, документировано, не дрейф.
+    storage: file
+
+  # --- 08-service-clauses/ ---
+  DP.SC:
+    dir: pack/digital-platform/08-service-clauses/
+    id_pattern: 'DP\.SC\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: {field: type, value: sc}
+    # реальность: 129/162 (80%) type: sc (совпадает с каноном _SC-template.md и с RHE.SC в
+    # PACK-rhetoric). 33 исключения: 31 файл вовсе без поля type (похоже, легаси до
+    # закрепления конвенции — самый ранний найденный пример created: 2026-04-01), 2 файла с
+    # альтернативным написанием (service_clause, service-clause). Нумерация диапазонов
+    # (001-099 L4-Personal / 101-199 L2-Platform / 201-299 L3-Template резерв) — CLAUDE.md §8,
+    # не влияет на этот контракт (один kind, одна директория). _SC-template.md (id: DP.SC.NNN,
+    # литеральный плейсхолдер) — вне юрисдикции, см. ВНИМАНИЕ п.8.
+    storage: file
+
+  # --- 09-value-milestones/ — см. ВНИМАНИЕ п.4 (директория ранее не встречалась ни в одном Pack) ---
+  DP.VM:
+    dir: pack/digital-platform/09-value-milestones/
+    id_pattern: 'DP\.VM\.\d{3}-[a-z0-9-]+\.md$'
+    frontmatter_check: null
+    # реальность: kind = Value Milestones (калибровочные "пользы" P1-P9 для движка тиров —
+    # DP.SC.170 §11 ссылается на этот файл). Ровно 1 файл существует физически —
+    # P1-P9-calibration-matrix.md с id: DP.VM.001 во frontmatter, но ИМЯ ФАЙЛА не следует
+    # конвенции "DP.VM.NNN-slug.md" (нет префикса в имени) — контракт объявлен на будущее,
+    # текущий файл останется нераспознанным (orphaned), не переименовывается этим контрактом.
+    # Ни поля type, ни kind во frontmatter файла нет вовсе (id/title/name_ru/name_en/summary/
+    # valid_from/updated/owner/schema_version/source/related/emits_event) — null.
+    storage: file
