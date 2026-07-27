@@ -12,7 +12,7 @@ trust:
 epistemic_stage: established
 related:
   see_also: [DP.D.052]
-  references: [HD #27, FORM.089]
+  references: ["HD #27", FORM.089]
 tags: [digital-twin, troubleshooting, derived-aggregate, cache-invalidation]
 wp: WP-327 Ф5c (commit 0b5eac2e)
 ---

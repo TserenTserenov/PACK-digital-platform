@@ -5,7 +5,7 @@ type: sc
 status: draft
 layer: L4-Personal  # или L2-Platform
 summary: "[Кому] получает [что] при [условии]"
-consumer: [R?? Роль потребителя]
+consumer: ["R?? Роль потребителя"]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 related:

@@ -6,7 +6,7 @@ status: proposed
 trust: provisional
 epistemic_stage: B
 created: 2026-05-27
-source: session-transcript 2026-05-27 (WP-330 Ф8.2: «нажад и вышло, а потом исчез Тупик»)
+source: "session-transcript 2026-05-27 (WP-330 Ф8.2: «нажад и вышло, а потом исчез Тупик»)"
 domains: [ui, async, callbacks, verification, telegram-bot]
 ---
 

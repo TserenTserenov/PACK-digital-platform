@@ -6,7 +6,7 @@ trust: observed
 epistemic_stage: confirmed
 domains: [ci-checks, frontmatter-validation, bash-scripting]
 source_session: 2026-06-06 session-close (FMT-exocortex-template extensions/protocol-close.checks.md)
-source_commit: 20f0afa (fix(checks): anchored grep ^status:)
+source_commit: "20f0afa (fix(checks): anchored grep ^status:)"
 valid_from: 2026-06-06
 schema_version: 1
 ---

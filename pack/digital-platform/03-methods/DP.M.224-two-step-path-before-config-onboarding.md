@@ -1,7 +1,7 @@
 ---
 id: DP.M.224
 type: method
-name: Двухшаговый онбординг бота: путь → конфигурация
+name: "Двухшаговый онбординг бота: путь → конфигурация"
 pack: PACK-digital-platform
 domain: digital-platform
 status: draft
