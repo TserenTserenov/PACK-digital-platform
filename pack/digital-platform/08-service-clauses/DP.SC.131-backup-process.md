@@ -28,9 +28,10 @@ wp: WP-317
 
 ## Входы
 
-- 16 Neon PostgreSQL баз данных (проект `purple-bread-37001042`, branch `production`)
+- 17 Neon PostgreSQL баз данных (проект `purple-bread-37001042`, branch `production`)
+- Railway Postgres `bot_data` (проект `peaceful-vision`) — токены авторизации non-Ory пользователей; добавлен 27.07 (WP-7 Ф-Backup-Resilience-Audit), дампится тем же скриптом через публичный TCP-прокси (`*.railway.internal` с tsekh-1 недостижим)
 - Локальные файлы: `/home/tseren`, `/etc/restic`
-- Credentials: `/etc/restic/neon-connections`, `/etc/restic/password`, `/etc/restic/b2-env`
+- Credentials: `/etc/restic/neon-connections` (несмотря на название, теперь несёт и Railway-URL), `/etc/restic/password`, `/etc/restic/b2-env`
 
 ## Выходы
 
@@ -65,6 +66,7 @@ wp: WP-317
 |-----------|----------|-------------|
 | persona, payment, subscription, indicators, learning, reference, rewards | Neon → B2 | 🔴 критическая |
 | health, community, journal, knowledge, lead, metabase, payment_registry, publication, secrets | Neon → B2 | 🟡 высокая |
+| Railway Postgres `bot_data` (ory_tokens, dt_tokens, development.user_state) | Railway → B2, тот же контур | 🔴 критическая |
 | `/home/tseren` (IWE-репо, конфиги, скрипты) | local → B2 | 🔴 критическая |
 | Git-репо (Pack, DS, FMT) | GitHub mirrors | 🟢 надёжно |
 
@@ -73,14 +75,14 @@ wp: WP-317
 | Компонент | Причина | Риск |
 |-----------|---------|------|
 | Google Drive / Gmail / Calendar | vendor lock, нет экспорта | 🟡 средний |
-| Railway env vars / secrets | не автоматизировано | 🟡 средний |
+| Railway env vars / secrets (кроме `bot_data`, см. выше) | не автоматизировано | 🟡 средний |
 | Cloudflare Workers config | wrangler.toml частично в git | 🟡 низкий |
 
 ---
 
 ## Инвариант
 
-- **Все** 16 Neon БД дампятся каждую ночь без исключений
+- **Все** 17 Neon БД + Railway `bot_data` дампятся каждую ночь без исключений
 - Heartbeat в BetterStack пингует **только** при успешном дампе **всех** БД (не при любом завершении)
 - Снапшоты с размером 0 байт = аварийный сигнал, не норма
 
