@@ -82,6 +82,9 @@ kinds:
     # реальность: 262/270 файлов (везде, обе директории) type: distinction. 8 исключений —
     # 4 файла только с kind: Distinction (без type), 3 файла type: domain-entity, 1 файл
     # без обоих полей — не чинится, задокументировано.
+    # allow_dir_exceptions: CC-125 (content-cleanup-backlog.md), решение пилота 2026-07-28 —
+    # высокоцитируемые карточки (50+ ссылок каждая), перенос отклонён, легализовано.
+    allow_dir_exceptions: ['DP.D.025', 'DP.D.033', 'DP.D.034', 'DP.D.035', 'DP.D.052', 'DP.D.053']
     storage: file
 
   # --- 02-domain-entities/ (мелкие kind, все type: domain-entity почти без исключений) ---
