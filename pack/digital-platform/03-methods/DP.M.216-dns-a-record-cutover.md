@@ -1,3 +1,4 @@
+---
 id: DP.M.216
 name: "DNS A-record cutover — zero-downtime переезд домена"
 type: method

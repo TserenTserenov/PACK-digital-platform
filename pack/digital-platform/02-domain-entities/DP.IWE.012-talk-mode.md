@@ -1,3 +1,4 @@
+---
 id: DP.IWE.012
 name: Talk Mode — голосовой surface поверх IWE-сессии
 type: domain-entity
