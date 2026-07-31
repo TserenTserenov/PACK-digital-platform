@@ -246,7 +246,7 @@ Push в Pack-репо (GitHub)
 
 ### 10.4. BYOB и control-plane (двухтактно)
 
-- **Такт 1 (WP-402):** `backend_registry` сейчас — задел (0 строк в проде, env `REGISTRY_DB_URL` помечен `optional until BYOB is live`, [DP.D.036](../01-domain-contract/DP.D.036-byob-knowledge-architecture.md) status=draft). Удаляется из gateway как dead weight; fan-out остаётся на статических backends из env. Удаление, не миграция — мигрировать нечего.
+- **Такт 1 (WP-402):** `backend_registry` сейчас — задел (0 строк в проде, env `REGISTRY_DB_URL` помечен `optional until BYOB is live`, [DP.D.036](../02-domain-entities/DP.D.036-byob-knowledge-architecture.md) status=draft). Удаляется из gateway как dead weight; fan-out остаётся на статических backends из env. Удаление, не миграция — мигрировать нечего.
 - **Такт 2 (BYOB в прод, отдельная фаза):** control-plane владеет `backend_registry`; gateway читает `GET /backends/{userId}`. BYOB работает без редеплоя gateway — динамика на стороне control-plane.
 
 ### 10.5. Развёртывание без downtime
@@ -271,4 +271,4 @@ Blue/green с health-check вместо in-place миграции: gateway v2 п
 - [DP.EXOCORTEX.001](DP.EXOCORTEX.001-modular-exocortex.md) — модульный экзокортекс
 - [DP.IWE.001](DP.IWE.001-intelligent-working-environment.md) — IWE как концепция
 - [DP.IWE.002](DP.IWE.002-iwe-template-and-setup.md) — шаблон и setup
-- [DP.D.036](../01-domain-contract/DP.D.036-byob-knowledge-architecture.md) — BYOB Knowledge Architecture
+- [DP.D.036](../02-domain-entities/DP.D.036-byob-knowledge-architecture.md) — BYOB Knowledge Architecture

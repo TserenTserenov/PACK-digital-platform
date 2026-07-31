@@ -544,7 +544,7 @@ TD1: то же что T{N} + доступ к исходникам и депло�
 >
 > **digital-twin-mcp — приватный** (фильтрация по user_id). Персональные данные. Требует изоляции.
 >
-> Подробнее: [DP.D.031 MCP Access Model](../01-domain-contract/DP.D.031-mcp-access-model.md)
+> Подробнее: [DP.D.031 MCP Access Model](../02-domain-entities/DP.D.031-mcp-access-model.md)
 
 ## 11. Коммерческая модель
 
@@ -617,6 +617,6 @@ TD1: то же что T{N} + доступ к исходникам и депло�
 - [DP.EXOCORTEX.001 Модульный экзокортекс](DP.EXOCORTEX.001-modular-exocortex.md) — Standard/Personal файлы, слои инструкций
 - [DP.AISYS.014 AIST Bot](DP.AISYS.014-aist-bot.md) — реализация T1-T3 через бота, консультация "?"
 - [DP.M.003 Context Engineering](../03-methods/DP.M.003-context-engineering.md) — метод формирования контекста по тиру
-- [DP.D.030 Deployment Topology](../01-domain-contract/DP.D.030-deployment-topology.md) — Railway + CF + Neon + GitHub → K8s
-- [DP.D.031 MCP Access Model](../01-domain-contract/DP.D.031-mcp-access-model.md) — knowledge-mcp публичный, digital-twin-mcp приватный
-- [DP.D.032 Unified Circuit Breaker](../01-domain-contract/DP.D.032-unified-circuit-breaker.md) — единый паттерн для всех зависимостей
+- [DP.D.030 Deployment Topology](../02-domain-entities/DP.D.030-deployment-topology.md) — Railway + CF + Neon + GitHub → K8s
+- [DP.D.031 MCP Access Model](../02-domain-entities/DP.D.031-mcp-access-model.md) — knowledge-mcp публичный, digital-twin-mcp приватный
+- [DP.D.032 Unified Circuit Breaker](../02-domain-entities/DP.D.032-unified-circuit-breaker.md) — единый паттерн для всех зависимостей
