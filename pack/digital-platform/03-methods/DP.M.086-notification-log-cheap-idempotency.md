@@ -24,6 +24,15 @@ schema_version: 1
 
 Каждый side-effect получает composable event_key вида `f"{domain}:{user_id}:{nonce}"` (например, `marathon_practice:1234567:2026-05-30` для notification «отправь практику пользователю N в день D»). Перед side-effect — `SELECT ... WHERE event_key=?` (probe). После success — `INSERT event_key`.
 
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Дешевизна дедупликации без DDL ↔ выразительность запросов | Отдельная лог-таблица с `ON CONFLICT DO NOTHING` снимает миграции и lock-table на горячей таблице, но «log ≠ state»: ответить можно только на «is X done?», а запрос «покажи все pending/unsent» невозможен — метод сознательно отдаёт filtering/sorting ради zero-миграций |
+| Простота схемы (одна колонка-ключ) ↔ неограниченный рост лога | Composable event_key и lock-free INSERT делают добавление нового event-type бесплатным, но без partitioning/cron-cleanup по `created_at` лог растёт без границ — метод требует TTL-стратегии для event-types с естественным сроком жизни, иначе дешевизна сегодня оплачивается раздутой таблицей завтра |
+
 ## Когда применять
 
 1. Need dedup только для side-effect (ответ на «уже сделали ли это?»), не для filtering/sorting/query.
@@ -72,6 +81,15 @@ schema_version: 1
 - **Только probe** → notification_log (этот метод).
 - **+ filtering/sorting** → state-колонка с миграцией.
 
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Happy-path дедупликации затмевает порядок log-after-success | Внимание практика приковано к «не отправить дважды», а позиция `INSERT` относительно side-effect ускользает: запись лога до успешной отправки (или без `try/except` вокруг send) тихо превращает дедуп в потерю уведомлений — то есть воспроизводит DP.FM.045, который метод обещает предотвращать |
+| Устранение DDL-ноиза затмевает вопрос о cleanup | Соблазн «миграций больше нет» перевешивает, и TTL-стратегия для лог-таблицы не проектируется: partitioning/cron по `created_at` вспоминают, когда таблица уже раздута, а ретроспективная чистка горячего лога — это как раз тот lock, от которого метод уходил |
+
 ## Антипаттерн
 
 `ALTER TABLE main ADD COLUMN done_at` на каждый новый event-type → DDL-ноиз, миграции каскадом, lock-table на больших таблицах, deploy блокируется на ожидании ACCESS EXCLUSIVE lock.
@@ -81,3 +99,7 @@ schema_version: 1
 - **Prevents:** DP.FM.045 (log-after-success violation) — метод реализует корректный порядок log-after-success.
 - **See also:** DP.M.054 (targeted-backfill-via-queue) — другой паттерн «без миграции основной таблицы».
 - **Source:** WP-330 peer-session 2026-05-29-29 report-draft §2 Тема 2 КС2-2 (marathon_practice notification dedup, handlers/marathon.py).
+
+---
+
+> 2026-07-31 — миграция на обогащённый формат карточки (Forces + Bias-Annotation), WP-448 Ф12 Батч 3 (суб-батч 4). Эталон формата: `SPF/pack-template/03-methods/_method-card-template.md`.
