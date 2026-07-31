@@ -1,6 +1,7 @@
 ---
 id: DP.SC.024
 title: "Техобслуживание IWE (экзоскелетное)"
+type: sc
 status: draft
 layer: L4-Personal
 audience: [технарь, R1 Стратег, R14 Заказчик]
@@ -117,7 +118,7 @@ related:
 
 ### SC.024.4 — Месячное ТО (R, только судящее)
 
-**Триггер:** первый Пн месяца, скилл `/month-close` (см. `.claude/skills/month-close/SKILL.md`, протокол `memory/protocol-month-close.md`). Стадия 7 каскада ВДВ v9 (PD.METHOD.008).
+**Триггер:** последние дни закрываемого месяца, либо первый Пн следующего месяца (если не сделано раньше), скилл `/month-close` (см. `.claude/skills/month-close/SKILL.md`, протокол `memory/protocol-month-close.md`). Стадия 7 каскада ВДВ v9 (PD.METHOD.008).
 **Владелец:** человек (R1 Стратег) + агент (R23 Верификатор Haiku) для формальной верификации.
 **Шаги:**
 1. Агент: собирает данные — коммиты, Week Report'ы, drift, decision log, метрики memory (файлы без valid_from, правила без срабатываний, distinctions не применённые за месяц).
