@@ -8,6 +8,7 @@ pack_refs:
   - DP.M.060  # atomic VDV step — atomic-фаза по одному классу
   - DP.M.163  # deferred-phase-finalization-checkpoint — отложенная финализация
 domains: [wp-management, phase-decomposition, verification-classes]
+last_updated: 2026-08-01
 ---
 
 # DP.M.236 — Разделение фазы РП по классу верификации
@@ -15,6 +16,16 @@ domains: [wp-management, phase-decomposition, verification-classes]
 ## Описание
 
 Метод декомпозиции фазы РП по характеристике верификации каждой под-задачи (trivial / closed-loop / open-loop / problem-framing). Closed-loop + trivial закрываются в текущей сессии; problem-framing выделяется в отдельную фазу с pre-articulated открытыми вопросами и маркером «не блокирует closed-loop».
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Скорость закрытия closed-loop/trivial ↔ качество problem-framing | Если ждать, пока решится policy-вопрос, fix застревает в backlog; если выделять problem-framing слишком рано, мелкие задачи размазываются по фазам и растёт overhead handoff'ов |
+| Атомарность фазы ↔ разнообразие классов верификации | Зонтичная фаза удобна как единый контейнер, но смешивает классы; split делает каждый класс чистым, но увеличивает число фаз и точек передачи |
+| Полнота сессионного закрытия ↔ непрерывность отложенных задач | Хочется закрыть сессию с максимум done, но это требует чётких checkpoint для open-loop/problem-framing, иначе они выпадают из внимания |
 
 ## Когда применять
 

@@ -9,6 +9,7 @@ pack_refs:
   - DP.M.163  # deferred-phase-finalization-checkpoint — checkpoint при отложении
   - DP.M.236  # phase-split-by-verification-class — родительский split
 domains: [peer-session-prep, problem-framing, deferred-decision]
+last_updated: 2026-08-01
 ---
 
 # DP.M.238 — Pre-articulated open questions в отложенной problem-framing фазе
@@ -16,6 +17,16 @@ domains: [peer-session-prep, problem-framing, deferred-decision]
 ## Описание
 
 Метод подготовки отложенного problem-framing решения к peer-session / ArchGate. При выделении фазы problem-framing класса (см. DP.M.236) фиксируется ≥3 **конкретных** открытых вопроса с явными критериями качества, а не общая формулировка «обсудить тему».
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Конкретика вопроса ↔ скорость откладывания | Детальная артикуляция требует времени до закрытия фазы, но без неё peer-session начинается с реконструкции контекста и тратит ~30 мин |
+| Полнота списка вопросов ↔ стоимость подготовки | ≥3 конкретных вопроса сокращают время обсуждения, но каждый вопрос должен быть бинарным/choice-between-options и ссылаться на артефакт; это создаёт work-in-progress, который может тормозить закрытие текущей сессии |
+| Бинарный/actionable вопрос ↔ глубина problem-framing | Открытый вопрос позволяет исследовать пространство, но не готов к peer-session; конкретный вопрос действует, но может зафиксировать неправильную рамку |
 
 ## Когда применять
 

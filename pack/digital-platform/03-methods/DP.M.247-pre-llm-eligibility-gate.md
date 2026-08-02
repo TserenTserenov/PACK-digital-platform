@@ -5,6 +5,7 @@ type: method
 domain: digital-platform
 status: active
 valid_from: 2026-05-31
+last_updated: 2026-08-01
 source: DS-autonomous-agents render-pilot-guides.py (commit 73726a3) + peer-session 2026-05-31-16
 ---
 
@@ -14,6 +15,16 @@ source: DS-autonomous-agents render-pilot-guides.py (commit 73726a3) + peer-sess
 
 Контент-генератор с неоднородной аудиторией ОБЯЗАН проверять eligibility ДО вызова LLM.
 При несоответствии аудитории возвращается информативный stub — не генерация неверного контента.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Полнота контента vs. безопасность аудитории | LLM может генерировать полный контент для любого потребителя, но для неподготовленной аудитории это вводит в заблуждение; метод жертвует полнотой ради информативного stub |
+| Покрытие gate vs. false negatives | Широкая проверка eligibility неосознанно блокирует подходящих пользователей; узкая проверка пропускает неподходящие контексты и допускает вредную генерацию |
+| Простота реализации vs. аудируемость | Хардкодный набор квалификаций легко поддерживать, но сложно отслеживать; метод требует явного конфига, чтобы gate было можно review |
 
 ## Алгоритм
 
@@ -33,6 +44,15 @@ def render_pilot(pilot_context):
     return llm_generate_content(pilot_context)
 ```
 
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Feature-completeness bias | Практикующий воспринимает stub как ухудшенный опыт и ослабляет gate, позволяя LLM генерировать контент, что сводит на нет цель безопасности |
+| Homogeneous-audience assumption | Практикующий считает основную аудиторию квалифицированной и опускает проверку для вторичных точек входа (shared links, preview modes) |
+
 ## Применимость
 
 - Многопрограммные системы рендеринга (ЛР/РР/ИР нарративы)
@@ -48,3 +68,7 @@ def render_pilot(pilot_context):
 
 - pack_refs: DS-autonomous-agents render-pilot-guides.py
 - см. также: DP.M.266 (personal-guide-render) — конкретный consumer этого паттерна
+
+---
+
+> 2026-08-01 — миграция на обогащённый формат карточки (Forces + Bias-Annotation), WP-448 Ф12 Батч 3 (суб-батч 6). Эталон формата: `SPF/pack-template/03-methods/_method-card-template.md`.

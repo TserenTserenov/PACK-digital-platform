@@ -10,6 +10,7 @@ status: active
 valid_from: 2026-05-29
 schema_version: 1
 source: "session-transcript 2026-05-29, peer-session 05 production-deploy-iwe-vps"
+last_updated: 2026-08-01
 ---
 
 # DP.M.216 DNS A-record cutover — zero-downtime переезд домена

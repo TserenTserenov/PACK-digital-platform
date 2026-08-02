@@ -14,6 +14,7 @@ related:
 tags: [refactor, regex, defensive-programming, observability, continuous-deployment]
 source: "WP-7 RPA close (peer-session 2026-05-30-31, _split_compute_from_sql:386)"
 schema_version: 1
+last_updated: 2026-08-01
 ---
 
 # DP.M.239 — Defense-in-depth bail-out при refactor regex single→multi
@@ -21,6 +22,16 @@ schema_version: 1
 ## Суть метода
 
 Pattern для безопасного refactor функций обработки regex-match в production коде, когда меняется семантика `search()` (single-match) → `finditer()` (multi-match). Риск: новая функция может встретить вход с несколькими matches, для которого старая логика split/transform была заточена под единственный match — и тихо испортить данные (например, переписать SQL так, что второй call пропал или продублировался).
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Безопасность сохранения старого поведения ↔ прогресс в обработке нового сценария | Bail-out возвращает input без изменений, защищая данные, но откладывает полноценную поддержку multi-match; ранняя реализация multi-match решает кейс, но увеличивает риск регрессии |
+| Fail-loud наблюдаемость ↔ шум алертов | CRITICAL-лог + counter гарантируют заметность первого срабатывания, но если boundary case частый, каждый вызов триггерит alert и может вызвать усталость |
+| Непрерывное развёртывание ↔ полнота рефакторинга | Bail-out позволяет выкатить фикс быстро, не блокируясь на редком edge-case; но создаёт технический долг, который нужно закрыть по метрикам counter == 0 за N дней |
 
 ## Алгоритм
 

@@ -14,6 +14,7 @@ related:
 tags: [tooling, deployment, launchd, cron, distribution, self-recovery]
 source: "WP-364 fork4 close (peer-session 2026-05-30-27, iwe-tg installation)"
 schema_version: 1
+last_updated: 2026-08-01
 ---
 
 # DP.M.240 — Self-recoverable tooling: SoT в репо + symlink/copy в writable PATH
@@ -25,6 +26,16 @@ Pattern для distribution мелких CLI-инструментов агент
 - **(а)** доступны в PATH из любых вызывающих контекстов (cron, launchd, hook'и);
 - **(б)** self-recoverable без sudo и без ручной правки `~/.zshrc` после переустановки / wipe;
 - **(в)** source-of-truth жил в git-репо, не локально.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Единый SoT в git-репо ↔ исполняемый файл в PATH | SoT гарантирует версионирование и восстановление, но cron/launchd не видит репо-путь; копия/ссылка в PATH делает инструмент доступным, но вводит drift между repo и target |
+| Writable без sudo ↔ conventional system paths | `/opt/homebrew/bin` или `~/.local/bin` не требуют sudo и работают для launchd, но отличаются от `/usr/local/bin` и требуют проверки PATH каждого окружения |
+| Symlink (один шаг обновления) ↔ копия (robust к wipe) | Симлинк автоматически отражает изменения в репо, но ломается при переезде репо; копия переживает wipe, но требует повторного deploy после правки |
 
 ## Три требования к target-директории
 
