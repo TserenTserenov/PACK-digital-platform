@@ -7,6 +7,7 @@ domains: [postgresql, debugging, verification]
 trust: high
 epistemic_stage: validated
 source: WP-7 rewards-projection peer-session 2026-05-30-16
+last_updated: 2026-08-01
 ---
 
 # DP.M.258: Cross-component trigger reasoning через полное body + search_path resolution
@@ -14,6 +15,16 @@ source: WP-7 rewards-projection peer-session 2026-05-30-16
 ## Назначение
 
 Метод диагностики cascade-багов, где взаимодействуют функция + trigger + промежуточная таблица в разных (или казалось бы разных) схемах. Снижает частоту ложно-отрицательного диагноза «cascade невозможен — schemas разные».
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Скорость диагноза ↔ полнота расследования | Сигнатуры и одна строка trigger дают быстрый ответ, но вводят в заблуждение; полный body требует времени, но точнее |
+| Уверенность в namespace isolation ↔ реальность search_path | Разные schemas кажутся надёжной защитой, но unqualified references и динамический search_path размывают границы |
+| Простота ответа ↔ точность root cause | «cascade невозможен» — удобный и конкретный ответ, но часто ложно-отрицательный при неполном анализе |
 
 ## Шаги
 
@@ -32,6 +43,16 @@ source: WP-7 rewards-projection peer-session 2026-05-30-16
    - Из trigger в schema X: `search_path = schema_of_trigger, public`?
 
 5. **Только после (1)-(4)** утверждать «функция пишет в X, trigger на Y, schemas разные → cascade невозможен».
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Диагноз по сигнатуре и одной строке trigger | Практикующий торопится и не извлекает полный body, пропуская side effects внутри `IF`/`CASE`/`LOOP` |
+| Упрощение namespace resolution | «schemas разные → cascade невозможен» без проверки effective `search_path` и unqualified references |
+| Игнорирование `pg_get_functiondef` как «лишняя работа» | Склонность считать, что сигнатура + `CREATE TRIGGER` достаточны, особенно под давлением «быстро найти root cause» |
 
 ## Антипаттерн
 
