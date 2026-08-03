@@ -8,6 +8,7 @@ epistemic_stage: confirmed
 trust: high
 valid_from: 2026-06-02
 source: peer-session 2026-06-01-21, DS-my-strategy commits 7090877 + 395b481e, DS-my-strategy CLAUDE.md §WP-REGISTRY drift guard
+last_updated: 2026-08-01
 ---
 
 # DP.M.269 — Bidirectional registry drift guard via commit-msg hook
@@ -15,6 +16,16 @@ source: peer-session 2026-06-01-21, DS-my-strategy commits 7090877 + 395b481e, D
 ## Описание
 
 Метод принудительной двусторонней синхронизации между рабочими файлами и их реестром через git commit-msg hook. Drift обнаруживается в момент commit, не при следующем review.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Строгая синхронизация ↔ скорость коммита | Hook блокирует drift, но замедляет коммит и требует обновлять реестр даже для мелких правок статуса |
+| Escape hatch ↔ злоупотребление | `[no-registry-touch]` нужен для легитимных исключений, но каждый escape — потенциальный путь обхода guard'а, требующий аудита |
+| File-level check ↔ точность | File-level check прост и надёжен для >95% случаев, но не ловит hunk-level изменения; hunk-level точнее, но ломается на markdown-таблицах с pipe в тексте |
 
 ## Алгоритм
 
@@ -48,6 +59,16 @@ source: peer-session 2026-06-01-21, DS-my-strategy commits 7090877 + 395b481e, D
 - `inbox/WP-*.md` ↔ `WP-REGISTRY.md`
 - `routes.yaml` ↔ `handlers/*.py`
 - `manifest.json` ↔ `implementations/*.md`
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| «Это just formatting, можно [no-registry-touch]» | Практикующий склонен использовать escape hatch для удобства, даже когда изменение всё-таки затрагивает статус или placement |
+| Игнорирование Week Close audit | Escape-теги не проверяются периодически, и злоупотребление накапливается до тех пор, пока guard не теряет смысл |
+| «Forward direction важнее backward» | Проверяют только изменение detail-файлов без реестра, но не наоборот, что даёт orphan-записи в реестре |
 
 ## Связи
 

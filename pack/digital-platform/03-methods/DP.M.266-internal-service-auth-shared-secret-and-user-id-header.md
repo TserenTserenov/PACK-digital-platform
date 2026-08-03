@@ -13,6 +13,7 @@ related:
 tags: [auth, microservices, least-privilege, service-to-service, jwt, accounting]
 source: "session 2026-05-30 WP-201 Ф3.4 mcp_tools (peer-session 30, 01-peer.md:17-21, report.md §2 Тема 2)"
 schema_version: 1
+last_updated: 2026-08-01
 ---
 
 # DP.M.266 — Internal service auth: shared secret + X-User-ID header вместо user_jwt propagation
@@ -20,6 +21,16 @@ schema_version: 1
 ## Суть метода
 
 При построении внутреннего service-to-service вызова (agent-runner → LLM-proxy, worker → cache-tier) возникает соблазн прокидывать raw user-токен (user_jwt, session_id) для per-user accounting и rate-limit на стороне зависимого сервиса. Method предлагает альтернативу с меньшим blast radius: **shared service-level secret** (`PROXY_SHARED_SECRET` в env, required field в Settings) + **`X-User-ID` header** для accounting. Backend-сервис доверяет user-ID claim'у благодаря shared-secret и не валидирует JWT повторно.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Упрощение accounting ↔ blast radius | user_jwt propagation даёт полный scope для accounting, но увеличивает blast radius при компрометации; shared secret + X-User-ID ограничивает blast radius, но теряет scope-claims |
+| Прозрачность trust boundary ↔ удобство | Внутри одного deployment unit shared secret проще в настройке, но cross-tenant boundary требует JWT; граница trust boundary может размываться при «удобстве» |
+| Token rotation ↔ стабильность deploy | Shared secret rotation требует одновременного deploy обоих сервисов; user_jwt rotation проще, но каждый потребитель видит токен и может кэшировать его |
 
 ## Когда применять
 
@@ -37,6 +48,16 @@ schema_version: 1
    - Constant-time сравнение `Authorization` с собственным `PROXY_SHARED_SECRET` → 401 при mismatch.
    - При passed check — читает `X-User-ID`, использует для logging/metrics/rate-limit.
 4. Token rotation: каждые N дней / по incident — оба сервиса обновляются одновременно через deployment с blue-green.
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| «Прокинуть user_jwt — проще и правильнее» | Практикующий предпочитает повторно использовать существующий токен, недооценивая blast radius, scope creep и усложнение rotation/revocation |
+| Игнорирование constant-time comparison | Сравнение shared secret делается обычным `==` или `!=`, что уязвимо для timing-атак и снижает эффект защиты |
+| «Internal service — можно не менять secret» | Ротация откладывается, secret зашивается в конфигурацию и долго живёт, увеличивая окно компрометации |
 
 ## Антипаттерн (что НЕ делать)
 
