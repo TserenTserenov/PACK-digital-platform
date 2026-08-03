@@ -28,7 +28,10 @@ L1-шаблон определяет **hook-point**: именованный пу
 HOOK="$IWE/extensions/day-open.summary-extra.sh"
 extra=""
 if [ -x "$HOOK" ]; then
-  extra=$("$HOOK" "$DATE_ARG" 2>/dev/null) || true
+if ! extra=$("$HOOK" "$DATE_ARG"); then
+  echo "optional hook failed: $HOOK; continuing without its output" >&2
+  extra=""
+fi
 fi
 # Использовать $extra в шаблоне вывода
 ```
@@ -37,8 +40,8 @@ fi
 - Имя файла: `extensions/{protocol}.{hook-name}.sh`
 - Аргументы: определяет L1 (стандартно: дата или другой контекст)
 - Stdout: текст для вставки в шаблон
-- Stderr: подавляется L1 (`2>/dev/null`)
-- Exit code: не проверяется (`|| true`); ошибка hook = noop
+- Stderr: передаётся в журнал вызывающего протокола
+- Exit code: ненулевой код явно журналируется, но не останавливает L1; ошибка hook = наблюдаемый noop
 
 ## Отличие от Drop-in (DP.M.009 §3.1)
 
@@ -47,7 +50,7 @@ fi
 | L1 знает формат расширения | Да (читает config/YAML) | Нет (вызывает исполняемое, берёт stdout) |
 | Реализация L3 | Declarative config | Любой язык (bash, python, SQL) |
 | L1 знает о существовании | Нет (сканирует директорию) | Нет (проверяет конкретный путь) |
-| Ошибка расширения | Зависит от формата | Тихий noop |
+| Ошибка расширения | Зависит от формата | Неблокирующий noop с записью в stderr |
 
 ## Когда применять
 
