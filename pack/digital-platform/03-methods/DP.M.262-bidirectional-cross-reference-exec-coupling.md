@@ -10,6 +10,7 @@ status: active
 valid_from: 2026-05-30
 schema_version: 1
 source: "peer-session 2026-05-30-27-wp-364-fork4-ale-calibration (03-peer.md)"
+last_updated: 2026-08-01
 ---
 
 # DP.M.262 Bidirectional cross-reference для shared exec-mechanism
@@ -17,6 +18,16 @@ source: "peer-session 2026-05-30-27-wp-364-fork4-ale-calibration (03-peer.md)"
 ## Описание
 
 При использовании чужого exec-mechanism (расширение чужого Telegram alert, чужого cron'а, чужого webhook'а) для **своего** lifecycle — возникает скрытое coupling: владелец чужого механизма меняет скрипт без знания о вашем потребителе → silent drift.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Минимальное изменение чужого скрипта ↔ долгосрочная видимость | Patch в чужой exec-path быстрее, но скрыт; bidirectional ref требует комментариев в двух местах, что замедляет, но предотвращает silent drift |
+| Zero coupling (independent reminder) ↔ maintenance burden | Собственный reminder не ломается от чужих изменений, но добавляет cron/reminder инфраструктуру и требует нового owner'а |
+| Прозрачность coupling ↔ чистота метаданных | Pack-import декларативен, но не ловит runtime concatenation; bidirectional ref ловит, но загромождает код и не виден из frontmatter |
 
 ## IPO
 
@@ -36,6 +47,16 @@ source: "peer-session 2026-05-30-27-wp-364-fork4-ale-calibration (03-peer.md)"
 
 Pack-import: coupling декларативен (явный `pack_refs:` в frontmatter).
 Здесь: coupling скрытый, через runtime concatenation — не виден из метаданных.
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| «Небольшой patch в чужой скрипт — не страшно» | Практикующий недооценивает частоту изменений владельцем exec-path и вероятность silent drift |
+| Забывание потребительской ссылки | Делаем комментарий в источнике, но не якорим в потребителе → drift обнаруживается только при инциденте |
+| Предпочтение magic-string injection | Вместо явного hook'а расширяем чужую строку через `+=`, что делает coupling невидимым и хрупким |
 
 ## Тест применимости
 
