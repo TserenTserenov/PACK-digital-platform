@@ -79,6 +79,15 @@ def transform(src: str) -> str:
 - **Да** → требуется bail-out на boundary до закрытия issue по полному multi-match handling.
 - **Нет** (refactor сохраняет cardinality, или функция read-only) → bail-out не нужен.
 
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Тяга удалить bail-out после зелёного прогона | «Лишний код» мозолит глаза; критерий удаления — не «прошло N дней», а «counter == 0 за N дней при живом трафике boundary case» — подменяется календарным, и защита снимается без свидетельств безопасности (третий антипаттерн, но как дрейф внимания, не как решение) |
+| Привыкание к CRITICAL-алерту | Если boundary case оказался частым, bail-out срабатывает постоянно; alert fatigue гасит сигнал, и временный foothold становится постоянным поведением — технический долг перестаёт ощущаться долгом |
+
 ## Связи
 
 - **Remediates DP.FM.113** — `re.search()` глотает второе нарушение в multi-violation validators.
@@ -91,3 +100,7 @@ SQL transformers, code-mod tools, AST rewriters, parser refactor, любые `se
 ## Прецедент
 
 WP-7 RPA close (2026-05-30): `_COMPUTE_CALL_RE.search(sql)` → `finditer(sql)` с safety bail-out при `len > 1` в `_split_compute_from_sql:386`. Bail-out поймал production-input с двумя SQL-вызовами, что было бы переписано неверно через старую single-match логику.
+
+---
+
+> 2026-08-03 — дозакрытие миграции на обогащённый формат (Bias-Annotation), WP-448 Ф12 Батч 3 (суб-батч 6б). Эталон формата: `SPF/pack-template/03-methods/_method-card-template.md`.
