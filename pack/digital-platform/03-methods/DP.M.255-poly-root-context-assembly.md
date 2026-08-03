@@ -16,6 +16,7 @@ related:
 tags: [poly-context, context-assembly, multi-program, qualification, composition]
 source: "WP-379 Ф5 (peer-session 2026-06-01-12)"
 schema_version: 1
+last_updated: 2026-08-01
 ---
 
 # DP.M.255 «Поликорневая сборка контекста» / «Poly-root Context Assembly»
@@ -23,6 +24,16 @@ schema_version: 1
 > **Статус:** перенесено из draft `sessions/2026-06/2026-06-01-09-pack-extraction-poly-root/report.md` в Pack (peer-session 2026-06-01-12).
 
 Метод реализует контекстную составляющую `DP.SC.164 «Доставка персонального руководства пилоту»` §Этап-1 (Сборщик контекста). Собирает фрагменты контекста из нескольких программ развития, упорядоченных по квалификации пилота.
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Полнота контекста ↔ релевантность/шум | Больше программ в poly_context даёт больше информации для downstream, но увеличивает риск шума и конфликтующих инструкций |
+| Порядок приоритета ↔ additive concatenation | Qualification order задаёт приоритет, но метод намеренно не дедуплицирует и не резолвит блоки — это отдано downstream |
+| Стабильность контракта ↔ гибкость implementation | Output contract (poly_context, program_tag) фиксирован, но context_resolver implementation-specific, что даёт свободу DS и скрывает детали от потребителя |
 
 ---
 
@@ -137,6 +148,16 @@ poly_context as defined in §2, program_tag as defined in §2
 - **additive:** `context_block`s are concatenated, not merged or resolved
 
 ---
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Использование program_tag как routing key | Несмотря на явный запрет, практикующий тянется к `if program_tag == "X+Y" then ...` — это ломает инвариант и делает систему хрупкой при изменении qualification_map |
+| Дедупликация на уровне метода вместо downstream | Желание «почистить» контекст приводит к слиянию или удалению блоков внутри сборщика, нарушая additive-инвариант |
+| Переупорядочивание программ по удобству | Вместо сохранения qualification order программы сортируются по алфавиту, привычке или «важности», что меняет приоритет и ломает downstream routing |
 
 ## §4. Связи
 

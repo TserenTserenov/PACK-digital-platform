@@ -9,6 +9,7 @@ epistemic_stage: empirical
 status: active
 valid_from: 2026-05-29
 schema_version: 1
+last_updated: 2026-08-01
 source: "peer-сессия 2026-05-29-14-mim-as-it-company Тема 4 (ALE как направление WP-7)"
 ---
 
@@ -17,6 +18,16 @@ source: "peer-сессия 2026-05-29-14-mim-as-it-company Тема 4 (ALE ка�
 ## Описание
 
 При декомпозиции umbrella-РП на направления отличать **стандартные инфраструктурные направления** (CI/CD, observability, deployment, package management — общие для любой production-системы) от **domain-specific subsystems** (компоненты, отсутствующие в reference-IT-стеке для данного класса систем: reflection loop, user-model store, calibration engine для knowledge/agent-платформ).
+
+## Forces
+
+_Какие конкурирующие давления удерживает метод._
+
+| Force | Tension |
+|-------|---------|
+| Стандартизация инфра-направлений ↔ уникальность domain-specific | Типовые CI/CD/observability направления проще планировать и переиспользовать, но в них растворяются subsystems, которые отсутствуют в reference-стеке |
+| Меньше направлений в umbrella ↔ прозрачность roadmap domain-части | Агрегирование снижает когнитивную нагрузку, но скрывает roadmap и ownership для domain-specific компонентов |
+| Единый процессный funnel ↔ отдельная subsystem-идентичность | Упрощение декомпозиции до process funnel теряет разницу масштабов между производством артефактов и обучением платформы |
 
 ## IPO
 
@@ -34,6 +45,16 @@ source: "peer-сессия 2026-05-29-14-mim-as-it-company Тема 4 (ALE ка�
 - User-model store с cp/bh-профилем → domain-specific (не растворять в storage).
 - CI/CD pipeline → infra.
 - Logging/metrics → infra.
+
+## Bias-Annotation
+
+_Куда систематически съезжает внимание практикующего._
+
+| Bias | Direction of distortion |
+|------|--------------------------|
+| Инфра-направления кажутся «безопасными» и понятными | Внимание уходит в CI/CD, observability, deployment как в хорошо известные направления, а domain-specific subsystem остаётся без явного owner'а и roadmap |
+| Domain-specific subsystem растворяется в process funnel | Склонность интерпретировать reflection loop, user-model store, calibration engine как этап производства артефактов, а не как отдельную подсистему продукта |
+| Стремление уменьшить N направлений umbrella | Давление «не раздувать план» приводит к поглощению domain-specific направлений инфра-направлениями, что позже даёт drift в архитектуре и roadmap |
 
 ## Анти-паттерн
 
