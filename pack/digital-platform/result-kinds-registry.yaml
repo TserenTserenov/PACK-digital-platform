@@ -1,0 +1,146 @@
+# WP-481 Ф7: открытый реестр kind-ов результата работы («не бывает общего результата»)
+#
+# Зачем: FPF намеренно НЕ вводит тип «Результат вообще» (инвентарь п.49/54/73) —
+# под общим словом разные участники понимают разное. Вместо супертипа — открытый
+# перечень конкретных kind-ов (дискриминаторов): WP Gate и Верификатор выбирают
+# проверку ПО kind-у артефакта («не бывает общего результата» → «не бывает общей
+# проверки»), /artifactor выдаёт expected_result_kind как дискриминатор.
+# Образец механики реестра: DS-my-strategy/docs/state-axes-registry.yaml (WP-457).
+#
+# РАЗМЕЩЕНИЕ: доменный словарь этого Pack, сиблинг routing.yaml (тот же уровень
+# машинного контракта — не нарративная карточка с id_pattern DP.*, поэтому не
+# внутри 02-domain-entities/ или 07-map/). Решение пилота 05.08.2026, консенсус
+# пир-сессии 2026-08-05-14-codex-wp481-f7-impl. Прежняя рабочая копия жила в
+# DS-my-strategy/inbox/WP-481/result-kinds-registry.yaml — удалена после
+# переключения потребителей (scripts/check-result-kind.py, scripts/artifactor.py)
+# на этот файл как SoT.
+#
+# АНТИ-УТЕЧКА В СУПЕРТИП (жёсткое правило реестра, из дизайна Ф7):
+#   1. Элемент generic/other ЗАПРЕЩЁН. Не нашёлся подходящий kind → это кандидат
+#      в НОВЫЙ kind через CTR2L (сначала правило распознавания предмета и граница,
+#      потом подведение под kind), а не запись «прочее». Классификатор в этом
+#      случае возвращает RESULT_KIND_UNRESOLVED, не подменяет ближайшим kind-ом
+#      (найдено на живом примере: spec_writing/«Сценарии ТЗ» не равно
+#      MethodDescription, хоть и похоже лексически).
+#   2. Общая обязательная структура САМИХ результатов запрещена — required_structure
+#      у каждого kind свой. Служебные метаданные реестра (kind_id, verification_class,
+#      gate_ready, handler_*, required_lenses, aggregation_policy) — не в счёт.
+#      Появилась «общая структура результата» для всех kind-ов → сигнал утечки
+#      в супертип, стоп и пересмотр.
+#
+# gate_ready: true  — структура kind-а определена И путь проверки существует
+#                     (эталон /verify, работающий скилл или детерминированный след) —
+#                     kind можно требовать в гейтах (WP Gate, hook, R23).
+# gate_ready: false — kind описан, но проверка не операционализирована; гейты его
+#                     пока не принимают (см. reason_not_ready). /verify возвращает
+#                     NOT_VERIFIABLE с reason_not_ready, НЕ FAIL и НЕ PASS —
+#                     артефакт технически не проверен, а не провалил проверку.
+#
+# handler_type — kind проверки: rubric (текстовая рубрика sub-agent'ом) |
+#                deterministic (детерминированный след факта, без LLM) |
+#                skill (делегирование другому скиллу) | manual (только явная
+#                приёмка пилотом, эталон/алгоритм ещё не создан).
+# handler_id   — конкретная ссылка на обработчик (путь к эталону/скиллу/функции)
+#                при handler_type != manual. null при manual.
+# required_lenses — дополнительные линзы /verify, обязательные ПОСЛЕ основного
+#                обработчика (пусто = нет обязательных). Не заменяют handler,
+#                агрегируются с ним по aggregation_policy.
+# aggregation_policy — как сводится verdict основного handler'а и required_lenses:
+#                any_required_fail_blocks (по умолчанию — любой обязательный FAIL
+#                блокирует итог) | n/a (при handler_type: manual — агрегации нет,
+#                решение принимает пилот).
+#
+# verification_class — по HD #32: trivial | closed-loop | open-loop | problem-framing.
+# name_ru = plain-имя для пилота; kind_id = tech-имя (дискриминатор).
+#
+# СВЯЗАННЫЕ ФАЙЛЫ (не в счёт супертипа — служебная навигация):
+#   - scripts/check-result-kind.py (DS-my-strategy) — commit-gate, читает этот файл
+#     по относительному пути от корня IWE, вычисленному из своего REGISTRY_REL.
+#   - scripts/artifactor.py (IWE root) — классификатор, KIND_MAP: task_type → kind_id.
+#   - .claude/skills/verify/SKILL.md (IWE root) — диспетчер /verify по kind.
+#
+# ЗАМЕЧЕНО, НЕ РЕАЛИЗОВАНО (05.08, пир-сессия с Codex): task_type=spec_writing
+# («сценарии ТЗ») не покрыт ни одним из шести kind-ов — описывает требуемое
+# поведение интерфейса/состояния/доступ, не method_steps и не Episteme-claims.
+# Кандидат нового kind — Specification. Не заводим сейчас (нет живого повторного
+# случая, только один эталонный запрос WP-421); /artifactor возвращает для него
+# RESULT_KIND_UNRESOLVED, не подменяет ближайшим.
+
+kinds:
+  - kind_id: ProblemCard
+    name_ru: "Карточка проблемы"
+    origin: "FPF C.22.2 Problem Shaping (семинар 1, п.28/90/91 инвентаря)"
+    required_structure: [signal, bounded_context, problem_boundary, improvement_sign]
+    verification_class: problem-framing
+    verify_etalon: null
+    handler_type: manual
+    handler_id: null
+    required_lenses: []
+    aggregation_policy: n/a
+    gate_ready: false
+    reason_not_ready: "эталона /verify для карточки проблемы нет; кандидат-рубрика: 4 обязательных поля заполнены содержательно + карточка НЕ выбирает метод и НЕ является планом (по C.22.2)."
+
+  - kind_id: ChoiceResult
+    name_ru: "Результат выбора"
+    origin: "семинар 1: сравнение вариантов по явным критериям"
+    required_structure: [options_compared, criteria, decision, rejected_because]
+    verification_class: open-loop
+    verify_etalon: null
+    handler_type: manual
+    handler_id: null
+    required_lenses: []
+    aggregation_policy: n/a
+    gate_ready: false
+    reason_not_ready: "эталон сравнения вариантов не создан; для архитектурных выборов уже есть смежный путь — профиль ЭМОГССБ (/archgate), но он оценивает решение, а не полноту фиксации выбора; ценнее всего проверка зафиксированной ОТВЕРГНУТОЙ альтернативы (иначе её предложат заново)."
+
+  - kind_id: WorkDone
+    name_ru: "Выполненная работа"
+    origin: "FPF U.Work (семинар 1, п.3/55: kind + факт + следующий ход)"
+    required_structure: [work_description, fact_telemetry]
+    verification_class: closed-loop
+    verify_etalon: null
+    check_method: "детерминированный след факта: коммит/лог/запись события — «сделал → эффект» (A7); заявление без наблюдаемого следа = не WorkDone (байка о трёх лягушках)"
+    handler_type: deterministic
+    handler_id: "rule-engine.sh::check-trace-satisfaction (AR.005-evidence: repo_clean + orz_filled + pushed — уже в проде, не изобретается заново)"
+    required_lenses: []
+    aggregation_policy: any_required_fail_blocks
+    gate_ready: true
+
+  - kind_id: Episteme
+    name_ru: "Описание / знание"
+    origin: "FPF Episteme (семинар 1; граф атомарных claim-ов)"
+    required_structure: [claims, basis, connectivity]
+    verification_class: open-loop
+    verify_etalon: ".claude/skills/verify/verify-ontological-adequacy.md"
+    check_method: "/verify ontological (Ф9, DP.SC.193): онтологично-не-лексично + реальная проблема-не-generic"
+    handler_type: rubric
+    handler_id: ".claude/skills/verify/verify-ontological-adequacy.md"
+    required_lenses: []
+    aggregation_policy: any_required_fail_blocks
+    gate_ready: true
+
+  - kind_id: MethodDescription
+    name_ru: "Описание метода"
+    origin: "семинар 1, п.49: описание метода ≠ выбранный метод — частая подмена на hand-off"
+    required_structure: [method_steps, applicability_boundary]
+    verification_class: open-loop
+    verify_etalon: null
+    check_method: "/vdv audit — проверка описания стадийного процесса по 6 принципам Вход·Действие·Выход"
+    handler_type: skill
+    handler_id: "/vdv audit"
+    required_lenses: []
+    aggregation_policy: any_required_fail_blocks
+    gate_ready: true
+
+  - kind_id: NegativeResult
+    name_ru: "Отрицательный результат"
+    origin: "семинар 1, п.5/58: установленная непригодность метода = валидное продвижение (открывает выбор другого метода)"
+    required_structure: [method_tried, refutation_evidence, opened_move]
+    verification_class: open-loop
+    verify_etalon: null
+    handler_type: manual
+    handler_id: null
+    required_lenses: []
+    aggregation_policy: n/a
+    gate_ready: false
+    reason_not_ready: "эталон честного опровержения не создан (шаг 5 дизайна Ф7: проверять, что метод опровергнут по свидетельству, а не заброшен по усталости); до эталона NegativeResult принимается только через явную приёмку пилотом. ИСКЛЮЧЕНИЕ ИЗ FAIL-CLOSED (05.08): actual_result_kind == NegativeResult НЕ считается несовпадением с expected_result_kind в /verify — честный отрицательный результат не наказывается как провал классификации; PASS всё равно не выдаётся автоматически (см. handler_type: manual выше), verdict — NOT_VERIFIABLE до приёмки пилотом."
