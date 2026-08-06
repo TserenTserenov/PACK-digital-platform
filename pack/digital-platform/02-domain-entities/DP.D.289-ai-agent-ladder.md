@@ -1,6 +1,10 @@
 ---
 id: DP.D.289
 name: "Лестница ИИ-агентов: чат-бот ≠ stateless-агент ≠ stateful-агент с памятью пользователя ≠ агент с непрерывной личностью"
+name_ru: "Лестница ИИ-агентов (четыре ступени)"
+name_en: "AI Agent Ladder (four rungs)"
+summary: "Четыре ступени ИИ-агентов различаются не количеством функций, а непрерывностью личности и владельцем памяти: chatbot → stateless agent → stateful agent with user-owned memory → agent with persistent personality."
+related: ["DP.ARCH.005", "DP.D.052", "DP.ASSIST.001"]
 type: distinction
 pack: PACK-digital-platform
 domain: digital-platform
