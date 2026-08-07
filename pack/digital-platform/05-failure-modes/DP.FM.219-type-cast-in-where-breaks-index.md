@@ -13,6 +13,9 @@ related:
 tags: [postgresql, performance, query, index, type-cast, rls]
 ---
 
+<!-- index-health: skip -->
+<!-- Причина: описание режима отказа, не индекс. -->
+
 # DP.FM.219 — Приведение типа в WHERE на большой таблице → seq scan вместо index scan
 
 ## Описание

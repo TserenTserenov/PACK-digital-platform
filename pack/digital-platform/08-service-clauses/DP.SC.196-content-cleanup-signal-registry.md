@@ -5,6 +5,9 @@ domains: [service-clauses, knowledge-management]
 tags: [specification, contract, backlog, author-workflow]
 ---
 
+<!-- index-health: skip -->
+<!-- Причина: сервисный контракт реестра, не сам индекс. -->
+
 # DP.SC.196 — Реестр сигналов авторской очистки содержания
 
 ## Обещание
