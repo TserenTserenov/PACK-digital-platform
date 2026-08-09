@@ -1,6 +1,8 @@
 ---
 id: DP.ROLE.097
 name: Следователь (Causal Investigator)
+name_ru: Следователь
+name_en: Causal Investigator
 type: role-description
 status: draft
 valid_from: 2026-08-09

@@ -1,6 +1,8 @@
 ---
 id: DP.SC.066
 name: honest-rung-labelling
+name_ru: Честная разметка рунга для утверждений о развитии
+name_en: Honest rung labelling for development claims
 type: sc
 status: draft
 layer: L4-Personal
@@ -9,8 +11,8 @@ consumer: ["R27 Портной", "R1 Стратег", "R42 Диагност", "R
 created: 2026-08-09
 updated: 2026-08-09
 related:
-  realizes: []
-  uses: []
+  realizes: [DP.ROLE.097]
+  uses: [DP.ARCH.006]
   extends: []
 wp: WP-290
 ---
