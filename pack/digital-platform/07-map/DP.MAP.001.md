@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-07-23
-last_updated: 2026-07-23
+created: 2026-08-09
+last_updated: 2026-08-09
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-07-23. Do not edit manually.
+> Auto-generated from frontmatter on 2026-08-09. Do not edit manually.
 
 ---
 
@@ -20,28 +20,29 @@ generated: true
 | AISYS (AISYS) | 4 |
 | ARCH (ARCH) | 9 |
 | ASSIST (ASSIST) | 1 |
+| Characteristics (CHR) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 266 |
+| Distinctions (D) | 272 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 292 |
-| IWE (IWE) | 13 |
+| Failure Modes (FM) | 315 |
+| IWE (IWE) | 14 |
 | KR (KR) | 3 |
-| Methods (M) | 367 |
+| Methods (M) | 373 |
 | Maps (MAP) | 2 |
-| METHOD (METHOD) | 132 |
+| METHOD (METHOD) | 177 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
 | ROADMAP (ROADMAP) | 2 |
-| ROLE (ROLE) | 76 |
+| ROLE (ROLE) | 77 |
 | RUNBOOK (RUNBOOK) | 1 |
-| SC (SC) | 158 |
+| SC (SC) | 163 |
 | SoTA Annotations (SOTA) | 35 |
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1388** |
+| **Total** | **1476** |
 
 ## Distinctions
 
@@ -149,6 +150,7 @@ generated: true
 | DP.D.104 | Прогресс к награде ≠ Показ баланса | — | — |
 | DP.D.105 | Pack-internal frontmatter check ≠ DS-level prose check (scope линтера) | — | active |
 | DP.D.106 | Trigger по состоянию ≠ Trigger по счётчику (для архитектурных переключений) | — | active |
+| DP.D.107 | Ui Ack Vs Side Effect | — | proposed |
 | DP.D.108 | Поведенческий ≠ Технический bottleneck | — | active |
 | DP.D.109 | TOC Bottleneck (вклад в потерю Throughput) ≠ Readiness Gap (разрыв готовности) | — | active |
 | DP.D.110 | Pillar-текст ≠ Conversion Post | — | active |
@@ -313,6 +315,11 @@ generated: true
 | DP.D.279 | Шкала серьёзности ≠ Идентификатор находки | — | draft |
 | DP.D.280 | Две оценки одного конструкта в разное время несравнимы без совпадающей методологии | — | draft |
 | DP.D.284 | `--allowedTools` в headless Claude Code принимает только полные namespaced имена MCP-инструментов | — | draft |
+| DP.D.285 | Разделитель оси О: конкретный экземпляр, не глагол-отношение | — | draft |
+| DP.D.286 | «Нет данных» vs ложный «недоступен»/«0» в дашборде | — | draft |
+| DP.D.287 | Прикладное мастерство = личное, не платформенное | — | draft |
+| DP.D.288 | Быстрое закрытие vs Полное закрытие (сессия/день/неделя/месяц) | — | draft |
+| DP.D.289 | Лестница ИИ-агентов: чат-бот ≠ stateless-агент ≠ stateful-агент с памятью пользователя ≠ агент с непрерывной личностью | Четыре ступени ИИ-агентов различаются техническим носителем, непрерывностью личности и владельцем памяти; ступень не измеряет культуру, мастерство, качество или полномочия. | active |
 
 ## Methods
 
@@ -447,6 +454,7 @@ generated: true
 | DP.M.140 | Двухфазный жизненный цикл онтологических терминов: forming → formalized | — | draft |
 | DP.M.141 | Выбор source в pack_refs: ID Pack vs docs + ontology_anchor | — | — |
 | DP.M.142 | CI Setup Flag Mode Separation | — | draft |
+| DP.M.144 | Digital Twin staleness diagnostic — calc_at before code | — | draft |
 | DP.M.145 | Terminology replace — multi-pass verify through peer agent | — | draft |
 | DP.M.146 | Working-hypothesis marker with verification source | — | — |
 | DP.M.147 | Semantic-first / Performance-later layered integration | — | draft |
@@ -514,11 +522,15 @@ generated: true
 | DP.M.213 | UPSERT + xmax=0 — атомарное определение INSERT vs UPDATE | — | active |
 | DP.M.214 | Silent OAuth Token Provisioning — провиженинг через session cookie | — | active |
 | DP.M.215 | SQL NOT EXISTS guard для predicate-based row exclusion | — | active |
+| DP.M.216 | DNS A-record cutover — zero-downtime переезд домена | — | active |
 | DP.M.217 | Glue Requires Executor Pipeline Decomposition | — | active |
 | DP.M.218 | Defense-in-depth протокола: Close-check + Open-autofix | — | active |
 | DP.M.219 | BY-SCRIPT маркер — идемпотентная авто-инжекция в шаблонный файл | — | active |
 | DP.M.220 | Threshold-or-time авто-коммит с daily squash | — | active |
+| DP.M.221 | Infrastructure Snapshot Living Artifact | — | draft |
+| DP.M.222 | Event Type Three Component Atomic Deploy | — | — |
 | DP.M.223 | Marp тёмная тема — layout-классы для структурированных презентаций | — | — |
+| DP.M.224 | Двухшаговый онбординг бота: путь → конфигурация | — | draft |
 | DP.M.225 | Identity-anchor персонаж в семинаре | — | draft |
 | DP.M.226 | Прогрессивное заполнение карточки в семинаре (3 точки) | — | draft |
 | DP.M.230 | Двухуровневая защита async replay-loop от infinite retry (outer + per-event wait_for) | — | active |
@@ -685,6 +697,7 @@ generated: true
 | DP.M.409 | При закрытии gating-условия: проверить реализацию в смежных РП | — | draft |
 | DP.M.410 | Pull-only паттерн при разделении GitHub-организации: новая org тянет, не получает push | — | draft |
 | DP.M.411 | Override env-var для переиспользования guard в соседнем контексте без смены дефолта | — | draft |
+| DP.M.412 | Состояние перед уведомлением: идемпотентный порядок завершения | — | active |
 
 ## Work Products
 
@@ -833,6 +846,7 @@ generated: true
 | DP.FM.133 | Backup Restore No 3Way Merge | — | active |
 | DP.FM.134 | Vocabulary Split Aux Subsections | — | — |
 | DP.FM.135 | Projection Rule No Backfill Fallback Mask | — | — |
+| DP.FM.136 | Unanchored Grep Frontmatter False Positive | — | — |
 | DP.FM.137 | Asymmetric Alert Suppression Paths | — | — |
 | DP.FM.138 | Shared Db Without Env Discriminator | — | — |
 | DP.FM.139 | Llm Proxy Default Timeout Too Short | — | — |
@@ -1003,6 +1017,28 @@ generated: true
 | DP.FM.358 | git worktree не открывает одну ветку дважды — для параллельных агентов нужна per-session branch | — | draft |
 | DP.FM.359 | PENDING-инструкции в headless-скаффолде не выполняются — нужен детерминированный скрипт-забор | — | draft |
 | DP.FM.360 | Прод-сервис вызывает LLM-провайдера напрямую в обход прокси — невидимые расходы | — | draft |
+| DP.FM.361 | Коллизия кода сервисного обещания в реестре при назначении по «max+1» | — | draft |
+| DP.FM.362 | Проверка наличия структуры ловит контент-паттерн внутри ячеек — false positive | — | draft |
+| DP.FM.363 | Внутренняя нестыковка секций одного living-документа | — | draft |
+| DP.FM.364 | Эмодзи в имени сущности дублируется при рендере | — | draft |
+| DP.FM.365 | session-guard: warn-блок молчит при переименовании семафора | — | draft |
+| DP.FM.366 | check-trace-satisfaction возвращает vacuous ok при нулевых гейтах | — | draft |
+| DP.FM.367 | Same-code sweep по многим файлам оставляет протухшие cross-ref'ы | — | draft |
+| DP.FM.368 | Хук вызывает скрипт с несуществующим флагом — глобальный fail-closed на все коммиты | — | draft |
+| DP.FM.369 | Односторонний template-sync откатывает фиксы, сделанные в приёмнике | — | draft |
+| DP.FM.370 | Производный вид молча теряет строки при несовпадении формата | — | draft |
+| DP.FM.371 | Сторож в том же домене отказа не заметит собственную смерть | — | draft |
+| DP.FM.372 | Автокоммит update-конвейера может утащить пользовательский конфиг с секретами в публичный форк | — | draft |
+| DP.FM.373 | Карта маршрутизации отвечает «какой тип куда», не «какой домен ближе» | — | draft |
+| DP.FM.374 | Артефакт задеплоен, но не подключён к вызывающему чек-листу — wiring gap | — | draft |
+| DP.FM.375 | Два каталога с общим ID-пространством: потребители старого молча получают устаревшие версии | — | draft |
+| DP.FM.376 | Демотирование полных текстов в lazy меняет пути файлов — linkcheck обязателен как отдельный шаг | — | draft |
+| DP.FM.378 | Дублирующий канал доставки зависимости — латентный обрыв сборки при инвалидации кеша | — | draft |
+| DP.FM.379 | Самообходимый секрет-маркер: маркер исключения из проверки сам является секретом | — | draft |
+| DP.FM.380 | Race condition UTC-логгер vs локальный time-check при пересечении дня | — | draft |
+| DP.FM.381 | Remote-aware guard: git fetch + log HEAD..origin вместо bare git log | — | draft |
+| DP.FM.382 | CI-проверка на своём коммите, не на размере диффа | — | draft |
+| DP.FM.383 | Скрипт-напоминалка + WakeSystem = гонка инициализации | — | draft |
 
 ## SoTA Annotations
 
@@ -1066,7 +1102,7 @@ generated: true
 
 | ID | Name | Summary | Status |
 |----|------|---------|--------|
-| DP.ARCH.001 | Архитектура платформы | 3-слойная архитектура ИТ-платформы с 7 характеристиками (ЭМОГССБ) и 25 принципами: эволюционируемость, масштабируемость, обучаемость, генеративность, скорость, современность, безопасность | active |
+| DP.ARCH.001 | Архитектура платформы | 3-слойная архитектура ИТ-платформы с 7 характеристиками (ЭМОГССБ) и 34 принципами: эволюционируемость, масштабируемость, обучаемость, генеративность, скорость, современность, безопасность | active |
 | DP.ARCH.002 | Тиры платформы | 4 оси полномочий: T0–T4 (учащийся) + TM1–TM3 (наставник) + TA1–TA4 (администратор) + TD1 (разработчик). Каждый тир — конфигурация среды по 5 измерениям. Оси полномочий ортогональны: один человек = T + TM? + TA? + TD?. Отдельно — 2 оси онбординга (оснащение × развитие), см. §2б. | draft |
 | DP.ARCH.003 | Архитектура Digital Twin — единая точка расчёта и чтения | 8 принципов разделения Calculator / Reader. Единственный калькулятор — R28 Profiler. Интерфейсы — stateless витрины. Каждая цифра трассируется к IND-коду метамодели. | active |
 | DP.ARCH.004 | Архитектура данных Neon (Database-per-BoundedContext) | 12 баз данных Neon по принципу database-per-BoundedContext. Сводная таблица, карта, ERD по каждой БД, связи, потоки, реестр физ.объектов с маркерами О/С/Р/К, revenue-sharing механика (контракты/сплиты/выплаты), points-ledger (event-sourcing) + эмиссионный отчёт, верификация по чеклистам SPF.SPEC.005, замечаниям Андрея Д1-Д12 и категориям WP-257. | active |
@@ -1120,6 +1156,7 @@ generated: true
 | DP.IWE.011 | IWE Runtime Host Contract | — | draft |
 | DP.IWE.011-adapter-claude-code | Claude Code Adapter for IWE Host Contract | — | active |
 | DP.IWE.011-adapter-headless | Headless Adapter for IWE Host Contract | — | active |
+| DP.IWE.012 | Talk Mode — голосовой surface поверх IWE-сессии | — | active |
 
 ### KR
 
@@ -1265,6 +1302,51 @@ generated: true
 | DP.METHOD.204 | Unified Collector Over Precomputed Cache | Если live-данные и historical-данные требуют одинакового парсинга — единый сборщик, читающий сырые данные при каждом запросе, дешевле, чем предкомпьютинг + дублирующий live-путь. Тест: 'нужна ли та же логика для live-данных?' | draft |
 | DP.METHOD.205 | Acceptance Sampling для LLM Batch Output (30 проб, порог 90%) | — | draft |
 | DP.METHOD.206 | Nullable draft_path как разделитель Intent-Accepted vs Artifact-Exists | — | draft |
+| DP.METHOD.207 | Pg Dump Compression In Wrapper | pg_dump вызывается с compress=0 (без встроенного сжатия), сжатие выносится в обёртывающий скрипт отдельным шагом. Разделение ответственности: дамп — данные, обёртка — формат хранения. | draft |
+| DP.METHOD.208 | Lambda Replace For Special Chars | В re.sub используется lambda-замена (`lambda m: literal`) вместо строкового replacement-паттерна, когда заменяющий текст может содержать спецсимволы (`\1`, `\g<0>`), которые re-движок иначе интерпретирует как backreference. | draft |
+| DP.METHOD.209 | Migrate To Lazy Before Slim Cut | При слимировании hot-контекста: сначала полный текст переносится в lazy-файл, и только ПОСЛЕ этого в hot-файле делается срез/выжимка. Порядок необратим — срез до переноса теряет контент безвозвратно. | draft |
+| DP.METHOD.210 | Cron Reminder Skip Aware | Cron-напоминание проверяет, не был ли соответствующий период уже закрыт вручную, прежде чем сработать — иначе автоматика дублирует уже выполненное действие. | draft |
+| DP.METHOD.211 | Explain Verify Index Scan | После создания/изменения vector-индекса — верифицировать фактический план запроса через EXPLAIN, подтверждая Index Scan, а не полагаться на факт наличия индекса в схеме. | draft |
+| DP.METHOD.212 | Grep Guard User Facing Separate Pass | После смены терминологии в кодовой базе/Pack — grep-guard на остатки старого термина запускается отдельным проходом по user-facing строкам (тексты для пилота), не только по внутренним идентификаторам/коду. | draft |
+| DP.METHOD.213 | Status History On Entity Restore | При восстановлении Pack-сущности, ошибочно помеченной как removed/удалённая, история статусов (когда и почему была помечена removed, когда восстановлена) сохраняется в файле, а не стирается заменой на чистый active. | draft |
+| DP.METHOD.214 | Transcript Uncertainty Markers No Diarization | При транскрипции аудио без диаризации голосов — неочевидные реплики помечаются явным маркером неопределённости (например [?]), повреждённые шумом фрагменты помечаются в тексте, вместо тихого пропуска или уверенной атрибуции без основания. | draft |
+| DP.METHOD.215 | Deferred Contribution To Owner Backlog | Вклад, найденный в рамках одной задачи, но принадлежащий по смыслу другому РП/артефакту, записывается в backlog карточки-владельца этого артефакта, а не остаётся в контексте того, кто его нашёл. | draft |
+| DP.METHOD.216 | Narrow Blocker Nudge Vs Full Unfreeze | При обнаружении блокирующего вопроса — сначала предпочтителен узкий, конкретный вопрос пилоту (толчок), а не полная разморозка всей фазы/раздела общим вопросом; узкий вопрос двигает работу быстрее, общий вопрос остаётся отдельно как опциональный follow-up. | draft |
+| DP.METHOD.217 | Three Factor Phase Triage Ranking | Триаж фаз/пунктов каталога ранжируется по трём независимым факторам одновременно: связка с активным РП, приоритет недели, трудозатраты — а не по одному фактору (например, только по порядку появления). | draft |
+| DP.METHOD.218 | Seed Thresholds Conditional Over Pass Fail | Пороги верификации PASS/CONDITIONAL/FAIL, помеченные как seed (ещё не откалиброванные пилотом), трактуются так: CONDITIONAL считается более надёжным сигналом, чем точная граница между PASS и FAIL, до момента пилотной калибровки. | draft |
+| DP.METHOD.220 | Homes Yaml Declarative Routing Map | homes.yaml — декларативная карта маршрутизации артефактов по репозиториям, вместо хардкода путей размещения внутри скриптов; пофайловый классификатор + дефолт-правило для неоднозначных случаев. | draft |
+| DP.METHOD.221 | Verify Tool Docs Against Actual Behavior | Документацию инструмента (описание механизма) нужно верифицировать против фактического поведения кода, а не считать текст описания автоматически достоверным. | draft |
+| DP.METHOD.222 | Execution Mode Constraint Satisfaction Not Script | Протокол моделируется как набор ограничений (constraint-satisfaction), а не как линейный скрипт с фиксированным порядком шагов — [[gate]] = предусловие, блокирует; [[narrative]] = демонстрационный порядок, skippable, вход «с середины» штатен при соблюдении всех гейтов. | draft |
+| DP.METHOD.223 | Verifier Scope Parameter Own Scale | Верификатор гейтов протокола принимает scope-параметр, ограничивающий проверку файлом своего масштаба (например, day-close не должен передавать week-close/SKILL.md как проверяемый scope) — иначе проверка блокируется на чужих гейтах. | draft |
+| DP.METHOD.224 | Order Invariant Gate Instead Of Self Set Marker | Гейт согласия/допуска реализуется через структурный инвариант порядка создания артефактов (например, Write контекст-файла возможен только через определённый скрипт-создатель), а не через самовыставляемый маркер, который агент может проставить себе сам. | draft |
+| DP.METHOD.225 | Longlived Wp Actualization History To Archive | Актуализация долгоживущего РП: история переносится в архив, ядро замысла остаётся в основном контексте, needs-decision-пункты выносятся явным списком отдельно. | draft |
+| DP.METHOD.226 | Race Integration Test On Prod Infra | Интеграционный тест гонки (race condition) на реальной боевой инфраструктуре (не эмулятор) — тест воспроизводит гонку токен-коалесера на боевом Cloudflare Durable Object, поскольку локальный эмулятор недостаточно точно повторяет тайминги реальной инфраструктуры. | draft |
+| DP.METHOD.227 | Migration Smoke Byte Parity Coverage Matrix | Смок-тест миграции каталога: байтовый паритет старого подмножества (глубины прежних записей не меняются ни на байт) + матрица покрытия новых сочетаний (например, «область × ступень») + живой аргумент выдержки на пилоте (реальная эксплуатация до и после миграции). | draft |
+| DP.METHOD.228 | Vendored By Tag Provenance Outside Copy | Чужой компонент вендорится в репозиторий закреплённым тегом версии; provenance (какой именно тег, откуда) хранится ВНЕ самой копии (отдельный манифест), а drift-gate запрещает правки на месте — обновление возможно только через смену закреплённого тега. | draft |
+| DP.METHOD.229 | Local Exclusion Manifest Survives Platform Update | Локальные пользовательские исключения из платформенного обновления хранятся в отдельном файле (update-manifest.local.json), который update.sh никогда не трогает — вместо union-merge с апстримом, который не позволил бы пользователю «раз-исключить» путь. | draft |
+| DP.METHOD.230 | Contract Formalizes After Two Full Cycles | Контракт (например, обещание «ни одна находка не теряется») формализуется письменно только после двух полных циклов обкатки практики, а не заранее — преждевременная формализация фиксирует недоказанное поведение. | draft |
+| DP.METHOD.231 | Contract Evolution Optional Reference Block Not File | Эволюция формата записи (например, контент-брифа) отдаётся опциональным блоком со ссылками-идентификаторами (не копиями данных) внутри существующей структуры, а не отдельным обязательным файлом или обязательным полем — так изменения справочных каталогов не каскадируют в уже записанные брифы. | draft |
+| DP.METHOD.232 | Intra Batch Pairwise Compare Before Index Check | Экстрактор/R15-разбор сравнивает accept-кандидатов одного типа попарно ВНУТРИ текущего батча ДО проверки против существующего Pack-индекса — иначе дубли с одинаковым timestamp записи (появившиеся в одном батче) не ловятся, так как индекс на момент проверки ещё не содержит соседей из текущего отчёта. | draft |
+| DP.METHOD.233 | Full Context Slim Hot Triggers Lazy Texts | Полное слимирование контекстного каркаса: hot-слой содержит только триггеры и нормы, полные тексты демотированы в lazy-файлы; целевой бюджет hot-слоя ограничен явной метрикой (например M2 ≤12K токенов). | draft |
+| DP.METHOD.234 | Charset Gate Cyrillic Block On External Publish | Барьер качества на публикацию для внешней аудитории через запрет определённого набора символов (например кириллицы) — конвейер публикации отклоняет контент, содержащий недопустимые символы, до того как он достигнет внешнего читателя. | draft |
+| DP.METHOD.236 | Precommit Map Regen Isolated From Uncommitted | Pre-commit регенерация производного артефакта (например, MAP) изолируется от uncommitted-работы в рабочей копии — регенерация не должна затрагивать или конфликтовать с незакоммиченными изменениями, не относящимися к самой регенерации. | draft |
+| DP.METHOD.237 | Third Review Round Context Contamination Enemy | Третий раунд код-ревью субагентом (свежий, без контекста двух предыдущих раундов) находит дефекты, которые пропустили два предыдущих ручных раунда — контаминация контекста предыдущих диагнозов мешает обнаружению новых дефектов. | draft |
+| DP.METHOD.238 | Normalize Rcs Dict Before Cross System Export | Слой нормализации переводит личное контекстное состояние (relative-contextual-state) во внутреннем словарном представлении в переносимую нормализованную форму перед межсистемным экспортом; merge-hook разрешает конфликты при импорте, не перезаписывая ни одну из сторон. | draft |
+| DP.METHOD.239 | Core Conflict Gate Manual Classification Not Automerge | CONFLICT-файлы конфигурации/протокола ядра (CLAUDE.md, protocol-*, memory-файлы) требуют ручной классификации при слиянии, а не автоматического мержа — боевой прогон подтвердил: гейт держит конфликты ядра, откатов не было. | draft |
+| DP.METHOD.240 | Data Gap Watchdog Checks Adjacent Timestamps | Сторож разрывов данных проверяет временную дистанцию между соседними записями (а не только наличие свежей записи) — проверка is_recent даёт ложное «всё в порядке» там, где реально есть многочасовой разрыв внутри потока данных. | draft |
+| DP.METHOD.241 | Activate Githooks Fresh Clone Headless Runner | `.githooks` не активируется автоматически во фреш-клоне headless-runner'а — init-скрипт раннера должен явно выполнять `git config core.hooksPath .githooks`, иначе хуки физически присутствуют в репо, но не подключены. | draft |
+| DP.METHOD.242 | Parametrize Governance Repo Not Hardcode | Скрипт принимает путь к governance-репозиторию как параметр (или переносимую дату), а не хардкодит путь внутри логики — переносимость между установками разных пилотов. | draft |
+| DP.METHOD.243 | Iwe Scripts Envvar Fallback Portability | Скрипт ищет путь к зависимому скрипту сначала через переменную окружения (`IWE_SCRIPTS`), и только при её отсутствии — через относительный путь по умолчанию, как fallback. | draft |
+| DP.METHOD.244 | Grep Audit Hardcoded Urls Before Decommission | Перед выводом сервиса из эксплуатации (decommission) — grep-аудит по всем репозиториям на упоминание его URL, проверка входящего трафика за 7-14 дней и DNS; допущение «ничего не смотрит на этот сервис» без проверки — не факт. | draft |
+| DP.METHOD.245 | Add Reference Variable Secret Without Copy | Паттерн Railway-подобной инфраструктуры: секрет передаётся между сервисами через ссылку на переменную (add_reference_variable) с сервиса-держателя, значение не покидает платформу и не попадает в контекст агента-исполнителя. | draft |
+| DP.METHOD.246 | Subprocess Cli Consumers Hidden Llm Class | При переходе на другого LLM-провайдера SDK-аудит недостаточен: нужно также проверять subprocess-вызовы CLI-инструментов, которые сами используют LLM внутри — неочевидный класс потребителей, невидимый для аудита по коду прямых SDK-вызовов. | draft |
+| DP.METHOD.247 | Integrity Log Without Blocking Ritual | Integrity-лог фиксирует аномалии (например, помечает день untrusted) без блокировки самого ритуала (day-close) — наблюдаемость отделена от прерывания процесса; блокировка ритуала — отдельное, более сильное решение. | draft |
+| DP.METHOD.248 | As Of Mandatory For Deterministic Fact Collector | Детерминированный сборщик фактов принимает обязательный параметр `--as-of` (не берёт «сегодня» по умолчанию); `generated_at` во frontmatter результата — критерий свежести для последующих потребителей. | draft |
+| DP.METHOD.249 | Stale Mirror Classification Content And Ancestry | Классификация 'устаревшего зеркала' репозитория перед reset --hard проверяет и содержимое (dirty files), и родословную коммитов (ancestry) — гейтинг только по содержимому dirty-файлов без учёта commit-graph может тихо осиротить реальный непушенный коммит, совпавший с устаревшим mirror-файлом. | draft |
+| DP.METHOD.251 | Build Time Placeholder To Runtime Envvar | Плейсхолдеры вида {{WORKSPACE_DIR}}, разрешаемые на этапе сборки, заменяются на разрешение через переменную окружения на этапе выполнения — build-time плейсхолдеры ломаются при переносе рантайма (например, .iwe-runtime/ в Docker/WSL2), runtime env var переносим. | draft |
+| DP.METHOD.252 | Hypotheses Log Weekly Lpf Calibration | Гипотезы о системе (не план, не факт) записываются в отдельный журнал при появлении; на регулярном ретро (Week Close) каждая сверяется: подтверждена / опровергнута / не проверялась. Метрика калибровки — доля подтверждённых среди проверенных. | draft |
+| DP.METHOD.253 | Self Change Method Isomorphic To Org Change | Метод изменения себя структурно изоморфен методу организационного изменения: объект → характеристика → разрыв → стадия → действие. Разница только в масштабе и субъекте воли; принципиальная структура шагов одна и та же. | draft |
+| DP.METHOD.254 | Composite Role Intersection Pattern | Новая специализированная роль проектируется как пересечение двух существующих ролей (составная роль, ⊗), а не с нуля — например, Наставник ИИ = Диагност ⊗ Навигатор. | draft |
 
 ### NAV
 
@@ -1371,6 +1453,7 @@ generated: true
 | DP.ROLE.090 | Инженер сопровождения (Sustaining Engineer) | Операционная роль писателя peer-сессии для дефект-кластеров: берёт согласованный план фиксов по пачке issues, выполняет минимальные правки с регресс-тестами, закрывает issues с диагнозом. Специализация Разработчика-исполнителя: вход — дефекты, не постановка фичи. Культурный аналог — sustaining engineering (в отличие от new-development engineering). | active |
 | DP.ROLE.091 | Сторож данных (data-gap watchdog) | Специализированная операционная роль: фоновый скрипт, который периодически проверяет содержимое (не живость процесса) зарегистрированных потоков персональных данных — health.db, WakaTime — на разрыв свежести сверх числового порога, и еженедельно подтверждает на canary-факте, что сам не деградировал в no-op. Скрипт ≠ агент (фиксированный flow, без LLM). | active |
 | DP.ROLE.092 | Аудитор знаний (knowledge-audit watchdog) | Специализированная роль: launchd-таймер запускает Экстрактора (R2, LLM) ежемесячно в режиме knowledge-audit на ротационный scope Pack-репозиториев, доставляет сводку отчёта в Telegram. Таймер сам — скрипт (фиксированное расписание); исполнитель проверки внутри — LLM-агент (R2), не скрипт: структурная/контентная оценка требует суждения, не детерминированной проверки. | draft |
+| DP.ROLE.097 | Следователь (Causal Investigator) | Ставит каждому утверждению программы развития рунг лестницы Пёрла, основание и границы использования («что утверждать можно / нельзя»), и отвечает, что нужно для перехода на рунг выше. Аналитическая роль: ничего не рекомендует и ничего не измеряет — размечает доказательность уже измеренного. | draft |
 
 ### RUNBOOK
 
@@ -1446,6 +1529,8 @@ generated: true
 | DP.SC.061 | Каденция аудита базы знаний (knowledge-audit) | Пилот получает ежемесячный отчёт о структурной проверке Pack-репозиториев (пробелы, дубликаты, битые ссылки, устаревшие записи) без ручного напоминания себе запустить проверку | draft |
 | DP.SC.062 | Публикация курируемого манифеста в исследовательский репозиторий iwesys | Ретранслятор канона (DP.ROLE.081) публикует ЯВНО ПЕРЕЧИСЛЕННЫЙ манифест уже-английских файлов из рабочего governance-репозитория (не весь repo/docs, без LLM-перевода на лету) в целевой публичный репозиторий iwesys — третий режим существующей роли, для потребителей без диспозиции 'вся документация репозитория публична' (WP-493 Лаборатория, будущий РП495). | active |
 | DP.SC.063 | Agent connect & select (простое подключение и выбор агента) | Пилот получает: (1) повторяемый чеклист подключения нового файлового агента к IWE за конечное число шагов, без изобретения процесса заново; (2) простой способ решить, какому из уже подключённых агентов отдать конкретную задачу, без нового инструмента поверх существующей инфраструктуры. | draft |
+| DP.SC.064 | nightly-wp-actualization-and-decision-queue | Каждую ночь конвейер сканирует все активные РП и держит карточки актуальными по сопутствующим эффектам; каждое утро пилот получает вопросы-решения парой «вопрос + предложенный ответ», отвечает одним проходом | draft |
+| DP.SC.066 | honest-rung-labelling | Каждое утверждение о развитии, доходящее до потребителя (Портной, Навигатор, Стратег, Диагност), несёт рунг лестницы Пёрла, доказательную базу и явное «что утверждать нельзя»; интервенционная формулировка без данных рунга 2 не выпускается | draft |
 | DP.SC.101 | Вход и онбординг на платформе | Новый участник регистрируется, создаёт ЦД и получает персональный стартовый маршрут — от любопытства к первому действию | draft |
 | DP.SC.102 | Непрерывное обучение | Участник изучает руководства, выполняет задания в рабочей тетради, получает обратную связь от наставника или ИИ | draft |
 | DP.SC.103 | Работа над целевыми системами | Участник применяет методологию FPF к реальным проектам — от учёбы к созиданию | draft |
@@ -1466,10 +1551,11 @@ generated: true
 | DP.SC.118 | Ассистент упоминаний в каналах | Бот отслеживает упоминания пользователя в TG-каналах, генерирует черновик ответа через IWE и присылает в личку | draft |
 | DP.SC.119 | Рабочее пространство из браузера | Пользователь создаёт и управляет IWE-пространствами из браузера — Pack, DS-репо, заметки — без git, без терминала, без VS Code | draft |
 | DP.SC.120 | Приёмник платежей (Payment Receiver) | Webhook-приёмник: провайдеры (YooKassa, Stripe, Paybox) → verify → normalize → idempotent write → finance_payments (Neon) | draft |
+| DP.SC.121 | Актуальная онтология в ответах агентов | Любой пользователь платформы получает от агента ответ, который не противоречит актуальной онтологии Pack (и опционально обогащён ссылками на концепты) | draft |
 | DP.SC.122 | Rewards Projection (точная проекция баллов по доменным событиям) | Точная идемпотентная проекция из learning.domain_event в rewards.point_balances по reference.reward_rules через LISTEN/NOTIFY | draft |
 | DP.SC.123 | Platform Observability (internal — наблюдаемость инфраструктуры для команды) | Минимально достаточный набор сигналов о здоровье 12 БД и ~10 сервисов для команды: реактивные ответы, проактивные алерты, retro-queries. SaaS-first (Better Stack owner external observability) + узкая projection в Neon для JOIN с business-данными. | draft |
 | DP.SC.124 | Lifework Pack Coaching | Созидатель получает поэтапную помощь Портного в составлении документа очередного уровня охвата пакета Lifework при условии, что документ предыдущего уровня работает ≥6 месяцев | draft |
-| DP.SC.125 | Реферальные приглашения «Инженерии интеллекта» | Постоянная ссылка → бессрочный бесплатный доступ → 3000 бонусов приглашающему после первой оплаты | active |
+| DP.SC.125 | Реферальные приглашения «Инженерии интеллекта» | Участник делится постоянной ссылкой → новый пользователь получает бессрочный бесплатный доступ → после его первой оплаты приглашающему начисляются 3000 бонусов | active |
 | DP.SC.126 | Подписка БР как массовый продукт | Участник получает персональную траекторию роста интеллекта на всю жизнь — не курс по навыкам, а среда с памятью о нём, которая адаптируется через методологию, платформу и адаптивную персонализацию | draft |
 | DP.SC.127 | Редактор контента | Автор получает топ-3 черновика для работы и сигналы о готовых постах в Day Open | draft |
 | DP.SC.128 | Ingest активности клуба (Discourse) | Платформа получает события активности участников клуба systemsworld.club для расчёта баллов и аналитики | draft |
@@ -1541,6 +1627,8 @@ generated: true
 | DP.SC.195 | Pack replenishment by topic must fix decisions as typed DR-records with maps_to before section text generation | — | — |
 | DP.SC.196 | Content-cleanup signal registry must never lose a registered signal | — | — |
 | DP.SC.197 | Наставник (Режим 2) — оперативная помощь в чате | Пилот в любой момент описывает своё текущее состояние своими словами в чате → Наставник (MIM.R.001, Режим 2 — связка Диагност⊗Навигатор⊗Преподаватель-предметник⊗Преподаватель-лидер) ставит диагноз и даёт рекомендацию, опираясь на известное о пилоте, или честно говорит, что знаний не хватает / даёт универсальный ответ | draft |
+| DP.SC.198 | agent-action-reversibility | Пилот может остановить, изменить или отменить любое необратимое/общевидимое действие агента до его совершения; формализует уже действующую практику CLAUDE.md «Executing actions with care» | draft |
+| DP.SC.199 | agent-autonomy-progression | Автономность агента на класс задач растёт по измеримому track record успешных закрытых циклов, не выдаётся одним актом; провал/откат сужает scope автоматически — механизм не спроектирован, только скелет обещания | draft |
 
 ### SYS
 
@@ -1557,63 +1645,6 @@ generated: true
 ## Warnings
 
 - Missing `summary`: DP.D.053 (DP.D.053-problem-task-workflow.md)
-- Missing `summary`: DP.D.054 (DP.D.054-dashboard-audience-projections.md)
-- Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
-- Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
-- Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
-- Missing `summary`: DP.D.058 (DP.D.058-service-clause-vs-carrier.md)
-- Missing `summary`: DP.D.059 (DP.D.059-three-classes-credentials-storage.md)
-- Missing `summary`: DP.D.060 (DP.D.060-entity-db-vs-special-db.md)
-- Missing `summary`: DP.D.061 (DP.D.061-neon-db-count-layers.md)
-- Missing `summary`: DP.D.062 (DP.D.062-sc-consumer-is-role-not-channel.md)
-- Missing `summary`: DP.D.063 (DP.D.063-platform-vs-consumer-notifications.md)
-- Missing `summary`: DP.D.064 (DP.D.064-same-vs-different-promise-wp-branch.md)
-- Missing `summary`: DP.D.065 (DP.D.065-orthogonal-distinctions.md)
-- Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
-- Missing `summary`: DP.D.099 (DP.D.099-read-metric-vs-downstream-effect.md)
-- Missing `summary`: DP.D.102 (DP.D.102-event-calendar-four-channels.md)
-- Missing `summary`: DP.D.104 (DP.D.104-progress-to-reward-vs-balance.md)
-- Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
-- Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
-- Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
-- Missing `summary`: DP.D.111 (DP.D.111-triaging-vs-execution.md)
-- Missing `summary`: DP.D.112 (DP.D.112-cutover-infra-vs-marketing-launch.md)
-- Missing `summary`: DP.D.121 (DP.D.121-toc-system-vs-portfolio.md)
-- Missing `summary`: DP.D.136 (DP.D.136-survival-predictor-vs-design-quality.md)
-- Missing `summary`: DP.D.137 (DP.D.137-exocortex-claude-slot-workspace-vs-governance.md)
-- Missing `summary`: DP.D.182 (DP.D.182-iwe-work-environment-vs-educational-platform.md)
-- Missing `summary`: DP.D.183 (DP.D.183-machine-precision-zero-vs-measured-zero.md)
-- Missing `summary`: DP.D.184 (DP.D.184-empty-view-vs-no-source-data.md)
-- Missing `summary`: DP.D.186 (DP.D.186-doc-reduces-error-probability-invariant-eliminates-it.md)
-- Missing `summary`: DP.D.187 (DP.D.187-sync-core-vs-inject-hook.md)
-- Missing `summary`: DP.D.190 (DP.D.190-container-updated-at-vs-data-freshness.md)
-- Missing `summary`: DP.D.191 (DP.D.191-mitigation-vs-fix-defect-status.md)
-- Missing `summary`: DP.D.192 (DP.D.192-per-event-rule-engine-vs-stateful-accumulation.md)
-- Missing `summary`: DP.D.193 (DP.D.193-field-name-vs-operation-semantics.md)
-- Missing `summary`: DP.D.194 (DP.D.194-sanity-check-vs-scale-validation.md)
-- Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
-- Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
-- Missing `summary`: DP.D.206 (DP.D.206-git-notes-vs-audit-trail.md)
-- Missing `summary`: DP.D.207 (DP.D.207-self-documenting-migration-config-abandonment.md)
-- Missing `summary`: DP.D.208 (DP.D.208-tautological-pass-always-empty-field.md)
-- Missing `summary`: DP.D.209 (DP.D.209-derived-registry-drift-set-difference.md)
-- Missing `summary`: DP.D.210 (DP.D.210-thin-client-signal-vs-write-trusted-storage.md)
-- Missing `summary`: DP.D.211 (DP.D.211-generation-param-machine-readable-contract.md)
-- Missing `summary`: DP.D.212 (DP.D.212-gateway-bearer-vs-direct-backend-anonymous-l2.md)
-- Missing `summary`: DP.D.213 (DP.D.213-categorical-policy-fact-vs-domain-semantic-path.md)
-- Missing `summary`: DP.D.214 (DP.D.214-durable-opt-out-vs-time-boxed-policy-fact.md)
-- Missing `summary`: DP.D.215 (DP.D.215-async-policy-fact-vs-sync-governor.md)
-- Missing `summary`: DP.D.216 (DP.D.216-outcome-dod-vs-output-dod.md)
-- Missing `summary`: DP.D.217 (DP.D.217-dev-vs-prod-runtime-resource.md)
-- Missing `summary`: DP.D.218 (DP.D.218-regex-data-presence-vs-success-signal.md)
-- Missing `summary`: DP.D.240 (DP.D.240-domain-event-vs-interpretation-immutable-log.md)
-- Missing `summary`: DP.D.246 (DP.D.246-indexable-knowledge-vs-pointer-record.md)
-- Missing `summary`: DP.D.247 (DP.D.247-local-user-compute-vs-our-zone-ai-work.md)
-- Missing `summary`: DP.D.248 (DP.D.248-last-verified-vs-actual-verification.md)
-- Missing `summary`: DP.D.252 (DP.D.252-stage-vs-qualification-degree.md)
-- Missing `summary`: DP.D.254 (DP.D.254-public-shelf-vs-workshop-lifecycle-split.md)
-- Missing `summary`: DP.D.255 (DP.D.255-one-mechanism-two-places-vs-defense-in-depth.md)
-- Missing `summary`: DP.D.256 (DP.D.256-enforcement-field-vs-convention.md)
 - Missing `summary`: DP.ARCH.009-decisions (DP.ARCH.009-decisions.md)
 - Missing `summary`: DP.D.001 (DP.D.001-obekt-vs-model.md)
 - Missing `summary`: DP.D.002 (DP.D.002-model-vs-dannye.md)
@@ -1651,6 +1682,19 @@ generated: true
 - Missing `summary`: DP.D.047 (DP.D.047-kvalifikaciya-stadiya-razvitiya-vs.md)
 - Missing `summary`: DP.D.048 (DP.D.048-skript-vs-agent.md)
 - Missing `summary`: DP.D.049 (DP.D.049-log-vs-incident-vs.md)
+- Missing `summary`: DP.D.054 (DP.D.054-dashboard-audience-projections.md)
+- Missing `summary`: DP.D.055 (DP.D.055-domain-vs-topic-test.md)
+- Missing `summary`: DP.D.056 (DP.D.056-iwe-layer-portability.md)
+- Missing `summary`: DP.D.057 (DP.D.057-routing-decision-vs-map-update.md)
+- Missing `summary`: DP.D.058 (DP.D.058-service-clause-vs-carrier.md)
+- Missing `summary`: DP.D.059 (DP.D.059-three-classes-credentials-storage.md)
+- Missing `summary`: DP.D.060 (DP.D.060-entity-db-vs-special-db.md)
+- Missing `summary`: DP.D.061 (DP.D.061-neon-db-count-layers.md)
+- Missing `summary`: DP.D.062 (DP.D.062-sc-consumer-is-role-not-channel.md)
+- Missing `summary`: DP.D.063 (DP.D.063-platform-vs-consumer-notifications.md)
+- Missing `summary`: DP.D.064 (DP.D.064-same-vs-different-promise-wp-branch.md)
+- Missing `summary`: DP.D.065 (DP.D.065-orthogonal-distinctions.md)
+- Missing `summary`: DP.D.066 (DP.D.066-blueprint-vs-build.md)
 - Missing `summary`: DP.D.067 (DP.D.067-card-vs-append-only-event.md)
 - Missing `summary`: DP.D.068 (DP.D.068-audit-discovered-owner.md)
 - Missing `summary`: DP.D.069 (DP.D.069-doc-wp-vs-impl-wp.md)
@@ -1677,16 +1721,26 @@ generated: true
 - Missing `summary`: DP.D.096 (DP.D.096-parliament-model-agent-memory.md)
 - Missing `summary`: DP.D.097 (DP.D.097-loop-control-at-caller-not-callee.md)
 - Missing `summary`: DP.D.098 (DP.D.098-ground-truth-vs-self-assessment.md)
+- Missing `summary`: DP.D.099 (DP.D.099-read-metric-vs-downstream-effect.md)
 - Missing `summary`: DP.D.100 (DP.D.100-iwe-kak-platforma-dokazatelstv.md)
 - Missing `summary`: DP.D.101 (DP.D.101-shared-module-sharing-symlink-submodule-vendor.md)
+- Missing `summary`: DP.D.102 (DP.D.102-event-calendar-four-channels.md)
+- Missing `summary`: DP.D.104 (DP.D.104-progress-to-reward-vs-balance.md)
 - Missing `summary`: DP.D.105 (DP.D.105-pack-internal-frontmatter-check.md)
 - Missing `summary`: DP.D.106 (DP.D.106-trigger-sostoyaniyu-vs-trigger.md)
+- Missing `summary`: DP.D.107 (DP.D.107-ui-ack-vs-side-effect.md)
+- Missing `summary`: DP.D.108 (DP.D.108-behavioral-vs-technical-bottleneck.md)
+- Missing `summary`: DP.D.109 (DP.D.109-toc-bottleneck-vs-readiness-gap.md)
+- Missing `summary`: DP.D.110 (DP.D.110-pillar-text-vs-conversion-post.md)
+- Missing `summary`: DP.D.111 (DP.D.111-triaging-vs-execution.md)
+- Missing `summary`: DP.D.112 (DP.D.112-cutover-infra-vs-marketing-launch.md)
 - Missing `summary`: DP.D.114 (DP.D.114-software-factory-vs-platform.md)
 - Missing `summary`: DP.D.115 (DP.D.115-distributed-vs-monolithic-orchestration.md)
 - Missing `summary`: DP.D.116 (DP.D.116-semantic-compiler-vs-ssg.md)
 - Missing `summary`: DP.D.117 (DP.D.117-render-pipelines-vs-products-vs-regions.md)
 - Missing `summary`: DP.D.118 (DP.D.118-roles-n-dimensional-orthogonality.md)
 - Missing `summary`: DP.D.119 (DP.D.119-domain-role-vs-turn-role.md)
+- Missing `summary`: DP.D.121 (DP.D.121-toc-system-vs-portfolio.md)
 - Missing `summary`: DP.D.122 (DP.D.122-continuous-trend-vs-point-in-time.md)
 - Missing `summary`: DP.D.123 (DP.D.123-state-dependency-test-for-skill-classification.md)
 - Missing `summary`: DP.D.124 (DP.D.124-agent-persona-vs-runtime.md)
@@ -1700,6 +1754,8 @@ generated: true
 - Missing `summary`: DP.D.132 (DP.D.132-stazher-vs-member.md)
 - Missing `summary`: DP.D.134 (DP.D.134-logout-kratos-login-sessiya.md)
 - Missing `summary`: DP.D.135 (DP.D.135-metod-vhoda-authentication-method.md)
+- Missing `summary`: DP.D.136 (DP.D.136-survival-predictor-vs-design-quality.md)
+- Missing `summary`: DP.D.137 (DP.D.137-exocortex-claude-slot-workspace-vs-governance.md)
 - Missing `summary`: DP.D.138 (DP.D.138-lokalizaciya-kak-derived-only.md)
 - Missing `summary`: DP.D.139 (DP.D.139-jit-provisioning-cherez-client.md)
 - Missing `summary`: DP.D.140 (DP.D.140-nablyudatel-storozh-observability-vs.md)
@@ -1735,15 +1791,40 @@ generated: true
 - Missing `summary`: DP.D.179 (DP.D.179-failure-policy-vs-monitoring-visibility.md)
 - Missing `summary`: DP.D.180 (DP.D.180-generated-vs-live-file-criterion.md)
 - Missing `summary`: DP.D.181 (DP.D.181-platform-vs-byok-wallet.md)
+- Missing `summary`: DP.D.182 (DP.D.182-iwe-work-environment-vs-educational-platform.md)
+- Missing `summary`: DP.D.183 (DP.D.183-machine-precision-zero-vs-measured-zero.md)
+- Missing `summary`: DP.D.184 (DP.D.184-empty-view-vs-no-source-data.md)
 - Missing `summary`: DP.D.185 (DP.D.185-razdelenie-prav-sderzhivanie-containment.md)
+- Missing `summary`: DP.D.186 (DP.D.186-doc-reduces-error-probability-invariant-eliminates-it.md)
+- Missing `summary`: DP.D.187 (DP.D.187-sync-core-vs-inject-hook.md)
 - Missing `summary`: DP.D.188 (DP.D.188-vozrast-processa-vs-zavisanie.md)
 - Missing `summary`: DP.D.189 (DP.D.189-vs-conditional-vs-defer.md)
+- Missing `summary`: DP.D.190 (DP.D.190-container-updated-at-vs-data-freshness.md)
+- Missing `summary`: DP.D.191 (DP.D.191-mitigation-vs-fix-defect-status.md)
+- Missing `summary`: DP.D.192 (DP.D.192-per-event-rule-engine-vs-stateful-accumulation.md)
+- Missing `summary`: DP.D.193 (DP.D.193-field-name-vs-operation-semantics.md)
+- Missing `summary`: DP.D.194 (DP.D.194-sanity-check-vs-scale-validation.md)
+- Missing `summary`: DP.D.195 (DP.D.195-method-holonic-role-nonholonic.md)
+- Missing `summary`: DP.D.196 (DP.D.196-org-role-assignment-vs-infra-readiness.md)
 - Missing `summary`: DP.D.198 (DP.D.198-vychislyaemyi-status-vs-harakteristika.md)
 - Missing `summary`: DP.D.199 (DP.D.199-rls-politika-vs-zaschita.md)
 - Missing `summary`: DP.D.200 (DP.D.200-force-row-level-security.md)
 - Missing `summary`: DP.D.201 (DP.D.201-zaschita-kode-flag-test.md)
 - Missing `summary`: DP.D.202 (DP.D.202-logicheskoe-gotovo-vs-operacionnoe.md)
 - Missing `summary`: DP.D.203 (DP.D.203-icloud-app-container-vs.md)
+- Missing `summary`: DP.D.206 (DP.D.206-git-notes-vs-audit-trail.md)
+- Missing `summary`: DP.D.207 (DP.D.207-self-documenting-migration-config-abandonment.md)
+- Missing `summary`: DP.D.208 (DP.D.208-tautological-pass-always-empty-field.md)
+- Missing `summary`: DP.D.209 (DP.D.209-derived-registry-drift-set-difference.md)
+- Missing `summary`: DP.D.210 (DP.D.210-thin-client-signal-vs-write-trusted-storage.md)
+- Missing `summary`: DP.D.211 (DP.D.211-generation-param-machine-readable-contract.md)
+- Missing `summary`: DP.D.212 (DP.D.212-gateway-bearer-vs-direct-backend-anonymous-l2.md)
+- Missing `summary`: DP.D.213 (DP.D.213-categorical-policy-fact-vs-domain-semantic-path.md)
+- Missing `summary`: DP.D.214 (DP.D.214-durable-opt-out-vs-time-boxed-policy-fact.md)
+- Missing `summary`: DP.D.215 (DP.D.215-async-policy-fact-vs-sync-governor.md)
+- Missing `summary`: DP.D.216 (DP.D.216-outcome-dod-vs-output-dod.md)
+- Missing `summary`: DP.D.217 (DP.D.217-dev-vs-prod-runtime-resource.md)
+- Missing `summary`: DP.D.218 (DP.D.218-regex-data-presence-vs-success-signal.md)
 - Missing `summary`: DP.D.219 (DP.D.219-compression-vs-lazy-razlicheniya.md)
 - Missing `summary`: DP.D.220 (DP.D.220-rezhim-otkaza-lazy-komponenta.md)
 - Missing `summary`: DP.D.221 (DP.D.221-kachestvennyi-porog-masterstva-vs.md)
@@ -1765,15 +1846,23 @@ generated: true
 - Missing `summary`: DP.D.237 (DP.D.237-unikalnyi-element-svyazki-vs.md)
 - Missing `summary`: DP.D.238 (DP.D.238-smesche-nnyi-proksi-vs.md)
 - Missing `summary`: DP.D.239 (DP.D.239-pack-tip-vs-db.md)
+- Missing `summary`: DP.D.240 (DP.D.240-domain-event-vs-interpretation-immutable-log.md)
 - Missing `summary`: DP.D.241 (DP.D.241-reestr-registry-vs-prodovoe.md)
 - Missing `summary`: DP.D.242 (DP.D.242-sobytie-perehoda-per-transition.md)
 - Missing `summary`: DP.D.243 (DP.D.243-kontur-iwe-vs-fizicheskoe.md)
 - Missing `summary`: DP.D.244 (DP.D.244-formalizuemoe-znanie-pack-fpf.md)
 - Missing `summary`: DP.D.245 (DP.D.245-vladenie-universalnoe-vs-personalnoe.md)
+- Missing `summary`: DP.D.246 (DP.D.246-indexable-knowledge-vs-pointer-record.md)
+- Missing `summary`: DP.D.247 (DP.D.247-local-user-compute-vs-our-zone-ai-work.md)
+- Missing `summary`: DP.D.248 (DP.D.248-last-verified-vs-actual-verification.md)
 - Missing `summary`: DP.D.249 (DP.D.249-sc-service-clause-vs.md)
 - Missing `summary`: DP.D.250 (DP.D.250-vladelec-domena-arhitekturnymi-polnomochiyami.md)
 - Missing `summary`: DP.D.251 (DP.D.251-service-layer-permission-vs-execution-obligation.md)
+- Missing `summary`: DP.D.252 (DP.D.252-stage-vs-qualification-degree.md)
 - Missing `summary`: DP.D.253 (DP.D.253-object-tiering-model.md)
+- Missing `summary`: DP.D.254 (DP.D.254-public-shelf-vs-workshop-lifecycle-split.md)
+- Missing `summary`: DP.D.255 (DP.D.255-one-mechanism-two-places-vs-defense-in-depth.md)
+- Missing `summary`: DP.D.256 (DP.D.256-enforcement-field-vs-convention.md)
 - Missing `summary`: DP.D.257 (DP.D.257-synchronized-file-invariant.md)
 - Missing `summary`: DP.D.258 (DP.D.258-paas-vs-saas.md)
 - Missing `summary`: DP.D.259 (DP.D.259-scaffold-iniciaciya-vs-point.md)
@@ -1799,6 +1888,10 @@ generated: true
 - Missing `summary`: DP.D.279 (DP.D.279-severity-scale-vs-finding-id.md)
 - Missing `summary`: DP.D.280 (DP.D.280-two-assessments-need-matching-methodology.md)
 - Missing `summary`: DP.D.284 (DP.D.284-allowedtools-requires-full-namespaced-mcp-name.md)
+- Missing `summary`: DP.D.285 (DP.D.285-axis-separator-named-instance-not-relation-verb.md)
+- Missing `summary`: DP.D.286 (DP.D.286-no-data-honest-vs-false-unavailable-zero.md)
+- Missing `summary`: DP.D.287 (DP.D.287-applied-mastery-personal-not-platform.md)
+- Missing `summary`: DP.D.288 (DP.D.288-quick-close-vs-full-close.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -1809,6 +1902,7 @@ generated: true
 - Missing `summary`: DP.IWE.011-adapter-claude-code (claude-code-adapter.md)
 - Missing `summary`: DP.IWE.011-adapter-headless (headless-adapter.md)
 - Missing `summary`: DP.IWE.011 (DP.IWE.011-runtime-host-contract.md)
+- Missing `summary`: DP.IWE.012 (DP.IWE.012-talk-mode.md)
 - Missing `summary`: DP.ROLE.053 (DP.ROLE.053-decomposer.md)
 - Missing `summary`: DP.ROLE.065 (DP.ROLE.065-hermes-proxy-tool.md)
 - Missing `summary`: DP.ROLE.067 (DP.ROLE.067-onboarder.md)
@@ -1897,6 +1991,7 @@ generated: true
 - Missing `summary`: DP.M.140 (DP.M.140-forming-to-formalized-ontology-term-lifecycle.md)
 - Missing `summary`: DP.M.141 (DP.M.141-pack-refs-source-docs-ontology-anchor.md)
 - Missing `summary`: DP.M.142 (DP.M.142-ci-setup-flag-mode-separation.md)
+- Missing `summary`: DP.M.144 (DP.M.144-digital-twin-staleness-diagnostic.md)
 - Missing `summary`: DP.M.145 (DP.M.145-terminology-replace-multi-pass-verify.md)
 - Missing `summary`: DP.M.146 (DP.M.146-working-hypothesis-marker.md)
 - Missing `summary`: DP.M.147 (DP.M.147-semantic-first-performance-later.md)
@@ -1959,11 +2054,15 @@ generated: true
 - Missing `summary`: DP.M.213 (DP.M.213-upsert-xmax-insert-detect.md)
 - Missing `summary`: DP.M.214 (DP.M.214-silent-oauth-token-provisioning.md)
 - Missing `summary`: DP.M.215 (DP.M.215-sql-not-exists-guard-for-predicate-based-row-exclusion.md)
+- Missing `summary`: DP.M.216 (DP.M.216-dns-a-record-cutover.md)
 - Missing `summary`: DP.M.217 (DP.M.217-glue-requires-executor-pipeline-decomposition.md)
 - Missing `summary`: DP.M.218 (DP.M.218-close-check-open-autofix-defense-in-depth.md)
 - Missing `summary`: DP.M.219 (DP.M.219-by-script-marker-idempotent-injection.md)
 - Missing `summary`: DP.M.220 (DP.M.220-threshold-or-time-auto-commit.md)
+- Missing `summary`: DP.M.221 (DP.M.221-infrastructure-snapshot-living-artifact.md)
+- Missing `summary`: DP.M.222 (DP.M.222-event-type-three-component-atomic-deploy.md)
 - Missing `summary`: DP.M.223 (DP.M.223-marp-dark-theme-layout-classes.md)
+- Missing `summary`: DP.M.224 (DP.M.224-two-step-path-before-config-onboarding.md)
 - Missing `summary`: DP.M.225 (DP.M.225-identity-anchor-character-seminar.md)
 - Missing `summary`: DP.M.226 (DP.M.226-progressive-card-filling-seminar.md)
 - Missing `summary`: DP.M.230 (DP.M.230-dual-level-wait-for-infinite-retry-guard.md)
@@ -2096,6 +2195,7 @@ generated: true
 - Missing `summary`: DP.M.409 (DP.M.409-check-adjacent-wp-implementation-at-closure.md)
 - Missing `summary`: DP.M.410 (DP.M.410-pull-only-github-org-split.md)
 - Missing `summary`: DP.M.411 (DP.M.411-guard-override-env-var-reuse.md)
+- Missing `summary`: DP.M.412 (DP.M.412-idempotent-completion-state-before-notify.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2261,6 +2361,7 @@ generated: true
 - Missing `summary`: DP.FM.133 (DP.FM.133-backup-restore-no-3way-merge.md)
 - Missing `summary`: DP.FM.134 (DP.FM.134-vocabulary-split-aux-subsections.md)
 - Missing `summary`: DP.FM.135 (DP.FM.135-projection-rule-no-backfill-fallback-mask.md)
+- Missing `summary`: DP.FM.136 (DP.FM.136-unanchored-grep-frontmatter-false-positive.md)
 - Missing `summary`: DP.FM.137 (DP.FM.137-asymmetric-alert-suppression-paths.md)
 - Missing `summary`: DP.FM.138 (DP.FM.138-shared-db-without-env-discriminator.md)
 - Missing `summary`: DP.FM.139 (DP.FM.139-llm-proxy-default-timeout-too-short.md)
@@ -2410,6 +2511,28 @@ generated: true
 - Missing `summary`: DP.FM.358 (DP.FM.358-git-worktree-cannot-open-branch-twice.md)
 - Missing `summary`: DP.FM.359 (DP.FM.359-headless-scaffold-ignores-pending-instructions.md)
 - Missing `summary`: DP.FM.360 (DP.FM.360-prod-service-bypasses-llm-proxy.md)
+- Missing `summary`: DP.FM.361 (DP.FM.361-promise-code-collision-max-plus-one.md)
+- Missing `summary`: DP.FM.362 (DP.FM.362-structure-check-false-positive-content-pattern.md)
+- Missing `summary`: DP.FM.363 (DP.FM.363-intra-document-section-drift.md)
+- Missing `summary`: DP.FM.364 (DP.FM.364-duplicate-emoji-in-entity-name-render.md)
+- Missing `summary`: DP.FM.365 (DP.FM.365-session-guard-silent-on-renamed-semaphore.md)
+- Missing `summary`: DP.FM.366 (DP.FM.366-trace-satisfaction-vacuous-ok-zero-gates.md)
+- Missing `summary`: DP.FM.367 (DP.FM.367-same-code-sweep-leaves-stale-cross-refs.md)
+- Missing `summary`: DP.FM.368 (DP.FM.368-hook-nonexistent-flag-blocks-all-commits.md)
+- Missing `summary`: DP.FM.369 (DP.FM.369-oneway-template-sync-reverts-receiver-fixes.md)
+- Missing `summary`: DP.FM.370 (DP.FM.370-derived-view-silently-drops-lines-format-mismatch.md)
+- Missing `summary`: DP.FM.371 (DP.FM.371-watchdog-same-failure-domain-blind-to-own-death.md)
+- Missing `summary`: DP.FM.372 (DP.FM.372-autocommit-can-leak-secrets-to-public-fork.md)
+- Missing `summary`: DP.FM.373 (DP.FM.373-routing-map-answers-type-not-domain-proximity.md)
+- Missing `summary`: DP.FM.374 (DP.FM.374-deployed-artifact-not-wired-into-checklist.md)
+- Missing `summary`: DP.FM.375 (DP.FM.375-two-catalogs-shared-id-space-stale-consumers.md)
+- Missing `summary`: DP.FM.376 (DP.FM.376-lazy-demotion-changes-paths-linkcheck-required.md)
+- Missing `summary`: DP.FM.378 (DP.FM.378-duplicate-dependency-channel-latent-build-break.md)
+- Missing `summary`: DP.FM.379 (DP.FM.379-self-exempting-secret-marker.md)
+- Missing `summary`: DP.FM.380 (DP.FM.380-utc-logger-vs-local-time-race-at-midnight.md)
+- Missing `summary`: DP.FM.381 (DP.FM.381-day-close-race-guard-local-log-only-misses-remote.md)
+- Missing `summary`: DP.FM.382 (DP.FM.382-ci-check-must-target-own-commit-not-diff-size.md)
+- Missing `summary`: DP.FM.383 (DP.FM.383-reminder-script-races-wake-system.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
@@ -2455,12 +2578,12 @@ generated: true
 
 | ID | Days Since Update |
 |----|-------------------|
-| DP.FM.008 | 124 |
-| DP.FM.009 | 104 |
-| DP.FM.011 | 103 |
-| DP.FM.012 | 102 |
-| DP.FM.010 | 97 |
+| DP.FM.008 | 141 |
+| DP.FM.009 | 121 |
+| DP.FM.011 | 120 |
+| DP.FM.012 | 119 |
+| DP.FM.010 | 114 |
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-07-23*
+*Generated by `scripts/generate-map.py` on 2026-08-09*
