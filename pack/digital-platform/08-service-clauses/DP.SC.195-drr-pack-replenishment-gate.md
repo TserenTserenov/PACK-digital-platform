@@ -24,7 +24,7 @@ tags: [specification, contract, drr, decision-record, pack-creation]
 ## Выходы
 
 - `inbox/WP-NNN/drr/DRR.md` — индекс: Intake-итог + реестр решений + чеклист покрытия
-- `inbox/WP-NNN/drr/DR-NN.md` — по одной записи на решение, с `maps_to` (раздел SPF-структуры или id паттерна)
+- `inbox/WP-NNN/drr/DR-NN.md` — по одной записи на решение, с `maps_to` (раздел SPF-структуры или id паттерна) и опциональным `confidence_tier` (черновик/достаточно/проверено — информационное поле, не влияет на гейт Шага 1.7)
 - Гейт: генерация раздела Pack разрешена только при наличии ≥1 DR-записи со `status: accepted` и `maps_to` на этот раздел (pack-creator SKILL.md, Шаг 1.7)
 - Провенанс: DRR архивируется вместе с WP-context (`archive/wp-contexts/`) — по вопросу «почему в Pack так» агент находит DR-запись
 
