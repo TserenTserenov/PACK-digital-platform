@@ -234,3 +234,4 @@ Fallback: нет cp-данных → B-lite (stage_raw из Аттестатор
 | Аттестатор (upstream bh) | `DP.ROLE.041`, `DS-my-strategy/inbox/WP-310-attestator.md` |
 | Портной (downstream cp-потребитель) | `WP-149` |
 | Сигнальщик инвалидации профиля (фоновый режим) | `WP-316` (archive/wp-contexts/WP-316/) |
+| Правило формулировки вопросов (пресуппозиция запрещена в измерительных) | `DP.D.290` |
