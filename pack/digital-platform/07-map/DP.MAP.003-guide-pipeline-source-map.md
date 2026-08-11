@@ -1,6 +1,8 @@
 ---
 id: DP.MAP.003
 name: Guide Pipeline Source Map
+name_ru: "Карта источников конвейера генерации руководств и методических материалов"
+name_en: "Guide Pipeline Source Map"
 type: map
 status: draft
 maturity: draft-pending-F1
