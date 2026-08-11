@@ -6,7 +6,7 @@ name_en: IWE Task Formulator
 type: sc
 status: draft
 layer: L4-Platform
-summary: "Пилот или Маршрутизатор получает: из сырого запроса — структурированный РП с routing-тегом (task_type, class, artifact, budget_estimate), готовый к lookup в executor-catalog."
+summary: "Пилот или Маршрутизатор получает: из сырого запроса — структурированный РП с routing-тегом и явной незаполненной связью со ставкой, готовый к WP Gate и lookup в executor-catalog."
 consumer: Маршрутизатор (DP.ROLE.059), Пилот IWE (через Opening при отсутствии явного РП)
 created: 2026-05-25
 updated: 2026-06-16
@@ -32,6 +32,7 @@ wp: WP-350
 - **Класс РП = routing-ключ.** Классификация `{trivial, closed-loop, open-loop, problem-framing}` — по критериям WP Gate Ritual (CLAUDE.md §2). Артефактор не вводит новые классы.
 - **Один выход — один routing-tag.** Артефактор не производит несколько вариантов РП; если неоднозначность — фиксирует наиболее широкий класс (например, open-loop вместо closed-loop при сомнении).
 - **Не блокирует пилота уточняющими вопросами.** При недостаточном входе — делает наилучшее предположение и передаёт результат с флагом `confidence: low` для последующего уточнения.
+- **Не выдумывает стратегическую ставку.** Артефактор передаёт в WP Gate связь `unclassified`; до запуска РП пилот или Стратег выбирает `tests`, `enables`, `responds`, `researches` либо `operational`.
 
 ---
 
@@ -55,12 +56,16 @@ wp: WP-350
   "budget_estimate": "~Xh | ?",
   "confidence": "high | low",
   "routing_tag": "{class, task_type}",
-  "resolution_path": "keyword | llm"
+  "resolution_path": "keyword | llm",
+  "hypothesis_relation": "unclassified"
 }
 ```
 
 Поле `budget_estimate: "?"` — маркер «не определено» (потребитель запрашивает у пилота отдельно).
 Поле `resolution_path` — путь классификации: `"keyword"` = статический lookup (< 200 мс), `"llm"` = Haiku-вызов (< 60 сек).
+Поле `hypothesis_relation` — не предположение Артефактора, а обязательный
+handoff в WP Gate. Для `tests`, `enables`, `responds` указывается один `H-NNN`;
+`researches` и `operational` имеют явное основание без номера гипотезы.
 
 **Время отклика (два SLA):**
 

@@ -9,7 +9,7 @@ status: draft
 valid_from: 2026-05-25
 source: WP-350
 sc: DP.SC.160
-summary: "Агентная роль: превращает сырой запрос пользователя в структурированный РП с routing-тегом (task_type + class), готовый к lookup в executor-catalog.yaml Маршрутизатора."
+summary: "Агентная роль: превращает сырой запрос пользователя в структурированный РП с routing-тегом и обязательным handoff для связи со ставкой; не угадывает гипотезу за пилота."
 related:
   - DP.SC.160
   - DP.ROLE.059
@@ -30,7 +30,7 @@ related:
 ## Вход → Выход
 
 - **Вход:** сырой запрос — текст любой длины и структуры, без routing-tag
-- **Выход:** structured request `{task_type, class, artifact, budget_estimate, confidence, routing_tag}`
+- **Выход:** structured request `{task_type, class, artifact, budget_estimate, confidence, routing_tag, hypothesis_relation: unclassified}`
   → возвращается в Маршрутизатор (DP.ROLE.059) для lookup
 
 ## Обязанности
@@ -45,6 +45,9 @@ related:
 6. **Вернуть structured request** → Маршрутизатор; **не вызывать исполнителя самостоятельно**
 7. **При INSUFFICIENT_INPUT** (< 5 слов, пустой ввод) → вернуть `INSUFFICIENT_INPUT`,
    не запускать LLM
+8. **Передать стратегическое основание в WP Gate:** не выбирать H-NNN по
+   догадке; требовать до запуска РП один из типов `tests`, `enables`,
+   `responds`, `researches`, `operational`.
 
 ## Полномочия
 
