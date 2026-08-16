@@ -8,8 +8,8 @@ status: draft
 maturity: draft-pending-F1
 summary: "Карта источников конвейера генерации руководств и методических материалов (РП521): один механизм отбора, две конфигурации; три подпотока данных; происхождение рубрик; аудит машиночитаемости программ"
 created: 2026-08-11
-updated: 2026-08-11
-source: "РП521 Ф0, пир-сессия 2026-08-11-24-kimi-wp521-source-map (консенсус Claude+Kimi)"
+updated: 2026-08-16
+source: "РП521 Ф0, пир-сессия 2026-08-11-24-kimi-wp521-source-map (консенсус Claude+Kimi); §А.1 добавлен Ф1, пир-сессия 2026-08-16-08-wp521-fragment-provenance-schema (консенсус Claude+Codex)"
 related:
   uses: [DP.MAP.002]
   see_also: ["DATA-RESIDENCY.md §3 (типы 2.1-2.4)", "DS-my-strategy/inbox/WP-521/WP-521.md", "DS-autonomous-agents/inbox/selection-config-contract-draft.md"]
@@ -44,6 +44,55 @@ related:
 `fragment_id, role (main|support), source_program, source_unit, source_version, content_hash,
 position_in_sequence, selection_basis (узкое место | квалификация), prerequisites_checked[],
 rubric_ref`; плюс `assembled_by_run` на уровне объекта занятия/сборки.
+
+### §А.1 Типизация схемы происхождения (Ф1, пир-сессия 2026-08-16-08-wp521-fragment-provenance-schema, Клод+Кодекс, консенсус за 3 хода)
+
+Состав 10 полей закрыт (§А выше). Ниже — типы, ограничения и место хранения; вопрос
+следующего уровня детализации, не пересмотр состава.
+
+**Хранение.** JSON-массив фрагментов внутри объекта занятия/сборки (не отдельная
+реляционная таблица) — коллекция небольшая (единицы-десятки), упорядоченная
+(`position_in_sequence`), всегда читается и пишется целиком вместе с родительским
+объектом (write-once, append-only на момент сборки). Запрос «все занятия/сборки с
+данным `source_program`» (нужен для аудита §Г и для миграции/отзыва версии
+программы при обнаруженном дрейфе через `content_hash`) обязан работать без full
+scan — функциональный индекс (`jsonb_path_ops`/GIN на PostgreSQL или materialized
+view) на `source_program` внутри массива; конкретный механизм — решение при
+реализации Ф1/Ф7, не архитектурный вопрос этой карты.
+
+**Типы полей фрагмента:**
+
+| Поле | Тип | Ограничение |
+|---|---|---|
+| `fragment_id` | string | — |
+| `role` | enum(`main`\|`support`) | — |
+| `source_program` | string | — |
+| `source_unit` | string | — |
+| `source_version` | string | — |
+| `content_hash` | string | формат `sha256:<hex>`; хэш **канонического исходного содержимого** `source_unit` на момент сборки — НЕ хэш сериализации самой записи происхождения (та меняется тривиально при правке метаданных, не при дрейфе материала) |
+| `position_in_sequence` | integer | — |
+| `selection_basis` | enum(`bottleneck`\|`qualification`) | — |
+| `prerequisites_checked[]` | array of `{prerequisite_ref: string, status: enum(verified\|assumed\|failed), checked_against: string\|null}` | `role=main`: массив непустой, ВСЕ элементы `status=verified`. `role=support`: массив пустой или с любым статусом |
+| `rubric_ref` | string | null запрещён (§В) |
+
+**Три статуса `prerequisites_checked[].status`, не два.** `verified` — машинная
+проверка реально выполнена и прошла (покрытые источники §Г: CAT.001-003 —
+`entry_stage_ok`/`blocks_transition_ok` как конкретные значения `prerequisite_ref`
+с `status: verified`). `assumed` — предпосылка заявлена без машинной проверки,
+честно помечена как некрепкое основание (для источников без покрытия §Г —
+альтернатива не «запретить материал совсем» и не «тихо считать проверенным»).
+`failed` — проверка выполнялась и не прошла (история попытки; такой фрагмент не
+должен был получить `role: main`, поле фиксирует факт для аудита, не разрешает
+использование). Плоское `{checked: bool}` отклонено консенсусом сессии — непустой
+массив из одних `false` формально прошёл бы правило `main`, не доказывая
+покрытость.
+
+**На уровне объекта занятия/сборки (не фрагмента):**
+
+| Поле | Тип | Примечание |
+|---|---|---|
+| `assembled_by_run` | string | id прогона Портного; держит версию мета-конфигурации (§Б.3) |
+| недельная петля | `{topic_ref: <A2w-id>, status: enum(open\|closed\|waived)}` | `topic_ref` — снимок ссылки на тему недели, пишется при `slot_opened` (не derived-поле, вычисляемое на лету из даты+WeekPlan на каждое чтение — иначе последующая правка WeekPlan незаметно переписывает историю уже прошедшего занятия; пересчёт из даты допустим только как sanity-check в момент создания). Статус меняет тот же владелец, что пишет `lesson_events` (ревизия-2 п.8 РП521, обёртка `/lesson`) |
 
 ## §Б. Карта данных: три подпотока
 
@@ -155,9 +204,14 @@ domain_event», не гарантированно точное PostgreSQL-ква
 хоть какая-то машинная проверка готовности/применимости реально выполнена кодом ДО выбора.
 Пустой список → только `role: support`. Вид проверки — колонка аудита, не поле фрагмента.
 
+**Типизация элемента (§А.1, Ф1):** таблица ниже упрощённо пишет `entry_stage_ok` —
+это значение `prerequisite_ref` конкретного элемента с `status: verified`, не
+голая строка в массиве. Полная форма: `{prerequisite_ref: "entry_stage_ok",
+status: "verified", checked_against: <id проверки>}`.
+
 | Источник | Последовательность | Предпосылки | Вид проверки | Как проверяется кодом | Вердикт |
 |---|---|---|---|---|---|
-| CAT.001-003 | нет (stage-gated, не DAG) | `entry_stage`, `blocks_transition` («2→3») | структурная | guide-kit `planner.py` (bottleneck-first + ступень) | main допустим; `prerequisites_checked: [entry_stage_ok, blocks_transition_ok]` |
+| CAT.001-003 | нет (stage-gated, не DAG) | `entry_stage`, `blocks_transition` («2→3») | структурная | guide-kit `planner.py` (bottleneck-first + ступень) | main допустим; `prerequisites_checked: [entry_stage_ok, blocks_transition_ok]` (полная форма — см. типизацию выше) |
 | `programs/{lr,rr,ir}/assignments.yaml` | нет | нет; селекция `bottleneck+domain+priority` | селекционная | `assignment_selector.py` (сортировка соответствия) | **пока только `support`** — селектор не возвращает `domain_match` вовсе (проверено в коде); `selection_basis` фиксирует релевантность, не готовность, см. оговорку |
 | `cells/` (ZP/FPF, шаблон с prerequisites) | шаблон есть, данных 0 | прозаический шаблон | нет (не заполнено) | — | не источник, пока не заполнен |
 | decomposer Mode Б (`topic_sections.yaml`) | DAG-структура (prerequisites/depends_on); сортировка — MVP-упрощение, НЕ полный topological sort (оговорка в коде `decomposer.py`) | машиночитаемые | структурная | `guide-kit/generator/decomposer.py` | **резерв**: в суточный конвейер не включён |
