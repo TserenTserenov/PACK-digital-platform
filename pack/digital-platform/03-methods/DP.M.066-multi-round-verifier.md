@@ -1,6 +1,7 @@
 ---
 id: DP.M.066
 name: Multi-round verifier с сужающимся scope
+type: method
 kind: Method
 status: active
 created: 2026-05-17
@@ -69,7 +70,7 @@ _Куда систематически съезжает внимание пра�
 
 - [[DP.M.060]] (атомарные шаги) — даёт нижнюю границу декомпозиции, чтобы post-condition был формулируем; этот метод — как **проверять** уже атомарные шаги через несколько проходов.
 - [[DP.M.012]] Machine-Check Postcondition — машинная проверка одного шага; multi-round verifier — оркестрация N таких проверок над одним deliverable.
-- Расширяет контракт VR.R.001 в PACK-autonomous-agents.
+- Расширяет контракт VR.R.001 в PACK-verification (до 31.08.2026 здесь ошибочно значился PACK-autonomous-agents — там роль лишь упоминается как пример).
 
 ## Источник
 
