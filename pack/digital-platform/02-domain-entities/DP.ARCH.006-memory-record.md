@@ -3,7 +3,7 @@ id: DP.ARCH.006
 version: v1.0
 name: Память (Observed события + Derived агрегаты)
 type: domain-entity
-status: approved
+status: active
 summary: "Память — операционный слой модели пользователя. Писатель = платформа runtime, владелец = Neon. Два под-слоя: Observed (append-only события) + Derived (вычисляемые агрегаты, бывший узкий ЦД). Event Sourcing + CQRS. BKT, HLR, engagement, misconceptions, qualifications. Замещает основную часть монолита DP.ARCH.003."
 created: 2026-04-22
 updated: 2026-04-24
@@ -618,5 +618,5 @@ Derived update: P(known ZP.3) = 0.19 → 0.35
 
 ---
 
-*Статус: approved. Выделено из DP.ARCH.003 в WP-257 Ф5 (расщепление по writer+owner).*
+*Статус: active. Выделено из DP.ARCH.003 в WP-257 Ф5 (расщепление по writer+owner).*
 *Создано: 2026-04-22. Наследует содержимое §3-§5, §13-§15, §18 старого DP.ARCH.003.*

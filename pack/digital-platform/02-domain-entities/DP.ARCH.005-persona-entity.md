@@ -3,7 +3,7 @@ id: DP.ARCH.005
 version: v1.2
 name: Персона (декларативная модель созидателя)
 type: domain-entity
-status: approved
+status: active
 summary: "Персона — distributed-entity, представляющая одного носителя (человека) в IWE. Composition: identity-anchor (Ory subject_id или Pre-Grant claim_token) + declarations (Git PACK-personal/DS-my-strategy/captures) + refs (Neon persona_grants). Писатель деклараций = пользователь (или агент по его поручению с acceptance); identity-anchor издаётся системой регистрации. Заменяет часть монолита ЦД (DP.ARCH.003). v1.1 (2026-05-31): добавлен §0 — Носитель ≠ Персона ≠ Декларация + lifecycle anchor. v1.2 (2026-08-25): неудовлетворённости и граница самооценки квалификации/состояний."
 created: 2026-04-22
 updated: 2026-08-25
@@ -179,5 +179,5 @@ Persona anchor проходит две фазы. Переход одностор
 
 ---
 
-*Статус: approved. Создано в WP-257 Ф5 (расщепление DP.ARCH.003 по writer+owner критерию).*
+*Статус: active. Создано в WP-257 Ф5 (расщепление DP.ARCH.003 по writer+owner критерию).*
 *Создано: 2026-04-22.*

@@ -3,7 +3,7 @@ id: DP.ARCH.007
 version: v1.0
 name: Проекция (runtime-компиляция под потребителя)
 type: domain-entity
-status: approved
+status: active
 summary: "Проекция — эфемерный runtime-слой: агент на лету собирает из Памяти и Персоны ответ под одного потребителя (LLM-промпт, пользовательский view, nudge). Writer = агент в runtime. Owner = нет (не хранится дольше одного вызова). Заменяет часть монолита ЦД (DP.ARCH.003) — §7 Views + §17 Nudge Engine."
 created: 2026-04-22
 updated: 2026-04-22
@@ -244,5 +244,5 @@ Event: test_answered {skill: ZP.3, correct: true}   ──→ Память.Obser
 
 ---
 
-*Статус: approved. Создано в WP-257 Ф5 (расщепление DP.ARCH.003 по writer+owner критерию).*
+*Статус: active. Создано в WP-257 Ф5 (расщепление DP.ARCH.003 по writer+owner критерию).*
 *Создано: 2026-04-22.*
