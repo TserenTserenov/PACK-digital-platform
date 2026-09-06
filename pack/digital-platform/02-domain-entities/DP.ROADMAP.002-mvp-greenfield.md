@@ -5,7 +5,7 @@ type: roadmap-variant
 status: in_progress
 valid_from: 2026-04-24
 version: 0.7
-derived_from: DP.ARCH.004@v2.4
+derived_from: DP.ARCH.004@v2.6
 parent: DP.ROADMAP.001-neon-migration
 summary: "Параллельный к основному Roadmap план: MVP-greenfield на 12 целевых БД (DP.ARCH.004 v2.4), infra-first. Cut-over W18 executed 26-27 апр. Ф9.1-Ф9.4 internal gates PASS, Ф9.5 core-team prep активен, Ф9.6-Ф9.8 запланированы. Нумерация Ф9.X выровнена с context-файлом WP-253."
 related:
@@ -312,7 +312,7 @@ WHERE flag_name = 'mvp_greenfield' AND ory_user_id IN (<5 uuids>);
 - `DELETE FROM reference.feature_flags WHERE flag_name='mvp_greenfield' AND ory_user_id IN (5 ory_ids)` — снять сам флаг (после Шага 1 он уже `enabled=FALSE`, здесь удаляем строки).
 
 **Не удаляем (сохраняем для post-mortem):**
-- `security.reject_log` — следы PII reject'ов на ingress.
+- `learning.security_reject_log` — следы PII reject'ов на ingress.
 - `journal.event` — raw телеметрия волонтёров (полезна для разбора причины — что писал aggregator, что отдавал WakaTime). Хранится 30 дней, после — стандартный retention.
 - `subscription.payment_audit` — mapping hash→external_id (нужен для сверки с YooKassa-кабинетом, если rollback связан с платежом).
 - `learning.domain_event` от non-volunteer'ов (если случайно попали — расследовать).
@@ -389,7 +389,7 @@ WHERE flag_name = 'mvp_greenfield' AND ory_user_id IN (<5 uuids>);
 | **Г** | Генеративность | ✅ | Сторонние плагины (WP-258 Plugin API L2) пишут через тот же POST /events с per-source JSON Schema — без БД-доступа. Готовая точка расширения экосистемы. |
 | **С** | Скорость | ⚠️ | SLO p95 ≤500ms (DP.SC.020 критерий 3). CF Worker edge + pooled Neon: realistically 100-300ms для прямой записи, 202 Accepted для buffer-пути. **Риск:** под пиком buffer добавляет eventual consistency ≤5s — некоторые читатели (баланс баллов) это заметят. **Митигация:** при p95 >1s в smoke-test — пересмотр. |
 | **С** | Современность | ✅ | Event-sourcing + projection workers (CQRS, Kafka-style ingest на HTTP). DDD Strategic: единый Aggregate Root. Coupling Model: ports & adapters, knowledge coupling низкое (source-specific schemas). Context Engineering: JSON Schema = явный контракт. |
-| **Б** | Безопасность (критическая) | ⚠️ | PII reject на ingress (whitelist в JSON Schema, лог в `security.reject_log`). payment_credentials — отдельный класс, хэш в Bridge-2 (DP.SC.101, DP.ARCH.004 §2 П6.1). Bearer token, single audit point. **Риск:** prompt injection в payload от LLM-источников (скиллы) — JSON Schema `additionalProperties: false` закрывает структурную часть, но не семантику. **Митигация:** в MVP источники под нашим контролем; plugin-источники (WP-258) — после аудита каждого. |
+| **Б** | Безопасность (критическая) | ⚠️ | PII reject на ingress (whitelist в JSON Schema, лог в `learning.security_reject_log`). payment_credentials — отдельный класс, хэш в Bridge-2 (DP.SC.101, DP.ARCH.004 §2 П6.1). Bearer token, single audit point. **Риск:** prompt injection в payload от LLM-источников (скиллы) — JSON Schema `additionalProperties: false` закрывает структурную часть, но не семантику. **Митигация:** в MVP источники под нашим контролем; plugin-источники (WP-258) — после аудита каждого. |
 | **П** | Переносимость данных (L2.1) | ✅ | `learning.domain_event` — Postgres + JSONB (открытый формат). `pg_dump` экспортирует целиком, перенос на любой Postgres-совместимый сервис. Нет проприетарного протокола. |
 
 **§Б чеклист безопасности (WP-212 B7.1):** Auth — Bearer token ✅; Authorization — per-source whitelist ✅; identity — `actor_user_id` из JWT, не из body ✅; secrets — CF env, B2.1 обновляется в Ф9.4 ⚠️; PII logging — **запрещено**, reject_log хранит только `reject_reason` без payload ✅; SQL injection — параметризованные запросы через neon-http ✅; шифрование — TLS до Neon by default ✅. Итог §Б: **0 ❌, 1 ⚠️ (secrets inventory)** → Безопасность = ⚠️.

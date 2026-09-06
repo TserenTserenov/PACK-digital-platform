@@ -8,7 +8,7 @@ summary: "Платформа адаптируется под человека ч
 consumer: Участник сообщества (все)
 created: 2026-03-17
 updated: 2026-04-24
-derived_from: [DP.ARCH.004@v2.3, DP.ARCH.005@v1, DP.ARCH.006@v1, DP.ARCH.007@v1]
+derived_from: [DP.ARCH.004@v2.6, DP.ARCH.005@v1.2, DP.ARCH.006@v1, DP.ARCH.007@v1]
 related:
   realizes: [DP.CONCEPT.003]
   extends: []

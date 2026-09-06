@@ -8,7 +8,7 @@ summary: "Память — операционный слой модели пол
 created: 2026-04-22
 updated: 2026-04-24
 valid_from: 2026-04-22
-derived_from: DP.ARCH.004@v2.3
+derived_from: DP.ARCH.004@v2.6
 trust:
   F: 4
   G: domain

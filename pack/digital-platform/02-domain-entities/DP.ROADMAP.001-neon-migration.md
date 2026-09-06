@@ -4,7 +4,7 @@ name: План миграции Neon 9 → 12 БД
 type: roadmap
 status: draft
 valid_from: 2026-04-22
-derived_from: DP.ARCH.004@v2.3
+derived_from: DP.ARCH.004@v2.6
 related:
   elaborates: [DP.ARCH.004]
   coordinates: [WP-155, WP-187, WP-227, WP-246, WP-253, WP-254, WP-256, WP-244, WP-212, WP-188, WP-121, WP-224, WP-240, WP-139, WP-109]
