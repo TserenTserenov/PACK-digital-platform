@@ -22,8 +22,8 @@ entry_point: headless-runner.sh
 
 | Контракт (абстрактный) | Headless-реализация | Примечание |
 |------------------------|---------------------|------------|
-| `task_tracker.create(tasks[])` | Файл `inbox/agent/tasks/TASK-*.md` + `status: pending` в frontmatter | Создаётся до запуска runner'а или внутри `claude -p` через `Write` |
-| `task_tracker.update(id, status)` | `update_task_frontmatter()` в dispatcher — патчит frontmatter по task_id | UUID = имя файла (TASK-<id>.md) |
+| `task_tracker.create(tasks[])` | N файлов `inbox/agent/tasks/TASK-<run>-NN.md` (один на шаг алгоритма, не один на весь прогон) + `status: pending` в frontmatter | Создаётся до запуска runner'а или внутри `claude -p` через `Write` |
+| `task_tracker.update(id, status)` | Mid-session (агент отмечает свой шаг) — сам агент через нативный `Edit` правит frontmatter `TASK-<id>.md`. Внешний апдейт (не от текущей сессии) — `update_task_frontmatter()` в dispatcher | UUID = имя файла (TASK-<id>.md); single-writer-инвариант ниже |
 | `task_tracker.list()` | `find_pending_tasks()` — сканирует `tasks/*.md` по `status: pending` | Используется dispatcher'ом перед вызовом claude |
 | `scheduler.schedule_at(ts, msg)` | cron / systemd-timer (`*/30 * * * *` → `iwe-agent-dispatcher.py`) + `due:` поле в task frontmatter | `schedule_at` = записать task с `due: <timestamp>`, dispatcher возьмёт по расписанию |
 | `fs.read(path)` | `Read` (нативный инструмент `claude -p`) | Без изменений |
@@ -36,6 +36,8 @@ entry_point: headless-runner.sh
 **Ключевое отличие от CC-адаптера:**
 - `task_tracker.*` — не эфемерный TodoWrite (в памяти процесса), а файловая система. Задачи персистентны между сессиями.
 - `scheduler.schedule_at` — не `ScheduleWakeup` (не будит процесс), а `due:` поле + cron-цикл dispatcher'а.
+
+**Single-writer-инвариант (пир-сессия WP-564, 11.09.2026, Claude+Codex).** Пока идёт headless-сессия (между `SESSION_START` и `SESSION_END` для данного `AGENT_SESSION_ID`), её TASK-файлы правит ТОЛЬКО сам агент (через `Edit`) — dispatcher не патчит их параллельно, а откладывает любой внешний апдейт (например, отмену задачи оператором) до `SESSION_END`. Без этого правила параллельная запись агента и dispatcher'а в один frontmatter теряет статус без блокировки/CAS (найдено при разборе, не проверено — CAS/lock сознательно не вводится в v0.1, это более дешёвый вариант той же гарантии).
 
 ---
 
@@ -104,7 +106,7 @@ entry_point: headless-runner.sh
 | Компонент | Контракт требует | Headless реализует | Статус |
 |-----------|-----------------|-------------------|--------|
 | `task_tracker.list()` realtime | Список задач в текущем контексте агента | Файловый скан до запуска claude | ⚠️ Pre-session только |
-| `task_tracker.update()` из агента | Агент обновляет task mid-session | dispatcher обновляет до/после claude | ⚠️ Только dispatcher |
+| `task_tracker.update()` из агента | Агент обновляет task mid-session | Агент сам правит frontmatter через `Edit` (single-writer-инвариант выше) — эмпирически не подтверждено smoke-прогоном | ✅ Спецификация; ⚠️ поведение не проверено (WP-564 Фаза 2) |
 | Interactive clarification | Агент может задать вопрос пользователю | Нет UI — вопросы без ответа | ⚠️ Задачи должны быть самодостаточны |
 | Real-time output | Пользователь видит вывод в интерфейсе | Всё в RESULT-*.md post-factum | ⚠️ Асинхронный результат |
 

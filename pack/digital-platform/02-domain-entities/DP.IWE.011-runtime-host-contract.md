@@ -2,7 +2,7 @@
 id: DP.IWE.011
 name: IWE Runtime Host Contract
 name_ru: Контракт хоста для IWE
-type: concept
+type: domain-entity
 status: draft
 layer: L4-Distribution
 version: 0.1.0
@@ -142,6 +142,20 @@ task_tracker.create([{content: "шаг 1", status: "pending"}])
 
 **Переходный период:** CC-адаптер (Ж-Ф3) транслирует `task_tracker.*` → `TodoWrite`, `scheduler.*` → `ScheduleWakeup`. Протоколы продолжают работать в CC без изменений.
 
+**Правило резолюции (закреплено пир-сессией WP-564, 11.09.2026, Claude+Codex).** Абстрактные операции (`task_tracker.*`, `scheduler.*` и т.п.) резолвятся ИСКЛЮЧИТЕЛЬНО через адаптер, соответствующий текущему `$IWE_RUNTIME`. Прямой вызов host-native инструмента (`TodoWrite`, `ScheduleWakeup` и т.п.) в тексте протокола или скилла в обход адаптера — нарушение контракта; конкретное имя инструмента хоста допустимо только внутри самого файла адаптера (`DP.IWE.011-adapters/*.md`).
+
+**Пошаговые инварианты `task_tracker.*` для многошагового протокола (Day/Week Open, Close).** Один прогон протокола = N единиц отслеживания (по одной на шаг алгоритма), не одна на весь прогон:
+1. хост-раннер верно распознан (`$IWE_RUNTIME` соответствует фактическому хосту);
+2. перед первым содержательным шагом создан полный список шагов;
+3. каждый шаг проходит `pending → in_progress → completed` либо помечается `blocked` (не пропускается молча);
+4. одновременно не более одного шага в статусе `in_progress`;
+5. следующий шаг не начинается до терминального статуса предыдущего (`completed`/`blocked`);
+6. нет вызова host-native инструмента в обход адаптера;
+7. прогон достигает предусмотренной протоколом контрольной точки (не обрывается раньше);
+8. по завершении прогона число units со статусом `completed`/`blocked` равно числу шагов алгоритма.
+
+Эти 8 инвариантов — единственный обязательный список для проверки соответствия (§9) в любом хосте, включая headless; §9 не дублирует их отдельным перечнем.
+
 ---
 
 ## 6. Версионирование
@@ -186,13 +200,16 @@ task_tracker.create([{content: "шаг 1", status: "pending"}])
 
 | Потребитель | Ожидаемое (§5) | Фактическое | Статус |
 |---|---|---|---|
-| `memory/protocol-open.md` | вызов через `task_tracker.create` | прямой `TodoWrite` (строка 23: «Исполнение: пошагово через TodoWrite») | ❌ не потребляет |
+| `memory/protocol-open.md` | вызов через `task_tracker.create` | ссылка на `.claude/skills/day-open/SKILL.md`, которая теперь сама вызывает `task_tracker.create` (см. следующую строку) | ✅ текстово мигрировал (CC) |
+| `.claude/skills/day-open/SKILL.md` | вызов через `task_tracker.create` | исполняющая инструкция без `TodoWrite`; ссылка на `DP.IWE.011` и адаптеры | ✅ текстово мигрировал (CC); ⚠️ headless-путь не проверен прогоном (Фаза 2) |
 | `memory/protocol-work.md` | вызов через абстрактный API | нет упоминания контракта | ❌ не потребляет |
-| `memory/protocol-close.md` | вызов через `task_tracker.create` | прямой `TodoWrite` (строка 22: «Day/Week Close = через SKILL.md + TodoWrite») | ❌ не потребляет |
+| `memory/protocol-close.md` | вызов через `task_tracker.create` | прямой `TodoWrite` (строка 22: «Day/Week Close = через SKILL.md + TodoWrite») | ❌ не потребляет (вне объёма WP-564 Фаза 1) |
 | `CLAUDE.md` / `AGENTS.md` | ссылка на Host Contract при описании агентного ядра | нет упоминания `DP.IWE.011` / `DP.SC.046` | ❌ не потребляет |
 | `DP.IWE.011-adapters/claude-code-adapter.md` | маппинг контракт↔CC | есть (§A-D этого адаптера) | ✅ потребляет (декларативно) |
-| `scripts/headless-runner.sh` | headless-адаптер по контракту | ссылается на `DP.IWE.011-adapter-headless` в комментариях | ✅ потребляет |
+| `DP.IWE.011-adapters/headless-adapter.md` | маппинг контракт↔headless, agent-driven mid-session update | обновлён (single-writer-инвариант, N task-файлов на прогон) | ✅ спецификация; ⚠️ поведение не подтверждено живым прогоном |
+| `scripts/headless-runner.sh` | headless-адаптер по контракту | ссылается на `DP.IWE.011-adapter-headless` в комментариях, устанавливает `IWE_RUNTIME=headless` | ✅ потребляет |
+| `.claude/settings.json` (интерактивный CC) | `IWE_RUNTIME=claude-code` в `env` (по `claude-code-adapter.md` §C) | установлен (WP-564 Фаза 1) | ✅ потребляет |
 
-**Вывод:** адаптеры (Pack-слой) знают о контракте, протоколы (живой слой, вне Pack) — нет. Контракт написан, но open→work→close пока не написаны *против* него — только адаптер описывает, чем он мог бы быть. Статус `draft` в frontmatter (§v0.1) отражает это точно; поднимать до `active` только после того, как хотя бы один протокол реально вызовет `task_tracker.*`/`scheduler.*` вместо `TodoWrite`/`ScheduleWakeup` напрямую.
+**Вывод (обновлено WP-564 Фаза 1, 11.09.2026):** `protocol-open.md`/`day-open/SKILL.md` текстово переписаны против абстрактного API и не упоминают `TodoWrite`; резолюция в Claude Code подтверждена (адаптер уже был `status: active`, маппинг не менялся). Headless-путь специфицирован (single-writer-инвариант, agent-driven update, N task-файлов), но **не подтверждён живым прогоном** — headless-runner.sh не запускался с этим протоколом в рамках Фазы 1. `protocol-work.md`/`protocol-close.md` остаются вне объёма. Статус `draft` в frontmatter поднимать до `active` только после Фазы 2 (живой headless-smoke по инвариантам §5).
 
-**Следующий шаг** (кто и когда — решение пилота, не Pack): переписать `protocol-open.md`/`protocol-work.md`/`protocol-close.md` против абстрактного API. Кандидаты-владители по WP-реестру IWE: spin-off закрытого РП, породившего этот контракт, либо фаза действующего РП по документации платформы.
+**Следующий шаг (WP-564 Фаза 2, отдельная карточка по решению пилота от 11.09.2026):** живой прогон `headless-runner.sh` через Day Open (или представительный кусок), проверка всех 8 инвариантов §5 — до этого headless-строки этой таблицы остаются `⚠️`, не `✅`.
