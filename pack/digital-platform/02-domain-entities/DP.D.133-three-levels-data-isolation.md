@@ -1,7 +1,7 @@
 ---
 id: DP.D.133
 name: Три уровня изоляции данных в IWE
-type: domain-entity
+type: distinction
 subtype: distinction
 status: active
 summary: "Данные в IWE изолируются на трёх независимых уровнях: БД-уровень (vault-паттерн), schema-уровень (aisystant schema), table/column-уровень (RLS + column grants). Каждый уровень защищает от разного класса нарушений. Уровни не заменяют друг друга — нарушение одного не компенсируется другим."
@@ -38,7 +38,7 @@ tags: [data-isolation, rls, schema, vault, security, pii]
 |---------|-------|-------------|--------------|-----------------|
 | **L1: БД-vault** | Отдельный инстанс/БД для compliance-критичных данных | Neon project isolation | DP.ARCH.004 §10.12: `payment_registry` (PCI), `secrets` (OAuth) — отдельные БД | `neon projects list` → `payment_registry` и `secrets` в отдельных project_id |
 | **L2: Schema** | REVOKE/GRANT на schema; данные пользователей в schema `aisystant`, не в `public` | Neon role policies | B7.3.1 (классификация схем) + B7.3.3 (schema grants) | `SELECT nspname, nspacl FROM pg_namespace WHERE nspname='aisystant'` — проверить отсутствие `=UC` у анонимных ролей |
-| **L3: Row/Column** | RLS-политики + column-level grants | PostgreSQL / Neon Authorize | B7.3.3 column grants + B7.3.5 Fernet-шифрование сенситивных полей; RLS-матрица в WP-245 Ф26 | `SELECT * FROM pg_policies WHERE tablename='learning_events'` + `SELECT * FROM information_schema.column_privileges WHERE grantee='web_anon'` |
+| **L3: Row/Column** | RLS-политики + column-level grants | PostgreSQL / Neon Authorize | B7.3.3 column grants + B7.3.5 Fernet-шифрование сенситивных полей; политики доступа — B7.3-cedar-protocol.md (WP-212 ФС1); живой RLS-статус — security-posture.md §3 (указатель «WP-245 Ф26» удалён 12.09.2026: та фаза — каскадное планирование, не RLS) | `SELECT * FROM pg_policies WHERE tablename='learning_events'` + `SELECT * FROM information_schema.column_privileges WHERE grantee='web_anon'` |
 
 ## 3. Маппинг на существующие артефакты
 
