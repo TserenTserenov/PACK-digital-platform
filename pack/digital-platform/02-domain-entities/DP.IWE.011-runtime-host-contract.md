@@ -201,15 +201,27 @@ task_tracker.create([{content: "шаг 1", status: "pending"}])
 | Потребитель | Ожидаемое (§5) | Фактическое | Статус |
 |---|---|---|---|
 | `memory/protocol-open.md` | вызов через `task_tracker.create` | ссылка на `.claude/skills/day-open/SKILL.md`, которая теперь сама вызывает `task_tracker.create` (см. следующую строку) | ✅ текстово мигрировал (CC) |
-| `.claude/skills/day-open/SKILL.md` | вызов через `task_tracker.create` | исполняющая инструкция без `TodoWrite`; ссылка на `DP.IWE.011` и адаптеры | ✅ текстово мигрировал (CC); ⚠️ headless-путь не проверен прогоном (Фаза 2) |
+| `.claude/skills/day-open/SKILL.md` | вызов через `task_tracker.create` | исполняющая инструкция без `TodoWrite`; ссылка на `DP.IWE.011` и адаптеры | ✅ CC-интерфейс: текстово мигрировано; ⚠️ headless: подтверждён только `--dry-run` (Фаза 2, см. ниже) |
 | `memory/protocol-work.md` | вызов через абстрактный API | нет упоминания контракта | ❌ не потребляет |
 | `memory/protocol-close.md` | вызов через `task_tracker.create` | прямой `TodoWrite` (строка 22: «Day/Week Close = через SKILL.md + TodoWrite») | ❌ не потребляет (вне объёма WP-564 Фаза 1) |
 | `CLAUDE.md` / `AGENTS.md` | ссылка на Host Contract при описании агентного ядра | нет упоминания `DP.IWE.011` / `DP.SC.046` | ❌ не потребляет |
 | `DP.IWE.011-adapters/claude-code-adapter.md` | маппинг контракт↔CC | есть (§A-D этого адаптера) | ✅ потребляет (декларативно) |
-| `DP.IWE.011-adapters/headless-adapter.md` | маппинг контракт↔headless, agent-driven mid-session update | обновлён (single-writer-инвариант, N task-файлов на прогон) | ✅ спецификация; ⚠️ поведение не подтверждено живым прогоном |
-| `scripts/headless-runner.sh` | headless-адаптер по контракту | ссылается на `DP.IWE.011-adapter-headless` в комментариях, устанавливает `IWE_RUNTIME=headless` | ✅ потребляет |
+| `DP.IWE.011-adapters/headless-adapter.md` | маппинг контракт↔headless, agent-driven mid-session update | обновлён (single-writer-инвариант, N task-файлов на прогон) | ✅ спецификация; ⚠️ живой прогон подтверждает только create/pending-обнаружение (см. ниже); mid-session update, concurrency и полный `completed` не проверены |
+| `scripts/headless-runner.sh` | headless-адаптер по контракту | ссылается на `DP.IWE.011-adapter-headless` в комментариях, устанавливает `IWE_RUNTIME=headless` | ✅ потребляет адаптер; ⚠️ прогон ограничен `--dry-run` (см. ниже) |
 | `.claude/settings.json` (интерактивный CC) | `IWE_RUNTIME=claude-code` в `env` (по `claude-code-adapter.md` §C) | установлен (WP-564 Фаза 1) | ✅ потребляет |
 
-**Вывод (обновлено WP-564 Фаза 1, 11.09.2026):** `protocol-open.md`/`day-open/SKILL.md` текстово переписаны против абстрактного API и не упоминают `TodoWrite`; резолюция в Claude Code подтверждена (адаптер уже был `status: active`, маппинг не менялся). Headless-путь специфицирован (single-writer-инвариант, agent-driven update, N task-файлов), но **не подтверждён живым прогоном** — headless-runner.sh не запускался с этим протоколом в рамках Фазы 1. `protocol-work.md`/`protocol-close.md` остаются вне объёма. Статус `draft` в frontmatter поднимать до `active` только после Фазы 2 (живой headless-smoke по инвариантам §5).
+**Вывод (обновлено WP-564 Фаза 1, 11.09.2026):** `protocol-open.md`/`day-open/SKILL.md` текстово переписаны против абстрактного API и не упоминают `TodoWrite`; резолюция в Claude Code подтверждена (адаптер уже был `status: active`, маппинг не менялся). `protocol-work.md`/`protocol-close.md` остаются вне объёма.
 
-**Следующий шаг (WP-564 Фаза 2, отдельная карточка по решению пилота от 11.09.2026):** живой прогон `headless-runner.sh` через Day Open (или представительный кусок), проверка всех 8 инвариантов §5 — до этого headless-строки этой таблицы остаются `⚠️`, не `✅`.
+**WP-564 Фаза 2 (12.09.2026, пир-сессия Claude+Kimi+Codex, live smoke против `TserenTserenov/DS-wp-sandbox`, ветка `smoke/wp564-2026-09-12`) — частичный результат:**
+
+Подтверждено живым `--dry-run`-прогоном (полный `claude -p` invoke заблокирован permission-классификатором auto-mode текущей сессии — харнесс-ограничение, не обойдено намеренно):
+- Инвариант 1 (`$IWE_RUNTIME=headless` резолвится верно) — ✅ подтверждён.
+- Инвариант 2 (task-юнит создан до первого шага) — ✅ подтверждён для одного task-файла на протокол.
+- Инвариант 6 (нет host-native вызова в обход адаптера) — ✅ подтверждён по собранному промпту (нет `TodoWrite`).
+- Инварианты 3, 4, 5, 7, 8 (реальные статусные переходы, single-flight `in_progress`, достижение контрольной точки, финальный подсчёт `completed`/`blocked`) — **не подтверждены**: требуют реального `claude -p` invoke, недоступного из этой сессии.
+
+**KNOWN NON-CONFORMANCE (найдено этим же прогоном, не блокирует smoke, но ограничивает claim):** `headless-adapter.md` таблица A обещает «N файлов `inbox/agent/tasks/TASK-<run>-NN.md`, один на шаг алгоритма, не один на весь прогон»; по факту кода `headless-runner.sh` (`_create_protocol_task`/аналог для `--task`) создаёт **ровно один** task-файл на весь прогон — разбиение на N файлов по шагам не enforce-контракт кода, а опциональное действие самого агента внутри `claude -p` (не проверено, т.к. `claude -p` не запускался). Для полного conformance headless-adapter это блокер, требующий либо правки кода раннера, либо пересмотра формулировки таблицы A.
+
+**Побочные технические находки Ф2 (не блокеры):** (1) `~/IWE/scripts/headless-runner.sh` разошёлся с `~/IWE/DS-my-strategy/scripts/headless-runner.sh` (первый новее на один фикс, второй — единственный с рабочей парой `iwe-agent-dispatcher.py` рядом; буквальный запуск из корня падает на отсутствии диспетчера) — Drift Reporting, не устранено в рамках Ф2; (2) `DS-my-strategy/scripts/headless-runner.sh:60` (копия, реально задействованная в Ф2 — вторая копия в корне `~/IWE/scripts/` разошлась, см. п.1) падает на `md5: command not found` на Linux-хостах (нужен `md5sum`), fallback срабатывает, но шумит в stderr; (3) GOV_BRANCH по умолчанию `main` без отдельного `--target-branch` — реальный live-прогон без явного `IWE_DISPATCHER_REPO_BRANCH` рискует запушить в главную ветку целевого репозитория.
+
+**Следующий шаг:** довести до реального (не `--dry-run`) прогона нужно вне классификатора этой интерактивной сессии — либо пилотом в своём терминале, либо headless-раннером на отдельном хосте/CI. Инфраструктура готова (sandbox-репо, ветка, task-файл, env-профиль изоляции — см. `MC-sessions:2026-09/12/2026-09-12-05-wp564-headless-smoke/`). Статус `draft` в frontmatter поднимать до `active` только после подтверждения инвариантов 3-5,7-8 реальным прогоном.
