@@ -191,8 +191,42 @@ domain_event», не гарантированно точное PostgreSQL-ква
 
 | ID рубрики | Для чего | Чем является сегодня | rubric_source |
 |---|---|---|---|
-| RUB.GUIDE-OUTPUT-01 | выход «руководство» (все фрагменты) | пара `render_checklist.py` (форма) + `verify_and_provenance.py` (содержание/провенанс) под одним ID | explicit (рубрика выхода; вырожденно для фрагментов — честно) |
+| RUB.GUIDE-OUTPUT-01 | выход «руководство» (все фрагменты) | многослойная рубрика (слои ниже): машинная пара + MVP fast-path + полный многошкальный профиль | explicit (пороги профиля обязательны только после записанного решения пилота по калибровке) |
 | RUB.LESSON.* | основной материал занятия (судья Ф3) | **не существует** — рубрик per-материал в каталогах сегодня ноль | заполнение — обязательная работа Ф6 |
+
+Слои и история RUB.GUIDE-OUTPUT-01 (эволюция строки, РП521 Ф9, пир-сессия 2026-09-12-18):
+
+```yaml
+rubric_id: RUB.GUIDE-OUTPUT-01
+rubric_source: explicit
+registry_status: registered  # статус записи в реестре; живость вердикта — по status каждого слоя ниже
+implementation_layers:
+  - layer: machine_form
+    artifact: DS-autonomous-agents/scripts/render_checklist.py
+    status: active
+    role: форма чеклиста
+  - layer: machine_provenance
+    artifact: DS-autonomous-agents/scripts/verify_and_provenance.py
+    status: active
+    role: содержание/провенанс
+  - layer: fast_path
+    artifact: DS-my-strategy/inbox/WP-521/guide-acceptance-checklist-mvp.md
+    status: active
+    role: ежедневная приёмка (binding gate до утверждения порогов профиля)
+  - layer: full_profile
+    artifact: DS-my-strategy/inbox/WP-521/guide-acceptance-rubric.md
+    status: draft-pending-calibration
+    role: многошкальный профиль (до утверждения порогов пилотом выдаёт профиль+риски, не вердикт)
+rubric_history:
+  - date: 2026-09-10
+    state: degenerate
+    note: "вырожденно для фрагментов — только машинная пара (форма + провенанс); честная пометка исходной строки"
+  - date: 2026-09-12
+    state: expanded
+    note: "добавлены слои MVP fast-path и полный многошкальный профиль; инвариант: пункт MVP отображён на порог шкалы, MVP FAIL ⇒ рубрика FAIL по построению"
+```
+
+Правило версии: записи фрагментов, сделанные до расширения, читаются по состоянию реестра на момент записи (вырожденная машинная пара) — миграция старых вердиктов не проводится; версия реестра на момент сборки фиксируется в `assembled_by_run` (§Б выше).
 
 **Честная строка:** рубрик в каталогах материалов сегодня НЕТ (CQR — рубрика авторов другого
 каталога `cells/`, заполненных данных 0; deepeval-рубрика — качество бота, не материала).
