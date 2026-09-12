@@ -2,14 +2,14 @@
 id: DP.MAP.001
 name: Pack Navigation Map
 scope: full-pack
-created: 2026-09-09
-last_updated: 2026-09-09
+created: 2026-09-13
+last_updated: 2026-09-13
 generated: true
 ---
 
 # [DP.MAP.001] Pack Navigation Map
 
-> Auto-generated from frontmatter on 2026-09-09. Do not edit manually.
+> Auto-generated from frontmatter on 2026-09-13. Do not edit manually.
 
 ---
 
@@ -18,19 +18,19 @@ generated: true
 | Kind | Count |
 |------|-------|
 | AISYS (AISYS) | 4 |
-| ARCH (ARCH) | 9 |
+| ARCH (ARCH) | 10 |
 | ASSIST (ASSIST) | 1 |
 | Characteristics (CHR) | 1 |
 | CONCEPT (CONCEPT) | 4 |
-| Distinctions (D) | 278 |
+| Distinctions (D) | 294 |
 | ECON (ECON) | 1 |
 | EXOCORTEX (EXOCORTEX) | 1 |
-| Failure Modes (FM) | 331 |
+| Failure Modes (FM) | 368 |
 | IWE (IWE) | 14 |
 | KR (KR) | 3 |
-| Methods (M) | 386 |
+| Methods (M) | 405 |
 | Maps (MAP) | 3 |
-| METHOD (METHOD) | 177 |
+| METHOD (METHOD) | 178 |
 | NAV (NAV) | 1 |
 | ONT (ONT) | 1 |
 | ORG (ORG) | 1 |
@@ -42,7 +42,7 @@ generated: true
 | SYS (SYS) | 1 |
 | VM (VM) | 1 |
 | Work Products (WP) | 16 |
-| **Total** | **1519** |
+| **Total** | **1593** |
 
 ## Distinctions
 
@@ -323,9 +323,25 @@ generated: true
 | DP.D.290 | Измерительный вопрос ≠ Интервенционный вопрос | — | active |
 | DP.D.291 | Вещь (физический объект) ≠ «вещь» (разговорное «нечто») | В обучающих и методических текстах «вещь» зарезервирована за физическими объектами; для ментального - «пункт/мысль/идея/различение»; в живом чате разговорное употребление допустимо. | active |
 | DP.D.292 | Подписка (Pack-каталог) ≠ Поделиться (обычный репозиторий) | Формальная подписка через каталог (/pack-subscribe, pack-catalog.yaml) применима только к Pack/DPF; обычные репозитории передаются вручную, без каталожного механизма. | active |
-| DP.D.293 | Self-referential verification (сравнение двух подконтрольных себе значений) ≠ third-party verification (сверка с независимым источником) | — | active |
+| DP.D.293 | Self-referential verification (сравнение двух подконтрольных себе значений) ≠ third-party verification (сверка с независимым источником) | Независимый эталон проверяет свойство, которое нельзя подтвердить сравнением двух значений, воспроизводящих одну ошибку; константа допустима как выражение отдельно заданного договора. | active |
 | DP.D.294 | Карантин недоверенного человеческого события ≠ обнаружение подделки агентского события | Защита от недоверенного, но подлинного источника (карантин, событие видимо с меткой) — не то же самое, что защита от подделки авторства (нужна подпись/аутентификация, а не сверка по строковому совпадению реестра). | active |
 | DP.D.295 | Модуль ≠ Функциональная роль | — | active |
+| DP.D.296 | Настройки хостинг-платформы репозитория (is_template и т.п.) живут вне git | Молчаливый дрейф настроек хостинг-платформы (GitHub/GitLab/Railway/Vercel) не оставляет следа ни в одном коммите — нужен явный сторож дрейфа через API платформы, git log здесь принципиально не поможет. | active |
+| DP.D.297 | multiplier_estimated (авто-снимок ledger) ≠ «Мультипликатор дня» (ручной пересчёт) | Два поля метрики с общим смысловым названием, вычисляемые разными формулами в разных подсистемах, расходятся молча, пока их явно не поставить рядом — фикс не унификация имени, а разведение полей с явным приоритетом одного. | active |
+| DP.D.298 | Позиционный/эвристический ключ поиска состояния небезопасен при параллельной записи | Lookup-key должен однозначно указывать на целевое состояние, а не на ближайшее похожее — иначе конкурентная запись/поиск даёт либо потерю данных при слиянии, либо чужое состояние вместо своего. | active |
+| DP.D.299 | `cmd1 | cmd2 || fallback` не ловит провал cmd1 — `||` смотрит только на код возврата ПОСЛЕДНЕЙ команды конвейера | Без set -o pipefail единственный проверяемый код возврата конвейера — у последней команды; фолбэк на 'первая команда ничего не нашла/упала' нужно проверять отдельно. | active |
+| DP.D.302 | Путь в NFC-форме ≠ путь в NFD-форме | На macOS одно и то же имя файла может прийти в двух разных байтовых представлениях (composed NFC / decomposed NFD) — побайтовое сравнение путей в security-проверке видит два разных пути там, где файл один. | active |
+| DP.D.303 | Файл на диске обновлён ≠ живой процесс исполняет новый код | Три уровня свежести деплоя долгоживущего демона — репозиторий → диск → память процесса; отчёт «задеплоено» обязан называть, до какого уровня дошло. | active |
+| DP.D.304 | Конкурентный форк ≠ Репличный форк | Конкурентный форк — истинная гонка часов (два писателя пишут одновременно, нужна вторая ОС-песочница с протоколом синхронизации). Репличный форк — две реплики реестра расходятся в изоляции (offline-first), конфликт виден только при слиянии — тестируется против резолвера без второй песочницы, потому что расхождение — свойство содержимого записи, а не гонки процессов. | active |
+| DP.D.305 | Heredoc-получатель, исполняющий stdin (shell/psql/mysql) ≠ получатель, читающий stdin как данные (cat/tee) | — | draft |
+| DP.D.306 | Атомарность лока (внутри инструмента) ≠ Общий namespace лока (между инструментами) | — | active |
+| DP.D.307 | Путь для мутации ≠ Путь для диагностики (резолвер эфемерного объекта ≠ резолвер устойчивого места) | — | active |
+| DP.D.308 | Неподтверждённый владелец блокировки ≠ осиротевшая блокировка | Отсутствие держателя в диагностическом снимке означает неизвестность. Право записи и восстановление определяются атомарным протоколом конкретной блокировки. | active |
+| DP.D.309 | Отсутствующий файл состояния согласия ≠ чистая установка | Независимый маркер успешной инициализации обнаруживает потерю файла согласия. Потеря обоих свидетельств остаётся неопределённостью и не восстанавливает разрешение. | active |
+| DP.D.310 | Частота крона ≠ гарантия восстановления пропущенной работы | Следующий периодический запуск помогает только при повторном выборе той же незавершённой работы; короткий интервал не гарантирует сохранность пропуска. | active |
+| DP.D.311 | Тень, запускаемая только после успеха основного пути, не охватывает отказы и ошибки | Выборка успешных исходов не проверяет защитное поведение на отказах. Отбор, исход основного пути, ошибка тени и воздержание от решения учитываются раздельно. | active |
+| DP.D.312 | Конфиденциальность ≠ проверяемость происхождения хеша публичного артефакта | Хеш публичного файла не требует сокрытия содержимого, но доверенность эталона зависит от прав его изменения и истории обновлений; защищённое хранилище может обеспечивать целостность. | active |
+| DP.D.313 | Стоимость нового дешёвого пути ≠ стоимость дорогого пути, который он должен заменить | Экономия требует измерить заменяемые стадии и оба полных пути на сопоставимых входах; совпадение маршрутов и стоимость нового классификатора сами по себе её не доказывают. | active |
 
 ## Methods
 
@@ -628,7 +644,7 @@ generated: true
 | DP.M.327 | Multi Level Lookup Diagnostic Precision | — | draft |
 | DP.M.328 | Yaml Preload Pure Bash Lookup | — | draft |
 | DP.M.329 | Идемпотентность вебхука на уровне ограничения БД (ON CONFLICT DO NOTHING) | — | active |
-| DP.M.331 | Agent Audit Trail as Append-only Sidecar | Машиночитаемый журнал действий агента хранится как отдельный append-only файл (audit-<id>.jsonl) рядом с человекочитаемым тредом сессии. Записывает события, которых нет в треде: вызовы инструментов, чтение/запись файлов, коммиты. Включается в коммит хода → переживает git reset --hard. | — |
+| DP.M.331 | Agent Audit Trail as Append-only Sidecar | Машиночитаемый журнал действий хранится отдельным дозаписываемым файлом рядом с тредом. Для восстановления после сброса ветки коммит журнала сохраняют достижимым через защищённую ссылку или подтверждённую публикацию. | — |
 | DP.M.332 | Sanity-guard quarantine pattern | Guard срабатывает двухслойно: (1) аномальная запись получает статус карантина, не финальный статус; (2) каждое срабатывание оставляет durable-след в инцидент-таблице. Уведомление эфемерно, инцидент-запись — нет. Решение о финализации отделено от детекции. | — |
 | DP.M.333 | Failure mode matrix per event type | Явная таблица 'тип события → режим отказа' как артефакт дизайна до реализации. Юридически значимые события (согласие) при сбое инфраструктуры принимаются в очередь и дозаписываются; привилегии честно ждут. Один дефолт для всей системы = архитектурная ошибка. | — |
 | DP.M.334 | Commented-out code with explanation as primary evidence of intentional disablement | При расследовании silent data gap первый поиск — git log --pickaxe + grep закомментированных строк с объяснением в планировщиках и main entry points. Закомментированный код с явным объяснением = primary evidence того, что компонент намеренно остановлен при миграции. | — |
@@ -717,6 +733,25 @@ generated: true
 | DP.M.423 | Audit Receiver Compensating Control Trust Boundary | — | — |
 | DP.M.424 | Reuse Deployed Idp Over Local Stub | — | — |
 | DP.M.425 | Non Fatal Repo Sync Before Optional Read | — | — |
+| DP.M.426 | Guard Scope By Ref Namespace Not Command Form | — | — |
+| DP.M.427 | Register New Install Step In Both Entry Points | — | — |
+| DP.M.428 | Content Usage Accounting Single Server Event Point | — | — |
+| DP.M.429 | Scheduled Sync Needs Test Gate Before Publish | — | — |
+| DP.M.430 | Republish Detection By Content Not Patch | Итоговое содержимое сравнивается со свежим опубликованным состоянием; допустимая нормализация не скрывает реальные добавления, а файловые переходы проверяются по независимому ожидаемому результату. | — |
+| DP.M.431 | Naming Gate Trigger Stems Need Word Boundary | — | — |
+| DP.M.434 | Atomic Mkdir Lock Before Liveness Check Singleton Background Start | — | — |
+| DP.M.435 | Wiring Test Call Site Fact And Condition Separate From Unit Test | — | — |
+| DP.M.436 | Safety Barrier At Edit Point Not Only Commit Point | — | — |
+| DP.M.437 | Побайтовое сравнение застешенной правки с новым HEAD — тест на право тихого удаления | — | active |
+| DP.M.438 | Контракт выпуска: deployment identity как тройка artifact+profile+environment, именной пилот-подписанный escape hatch вместо тега в коммите | — | active |
+| DP.M.439 | Сравнение веток по patch-id (git cherry -v), не по числу уникальных SHA | — | active |
+| DP.M.440 | Возобновляемый батч-бэкафилл с автокоммитом на строку + проверка скоуп-роли писателя перед записью | — | active |
+| DP.M.441 | Заявленное право проверять эмпирически по всей популяции инсталляций, не по манифесту и не по одной пробе | — | active |
+| DP.M.442 | Detective Layer When Preventive Org Policy Unavailable | — | — |
+| DP.M.450 | Narrow Guard Scan Boundary Before Pattern Match | — | — |
+| DP.M.451 | Command Identity Block For Whole Store Dump Commands | — | — |
+| DP.M.452 | Восстановление пропущенных источников через существующий более частый крон | Существующее расписание рассматривается как условная точка запуска восстановления; применимость требует бюджета, соблюдения сроков повторов, защиты от дублей и изоляции отказов. | active |
+| DP.M.453 | Ключ окна дедупликации уведомлений — класс инцидента, не идентификатор конкретного запуска | Меняющийся ID запуска хранится как след попытки; ключ подавления повторов объединяет один инцидент и сохраняет различимость разных инцидентов и восстановления. | active |
 
 ## Work Products
 
@@ -1074,6 +1109,43 @@ generated: true
 | DP.FM.397 | Отменённая миграция не долетела до код-читателя — симптом увёл от причины | — | active |
 | DP.FM.398 | Построчный decrypt внутри SQL WHERE и молчаливый возврат шифротекста при недоступном ключе | — | active |
 | DP.FM.399 | Nullable булево поле стороннего API проверено строгим сравнением с False без ветки на None | — | draft |
+| DP.FM.400 | Код полагался на systemctl как на общую для всех хостов возможность — на macOS её нет, молчаливый no-op вместо запуска | — | draft |
+| DP.FM.401 | Переписывание истории (filter-repo + force-push) молча ломает несвязанный автоматизационный чекаут вне обычного pull-потока | — | draft |
+| DP.FM.402 | Периодическая задача обновления по ошибке переиспользовала разовый шаг первичной установки — грозила молча перезаписывать пользовательский конфиг | — | draft |
+| DP.FM.403 | Git-хук всегда исполняется системным bash 3.2 (macOS), не интерактивным шеллом автора — пустой массив под set -u падает как unbound variable | — | draft |
+| DP.FM.404 | Приглашённый коллаборатор открыл доступ не к тому репозиторию, чем было согласовано — расхождение не проверялось до разбора | — | draft |
+| DP.FM.405 | Клиентский фильтр по дате поверх глобального каталога вырезает валидные персональные позиции с прошедшей номинальной датой старта | — | draft |
+| DP.FM.406 | Платёж прошёл успешно, но новый тип назначения платежа не имел обработчика вебхука завершения и запасного поллинга — доставка результата покупки не произошла молча | — | draft |
+| DP.FM.407 | Поле фронтматтера с легитимным пустым значением (~28% реальных карточек) обходило grep-первое-совпадение молча | — | draft |
+| DP.FM.408 | Самолечащий watchdog докладывал «починил» сразу после действия — без проверки состояния ПОСЛЕ ремедиации, числовой fallback-порт рисковал убить чужой процесс | — | draft |
+| DP.FM.409 | Обрыв YAML посреди вложенной записи в общем append-only ledger блокировал старт ЛЮБОЙ сессии, не только той, что писала запись | — | draft |
+| DP.FM.410 | (...) & disown отвязывает процесс от шелла, но не закрывает унаследованные файловые дескрипторы — открытый лок блокирует следующие тики | — | draft |
+| DP.FM.411 | systemd Type=oneshot без KillMode= убивает всю cgroup сразу после ExecStart — disown от этого не защищает | — | draft |
+| DP.FM.412 | Гейт безопасности глотал повреждённый JSON (fail-open) и крашился на крупном входе (ARG_MAX) — два пропуска валидации аномального входа | — | draft |
+| DP.FM.413 | Собственный тестовый хелпер классифицировал «упал с крашем» так же, как «прошёл» — маскировал бы находку | — | draft |
+| DP.FM.414 | Планировщики вне интерактивного шелла (launchd, санированный CLI-wrapper) запускают скрипты без HOME/PATH/кастомных переменных | — | draft |
+| DP.FM.415 | Параллельный rebase в общем чекауте опустошает коммит в окне между postcondition-проверкой и записью | — | active |
+| DP.FM.416 | Режим-исключение защитной проверки проходит там, где обычный режим отказывает | — | draft |
+| DP.FM.417 | Матчер позиции команды пропускает служебные слова составных операторов shell — часть команд разбирается вслепую, а вердикт заявляет полный анализ | — | draft |
+| DP.FM.418 | Сообщение об отказе guard'а не различает «сам guard неисправен» и «команда отклонена по правилу» — поломка защиты блокирует и попытку её починить | — | draft |
+| DP.FM.419 | Голый "$2" под set -u при флаге без значения роняет весь скрипт, объявленный fail-open | — | draft |
+| DP.FM.420 | Обязательный cleanup вложен в блок, чьё условие — доступность несвязанного опционального компонента | — | draft |
+| DP.FM.421 | Регэксп извлекает аргумент из сырого текста команды до раскрытия shell — значение через переменную невидимо и молча трактуется как отсутствующее | — | draft |
+| DP.FM.422 | Перенаправление, принятое за часть команды или за имя переменной, обходит блокировку по идентичности команды | — | draft |
+| DP.FM.423 | Резолвер позиции команды пропускает голые имена обёрток, но не обёртку вместе с её собственными опциями — первый аргумент обёртки съедает позицию реальной команды | — | draft |
+| DP.FM.424 | Новое ограничение на путь публикации ломает штатный конвейер, который публикует именно оттуда | — | draft |
+| DP.FM.425 | HTTP 409 (stale sha) — транзиентный конфликт, а не постоянная ошибка 4xx | — | active |
+| DP.FM.426 | Захардкоженная строка-идентификатор инстанса вместо machine id — дедупликация скрывает второй одновременный экземпляр | — | active |
+| DP.FM.427 | Скопированное предположение о схеме БД (JSONB-путь вместо колонки) — несовпадение не бросает исключение, тихо возвращает NULL | — | active |
+| DP.FM.428 | tail -N в pilot-facing алерте теряет причину провала, если после failed-шага в том же тике прошёл успешный | — | active |
+| DP.FM.429 | GDPR-финализатор резолвит identity через таблицу-посредник, но саму её не удаляет | Таблица поиска идентичности с подлежащими удалению данными входит в согласованный периметр удаления; полнота проверяется после коммита независимыми запросами. | active |
+| DP.FM.430 | Резолвер python3 в mandatory-gate недоступен — инфраструктурный сбой маскируется под «правило не настроено» | Невозможность выполнить обязательную проверку отличается от подтверждённого отключения правила и не допускает защищённое действие. | active |
+| DP.FM.431 | Отсутствие timeout при прямом вызове ломает защитный скрипт | Переносимый защитный скрипт проверяет наличие механизма ограничения времени и не заменяет его незаметно неограниченным запуском. | active |
+| DP.FM.432 | Правило, зависящее от класса карточки, не имеет структурного входа при её создании | Класс карточки сохраняется как структурное поле, а применение зависимого правила проверяется отдельным потребителем; наличие поля или напоминания не доказывает исполнения. | active |
+| DP.FM.433 | Идентификатор GitHub App в конфиге указывает на чужое приложение без диагностики принадлежности | Проверяемая конфигурация сверяется с независимым доверенным ожиданием идентичности приложения; запретительный список известных чужих ID не заменяет положительную проверку. | active |
+| DP.FM.434 | Независимые уведомления об активности утверждают несовместимые состояния | Содержание уведомления проверяется вместе с показателем, окном и временем снимка; независимые каналы не должны утверждать несовместимые состояния на одном основании. | active |
+| DP.FM.435 | Гонка проверки и чтения файла; неполная обработка ошибок чтения | Гонка между проверкой и открытием и неполный перехват ошибок — два разных механизма. Отсутствие, недоступность и неверное содержимое требуют различимых исходов. | active |
+| DP.FM.436 | Одновременные отказы кронов — диагностический сигнал для проверки общей причины | Совпадение времени и кода ошибок не устанавливает исчерпание общей квоты. Причина подтверждается диагностическими свидетельствами, а повторы соблюдают условия провайдера. | active |
 
 ## SoTA Annotations
 
@@ -1147,6 +1219,7 @@ generated: true
 | DP.ARCH.007 | Проекция (runtime-компиляция под потребителя) | Проекция — эфемерный runtime-слой: агент на лету собирает из Памяти и Персоны ответ под одного потребителя (LLM-промпт, пользовательский view, nudge). Writer = агент в runtime. Owner = нет (не хранится дольше одного вызова). Заменяет часть монолита ЦД (DP.ARCH.003) — §7 Views + §17 Nudge Engine. | active |
 | DP.ARCH.008 | Enforcement требует наблюдателя вне субъекта | Архитектурный принцип реализации правил агента: правило, которое проверяется самим агентом по памяти, имеет нулевую силу. Наблюдатель должен находиться ВНЕ субъекта, действия которого он контролирует. Шкала сил: memory (0) → hook (средняя) → deterministic generation (максимальная). | active |
 | DP.ARCH.009-decisions | Decisions | — | active |
+| DP.ARCH.010 | Стадийная модель конвейера персональных данных (С1-С9) | Единая 9-стадийная модель для любого конвейера персональных данных типов 2.1-2.4: Источник → Захват → Нормализация и согласие → Проверка → Запись в дом → Индекс/Реестр → Актуализация → Сохранность/восстановление → Потребление. Явная декларация отсутствующих стадий вместо молчания; карантин-класс «вне оси» для данных не-пилота. | active |
 
 ### ASSIST
 
@@ -1383,6 +1456,7 @@ generated: true
 | DP.METHOD.252 | Hypotheses Log Weekly Lpf Calibration | Гипотезы о системе (не план, не факт) записываются в отдельный журнал при появлении; на регулярном ретро (Week Close) каждая сверяется: подтверждена / опровергнута / не проверялась. Метрика калибровки — доля подтверждённых среди проверенных. | draft |
 | DP.METHOD.253 | Self Change Method Isomorphic To Org Change | Метод изменения себя структурно изоморфен методу организационного изменения: объект → характеристика → разрыв → стадия → действие. Разница только в масштабе и субъекте воли; принципиальная структура шагов одна и та же. | draft |
 | DP.METHOD.254 | Composite Role Intersection Pattern | Новая специализированная роль проектируется как пересечение двух существующих ролей (составная роль, ⊗), а не с нуля — например, Наставник ИИ = Диагност ⊗ Навигатор. | draft |
+| DP.METHOD.255 | Принципы унификации конвейеров персональных данных (П1-П9) | — | — |
 
 ### NAV
 
@@ -1936,8 +2010,10 @@ generated: true
 - Missing `summary`: DP.D.287 (DP.D.287-applied-mastery-personal-not-platform.md)
 - Missing `summary`: DP.D.288 (DP.D.288-quick-close-vs-full-close.md)
 - Missing `summary`: DP.D.290 (DP.D.290-measurement-question-vs-intervention-question.md)
-- Missing `summary`: DP.D.293 (DP.D.293-self-referential-vs-third-party-verification.md)
 - Missing `summary`: DP.D.295 (DP.D.295-modul-vs-funkcionalnaya-rol.md)
+- Missing `summary`: DP.D.305 (DP.D.305-heredoc-executing-recipient-vs-data-recipient.md)
+- Missing `summary`: DP.D.306 (DP.D.306-lock-atomicity-vs-shared-namespace.md)
+- Missing `summary`: DP.D.307 (DP.D.307-mutation-path-vs-diagnostic-path-resolver.md)
 - Missing `summary`: DP.IWE.003 (DP.IWE.003-gateway-architecture.md)
 - Missing `summary`: DP.IWE.004 (DP.IWE.004-iwe-interfaces.md)
 - Missing `summary`: DP.IWE.005 (DP.IWE.005-local-gateway.md)
@@ -2254,6 +2330,22 @@ generated: true
 - Missing `summary`: DP.M.423 (DP.M.423-audit-receiver-compensating-control-trust-boundary.md)
 - Missing `summary`: DP.M.424 (DP.M.424-reuse-deployed-idp-over-local-stub.md)
 - Missing `summary`: DP.M.425 (DP.M.425-non-fatal-repo-sync-before-optional-read.md)
+- Missing `summary`: DP.M.426 (DP.M.426-guard-scope-by-ref-namespace-not-command-form.md)
+- Missing `summary`: DP.M.427 (DP.M.427-register-new-install-step-in-both-entry-points.md)
+- Missing `summary`: DP.M.428 (DP.M.428-content-usage-accounting-single-server-event-point.md)
+- Missing `summary`: DP.M.429 (DP.M.429-scheduled-sync-needs-test-gate-before-publish.md)
+- Missing `summary`: DP.M.431 (DP.M.431-naming-gate-trigger-stems-need-word-boundary.md)
+- Missing `summary`: DP.M.434 (DP.M.434-atomic-mkdir-lock-before-liveness-check-singleton-background-start.md)
+- Missing `summary`: DP.M.435 (DP.M.435-wiring-test-call-site-fact-and-condition-separate-from-unit-test.md)
+- Missing `summary`: DP.M.436 (DP.M.436-safety-barrier-at-edit-point-not-only-commit-point.md)
+- Missing `summary`: DP.M.437 (DP.M.437-byte-identical-stash-compare-before-silent-drop.md)
+- Missing `summary`: DP.M.438 (DP.M.438-release-contract-deployment-identity-triple-named-escape-hatch.md)
+- Missing `summary`: DP.M.439 (DP.M.439-patch-id-branch-comparison-not-sha-count.md)
+- Missing `summary`: DP.M.440 (DP.M.440-resumable-batch-backfill-scoped-writer-role.md)
+- Missing `summary`: DP.M.441 (DP.M.441-verify-empirically-across-full-population.md)
+- Missing `summary`: DP.M.442 (DP.M.442-detective-layer-when-preventive-org-policy-unavailable.md)
+- Missing `summary`: DP.M.450 (DP.M.450-narrow-guard-scan-boundary-before-pattern-match.md)
+- Missing `summary`: DP.M.451 (DP.M.451-command-identity-block-for-whole-store-dump-commands.md)
 - Missing `summary`: DP.METHOD.051 (DP.METHOD.051-n8n-builtin-healthz.md)
 - Missing `summary`: DP.METHOD.059 (DP.METHOD.059-bash-32-portability-python3-heredoc.md)
 - Missing `summary`: DP.METHOD.060 (DP.METHOD.060-skill-promotion-l2-to-l1.md)
@@ -2329,6 +2421,7 @@ generated: true
 - Missing `summary`: DP.METHOD.199 (DP.METHOD.199-migration-smoke-under-real-role.md)
 - Missing `summary`: DP.METHOD.205 (DP.METHOD.205-acceptance-sampling-llm-batch.md)
 - Missing `summary`: DP.METHOD.206 (DP.METHOD.206-nullable-draft-path-intent-vs-artifact.md)
+- Missing `summary`: DP.METHOD.255 (DP.METHOD.255-data-pipeline-unification-principles.md)
 - Missing `summary`: DP.FM.004 (DP.FM.004-narrow-pregeneration-scope.md)
 - Missing `summary`: DP.FM.015 (DP.FM.015-false-positive-capture-detection.md)
 - Missing `summary`: DP.FM.016 (DP.FM.016-routing-config-path-decay.md)
@@ -2607,6 +2700,35 @@ generated: true
 - Missing `summary`: DP.FM.397 (DP.FM.397-cancelled-migration-reader-not-repointed.md)
 - Missing `summary`: DP.FM.398 (DP.FM.398-decrypt-in-sql-where-silent-ciphertext-passthrough.md)
 - Missing `summary`: DP.FM.399 (DP.FM.399-nullable-boolean-external-api-strict-equality.md)
+- Missing `summary`: DP.FM.400 (DP.FM.400-platform-primitive-assumed-universal-silent-noop.md)
+- Missing `summary`: DP.FM.401 (DP.FM.401-history-rewrite-breaks-unrelated-automation-checkout.md)
+- Missing `summary`: DP.FM.402 (DP.FM.402-periodic-task-reused-onetime-install-step.md)
+- Missing `summary`: DP.FM.403 (DP.FM.403-git-hook-runs-system-bash-not-interactive-shell.md)
+- Missing `summary`: DP.FM.404 (DP.FM.404-collaborator-grant-target-not-verified.md)
+- Missing `summary`: DP.FM.405 (DP.FM.405-client-date-filter-over-global-catalog-hides-valid-entries.md)
+- Missing `summary`: DP.FM.406 (DP.FM.406-new-enum-purpose-type-missing-webhook-branch-silent-payment-loss.md)
+- Missing `summary`: DP.FM.407 (DP.FM.407-frontmatter-legitimate-empty-value-bypasses-grep-first-match.md)
+- Missing `summary`: DP.FM.408 (DP.FM.408-self-healing-watchdog-reports-fixed-without-post-check.md)
+- Missing `summary`: DP.FM.409 (DP.FM.409-corrupt-yaml-in-shared-append-only-ledger-blocks-all-sessions.md)
+- Missing `summary`: DP.FM.410 (DP.FM.410-disowned-background-process-inherits-open-lock-fd.md)
+- Missing `summary`: DP.FM.411 (DP.FM.411-systemd-oneshot-kills-cgroup-despite-disown.md)
+- Missing `summary`: DP.FM.412 (DP.FM.412-security-gate-fail-open-on-malformed-input.md)
+- Missing `summary`: DP.FM.413 (DP.FM.413-test-runner-classifies-crash-as-pass.md)
+- Missing `summary`: DP.FM.414 (DP.FM.414-scheduler-sanitized-env-missing-home-path.md)
+- Missing `summary`: DP.FM.415 (DP.FM.415-shared-checkout-rebase-empties-pending-commit.md)
+- Missing `summary`: DP.FM.416 (DP.FM.416-exception-mode-bypasses-check-that-blocks-normal-mode.md)
+- Missing `summary`: DP.FM.417 (DP.FM.417-command-position-matcher-misses-compound-statement-keywords.md)
+- Missing `summary`: DP.FM.418 (DP.FM.418-guard-self-failure-indistinguishable-from-command-verdict.md)
+- Missing `summary`: DP.FM.419 (DP.FM.419-bare-positional-flag-value-under-set-u-breaks-declared-fail-open.md)
+- Missing `summary`: DP.FM.420 (DP.FM.420-obligatory-cleanup-nested-in-unrelated-optional-component-block.md)
+- Missing `summary`: DP.FM.421 (DP.FM.421-regex-arg-parse-blind-to-shell-variable-expansion.md)
+- Missing `summary`: DP.FM.422 (DP.FM.422-redirection-misclassified-bypasses-command-identity-block.md)
+- Missing `summary`: DP.FM.423 (DP.FM.423-option-bearing-wrapper-hides-real-command-from-position-resolver.md)
+- Missing `summary`: DP.FM.424 (DP.FM.424-freeze-policy-breaks-existing-canonical-writer.md)
+- Missing `summary`: DP.FM.425 (DP.FM.425-http-409-conflict-transient-not-permanent-4xx.md)
+- Missing `summary`: DP.FM.426 (DP.FM.426-hardcoded-instance-identity-breaks-dedup.md)
+- Missing `summary`: DP.FM.427 (DP.FM.427-copied-schema-assumption-jsonb-silent-null.md)
+- Missing `summary`: DP.FM.428 (DP.FM.428-tail-truncation-hides-earlier-failure.md)
 - Missing `summary`: DP.SOTA.029 (DP.SOTA.029-ai-era-two-crisis-groups.md)
 - Missing `summary`: DP.SOTA.030 (DP.SOTA.030-eam-agent-manifest-standard.md)
 - Missing `summary`: DP.SOTA.031 (DP.SOTA.031-async-factory-deterministic-pipeline.md)
@@ -2652,12 +2774,12 @@ generated: true
 
 | ID | Days Since Update |
 |----|-------------------|
-| DP.FM.008 | 172 |
-| DP.FM.009 | 152 |
-| DP.FM.011 | 151 |
-| DP.FM.012 | 150 |
-| DP.FM.010 | 145 |
+| DP.FM.008 | 176 |
+| DP.FM.009 | 156 |
+| DP.FM.011 | 155 |
+| DP.FM.012 | 154 |
+| DP.FM.010 | 149 |
 
 ---
 
-*Generated by `scripts/generate-map.py` on 2026-09-09*
+*Generated by `scripts/generate-map.py` on 2026-09-13*

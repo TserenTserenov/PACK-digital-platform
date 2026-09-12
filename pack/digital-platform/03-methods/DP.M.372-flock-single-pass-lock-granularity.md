@@ -8,7 +8,7 @@ trust: confirmed
 epistemic_stage: observed
 valid_from: 2026-07-10
 source: "session-close 2026-07-10, iwe-server-config commit 1055eb8 (tsekh-timer-race fix)"
-see_also: [DP.FM.228, DP.FM.229]
+see_also: [DP.FM.250, DP.FM.229]
 schema_version: 1
 ---
 
@@ -55,5 +55,5 @@ done
 
 ## Связано
 
-- DP.FM.228: FETCH_HEAD race — конкретный инцидент, потребовавший этот паттерн
+- DP.FM.250: FETCH_HEAD race — конкретный инцидент, потребовавший этот паттерн
 - DP.FM.229: OnBootSec gap collapse — почему таймеры схлопываются к одному моменту
