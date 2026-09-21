@@ -15,6 +15,7 @@ related:
     - PD.FORM.089  # Рубрики cp-профиля, RCS-fallback — PACK-personal
     - PD.FORM.137  # Нарратив 4 уровней — источник welcome — PACK-personal
     - DP.D.052     # Персона/Память/Контекст (HD #27)
+    - DP.M.466     # Карта навигации по формированию персонального руководства
 tags: [personal-guide, render, multi-program, semantic-compiler, tailor, feedback-loop]
 source: "WP-371 Ф0 (peer-session 2026-05-30-35), разнос в Pack (peer-session 2026-05-30-45)"
 schema_version: 1
@@ -24,6 +25,8 @@ last_updated: 2026-08-01
 # DP.M.241 «Порядок формирования персонального руководства» (8 шагов: S1, S2, S3, S3.5, S4, S5, S6, S7, S8)
 
 > **Статус:** перенесено из draft `inbox/WP-371/peer-session-2026-05-30/DP.M-personal-guide-render.md` в Pack (peer-session 2026-05-30-45).
+
+> **Навигация:** карта «что идёт не так на шаге и что проверить в коде» лежит в `DP.M.466`.
 
 Метод реализует обещание `DP.SC.164 «Доставка персонального руководства пилоту»`. Каждый шаг S1-S7 выполняется последовательно (S8 — асинхронный feedback loop). Шаги S6 и S7 — обязательные проверки; нарушение → degraded-режим.
 
