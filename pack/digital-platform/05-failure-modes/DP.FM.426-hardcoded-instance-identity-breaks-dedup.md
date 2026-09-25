@@ -9,7 +9,7 @@ epistemic_stage: observed
 status: active
 valid_from: 2026-09-09
 source: "git commit 228fa9e в DS-iwe-wp-panel (src/extension.ts, src/core/sessionsStore.ts, src/core/dashboardSessionsApi.ts), WP-494 Ф22, пир-сессия 2026-09-09-06-wp494-mac-tsekh-sitelabel (с Codex)"
-see_also: [DP.FM.041, DP.D.303]
+see_also: [DP.FM.041, DP.D.306]
 schema_version: 1
 ---
 
@@ -32,5 +32,5 @@ schema_version: 1
 
 ## Связи
 - DP.FM.041 (dedup content-slice false positive) — смежный класс «неверный ключ дедупликации», другой механизм: там ключ — срез текста, здесь — захардкоженная константа вместо идентификатора источника. Не дубль.
-- DP.D.303 (атомарность лока ≠ общий namespace) — смежная тема «несколько инструментов/инстансов на одном ресурсе», другая ось (блокировка, не идентификация).
+- DP.D.306 (атомарность лока ≠ общий namespace) — смежная тема «несколько инструментов/инстансов на одном ресурсе», другая ось (блокировка, не идентификация).
 - Источник: WP-494 Ф22, пир-сессия 2026-09-09-06-wp494-mac-tsekh-sitelabel (с Codex)
